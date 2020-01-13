@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Day 2 | Notes for STAT 5413 - Spatial Statistics</title>
+  <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Day 2 | Notes for STAT 5413 - Spatial Statistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Day 2 | Notes for STAT 5413 - Spatial Statistics" />
+  
+  <meta name="twitter:description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  
+
+<meta name="author" content="John Tipton" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day-1.html"/>
+<link rel="next" href="day-3.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> STAT 5413</a></li>
+<li class="chapter" data-level="2" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>2</b> Day 1</a><ul>
+<li class="chapter" data-level="2.1" data-path="day-1.html"><a href="day-1.html#notation"><i class="fa fa-check"></i><b>2.1</b> Notation</a></li>
+<li class="chapter" data-level="2.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>2.2</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="day-1.html"><a href="day-1.html#example-linear-regression"><i class="fa fa-check"></i><b>2.2.1</b> Example: linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>2.3</b> Hierarchical modeling</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="day-1.html"><a href="day-1.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>2.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="day-1.html"><a href="day-1.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>2.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="day-1.html"><a href="day-1.html#data-model"><i class="fa fa-check"></i><b>2.3.3</b> Data Model</a></li>
+<li class="chapter" data-level="2.3.4" data-path="day-1.html"><a href="day-1.html#process-model"><i class="fa fa-check"></i><b>2.3.4</b> Process Model</a></li>
+<li class="chapter" data-level="2.3.5" data-path="day-1.html"><a href="day-1.html#parameter-prior-model-bmhs-only"><i class="fa fa-check"></i><b>2.3.5</b> Parameter (Prior) Model (BMHs only)</a></li>
+<li class="chapter" data-level="2.3.6" data-path="day-1.html"><a href="day-1.html#posterior-distribution"><i class="fa fa-check"></i><b>2.3.6</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.3.7" data-path="day-1.html"><a href="day-1.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>2.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>3</b> Day 2</a><ul>
+<li class="chapter" data-level="3.1" data-path="day-2.html"><a href="day-2.html#spatial-data"><i class="fa fa-check"></i><b>3.1</b> Spatial Data</a></li>
+<li class="chapter" data-level="3.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Types of spatial data</a></li>
+<li class="chapter" data-level="3.3" data-path="day-2.html"><a href="day-2.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="day-2.html"><a href="day-2.html#in-class-activity"><i class="fa fa-check"></i><b>3.3.1</b> In Class Activity:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>4</b> Day 3</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Notes for STAT 5413 - Spatial Statistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day-2" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Day 2</h1>
+<div id="spatial-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> Spatial Data</h2>
+<p>All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let <span class="math inline">\(\mathcal{D}\)</span> represent the spatial domain and let <span class="math inline">\(\mathbf{s}\)</span> be a spatial location. In general, we will let <span class="math inline">\(\mathcal{A} \subset \mathcal{D}\)</span> be a subdomain of the spatial region of <span class="math inline">\(\mathbf{D}\)</span>.</p>
+<p><strong>Insert Diagram from class here</strong></p>
+</div>
+<div id="types-of-spatial-data" class="section level2">
+<h2><span class="header-section-number">3.2</span> Types of spatial data</h2>
+<p>There are three primary types of spatial data that we are going to consider</p>
+<ul>
+<li>Geostatistical data
+<ul>
+<li>Occur everywhere</li>
+<li>continuous support</li>
+<li>examples: temperature, precipitation</li>
+</ul></li>
+<li>Areal data
+<ul>
+<li>Occur only over discrete areas</li>
+<li>can be thought of as an integral of a continuous process over a subdomain <span class="math inline">\(\mathcal{A} \in \mathcal{D}\)</span></li>
+<li>examples: cases of a disease by counties, votes in an election by congressional district</li>
+</ul></li>
+<li>Point process data
+<ul>
+<li>The count and location of the data are random</li>
+<li>examples: tornados, lightning strikes</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(here)</a></code></pre></div>
+<ul>
+<li><p>Many different file types for spatial data</p>
+<ul>
+<li>Typically data are in “flat files” like comma-seperated value (CSV) files</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">read.csv</span>(<span class="kw">here</span>(<span class="st">&quot;path&quot;</span>, <span class="st">&quot;to&quot;</span>, <span class="st">&quot;file.csv&quot;</span>))</a></code></pre></div>
+<ul>
+<li>“shapefiles” which can be read using <em>rgdal</em> or <em>maptools</em> packages</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(rgdal)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(maptools)</a></code></pre></div>
+<ul>
+<li>“NetCDF” files cane be read using <em>ncdf4</em> or <em>RNetCDF</em></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">library</span>(RNetCDF)</a></code></pre></div></li>
+</ul>
+</div>
+<div id="textbook-package" class="section level2">
+<h2><span class="header-section-number">3.3</span> Textbook package</h2>
+<p>To install the data from the textbook, go to <a href="https://spacetimewithr.org/">https://spacetimewithr.org/</a> and follow the link to the code.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">library</span>(devtools)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">install_github</span>(<span class="st">&quot;andrewzm/STRbook&quot;</span>)</a></code></pre></div>
+<p>Note that this package is relatively large because it contains a decent amount of spatial data.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(STRbook)</a></code></pre></div>
+<div id="in-class-activity" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> In Class Activity:</h3>
+<p>From <a href="https://spacetimewithr.org/code">Lab 2.1</a> on the textbook site</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Wikle, C. K., Zammit-Mangion, A., and Cressie, N. (2019), </span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">## Spatio-Temporal Statistics with R, Boca Raton, FL: Chapman &amp; Hall/CRC</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">## Copyright (c) 2019 Wikle, Zammit-Mangion, Cressie</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">##</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">## This program is free software; you can redistribute it and/or</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">## modify it under the terms of the GNU General Public License</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">## as published by the Free Software Foundation; either version 2</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">## of the License, or (at your option) any later version.</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">##</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">## This program is distributed in the hope that it will be useful,</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">## but WITHOUT ANY WARRANTY; without even the implied warranty of</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">## GNU General Public License for more details.</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">                                        </a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="kw">library</span>(<span class="st">&quot;tidyr&quot;</span>)</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="kw">library</span>(<span class="st">&quot;STRbook&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">locs &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;Stationinfo.dat&quot;</span>,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                               <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>),</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">                  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>))</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">Times &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;Times_1990.dat&quot;</span>,</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">                                <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>),</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">                  <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;julian&quot;</span>, <span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;day&quot;</span>))</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">Tmax &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;Tmax_1990.dat&quot;</span>,</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">                               <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>))</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="kw">names</span>(Tmax) &lt;-<span class="st"> </span>locs<span class="op">$</span>id</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">Tmax &lt;-<span class="st"> </span><span class="kw">cbind</span>(Times, Tmax)</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="kw">head</span>(<span class="kw">names</span>(Tmax), <span class="dv">10</span>)</a></code></pre></div>
+<pre><code>##  [1] &quot;julian&quot; &quot;year&quot;   &quot;month&quot;  &quot;day&quot;    &quot;3804&quot;   &quot;3809&quot;   &quot;3810&quot;   &quot;3811&quot;  
+##  [9] &quot;3812&quot;   &quot;3813&quot;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">Tmax_long &lt;-<span class="st"> </span><span class="kw">gather</span>(Tmax, id, z, <span class="op">-</span>julian, <span class="op">-</span>year, <span class="op">-</span>month, <span class="op">-</span>day)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">head</span>(Tmax_long)</a></code></pre></div>
+<pre><code>##   julian year month day   id  z
+## 1 726834 1990     1   1 3804 35
+## 2 726835 1990     1   2 3804 42
+## 3 726836 1990     1   3 3804 49
+## 4 726837 1990     1   4 3804 59
+## 5 726838 1990     1   5 3804 41
+## 6 726839 1990     1   6 3804 45</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">Tmax_long<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">as.integer</span>(Tmax_long<span class="op">$</span>id)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">## -----------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">nrow</span>(Tmax_long)</a></code></pre></div>
+<pre><code>## [1] 479208</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">Tmax_long &lt;-<span class="st"> </span><span class="kw">filter</span>(Tmax_long, <span class="op">!</span>(z <span class="op">&lt;=</span><span class="st"> </span><span class="dv">-9998</span>))</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">nrow</span>(Tmax_long)</a></code></pre></div>
+<pre><code>## [1] 196253</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">Tmax_long &lt;-<span class="st"> </span><span class="kw">mutate</span>(Tmax_long, <span class="dt">proc =</span> <span class="st">&quot;Tmax&quot;</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">head</span>(Tmax_long)</a></code></pre></div>
+<pre><code>##   julian year month day   id  z proc
+## 1 726834 1990     1   1 3804 35 Tmax
+## 2 726835 1990     1   2 3804 42 Tmax
+## 3 726836 1990     1   3 3804 49 Tmax
+## 4 726837 1990     1   4 3804 59 Tmax
+## 5 726838 1990     1   5 3804 41 Tmax
+## 6 726839 1990     1   6 3804 45 Tmax</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">data</span>(Tmin_long, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">data</span>(TDP_long, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="kw">data</span>(Precip_long, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">NOAA_df_<span class="dv">1990</span> &lt;-<span class="st"> </span><span class="kw">rbind</span>(Tmax_long, Tmin_long, TDP_long, Precip_long)</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">summ &lt;-<span class="st"> </span><span class="kw">group_by</span>(NOAA_df_<span class="dv">1990</span>, year, proc) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># groupings</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="st">        </span><span class="kw">summarise</span>(<span class="dt">mean_proc =</span> <span class="kw">mean</span>(z))          <span class="co"># operation</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">NOAA_precip &lt;-<span class="st"> </span><span class="kw">filter</span>(NOAA_df_<span class="dv">1990</span>, proc <span class="op">==</span><span class="st"> &quot;Precip&quot;</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15">summ &lt;-<span class="st"> </span><span class="kw">group_by</span>(NOAA_precip, year, id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="st">        </span><span class="kw">summarise</span>(<span class="dt">days_no_precip =</span> <span class="kw">sum</span>(z <span class="op">==</span><span class="st"> </span><span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="kw">head</span>(summ)</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   year [1]
+##    year    id days_no_precip
+##   &lt;int&gt; &lt;int&gt;          &lt;int&gt;
+## 1  1990  3804             19
+## 2  1990  3810             26
+## 3  1990  3811             21
+## 4  1990  3812             24
+## 5  1990  3813             25
+## 6  1990  3816             23</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">median</span>(summ<span class="op">$</span>days_no_precip)</a></code></pre></div>
+<pre><code>## [1] 20</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co">## -------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">grps &lt;-<span class="st"> </span><span class="kw">group_by</span>(NOAA_precip, year, id)</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">summ &lt;-<span class="st"> </span><span class="kw">summarise</span>(grps, <span class="dt">days_no_precip =</span> <span class="kw">sum</span>(z <span class="op">==</span><span class="st"> </span><span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">NOAA_df_sorted &lt;-<span class="st"> </span><span class="kw">arrange</span>(NOAA_df_<span class="dv">1990</span>, julian, id)</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb22-9" data-line-number="9">df1 &lt;-<span class="st"> </span><span class="kw">select</span>(NOAA_df_<span class="dv">1990</span>, julian, z)</a>
+<a class="sourceLine" id="cb22-10" data-line-number="10">df2 &lt;-<span class="st"> </span><span class="kw">select</span>(NOAA_df_<span class="dv">1990</span>, <span class="op">-</span>julian)</a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb22-12" data-line-number="12"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb22-13" data-line-number="13">NOAA_df_<span class="dv">1990</span> &lt;-<span class="st"> </span><span class="kw">left_join</span>(NOAA_df_<span class="dv">1990</span>, locs, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</a>
+<a class="sourceLine" id="cb22-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb22-15" data-line-number="15"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb22-16" data-line-number="16">Tmax_long_sel &lt;-<span class="st"> </span><span class="kw">select</span>(Tmax_long, julian, id, z)</a>
+<a class="sourceLine" id="cb22-17" data-line-number="17">Tmax_wide &lt;-<span class="st"> </span><span class="kw">spread</span>(Tmax_long_sel, id, z)</a>
+<a class="sourceLine" id="cb22-18" data-line-number="18"><span class="kw">dim</span>(Tmax_wide)</a></code></pre></div>
+<pre><code>## [1] 1461  138</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">M &lt;-<span class="st"> </span><span class="kw">select</span>(Tmax_wide, <span class="op">-</span>julian) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.matrix</span>()</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">## -----------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="kw">library</span>(<span class="st">&quot;sp&quot;</span>)</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="kw">library</span>(<span class="st">&quot;spacetime&quot;</span>)</a></code></pre></div>
+<pre><code>## Registered S3 method overwritten by &#39;xts&#39;:
+##   method     from
+##   as.zoo.xts zoo</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">NOAA_df_<span class="dv">1990</span><span class="op">$</span>date &lt;-<span class="st"> </span><span class="kw">with</span>(NOAA_df_<span class="dv">1990</span>,</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">                       <span class="kw">paste</span>(year, month, day, <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>))</a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">head</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>date, <span class="dv">4</span>)   <span class="co"># show first four elements</span></a></code></pre></div>
+<pre><code>## [1] &quot;1990-1-1&quot; &quot;1990-1-2&quot; &quot;1990-1-3&quot; &quot;1990-1-4&quot;</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">NOAA_df_<span class="dv">1990</span><span class="op">$</span>date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>date)</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="kw">class</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>date)</a></code></pre></div>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">Tmax_long2 &lt;-<span class="st"> </span><span class="kw">filter</span>(NOAA_df_<span class="dv">1990</span>, proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>)</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">STObj &lt;-<span class="st"> </span><span class="kw">stConstruct</span>(<span class="dt">x =</span> Tmax_long2,           <span class="co"># data set</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">                    <span class="dt">space =</span> <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>),  <span class="co"># spatial fields</span></a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">                    <span class="dt">time =</span> <span class="st">&quot;date&quot;</span>)            <span class="co"># time field</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="kw">class</span>(STObj)</a></code></pre></div>
+<pre><code>## [1] &quot;STIDF&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;spacetime&quot;</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">spat_part &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords =</span> Tmax_long2[, <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)])</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">temp_part &lt;-<span class="st"> </span>Tmax_long2<span class="op">$</span>date</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">STObj2 &lt;-<span class="st"> </span><span class="kw">STIDF</span>(<span class="dt">sp =</span> spat_part,</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5">                <span class="dt">time =</span> temp_part,</a>
+<a class="sourceLine" id="cb32-6" data-line-number="6">                <span class="dt">data =</span> <span class="kw">select</span>(Tmax_long2, <span class="op">-</span>date, <span class="op">-</span>lon, <span class="op">-</span>lat))</a>
+<a class="sourceLine" id="cb32-7" data-line-number="7"><span class="kw">class</span>(STObj2)</a></code></pre></div>
+<pre><code>## [1] &quot;STIDF&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;spacetime&quot;</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">spat_part &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords =</span> locs[, <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)])</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">temp_part &lt;-<span class="st"> </span><span class="kw">with</span>(Times,</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4">                   <span class="kw">paste</span>(year, month, day, <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>))</a>
+<a class="sourceLine" id="cb34-5" data-line-number="5">temp_part &lt;-<span class="st"> </span><span class="kw">as.Date</span>(temp_part)</a>
+<a class="sourceLine" id="cb34-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-8" data-line-number="8">Tmax_long3 &lt;-<span class="st"> </span><span class="kw">gather</span>(Tmax, id, z, <span class="op">-</span>julian, <span class="op">-</span>year, <span class="op">-</span>month, <span class="op">-</span>day)</a>
+<a class="sourceLine" id="cb34-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-11" data-line-number="11">Tmax_long3<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">as.integer</span>(Tmax_long3<span class="op">$</span>id)</a>
+<a class="sourceLine" id="cb34-12" data-line-number="12">Tmax_long3 &lt;-<span class="st"> </span><span class="kw">arrange</span>(Tmax_long3,julian,id)</a>
+<a class="sourceLine" id="cb34-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb34-14" data-line-number="14"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-15" data-line-number="15"><span class="kw">all</span>(<span class="kw">unique</span>(Tmax_long3<span class="op">$</span>id) <span class="op">==</span><span class="st"> </span>locs<span class="op">$</span>id)</a></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">STObj3 &lt;-<span class="st"> </span><span class="kw">STFDF</span>(<span class="dt">sp =</span> spat_part,</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3">                <span class="dt">time =</span> temp_part,</a>
+<a class="sourceLine" id="cb36-4" data-line-number="4">                <span class="dt">data =</span> Tmax_long3)</a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="kw">class</span>(STObj3)</a></code></pre></div>
+<pre><code>## [1] &quot;STFDF&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;spacetime&quot;</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">proj4string</span>(STObj3) &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +ellps=WGS84&quot;</span>)</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb38-4" data-line-number="4"><span class="co">## ------------------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">STObj3<span class="op">$</span>z[STObj3<span class="op">$</span>z <span class="op">==</span><span class="st"> </span><span class="dv">-9999</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STAT-5413.pdf", "STAT-5413.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
