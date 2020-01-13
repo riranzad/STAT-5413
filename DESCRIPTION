@@ -2,5 +2,5 @@ Package: placeholder
 Type: Book
 Title: Does not matter.
 Version: 0.0.1
-Imports: bookdown, tidyverse, here, rgdal, maptools, netcdf4, RNetCDF, devtools,
+Imports: bookdown, tidyverse, here, rgdal, maptools, RNetCDF, devtools,
 Remotes: rstudio/bookdown, andrewzm/STRbook
