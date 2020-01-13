@@ -1,0 +1,53 @@
+# Spatial Visualization
+
+```{r, message = FALSE}
+library(tidyverse)
+library(here)
+```
+
+
+* Many different file types for spatial data
+
+    * Typically data are in "flat files" like comma-seperated value (CSV) files 
+    
+    ```{r, eval = FALSE}
+    read.csv(here("path", "to", "file.csv"))
+    ```
+    
+    * "shapefiles" which can be read using _rgdal_ or _maptools_ packages
+    
+    ```{r, eval = FALSE}
+    library(rgdal)
+    library(maptools)
+    ```
+    
+    * "NetCDF" files cane be read using _ncdf4_ or _RNetCDF_
+    
+    ```{r, eval = FALSE}
+    library(ncdf4)
+    library(RNetCDF)
+    ```
+    
+    
+## Spatial data
+
+To install the data from the textbook, go to [https://spacetimewithr.org/](https://spacetimewithr.org/) and follow the link to the code.
+
+```{r, eval = FALSE}
+# install.packages("devtools")
+library(devtools)
+install_github("andrewzm/STRbook")
+```
+
+Note that this package is relatively large because it contains a decent amount of spatial data. 
+
+
+```{r}
+library(STRbook)
+```
+
+
+
+
+
+

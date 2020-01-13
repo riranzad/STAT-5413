@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Introduction | A Minimal Book Example</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Introduction | A Minimal Book Example" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | A Minimal Book Example" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Yihui Xie" />
+
+
+<meta name="date" content="2020-01-13" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="spatial-visualization.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#notation"><i class="fa fa-check"></i><b>2.1</b> Notation</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#probability-distributions"><i class="fa fa-check"></i><b>2.2</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="intro.html"><a href="intro.html#example-linear-regression"><i class="fa fa-check"></i><b>2.2.1</b> Example: linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#hierarchical-modeling"><i class="fa fa-check"></i><b>2.3</b> Hierarchical modeling</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="intro.html"><a href="intro.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>2.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="intro.html"><a href="intro.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>2.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
+<li class="chapter" data-level="2.3.3" data-path="intro.html"><a href="intro.html#data-model"><i class="fa fa-check"></i><b>2.3.3</b> Data Model</a></li>
+<li class="chapter" data-level="2.3.4" data-path="intro.html"><a href="intro.html#process-model"><i class="fa fa-check"></i><b>2.3.4</b> Process Model</a></li>
+<li class="chapter" data-level="2.3.5" data-path="intro.html"><a href="intro.html#parameter-prior-model-bmhs-only"><i class="fa fa-check"></i><b>2.3.5</b> Parameter (Prior) Model (BMHs only)</a></li>
+<li class="chapter" data-level="2.3.6" data-path="intro.html"><a href="intro.html#posterior-distribution"><i class="fa fa-check"></i><b>2.3.6</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="2.3.7" data-path="intro.html"><a href="intro.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>2.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#spatial-data"><i class="fa fa-check"></i><b>2.4</b> Spatial Data</a></li>
+<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.5</b> Types of spatial data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="spatial-visualization.html"><a href="spatial-visualization.html"><i class="fa fa-check"></i><b>3</b> Spatial Visualization</a><ul>
+<li class="chapter" data-level="3.1" data-path="spatial-visualization.html"><a href="spatial-visualization.html#spatial-data-1"><i class="fa fa-check"></i><b>3.1</b> Spatial data</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>4</b> Day 3</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Introduction</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div id="notation" class="section level2">
+<h2><span class="header-section-number">2.1</span> Notation</h2>
+<p>The dimensions of different mathematical objects are very important for the study of spatial statistics. To communicate this, we use the following notation. A scalar random variable is represented by a lowercase alphanumeric letter (<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, <span class="math inline">\(z\)</span>, etc.), a vector random variable is respresented by a bold lowercase alphanumeric letter (<span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\(\mathbf{y}\)</span>, <span class="math inline">\(\mathbf{z}\)</span>, etc.), and a matrix random variable is respresented by a bold uppercase alphanumeric letter (<span class="math inline">\(\mathbf{X}\)</span>, <span class="math inline">\(\mathbf{Y}\)</span>, <span class="math inline">\(\mathbf{Z}\)</span>, etc.). We use a similar notation for parameters as well where scalar parameters are represented by a lowercase Greek letter (<span class="math inline">\(\mu\)</span>, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, etc.), a vector parameter is respresented by a bold lowercase Greek letter (<span class="math inline">\(\boldsymbol{\mu}\)</span>, <span class="math inline">\(\boldsymbol{\alpha}\)</span>, <span class="math inline">\(\boldsymbol{\beta}\)</span>, etc.), and a matrix random variable is respresented by a bold uppercase Greek letter (<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Psi}\)</span>, <span class="math inline">\(\boldsymbol{\Gamma}\)</span>, etc.).</p>
+</div>
+<div id="probability-distributions" class="section level2">
+<h2><span class="header-section-number">2.2</span> Probability Distributions</h2>
+<p>We also need notation to explain probability distributions. We use the notation <span class="math inline">\([y]\)</span> to denote the probability density function <span class="math inline">\(p(y)\)</span> of the random variable <span class="math inline">\(y\)</span> and <span class="math inline">\([y|x]\)</span> to denote the probability density function <span class="math inline">\(p(y|x)\)</span> of <span class="math inline">\(y\)</span> given <span class="math inline">\(x\)</span>. For example, if <span class="math inline">\(y\)</span> is a Gaussian random variable with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> we write</p>
+<p><span class="math display">\[
+\begin{align*}
+[y | \mu, \sigma] &amp; = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{-\frac{1}{2 \sigma^2} (y - \mu)^2 \right\}.
+\end{align*}
+\]</span></p>
+<p>We can also denote that <span class="math inline">\(y\)</span> has a Gaussian (normal) distribution given mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> using the <span class="math inline">\(\sim\)</span> notation</p>
+<p><span class="math display">\[
+\begin{align*}
+y | \mu, \sigma &amp; \sim \operatorname{N}(\mu, \sigma^2).
+\end{align*}
+\]</span></p>
+<div id="example-linear-regression" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Example: linear regression</h3>
+<p><span class="math display">\[
+\begin{align*}
+\left[y_i | \boldsymbol{\theta} \right] &amp; \sim \operatorname{N}(X_i \beta, \sigma^2) \\
+\boldsymbol{\theta} &amp; = (\beta, \sigma^2)
+\end{align*}
+\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Sample data</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">404</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span>(<span class="dt">x=</span><span class="kw">runif</span>(<span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">50</span>)),</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                  <span class="dt">y=</span><span class="kw">rnorm</span>(<span class="dv">200</span>, <span class="dv">10</span> <span class="op">*</span><span class="st"> </span>x, <span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">## breaks: where you want to compute densities</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">breaks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(dat<span class="op">$</span>x), <span class="dt">len=</span><span class="dv">7</span>)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>)]</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">dat<span class="op">$</span>section &lt;-<span class="st"> </span><span class="kw">cut</span>(dat<span class="op">$</span>x, breaks)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">## Get the residuals</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">dat<span class="op">$</span>res &lt;-<span class="st"> </span><span class="kw">residuals</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data=</span>dat))</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">## Compute densities for each section, and flip the axes, and add means of sections</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">## Note: the densities need to be scaled in relation to the section size (2000 here)</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">ys &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">300</span>, <span class="dv">300</span>, <span class="dt">length =</span> <span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">xs &lt;-<span class="st"> </span><span class="kw">rep</span>(breaks, <span class="dt">each =</span> <span class="dv">50</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1000</span> <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(ys, <span class="dv">0</span>, <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">res &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">  res[, i] &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">*</span><span class="st"> </span>breaks[i] <span class="op">+</span><span class="st"> </span>ys </a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">}</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">dens &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> xs, <span class="dt">y=</span><span class="kw">c</span>(res), </a>
+<a class="sourceLine" id="cb3-22" data-line-number="22">                   <span class="dt">grouping =</span> <span class="kw">cut</span>(xs, breaks))</a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(x, y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">fill=</span><span class="ot">NA</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data=</span>dens, <span class="kw">aes</span>(x, y, <span class="dt">group =</span> grouping), </a>
+<a class="sourceLine" id="cb3-27" data-line-number="27">            <span class="dt">color=</span><span class="st">&quot;salmon&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept=</span>breaks, <span class="dt">lty=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-4-1.png" width="80%" /></p>
+</div>
+</div>
+<div id="hierarchical-modeling" class="section level2">
+<h2><span class="header-section-number">2.3</span> Hierarchical modeling</h2>
+<ul>
+<li><p>Follow <span class="citation">Berliner (<a href="#ref-berliner1996hierarchical">1996</a>)</span> framework for hierarchical probability models</p></li>
+<li><p>Model encodes our understanding of the scientific process of interest</p></li>
+<li><p>Model accounts for as much uncertainty as possible</p></li>
+<li>Model results in a probability distribution
+<ul>
+<li>Note: nature may be deterministic – often probabilistic models outperform physical models.</li>
+<li>Example: model individual rain drops vs. probability/intensity of rain</li>
+</ul></li>
+<li><p>Update model with data</p></li>
+<li><p>Use the model to generate parameter estimates given data</p></li>
+</ul>
+<div id="bayesian-hierarchical-models-bhms" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Bayesian Hierarchical models (BHMs)</h3>
+<ul>
+<li><p>Break the model into components:</p>
+<ul>
+<li><p><span style="color: #ff0000"> Data Model. </span></p></li>
+<li><p><span style="color: #0000ff"> Process Model. </span></p></li>
+<li><p><span style="color: #ff7f00"> Parameter Model. </span></p></li>
+</ul></li>
+<li><p>Combined, the <span style="color: #ff0000"> data model, </span> the <span style="color: #0000ff"> process model, </span> and the <span style="color: #ff7f00"> parameter model </span> define a <span style="color: #00ffff"> posterior distribution. </span></p></li>
+</ul>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{cyan}{[\mathbf{z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}]} &amp; \propto
+\color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}  \color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]} \color{orange}{[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]}
+\end{align*}
+}%
+\]</span></p>
+</div>
+<div id="empirical-hierarchical-models-ehms" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Empirical Hierarchical models (EHMs)</h3>
+<ul>
+<li><p>Break the model into components:</p>
+<ul>
+<li><p><span style="color: #ff0000"> Data Model. </span></p></li>
+<li><p><span style="color: #0000ff"> Process Model. </span></p></li>
+<li><p><span style="color: #ff7f00"> Parameter estimates </span> (fixed values) are substituted before fitting the model</p></li>
+</ul></li>
+<li><p>Combined, the <span style="color: #ff0000"> data model and </span> the <span style="color: #0000ff"> process model </span> define a <span style="color: #DDA0DD"> predictive distribution. </span> Thus, numerical evaluation of the <span style="color: #DDA0DD"> predictive distribution </span> is typically required to estimate unceratinty (bootstrap, MLE asymptotics)</p>
+<ul>
+<li>Note: the predictive distribution is not a <span style="color: #00ffff">posterior distribution</span> because the normalizing constant is not known</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{plum}{[\mathbf{z} | \mathbf{y}]} &amp; \propto
+\color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}  \color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]}
+\end{align*}
+}%
+\]</span></p>
+</div>
+<div id="data-model" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Data Model</h3>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}
+\end{align*}
+}
+\]</span></p>
+<ul>
+<li><p>Describes how the data are collected and observed.</p></li>
+<li><p>Account for measurement process and uncertainty.</p></li>
+<li><p>Model the data in the manner in which they were collected.</p></li>
+<li><p>Data <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<ul>
+<li><p>Noisy.</p></li>
+<li><p>Expensive.</p></li>
+<li><p>Not what you want to make inference on.</p></li>
+</ul></li>
+<li><p>Latent variables <span class="math inline">\(\mathbf{z}\)</span>.</p>
+<ul>
+<li><p>Think of <span class="math inline">\(\mathbf{z}\)</span> as the ideal data.</p></li>
+<li><p>No measurement error - the exact quantity you want to observe but can’t.</p></li>
+</ul></li>
+<li><p>Data model parameters <span class="math inline">\(\boldsymbol{\theta}_D\)</span>.</p></li>
+</ul>
+</div>
+<div id="process-model" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> Process Model</h3>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]} 
+\end{align*}
+}
+\]</span></p>
+<ul>
+<li><p><strong>Where the science happens!</strong></p></li>
+<li><p>Latent process <span class="math inline">\(\mathbf{z}\)</span> is modeled.</p></li>
+<li><p>Can be dynamic in space and/or time</p></li>
+<li><p>Process parameters <span class="math inline">\(\boldsymbol{\theta}_P\)</span>.</p></li>
+<li><p>Virtually all interesting scientific questions can be made with inference about <span class="math inline">\(\mathbf{z}\)</span></p></li>
+</ul>
+</div>
+<div id="parameter-prior-model-bmhs-only" class="section level3">
+<h3><span class="header-section-number">2.3.5</span> Parameter (Prior) Model (BMHs only)</h3>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{orange}{[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]}
+\end{align*}
+}
+\]</span></p>
+<ul>
+<li><p>Probability distributions define “reasonable” ranges for parameters.</p></li>
+<li><p>Parameter models are useful for a variety of problems:</p>
+<ul>
+<li><p>Choosing important variables.</p></li>
+<li><p>Preventing over-fitting (regularization).</p></li>
+<li><p>“Pooling” estimates across categories.</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="posterior-distribution" class="section level3">
+<h3><span class="header-section-number">2.3.6</span> Posterior Distribution</h3>
+<p><span class="math display">\[
+{\Large
+\begin{align*}
+\color{cyan}{[\mathbf{z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}]} &amp; \propto
+[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}] [\mathbf{z} | \boldsymbol{\theta}_P] [\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]
+\end{align*}
+}
+\]</span></p>
+<ul>
+<li><p>Probability distribution over all unknowns in the model.</p></li>
+<li><p>Inference is made using the posterior distribution.</p></li>
+<li><p>Because the posterior distribution is a probability distribution (BHMs), uncertainty is easy to calculate. This is not true for EHMs.</p></li>
+</ul>
+</div>
+<div id="scientifically-motivated-statistical-modeling" class="section level3">
+<h3><span class="header-section-number">2.3.7</span> Scientifically Motivated Statistical Modeling</h3>
+<ul>
+<li><p>Criticize the model</p></li>
+<li><p>Does the model fit the data well?</p></li>
+<li><p>Do the predictions make sense?</p></li>
+<li><p>Are there subsets of the data that don’t fit the model well?</p></li>
+<li><p>Make inference using the model.</p></li>
+<li><p>If the model fits the data, use the model fit for prediction or inference.</p></li>
+</ul>
+</div>
+</div>
+<div id="spatial-data" class="section level2">
+<h2><span class="header-section-number">2.4</span> Spatial Data</h2>
+<p>All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let <span class="math inline">\(\mathcal{D}\)</span> represent the spatial domain and let <span class="math inline">\(\mathbf{s}\)</span> be a spatial location. In general, we will let <span class="math inline">\(\mathcal{A} \subset \mathcal{D}\)</span> be a subdomain of the spatial region of <span class="math inline">\(\mathbf{D}\)</span>.</p>
+<p><strong>Insert Diagram from class here</strong></p>
+</div>
+<div id="types-of-spatial-data" class="section level2">
+<h2><span class="header-section-number">2.5</span> Types of spatial data</h2>
+<p>There are three primary types of spatial data that we are going to consider</p>
+<ul>
+<li>Geostatistical data
+<ul>
+<li>Occur everywhere</li>
+<li>continuous support</li>
+<li>examples: temperature, precipitation</li>
+</ul></li>
+<li>Areal data
+<ul>
+<li>Occur only over discrete areas</li>
+<li>can be thought of as an integral of a continuous process over a subdomain <span class="math inline">\(\mathcal{A} \in \mathcal{D}\)</span></li>
+<li>examples: cases of a disease by counties, votes in an election by congressional district</li>
+</ul></li>
+<li>Point process data
+<ul>
+<li>The count and location of the data are random</li>
+<li>examples: tornados, lightning strikes</li>
+</ul></li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-berliner1996hierarchical">
+<p>Berliner, L Mark. 1996. “Hierarchical Bayesian Time Series Models.” In <em>Maximum Entropy and Bayesian Methods</em>, 15–22. Springer.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="spatial-visualization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STAT-5413.pdf", "STAT-5413.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
