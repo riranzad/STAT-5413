@@ -1,4 +1,4 @@
-# Introduction {#intro}
+# Day 1
 
 ```{r, message = FALSE}
 library(tidyverse)
@@ -12,28 +12,28 @@ The dimensions of different mathematical objects are very important for the stud
 
 We also need notation to explain probability distributions. We use the notation $[y]$ to denote the probability density function $p(y)$ of the random variable $y$ and $[y|x]$ to denote the probability density function $p(y|x)$ of $y$ given $x$. For example, if $y$ is a Gaussian random variable with mean $\mu$ and standard deviation $\sigma$ we write
 
-$$
+
 \begin{align*}
 [y | \mu, \sigma] & = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{-\frac{1}{2 \sigma^2} (y - \mu)^2 \right\}.
 \end{align*}
-$$
+
 
 We can also denote that $y$ has a Gaussian (normal) distribution given mean $\mu$ and variance $\sigma^2$ using the $\sim$ notation
 
-$$
+
 \begin{align*}
 y | \mu, \sigma & \sim \operatorname{N}(\mu, \sigma^2).
 \end{align*}
-$$
+
 
 ### Example: linear regression
 
-$$
+
 \begin{align*}
 \left[y_i | \boldsymbol{\theta} \right] & \sim \operatorname{N}(X_i \beta, \sigma^2) \\
 \boldsymbol{\theta} & = (\beta, \sigma^2)
 \end{align*}
-$$
+
 
 
 ```{r, out.width="80%"}
@@ -99,14 +99,12 @@ ggplot(dat, aes(x, y)) +
 
 * Combined, the <span style="color: #ff0000"> data model, </span> the <span style="color: #0000ff"> process model, </span> and the <span style="color: #ff7f00"> parameter model </span> define a <span style="color: #00ffff"> posterior distribution. </span>  
 
-$$
-{\Large
+
 \begin{align*}
 \color{cyan}{[\mathbf{z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}]} & \propto
 \color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}  \color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]} \color{orange}{[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]}
 \end{align*}
-}%
-$$
+
 
 
 ### Empirical Hierarchical models (EHMs)
@@ -124,26 +122,22 @@ $$
 
     * Note: the predictive distribution is not a <span style="color: #00ffff">posterior distribution</span>  because the normalizing constant is not known
     
-$$
-{\Large
+
 \begin{align*}
 \color{plum}{[\mathbf{z} | \mathbf{y}]} & \propto
 \color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}  \color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]}
 \end{align*}
-}%
-$$
+
 
 ### Data Model
 
 
 
-$$
-{\Large
+
 \begin{align*}
 \color{red}{[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}]}
 \end{align*}
-}
-$$
+
 
 * Describes how the data are collected and observed.
 
@@ -170,13 +164,11 @@ $$
 
 ### Process Model 
 
-$$
-{\Large
+
 \begin{align*}
 \color{blue}{[\mathbf{z} | \boldsymbol{\theta}_P]} 
 \end{align*}
-}
-$$
+
 
 * **Where the science happens!**
 
@@ -191,13 +183,9 @@ $$
 
 ### Parameter (Prior) Model (BMHs only)
 
-$$
-{\Large
 \begin{align*}
 \color{orange}{[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]}
 \end{align*}
-}
-$$
 
 
 * Probability distributions define "reasonable" ranges for parameters.
@@ -212,14 +200,10 @@ $$
 
 ### Posterior Distribution
 
-$$
-{\Large
 \begin{align*}
 \color{cyan}{[\mathbf{z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}]} & \propto
 [\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{z}] [\mathbf{z} | \boldsymbol{\theta}_P] [\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]
 \end{align*}
-}
-$$
 
 * Probability distribution over all unknowns in the model.
 
@@ -242,33 +226,4 @@ $$
 
 * If the model fits the data, use the model fit for prediction or inference.
 
-
-## Spatial Data
-
-All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let $\mathcal{D}$ represent the spatial domain and let $\mathbf{s}$ be a spatial location. In general, we will let $\mathcal{A} \subset \mathcal{D}$ be a subdomain of the spatial region of $\mathbf{D}$. 
-
-**Insert Diagram from class here**
-
-
-## Types of spatial data
-
-There are three primary types of spatial data that we are going to consider
-
-* Geostatistical data
-    * Occur everywhere
-    * continuous support
-    * examples: temperature, precipitation
-
-* Areal data
-    * Occur only over discrete areas
-    * can be thought of as an integral of a continuous process over a subdomain $\mathcal{A} \in \mathcal{D}$
-    * examples: cases of a disease by counties, votes in an election by congressional district
-    
-* Point process data
-    * The count and location of the data are random
-    * examples: tornados, lightning strikes
-    
-    
-
-    
 

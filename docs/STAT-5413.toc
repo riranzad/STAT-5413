@@ -1,0 +1,22 @@
+\contentsline {chapter}{\numberline {1}STAT 5413}{5}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Day 1}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Notation}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Probability Distributions}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Example: linear regression}{8}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Hierarchical modeling}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Bayesian Hierarchical models (BHMs)}{9}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Empirical Hierarchical models (EHMs)}{9}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Data Model}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Process Model}{10}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Parameter (Prior) Model (BMHs only)}{11}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}Posterior Distribution}{11}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}Scientifically Motivated Statistical Modeling}{11}{subsection.2.3.7}%
+\contentsline {chapter}{\numberline {3}Day 2}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Spatial Data}{13}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Types of spatial data}{13}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Spatial data}{14}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Day 3}{15}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Applications}{17}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Example one}{17}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Example two}{17}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Final Words}{19}{chapter.6}%
