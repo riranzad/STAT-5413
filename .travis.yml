@@ -1,4 +1,12 @@
 language: r
+cache: packages
+r:
+  - release
+addons:
+  apt:
+    packages:
+      - libnetcdf-dev
+      - libudunits2-dev
 pandoc_version: 1.19.2.1
 
 env:
