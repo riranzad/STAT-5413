@@ -12,6 +12,7 @@ All data occur at some location is space and time. For know we focus on spatial 
 There are three primary types of spatial data that we are going to consider
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Geostatistical data
 * Occur everywhere
 * continuous support
@@ -45,11 +46,21 @@ ggplot(aes(x = lon, y = lat, color = z)) +
     * continuous support
     * examples: temperature, precipitation
 
+=======
+* Geostatistical data
+    * Occur everywhere
+    * continuous support
+    * examples: temperature, precipitation
+
+>>>>>>> parent of c4d0e50... updated second day and added data folder
 * Areal data
     * Occur only over discrete areas
     * can be thought of as an integral of a continuous process over a subdomain $\mathcal{A} \in \mathcal{D}$
     * examples: cases of a disease by counties, votes in an election by congressional district
+<<<<<<< HEAD
 >>>>>>> parent of 39944d2... updated second day and added data folder
+=======
+>>>>>>> parent of c4d0e50... updated second day and added data folder
     
 * Point process data
     * The count and location of the data are random
@@ -59,6 +70,7 @@ ggplot(aes(x = lon, y = lat, color = z)) +
 ```{r, message = FALSE}
 library(tidyverse)
 library(here)
+<<<<<<< HEAD
 ```
 
 ```{r}
@@ -68,6 +80,8 @@ Window(starbucks) <- ma
 marks(starbucks) <- NULL
 ## plot using the plot function from spatstat
 plot(starbucks)
+=======
+>>>>>>> parent of c4d0e50... updated second day and added data folder
 ```
 
 
