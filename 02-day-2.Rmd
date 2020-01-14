@@ -1,11 +1,5 @@
 # Day 2
 
-```{r, message = FALSE}
-library(tidyverse)
-library(here)
-library(sp)
-```
-
 ## Spatial Data
 
 All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let $\mathcal{D}$ represent the spatial domain and let $\mathbf{s}$ be a spatial location. In general, we will let $\mathcal{A} \subset \mathcal{D}$ be a subdomain of the spatial region of $\mathbf{D}$. 
@@ -17,6 +11,7 @@ All data occur at some location is space and time. For know we focus on spatial 
 
 There are three primary types of spatial data that we are going to consider
 
+<<<<<<< HEAD
 ### Geostatistical data
 * Occur everywhere
 * continuous support
@@ -44,49 +39,26 @@ ggplot(aes(x = lon, y = lat, color = z)) +
     scale_color_viridis_c(option = "inferno") +
     ggtitle("Tmax for the first day of each month in 1990")
 ```    
-    
+=======
+* Geostatistical data
+    * Occur everywhere
+    * continuous support
+    * examples: temperature, precipitation
 
-### Areal data
-* Occur only over discrete areas
-* can be thought of as an integral of a continuous process over a subdomain $\mathcal{A} \in \mathcal{D}$
-* examples: cases of a disease by counties, votes in an election by congressional district
-
-```{r}
-data("BEA", package = "STRbook")
-glimpse(BEA)
-data("MOcounties", package = "STRbook")
-glimpse(MOcounties)
-MOcounties <- left_join(MOcounties, BEA, by = "NAME10")
-```
-
-```{r}
-ggplot(MOcounties) +
-    geom_polygon(aes(x = long,
-                     y = lat, # county boundary
-                     group = NAME10, # county group
-                     fill = log(X1970))) + # log of income
-    geom_path(aes(x = long, y = lat, group = NAME10)) +
-    scale_fill_viridis_c(limits = c(7.5, 10.2), option = "plasma", name = "log($)") +
-    coord_fixed() + 
-    ggtitle("1970") +
-    # county boundary
-    # county group
-    # annotations
-    xlab("x (m)") +
-    ylab("y (m)") +
-    theme_bw()
-```
+* Areal data
+    * Occur only over discrete areas
+    * can be thought of as an integral of a continuous process over a subdomain $\mathcal{A} \in \mathcal{D}$
+    * examples: cases of a disease by counties, votes in an election by congressional district
+>>>>>>> parent of 39944d2... updated second day and added data folder
     
-### Point process data
-* The count and location of the data are random
-* examples: tornados, lightning strikes
+* Point process data
+    * The count and location of the data are random
+    * examples: tornados, lightning strikes
     
-```{r}
-# uncomment out this line to download the data
-# load(url("http://github.com/mgimond/Spatial/raw/master/Data/ppa.RData"))
-# save(starbucks, ma, pop, file = here::here("data", "ppa-starbucks.RData"))
-load(here::here("data", "ppa-starbucks.RData"))
-glimpse(starbucks)
+    
+```{r, message = FALSE}
+library(tidyverse)
+library(here)
 ```
 
 ```{r}
@@ -97,18 +69,6 @@ marks(starbucks) <- NULL
 ## plot using the plot function from spatstat
 plot(starbucks)
 ```
-
-```{r}
-library(spatstat)
-## add the massachusetts polygon
-Window(starbucks) <- ma
-marks(starbucks) <- NULL
-## plot using the plot function from spatstat
-plot(starbucks)
-```
-
-
-## Animations of spatial data
 
 
 * Many different file types for spatial data
@@ -152,10 +112,6 @@ library(STRbook)
 ```
 
 
-## Spatial Visualization
-
-
-
 ### In Class Activity: 
 
 From [Lab 2.1](https://spacetimewithr.org/code) on the textbook site
@@ -178,7 +134,11 @@ From [Lab 2.1](https://spacetimewithr.org/code) on the textbook site
 library("dplyr")
 library("tidyr")
 library("STRbook")
+```
 
+
+
+```{r}
 ## ------------------------------------------------------------------------
 locs <- read.table(system.file("extdata", "Stationinfo.dat",
                                package = "STRbook"),
