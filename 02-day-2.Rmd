@@ -13,6 +13,7 @@ There are three primary types of spatial data that we are going to consider
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Geostatistical data
 * Occur everywhere
 * continuous support
@@ -53,12 +54,22 @@ ggplot(aes(x = lon, y = lat, color = z)) +
     * examples: temperature, precipitation
 
 >>>>>>> parent of c4d0e50... updated second day and added data folder
+=======
+* Geostatistical data
+    * Occur everywhere
+    * continuous support
+    * examples: temperature, precipitation
+
+>>>>>>> parent of c4d0e50... updated second day and added data folder
 * Areal data
     * Occur only over discrete areas
     * can be thought of as an integral of a continuous process over a subdomain $\mathcal{A} \in \mathcal{D}$
     * examples: cases of a disease by counties, votes in an election by congressional district
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of 39944d2... updated second day and added data folder
+=======
+>>>>>>> parent of c4d0e50... updated second day and added data folder
 =======
 >>>>>>> parent of c4d0e50... updated second day and added data folder
     
@@ -71,6 +82,7 @@ ggplot(aes(x = lon, y = lat, color = z)) +
 library(tidyverse)
 library(here)
 <<<<<<< HEAD
+<<<<<<< HEAD
 ```
 
 ```{r}
@@ -80,6 +92,8 @@ Window(starbucks) <- ma
 marks(starbucks) <- NULL
 ## plot using the plot function from spatstat
 plot(starbucks)
+=======
+>>>>>>> parent of c4d0e50... updated second day and added data folder
 =======
 >>>>>>> parent of c4d0e50... updated second day and added data folder
 ```
