@@ -26,13 +26,7 @@ There are three primary types of spatial data that we are going to consider
 data("NOAA_df_1990", package = "STRbook")
 glimpse(NOAA_df_1990)
 ```
-<<<<<<< HEAD
 
-
-=======
-
-
->>>>>>> c4d0e5059b2e45f143a484736aa818f3fe5da6bf
 ```{r, fig.width=16, fig.height = 9}
 ## Only plot the states with data
 states <- map_data("state") 
@@ -93,8 +87,6 @@ ggplot(MOcounties) +
 # save(starbucks, ma, pop, file = here::here("data", "ppa-starbucks.RData"))
 load(here::here("data", "ppa-starbucks.RData"))
 glimpse(starbucks)
-<<<<<<< HEAD
-=======
 ```
 
 ```{r}
@@ -104,7 +96,6 @@ Window(starbucks) <- ma
 marks(starbucks) <- NULL
 ## plot using the plot function from spatstat
 plot(starbucks)
->>>>>>> c4d0e5059b2e45f143a484736aa818f3fe5da6bf
 ```
 
 ```{r}
