@@ -49,6 +49,14 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.10/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
 
 
 <style type="text/css">
@@ -155,12 +163,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a><ul>
-<li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.1</b> Files for spatial data</a></li>
-<li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.2</b> Textbook package</a></li>
-<li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.3</b> Spatial Visualization</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.3.1</b> Spatial visualization using <em>fields</em></a></li>
-<li class="chapter" data-level="3.3.2" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>3.3.2</b> Spatial visualization using <em>fields</em></a></li>
-<li class="chapter" data-level="3.3.3" data-path="day-3.html"><a href="day-3.html#in-class-activity"><i class="fa fa-check"></i><b>3.3.3</b> In Class Activity:</a></li>
+<li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#anouncements"><i class="fa fa-check"></i><b>3.1</b> Anouncements</a></li>
+<li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Files for spatial data</a></li>
+<li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a></li>
+<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.4.1</b> Spatial visualization using <em>fields</em></a></li>
+<li class="chapter" data-level="3.4.2" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>3.4.2</b> Spatial visualization using <em>fields</em></a></li>
+<li class="chapter" data-level="3.4.3" data-path="day-3.html"><a href="day-3.html#in-class-activity"><i class="fa fa-check"></i><b>3.4.3</b> In Class Activity:</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a></li>
@@ -229,8 +238,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">library</span>(here)</a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">library</span>(sp)</a></code></pre></div>
+<div id="anouncements" class="section level2">
+<h2><span class="header-section-number">3.1</span> Anouncements</h2>
+<ul>
+<li><p>Show gitHub page for site <a href="https://github.com/jtipton25/STAT-5413">https://github.com/jtipton25/STAT-5413</a></p>
+<ul>
+<li>Show how to download files and data</li>
+</ul></li>
+</ul>
+</div>
 <div id="files-for-spatial-data" class="section level2">
-<h2><span class="header-section-number">3.1</span> Files for spatial data</h2>
+<h2><span class="header-section-number">3.2</span> Files for spatial data</h2>
 <ul>
 <li><p>Many different file types for spatial data</p></li>
 <li><p>Typically data are in “flat files” like comma-seperated value (CSV) files</p></li>
@@ -248,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">library</span>(RNetCDF)</a></code></pre></div>
 </div>
 <div id="textbook-package" class="section level2">
-<h2><span class="header-section-number">3.2</span> Textbook package</h2>
+<h2><span class="header-section-number">3.3</span> Textbook package</h2>
 <p>To install the data from the textbook, go to <a href="https://spacetimewithr.org/">https://spacetimewithr.org/</a> and follow the link to the code.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
 <a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">library</span>(devtools)</a>
@@ -262,9 +280,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##     MOcounties</code></pre>
 </div>
 <div id="spatial-visualization" class="section level2">
-<h2><span class="header-section-number">3.3</span> Spatial Visualization</h2>
+<h2><span class="header-section-number">3.4</span> Spatial Visualization</h2>
 <div id="spatial-visualization-using-fields" class="section level3">
-<h3><span class="header-section-number">3.3.1</span> Spatial visualization using <em>fields</em></h3>
+<h3><span class="header-section-number">3.4.1</span> Spatial visualization using <em>fields</em></h3>
 <ul>
 <li>Simulate a process with some random locations</li>
 </ul>
@@ -380,7 +398,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 </div>
 <div id="spatial-visualization-using-fields-1" class="section level3">
-<h3><span class="header-section-number">3.3.2</span> Spatial visualization using <em>fields</em></h3>
+<h3><span class="header-section-number">3.4.2</span> Spatial visualization using <em>fields</em></h3>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">nx &lt;-<span class="st"> </span><span class="dv">100</span></a>
 <a class="sourceLine" id="cb59-2" data-line-number="2">ny &lt;-<span class="st"> </span><span class="dv">100</span></a>
 <a class="sourceLine" id="cb59-3" data-line-number="3"></a>
@@ -751,7 +769,7 @@ The example is from <a href="https://www4.stat.ncsu.edu/~reich/SpatialStats/code
 <p><a href="http://www.deathpenaltyinfo.org/murder-rates-nationally-and-state#MRord">http://www.deathpenaltyinfo.org/murder-rates-nationally-and-state#MRord</a></p>
 </div>
 <div id="in-class-activity" class="section level3">
-<h3><span class="header-section-number">3.3.3</span> In Class Activity:</h3>
+<h3><span class="header-section-number">3.4.3</span> In Class Activity:</h3>
 <p>From <a href="https://spacetimewithr.org/code">Lab 2.1</a> on the textbook site</p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="co">## Wikle, C. K., Zammit-Mangion, A., and Cressie, N. (2019), </span></a>
 <a class="sourceLine" id="cb93-2" data-line-number="2"><span class="co">## Spatio-Temporal Statistics with R, Boca Raton, FL: Chapman &amp; Hall/CRC</span></a>

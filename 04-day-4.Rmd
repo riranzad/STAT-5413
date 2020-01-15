@@ -1,2 +1,10 @@
 # Day 4
 
+## Interactive visualization (Interactive with HTML format only)
+
+```{r}
+# install.packages("webshot")
+# webshot::install_phantomjs()
+DT::datatable(iris)
+```
+

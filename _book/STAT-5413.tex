@@ -105,37 +105,15 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage{etoolbox}
-\makeatletter
-\providecommand{\subtitle}[1]{% add subtitle to \maketitle
-  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
-}
-\makeatother
 \usepackage{booktabs}
 \usepackage{xcolor}
 \definecolor{plum}{rgb}{0.56, 0.27, 0.52}
-% https://github.com/rstudio/rmarkdown/issues/337
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
-
-% https://github.com/rstudio/rmarkdown/pull/252
-\usepackage{titling}
-\setlength{\droptitle}{-2em}
-
-\pretitle{\vspace{\droptitle}\centering\huge}
-\posttitle{\par}
-
-\preauthor{\centering\large\emph}
-\postauthor{\par}
-
-\predate{\centering\large\emph}
-\postdate{\par}
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
 
 \title{Notes for STAT 5413 - Spatial Statistics}
 \author{John Tipton}
-\date{Fall 2020 Semester. Last Modified: 2020-01-14}
+\date{Fall 2020 Semester. Last Modified: 2020-01-15}
 
 \begin{document}
 \maketitle
@@ -427,6 +405,7 @@ y | \mu, \sigma & \sim \operatorname{N}(\mu, \sigma^2).
 \KeywordTok{library}\NormalTok{(tidyverse)}
 \KeywordTok{library}\NormalTok{(here)}
 \KeywordTok{library}\NormalTok{(sp)}
+\KeywordTok{library}\NormalTok{(spatstat)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -661,7 +640,7 @@ There are three primary types of spatial data that we are going to consider
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(spatstat)}
+\CommentTok{## uses spatstat library}
 \CommentTok{## add the massachusetts polygon}
 \KeywordTok{Window}\NormalTok{(starbucks) <-}\StringTok{ }\NormalTok{ma}
 \KeywordTok{marks}\NormalTok{(starbucks) <-}\StringTok{ }\OtherTok{NULL}
@@ -671,6 +650,34 @@ There are three primary types of spatial data that we are going to consider
 \end{Shaded}
 
 \includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\hypertarget{day-3}{%
+\chapter{Day 3}\label{day-3}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(here)}
+\KeywordTok{library}\NormalTok{(sp)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{anouncements}{%
+\section{Anouncements}\label{anouncements}}
+
+\begin{itemize}
+\item
+  Show gitHub page for site \url{https://github.com/jtipton25/STAT-5413}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Show how to download files and data
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{files-for-spatial-data}{%
+\section{Files for spatial data}\label{files-for-spatial-data}}
 
 \begin{itemize}
 \item
@@ -732,6 +739,17 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+## 
+## Attaching package: 'STRbook'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked _by_ '.GlobalEnv':
+## 
+##     MOcounties
+\end{verbatim}
+
 \hypertarget{spatial-visualization}{%
 \section{Spatial Visualization}\label{spatial-visualization}}
 
@@ -747,6 +765,62 @@ Note that this package is relatively large because it contains a decent amount o
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(fields)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: spam
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: dotCall64
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: grid
+\end{verbatim}
+
+\begin{verbatim}
+## Spam version 2.5-1 (2019-12-12) is loaded.
+## Type 'help( Spam)' or 'demo( spam)' for a short introduction 
+## and overview of this package.
+## Help for individual functions is also obtained by adding the
+## suffix '.spam' to the function name, e.g. 'help( chol.spam)'.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'spam'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     backsolve, forwardsolve
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: maps
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'maps'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     map
+\end{verbatim}
+
+\begin{verbatim}
+## See https://github.com/NCAR/Fields for
+##  an extensive vignette, other supplements and source code
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{## longitude and latitude of approximately the center of Arkansas}
 \NormalTok{lon_lat_center <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{92.33}\NormalTok{, }\FloatTok{35.00}\NormalTok{) }
 
@@ -760,7 +834,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-16-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -769,7 +843,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-17-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -778,7 +852,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -834,7 +908,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-19-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -844,7 +918,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-20-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -852,7 +926,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-21-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -862,7 +936,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-22-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -872,7 +946,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -880,7 +954,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -888,7 +962,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-24-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-25-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -897,7 +971,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-25-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -938,7 +1012,7 @@ Note that this package is relatively large because it contains a decent amount o
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-26-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-27-1.pdf}
 
 Plot the simulated data with the county boundaries
 
@@ -949,7 +1023,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-27-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-28-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -959,7 +1033,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-28-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-29-1.pdf}
 
 \hypertarget{spatial-visualization-using-fields-1}{%
 \subsection{\texorpdfstring{Spatial visualization using \emph{fields}}{Spatial visualization using fields}}\label{spatial-visualization-using-fields-1}}
@@ -995,7 +1069,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-30-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1010,7 +1084,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-29-2.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-30-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1081,7 +1155,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-31-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-32-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1096,7 +1170,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-31-2.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-32-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1114,7 +1188,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-31-3.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-32-3.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1135,7 +1209,7 @@ Plot the simulated data with the county boundaries
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-31-4.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-32-4.pdf}
 
 Heatmaps can also be used for plotting. In general, there are two ggplot geoms that are useful for spatial data: \emph{geom\_tile} is good for irregularly spaced data, \emph{geom\_raster} is best for regularly spaced data as it is faster to process.
 
@@ -1217,7 +1291,7 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-33-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-34-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1233,7 +1307,7 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-33-2.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-34-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1260,7 +1334,7 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 ## will be shifted. Consider using geom_tile() instead.
 \end{verbatim}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-34-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-35-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1277,7 +1351,7 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-35-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-36-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -1293,7 +1367,19 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 \KeywordTok{library}\NormalTok{(maps)}
 \KeywordTok{library}\NormalTok{(ggplot2)}
 \KeywordTok{library}\NormalTok{(ggmap)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
+\end{verbatim}
+
+\begin{verbatim}
+## Please cite ggmap if you use it! See citation("ggmap") for details.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{lon <-}\StringTok{ }\NormalTok{arkansas_center[}\DecValTok{1}\NormalTok{] }\OperatorTok{+}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{length =} \DecValTok{10}\NormalTok{)   }
 \NormalTok{lat <-}\StringTok{ }\NormalTok{arkansas_center[}\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DataTypeTok{length =} \DecValTok{10}\NormalTok{)   }
 \NormalTok{s   <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(lon, lat)}
@@ -1340,7 +1426,7 @@ Heatmaps can also be used for plotting. In general, there are two ggplot geoms t
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-36-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-37-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1361,6 +1447,12 @@ Using Google maps requires registration of a key. See \url{https://www.littlemis
 \begin{Highlighting}[]
 \CommentTok{## process the guns data}
 \CommentTok{# load(here::here("data", "guns.RData"))}
+\CommentTok{# names(Y)[1:5]}
+\CommentTok{# region  <- tolower(names(Y))}
+\CommentTok{# region[1:5]}
+\CommentTok{# rate    <- 10000*Y/N}
+\CommentTok{# numlaws <- rowSums(X)}
+\CommentTok{# crime   <- data.frame(Y=Y,N=N,rate=rate,X=X,numlaws,region=region)}
 \CommentTok{# dat <- data.frame(}
 \CommentTok{#     deaths_2010             = Y,}
 \CommentTok{#     population              = N,}
@@ -1372,21 +1464,12 @@ Using Google maps requires registration of a key. See \url{https://www.littlemis
 \CommentTok{#     numlaws                 = apply(X, 1, sum),}
 \CommentTok{#     region                  = region}
 \CommentTok{# )}
-\CommentTok{# save(dat, file = here::here("guns_processed.RData"))}
-\KeywordTok{load}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"guns_processed.RData"}\NormalTok{))}
+\CommentTok{# save(dat, file = here::here("data", "guns_processed.RData"))}
+\KeywordTok{load}\NormalTok{(here}\OperatorTok{::}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"guns_processed.RData"}\NormalTok{))}
 
 \CommentTok{## mutate a death rate}
 \NormalTok{dat <-}\StringTok{ }\NormalTok{dat }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{rate =} \DecValTok{10000} \OperatorTok{*}\StringTok{ }\NormalTok{deaths_}\DecValTok{2010} \OperatorTok{/}\StringTok{ }\NormalTok{population)}
-
-\CommentTok{# names(Y)[1:5]}
-\CommentTok{# region  <- tolower(names(Y))}
-\CommentTok{# region[1:5]}
-\CommentTok{# rate    <- 10000*Y/N}
-\CommentTok{# numlaws <- rowSums(X)}
-\CommentTok{# crime   <- data.frame(Y=Y,N=N,rate=rate,X=X,numlaws,region=region)}
-\CommentTok{# }
-\CommentTok{# crime[1:5,]}
 
 \NormalTok{dat }\OperatorTok{%>%}
 \StringTok{    }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ numlaws, }\DataTypeTok{y =}\NormalTok{ rate, }\DataTypeTok{color =}\NormalTok{ region }\OperatorTok{==}\StringTok{ "arkansas"}\NormalTok{)) }\OperatorTok{+}
@@ -1399,7 +1482,7 @@ Using Google maps requires registration of a key. See \url{https://www.littlemis
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-37-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-38-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1464,7 +1547,7 @@ Using Google maps requires registration of a key. See \url{https://www.littlemis
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-38-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-39-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1491,7 +1574,7 @@ Using Google maps requires registration of a key. See \url{https://www.littlemis
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-39-1.pdf}
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-40-1.pdf}
 
 The map looks right according to
 
@@ -1656,11 +1739,21 @@ From \href{https://spacetimewithr.org/code}{Lab 2.1} on the textbook site
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{day-3}{%
-\chapter{Day 3}\label{day-3}}
-
 \hypertarget{day-4}{%
 \chapter{Day 4}\label{day-4}}
+
+\hypertarget{interactive-visualization-html-format-only}{%
+\section{Interactive visualization (HTML format only)}\label{interactive-visualization-html-format-only}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# install.packages("webshot")}
+\CommentTok{# webshot::install_phantomjs()}
+\NormalTok{DT}\OperatorTok{::}\KeywordTok{datatable}\NormalTok{(iris)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{STAT-5413_files/figure-latex/unnamed-chunk-42-1.pdf}
 
 \hypertarget{day-5}{%
 \chapter{Day 5}\label{day-5}}

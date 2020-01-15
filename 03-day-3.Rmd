@@ -6,6 +6,12 @@ library(here)
 library(sp)
 ```
 
+## Anouncements
+
+* Show gitHub page for site [https://github.com/jtipton25/STAT-5413](https://github.com/jtipton25/STAT-5413)
+
+    * Show how to download files and data
+
 ## Files for spatial data
 
 * Many different file types for spatial data
