@@ -8,9 +8,28 @@ library(sp)
 
 ## Anouncements
 
+* Course audits
+
 * Show gitHub page for site [https://github.com/jtipton25/STAT-5413](https://github.com/jtipton25/STAT-5413)
 
     * Show how to download files and data
+
+* Example Gerrymandering
+
+[https://uglygerry.com/](https://uglygerry.com/)
+
+```{r}
+library(showtext)
+font_add("myfont", here::here("fonts", "Gerry.otf"))
+```
+
+```{r fig.showtext=TRUE, fig.width=7, fig.height=7}
+plot(cars, family = "myfont")
+title(
+    main = "This Font is made of \n Gerrymandered Political Districts", 
+    family = "myfont", cex.main = 1.5
+)
+```
 
 ## Files for spatial data
 
