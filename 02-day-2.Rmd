@@ -11,7 +11,10 @@ library(spatstat)
 
 All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let $\mathcal{D}$ represent the spatial domain and let $\mathbf{s}$ be a spatial location. In general, we will let $\mathcal{A} \subset \mathcal{D}$ be a subdomain of the spatial region of $\mathbf{D}$. 
 
-**Insert Diagram from class here**
+```{r}
+knitr::include_graphics(here::here("images", "spatial-domain.jpg"))
+```
+
 
 
 ## Types of spatial data

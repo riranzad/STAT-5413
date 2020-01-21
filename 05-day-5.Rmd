@@ -1,2 +1,147 @@
 # Day 5
 
+```{r, message = FALSE}
+library(tidyverse)
+library(fields)
+library(mvnfast)
+library(plotly)
+set.seed(404)
+```
+## Spatial means and covariances
+
+Let $\{ y(\mathbf{s}_i) \}$ be a set of observations of a process at locations $\{ \mathbf{s}_i \in \mathcal{D}, i = 1, \ldots, n \}$. 
+
+* In one dimension, $y(\mathbf{s})$ is a curve
+
+```{r}
+n <- 100
+s <- seq(0, 1, length = n)
+## calculate the pairwise distance between locations
+## rdist from the fields package is much faster than the dist function
+D <- rdist(s, s)
+Sigma <- exp( - D)
+dat <- data.frame(
+    s = s,
+    y = c(rmvn(1, mu = rep(0, n), sigma = Sigma))
+)
+
+dat %>%
+    ggplot(aes(x = s, y = y)) +
+    geom_line() +
+    ylab("y(s)")
+```
+
+
+* In two dimensions, $y(\mathbf{s})$ is a surface
+
+```{r}
+n <- 20^2
+s <- expand.grid(
+    seq(0, 1, length = sqrt(n)),
+    seq(0, 1, length = sqrt(n))
+)
+    
+## calculate the pairwise distance between locations
+## rdist from the fields package is much faster than the dist function
+D <- rdist(s, s)
+Sigma <- exp( - D)
+dat <- data.frame(
+    s1 = s[, 1],
+    s2 = s[, 2],
+    y  = c(rmvn(1, mu = rep(0, n), sigma = Sigma))
+)
+
+
+plot_ly(
+    z = ~matrix(dat$y, sqrt(n), sqrt(n))
+) %>%
+    add_surface()
+```
+
+### Gaussian processes
+ 
+* A [Gaussian process](https://en.wikipedia.org/wiki/Gaussian_process) is an infinite-dimensional function (the function is defined for inginitely many locations $\mathbf{s} \in \mathcal{D}$) with the property that the finite-dimensional vector $\mathbf{y}(\mathbf{s}) = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n) )'$ at any finite subset of locations $\mathbf{s}_1, \ldots, \mathbf{s}_n \in \mathcal{D}$ has a multivariate Gaussian distribution. (A good book is available free online here: [http://www.gaussianprocess.org/gpml/](http://www.gaussianprocess.org/gpml/))
+
+#### Mean and covariance
+
+* A univariate normal distribution is fully characterized by a mean $\mu$ and a variance $\sigma^2$.
+
+* A multivariate normal distribution is fully characeterized by a mean vector $\boldsymbol{\mu}$ and a covariance matrix $\boldsymbol{\Sigma}$. 
+
+    * The mean is an $n$-dimensional vector with 
+    
+    \begin{align*}
+    E\left( y(\mathbf{s}) \right) = \boldsymbol{\mu}(\mathbf{s}) = \begin{pmatrix} \mu(\mathbf{s}_1) \\ \vdots \\ \mu(\mathbf{s}_n) \end{pmatrix}
+    \end{align*}
+    
+    * The covariance matrix is an $n \times n$ matrix with
+
+    \begin{align*}
+    \operatorname{Cov} \left( y(\mathbf{s}) \right) & = \begin{bmatrix}
+    \operatorname{Var} \left( y(\mathbf{s}_1) \right) & \operatorname{Cov} \left( y(\mathbf{s}_1), y(\mathbf{s}_2) \right) & \cdots & \operatorname{Cov} \left( y(\mathbf{s}_1), y(\mathbf{s}_n) \right) \\
+    \operatorname{Cov} \left( y(\mathbf{s}_2), y(\mathbf{s}_1) \right) & \operatorname{Var} \left( y(\mathbf{s}_2) \right) & \cdots & \operatorname{Cov} \left( y(\mathbf{s}_2), y(\mathbf{s}_n) \right) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \operatorname{Cov} \left( y(\mathbf{s}_n), y(\mathbf{s}_1) \right) &    \operatorname{Cov} \left( y(\mathbf{s}_n), y(\mathbf{s}_2) \right) & \cdots & \operatorname{Var} \left( y(\mathbf{s}_n) \right)  \\
+    \end{bmatrix}
+    \end{align*}
+    
+
+* Recall that the multivariate normal pdf is 
+
+\begin{align*}
+[\mathbf{y} | \boldsymbol{\mu}, \boldsymbol{\Sigma}] & = (2 \pi)^{-\frac{n}{2}} |\boldsymbol{\Sigma}|^{-\frac{1}{2}} e^{-\frac{1}{2} \left( \mathbf{y} - \boldsymbol{\mu} \right)' \boldsymbol{\Sigma}^{-1} \left( \mathbf{y} - \boldsymbol{\mu} \right)}
+\end{align*}
+
+    * Define the precision matrix $\boldsymbol{\Omega} = \boldsymbol{\Sigma}^{-1}$. Then, the multivariate normal pdf can be written as
+
+\begin{align*}
+[\mathbf{y} | \boldsymbol{\mu}, \boldsymbol{\Omega}] & = (2 \pi)^{-\frac{n}{2}} |\boldsymbol{\Omega}|^{\frac{1}{2}} e^{-\frac{1}{2} \left( \mathbf{y} - \boldsymbol{\mu} \right)' \boldsymbol{\Omega} \left( \mathbf{y} - \boldsymbol{\mu} \right)}
+\end{align*}    
+    
+
+#### Mean and covariance **functions**
+
+* A Gaussian process is fully characterized by a mean function $E\left( y(\mathbf{s}) \right) = \mu(\mathbf{s})$ that maps $\mathcal{R}^d \rightarrow \mathcal{R}^1$ (for a $d$-dimensional location $\mathbf{s}$ -- typically $d=2$) and a covariance function $\operatorname{Cov} \left( y(\mathbf{s}_i), y(\mathbf{s}_j) \right) = C(\mathbf{s}, \mathbf{s}')$.
+
+    * This means that once you know the mean function $\mu(\mathbf{s})$ and the covariance function $C(\mathbf{s}, \mathbf{s}')$ you have full knowledge of the distribution
+    
+    * Note: this is different than a multivariate normal distribution as this is an infinite-dimensional function -- cannot be represented with a vector and/or matrix.
+    
+* Any finite realization of a GP has the pdf
+
+\begin{align*}
+[\mathbf{y} | \boldsymbol{\mu}, \boldsymbol{\Sigma}] & = (2 \pi)^{-\frac{n}{2}} |\boldsymbol{\Sigma}|^{-\frac{1}{2}} e^{-\frac{1}{2} \left( \mathbf{y} - \boldsymbol{\mu} \right)' \boldsymbol{\Sigma}^{-1} \left( \mathbf{y} - \boldsymbol{\mu} \right)}
+\end{align*}
+
+where $\boldsymbol{\mu}$ is determined by the function $\mu(\cdot)$ and
+$\boldsymbol{\Sigma}$ is determined by the function $C(\cdot, \cdot)$.
+
+#### The Gaussian process mean function
+
+* There are many possible valid choices for the mean function $\mu(\mathbf{s})$ (almost any possible function is allowed).
+
+    * Constant function: $\mu(\mathbf{s}) \equiv \beta_0$
+    
+    * Spatial covariates: $\mu(\mathbf{s}) \equiv \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} = \beta_0 + \sum_{j=1}^p x_j(\mathbf{s}) \beta_j$
+        
+        * Examples: elevation, distance to water, latitude
+        
+    * Linear spatial trends: $\mu(\mathbf{s}_i) \equiv \beta_0 + \beta_1 s_{i1} + \beta_2 s_{i2}$
+    
+    * Higher-order spatial trends: $\mu(\mathbf{s}_i) \equiv \sum_{j=1}^p f_j(\mathbf{s}) \beta_j$ where $f_j(\mathbf{s})$ is some function of location $\mathbf{s}$ (i.e., B-splines, Fourier bases, wavelets, etc.)
+    
+* How to choose:
+
+    * AIC / BIC / cross-validation 
+    
+* A simple mean structure can leave behind a strong residual covariance structure
+
+* A complex mean structure can lead to independent residuals
+
+
+    
+    
+
+For future classes (basis representations) [Visual exploration of Gaussian Processes](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+
+

@@ -554,57 +554,58 @@ data("NOAA_df_1990", package = "STRbook")
 ```
 
 ```{r}
-if (!file.exists(here::here("images", "NOAA_df_1990-animation.gif"))) {
-    ## 48 unique months and years
-    month_year <- NOAA_df_1990 %>%
-        subset(day == 1 & id == 3804 & proc == "Tmax") %>%
-        # group_by(year, month) %>%
-        select(month, year)
-    
-    ## limits of the temperature range
-    zlim <- NOAA_df_1990 %>%
-        subset(proc == "Tmax") %>%
-        select(z) %>%
-        range()
+## 48 unique months and years
+month_year <- NOAA_df_1990 %>%
+    subset(day == 1 & id == 3804 & proc == "Tmax") %>%
+    # group_by(year, month) %>%
+    select(month, year)
 
-    ## Only plot the states with data
-    states <- map_data("state") 
-    states <- states %>%
-        subset(!(region %in% c(
-            "washington", "oregon", "california", "nevada", "idaho", "utah", 
-            "arizona","montana", "wyoming", "colorado", "new mexico"
-        ))) 
-    
-    ## generate a plotting function
-    make_plot <- function() {
-        for (i in 1:nrow(month_year)) {
-            p <- NOAA_df_1990 %>%
-                subset(
-                    day == 1 & proc == "Tmax" & 
-                        month == month_year$month[i] & 
-                        year == month_year$year[i]
-                ) %>%
-                ggplot(aes(x = lon, y = lat, color = z)) +
-                geom_point(size = 2) + 
-                geom_polygon(data = states, aes(x = long, y = lat, group = group), 
-                             inherit.aes = FALSE, fill = NA, color = "black") +
-                scale_color_viridis_c(option = "inferno", limits = zlim) +
-                theme(
-                    plot.title = element_text(size = rel(2.5))
-                ) +
-                ggtitle(
-                    paste("Tmax for the first day of month ", month_year$month[i], 
-                          " in ", month_year$year[i], sep = "")
-                )
-            print(p)
-        }
+## limits of the temperature range
+zlim <- NOAA_df_1990 %>%
+    subset(proc == "Tmax") %>%
+    select(z) %>%
+    range()
+
+## Only plot the states with data
+states <- map_data("state") 
+states <- states %>%
+    subset(!(region %in% c(
+        "washington", "oregon", "california", "nevada", "idaho", "utah", 
+        "arizona","montana", "wyoming", "colorado", "new mexico"
+    ))) 
+
+## generate a plotting function
+make_plot <- function() {
+    for (i in 1:nrow(month_year)) {
+        p <- NOAA_df_1990 %>%
+            subset(
+                day == 1 & proc == "Tmax" & 
+                    month == month_year$month[i] & 
+                    year == month_year$year[i]
+            ) %>%
+            ggplot(aes(x = lon, y = lat, color = z)) +
+            geom_point(size = 2) + 
+            geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+                         inherit.aes = FALSE, fill = NA, color = "black") +
+            scale_color_viridis_c(option = "inferno", limits = zlim) +
+            theme(
+                plot.title = element_text(size = rel(2.5))
+            ) +
+            ggtitle(
+                paste("Tmax for the first day of month ", month_year$month[i], 
+                      " in ", month_year$year[i], sep = "")
+            )
+        print(p)
     }
+}
+
+if (!file.exists(here::here("images", "NOAA_df_1990-animation.gif"))) {
     
     gifski::save_gif(
         make_plot(),
         gif_file = here::here("images", "NOAA_df_1990-animation.gif"), 
         progress = FALSE,
-        delay = 0.75, 
+        delay = 0.5, 
         height = 360, width = 640, units = "px"
     )
 }
@@ -614,6 +615,38 @@ if (!file.exists(here::here("images", "NOAA_df_1990-animation.gif"))) {
 knitr::include_graphics(here::here("images", "NOAA_df_1990-animation.gif"))
 ```
 
+### Interactive plotting using _plotly_
+
+```{r, message = FALSE}
+library(plotly)
+## Plot Tmax for June 1991
+p <- NOAA_df_1990 %>%
+    subset(
+        day == 1 & proc == "Tmax" & 
+            month == "6" & 
+            year == "1991"
+    ) %>%
+    ggplot(aes(x = lon, y = lat, color = z)) +
+    geom_point(size = 2) + 
+    geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+                 inherit.aes = FALSE, fill = NA, color = "black") +
+    scale_color_viridis_c(option = "inferno", limits = zlim) +
+    theme(
+        plot.title = element_text(size = rel(2.5))
+    ) +
+    ggtitle(
+        paste("Tmax for the first day of June, 1991")
+    )
+## Check if the ploty map has been produced. If so, use it, otherwise
+## run the code and produce the plot
+if (!file.exists(here::here("images", "temp-june-1991.html"))) {
+    p_plotly <- ggplotly(p, width = 800, height = 450)
+    htmlwidgets::saveWidget(p_plotly, file = here::here("images", "temp-june-1991.html"))
+} else {
+    # htmlwidgets::saveWidget()    
+    htmltools::includeHTML(here::here("images", "temp-june-1991.html"))
+}
+```
 
 
 

@@ -3,5 +3,6 @@ Type: Book
 Title: Does not matter.
 Version: 0.0.1
 Imports: bookdown, tidyverse, here, rgdal, maptools, RNetCDF, devtools, sp,
-         spacetime, spatstat, fields, maps, ggmap, showtext, gifski
+         spacetime, spatstat, fields, maps, ggmap, showtext, gifski, ggvis,
+         shiny, plotly, htmlwidgets, htmltools, mvnfast
 Remotes: rstudio/bookdown, andrewzm/STRbook
