@@ -1,2 +1,11 @@
 # Day 6
 
+
+
+
+
+
+
+
+For future classes (basis representations) [Visual exploration of Gaussian Processes](https://distill.pub/2019/visual-exploration-gaussian-processes/)
+
