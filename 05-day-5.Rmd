@@ -5,6 +5,7 @@ library(tidyverse)
 library(fields)
 library(mvnfast)
 library(plotly)
+library(splines)
 set.seed(404)
 ```
 ## Spatial means and covariances
@@ -92,7 +93,7 @@ plot_ly(
 [\mathbf{y} | \boldsymbol{\mu}, \boldsymbol{\Sigma}] & = (2 \pi)^{-\frac{n}{2}} |\boldsymbol{\Sigma}|^{-\frac{1}{2}} e^{-\frac{1}{2} \left( \mathbf{y} - \boldsymbol{\mu} \right)' \boldsymbol{\Sigma}^{-1} \left( \mathbf{y} - \boldsymbol{\mu} \right)}
 \end{align*}
 
-    * Define the precision matrix $\boldsymbol{\Omega} = \boldsymbol{\Sigma}^{-1}$. Then, the multivariate normal pdf can be written as
+* Define the precision matrix $\boldsymbol{\Omega} = \boldsymbol{\Sigma}^{-1}$. Then, the multivariate normal pdf can be written as
 
 \begin{align*}
 [\mathbf{y} | \boldsymbol{\mu}, \boldsymbol{\Omega}] & = (2 \pi)^{-\frac{n}{2}} |\boldsymbol{\Omega}|^{\frac{1}{2}} e^{-\frac{1}{2} \left( \mathbf{y} - \boldsymbol{\mu} \right)' \boldsymbol{\Omega} \left( \mathbf{y} - \boldsymbol{\mu} \right)}
@@ -134,12 +135,130 @@ $\boldsymbol{\Sigma}$ is determined by the function $C(\cdot, \cdot)$.
 
     * AIC / BIC / cross-validation 
     
+#### Example    
+
+```{r}
+n <- 1000
+X <- seq(0, 1, length = n)
+X_bs <- bs(X, df = 10)
+beta <- rnorm(ncol(X_bs))
+y <- X * 2 + X_bs %*% beta + rnorm(n, 0, 0.25)
+
+dat <- data.frame(X = X, y = y, mu = X * 2 + X_bs %*% beta)
+dat %>%
+    ggplot(aes(x = X, y = y)) +
+    geom_point() +
+    geom_line(aes(x = X, y = mu), color = "red")
+```
+
+
 * A simple mean structure can leave behind a strong residual covariance structure
+
+```{r, out.width = "49%", fig.show = "hold"}
+dat$simple <- predict(lm(y ~ X))
+dat$simple_resids <- resid(lm(y ~ X))
+
+dat %>%
+    ggplot(aes(x = X, y = y)) +
+    geom_point() +
+    geom_line(aes(x = X, y = mu), color = "red", lwd = 2) +
+    geom_line(aes(x = X, y = simple), color = "blue", lwd = 2) +
+    ggtitle("Simple linear fit") + 
+    theme(plot.title = element_text(size = 30))
+
+dat %>%
+    ggplot(aes(x = X, y = simple_resids)) +
+    geom_point() +
+    geom_hline(yintercept = 0, color = "red", lwd = 2) +
+    ggtitle("Simple linear fit residuals") + 
+    theme(plot.title = element_text(size = 30))
+```
 
 * A complex mean structure can lead to independent residuals
 
+```{r, out.width = "49%", fig.show = "hold"}
+dat$complex <- predict(lm(y ~ X + X_bs))
+dat$complex_resids <- resid(lm(y ~ X + X_bs))
 
+dat %>%
+    ggplot(aes(x = X, y = y)) +
+    geom_point() +
+    geom_line(aes(x = X, y = mu), color = "red", lwd = 2) +
+    geom_line(aes(x = X, y = complex), color = "blue", lwd = 2) +
+    ggtitle("Complex spline fit") + 
+    theme(plot.title = element_text(size = 30))
+
+dat %>%
+    ggplot(aes(x = X, y = complex_resids)) +
+    geom_point() +
+    geom_hline(yintercept = 0, color = "red", lwd = 2) +
+    ggtitle("Complex spline fit residuals") + 
+    theme(plot.title = element_text(size = 30))
+```
+
+* How do you interpret this residual correlation?
+
+    * Missing covariates that have a spatial pattern
+
+        * For example, what if you are modeling temperature in a mountainous region and don't include elevation as a covariate?
+
+    * Advection/diffusion processes 
+        * Example: the wind blowing, the spread of disease
+        
+#### Gaussian Process Covariance Functions
+
+* Unlike the mean functions, only specific covariance functions are valid.
+
+* The covaraince function at a finite subset of $n$ points is called the covariance matrix.
+
+* For a covariance matrix to be from a valid covariance function, the covariance matrix $\boldsymbol{\Sigma}$ must be **symmetric** and **positive-definite**.
+
+    * A matrix $\boldsymbol{\Sigma}$ is symmetric if $\boldsymbol{\Sigma}' = \boldsymbol{\Sigma}$
     
+    * A matrix $\boldsymbol{\Sigma}$ is positive definite iff and only if
+    
+    \begin{align*}
+    \boldsymbol{\Sigma} \mbox{ is positive definite } &  \iff \\
+    \mathbf{z}' \boldsymbol{\Sigma} \mathbf{z} \geq 0 \hspace{1em} \forall \mathbf{z} \in \mathcal{R}^n & \iff \\
+    \mbox{all eigenvalues of } \boldsymbol{\Sigma} \mbox{ are strictly positive} & \iff \\
+    |\boldsymbol{\Sigma}| > 0
+    \end{align*}
+    
+* Therefore, the covariance fuction $C(\mathbf{s}_i, \mathbf{s}_j)$ is a valid covariance function if the $n \times n$ covariance matrix at any finite collection of $n$ locations $\mathbf{s}_1, \ldots, \mathbf{s}_n$ has the properties
+
+    * **symmetry:** $C(\mathbf{s}_i, \mathbf{s}_j) = C(\mathbf{s}_j, \mathbf{s}_i) \hspace{1em} \forall \mathbf{s}_i, \mathbf{s}_j$ 
+    
+    * **positive definite:** $\sum_{i=1}^n \sum_{j=1}^n z_i z_j C(\mathbf{s}_i, \mathbf{s}_j) > 0 \hspace{1em} \forall n, \mathbf{s}_1, \ldots, \mathbf{s}_n, \mbox{ and } z_1, \ldots, z_n \in \mathcal{R}$ 
+
+    * proving that these properties hold is **hard** -- Often rely on spectral methods (showing the eigenvalues of the function are all strictly positive).
+    
+### Gaussian process assumptions
+
+* To fit a Gaussian process, we have to make assumptions
+
+    * Why? -- The mean and covariance functions are infinite dimensional but we only observe a finite vector $\mathbf{y} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_1))'$ so we cannot fully specify the model
+   
+* **Stationarity**
+    
+    * Strict stationarity: the probability density function is invariant to shifts
+        * $[y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n)] = [y(\mathbf{s}_1 + \mathbf{h}), \ldots, y(\mathbf{s}_n + \mathbf{h})] \hspace{1em} \forall \mathbf{s}_1, \ldots, \mathbf{s}_n \in \mathcal{D} \mbox{ and } \mathbf{h}$ (such that all points shifted by the vector $\mathbf{h}$ are also in $\mathcal{D}$)
+    
+    * Weak stationarity: mean and covariance function are stationary
+        * $E\left( y(\mathbf{s}) \right) = E\left( y(\mathbf{s} + \mathbf{h}) \right) = \mu \hspace{1em} \forall \mathbf{h}$ 
+        * $C\left( y(\mathbf{s}), y(\mathbf{s} + \mathbf{h}) \right) = C\left( y(\mathbf{0}), y(\mathbf{h}) \right) = C(\mathbf{h}) \hspace{1em} \forall \mathbf{s}, \mathbf{h}$ 
+        * This implies $C\left( y(\mathbf{s}_i), y(\mathbf{s}_j) \right) = C(\mathbf{s}_i - \mathbf{s}_j) = C(\mathbf{d}_{ij})$ where $\mathbf{d}_{ij} = \mathbf{s}_i - \mathbf{s}_j$ is the distance between location $\mathbf{s}_i$ and location $\mathbf{s}_j$
+        
+
+**Insert drawing here**
+
+<!-- ```{r} -->
+<!-- knitr::include_graphics(here::here("images", "stationarity.jpeg")) -->
+<!-- ``` -->
+
+* Note: for Gaussian processes, a weak stationarity implies strong stationarity.         
+    
+* **Isotropy**
+    * A covariance function is isotropic if it is invariant to direction and rotation.
     
 
 For future classes (basis representations) [Visual exploration of Gaussian Processes](https://distill.pub/2019/visual-exploration-gaussian-processes/)
