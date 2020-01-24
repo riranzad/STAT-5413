@@ -2,7 +2,7 @@
 
 ## Announcements
 
-* Assigned reading: [Model Selection for Geostatistical Models]()
+* Assigned reading: [Model Selection for Geostatistical Models](https://github.com/jtipton25/STAT-5413/blob/master/readings/MODEL%20SELECTION%20FOR%20GEOSTATISTICAL%20MODELS.pdf)
 
 ```{r, message = FALSE}
 library(tidyverse)
