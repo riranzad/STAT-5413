@@ -1,5 +1,9 @@
 # Day 5
 
+## Announcements 
+* HW Assignment
+* Another datacamp coming soon
+
 ```{r, message = FALSE}
 library(tidyverse)
 library(fields)

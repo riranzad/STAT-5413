@@ -1,5 +1,124 @@
 # Day 6
 
+## Announcements
+
+* Assigned reading: [Model Selection for Geostatistical Models]()
+
+```{r, message = FALSE}
+library(tidyverse)
+library(fields)
+library(mvnfast)
+```
+
+## Recall Hierachical modeling
+
+### Data Model
+
+\begin{align*}
+y(\mathbf{s}) & = z(\mathbf{s}) + \varepsilon(\mathbf{s})  \\
+(\#eq:data)
+\varepsilon(\mathbf{s}) \stackrel{iid}{\sim} N(0, \sigma^2)
+\end{align*}
+
+* $y(\mathbf{s})$ is the observation at site $\mathbf{s}$
+    
+* $z(\mathbf{s})$ is the process of interest at site $\mathbf{s}$
+
+* $\varepsilon(\mathbf{s}) \sim N(0, \sigma^2)$ is the measurement error
+    * Commonly called the "nugget"
+    * Geostatistics came from mining
+    * Microsite-variability
+    
+* $z(\mathbf{s})$ is the process of interest at site $\mathbf{s}$
+
+
+* Process Model (using Gaussian process)
+
+\begin{align*}
+z(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) 
+(\#eq:process)
+\end{align*}
+
+* $\mu(\mathbf{s})$ is the GP mean function
+
+* $\boldsymbol{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))' \sim N(\mathbf{0}, \boldsymbol{\Sigma})$
+
+* $Cov(\eta(\mathbf{s}_i), \eta(\mathbf{s}_j)) = \tau^2 C(d_{ij})$
+
+    * $C(d_ij)$ is a correlation function
+    
+    * $\tau^2$ is often called the "partial sill" parameter
+
+```{r}
+set.seed(101)
+n <- 40
+s <- runif(n)
+## mean function
+mu <- s
+## covariance function -- this is positive definite
+Sigma <- 2 * exp( - rdist(s) / 2)
+
+## generate the spatially (1-d) correlated process
+## rmvn returns a matrix -- use c() to coerce to a vector
+eta <- c(rmvn(1, rep(0, n), Sigma))            
+z <- mu + eta
+epsilon <- rnorm(n, 0, 0.25)
+y <- z + epsilon
+
+dat <- data.frame(
+    s = s,
+    y = y,
+    z = z,
+    mu = mu, 
+    eta = eta, 
+    epsilon = epsilon
+)
+
+dat %>% 
+    ggplot(aes(x = s, y = y)) +
+    geom_point() +
+    geom_segment(aes(xend = s, yend = z), alpha = 0.5) +
+    geom_line(aes(x = s, y = z), color = "blue") +
+    geom_line(aes(x = s, y = mu), color = "red") +
+    geom_line(aes(x = s, y = eta), color = "purple") +
+    theme_bw()
+```
+
+
+A quick check if Sigma meets the conditions of a symmetric positive-definite matrix
+
+```{r}
+## check is Sigma is symmetric
+all.equal(Sigma, t(Sigma))
+
+## check is Sigma is posivitive definite
+Sigma_eigen <- eigen(Sigma)
+## check that all eigenvalues are positive
+Sigma_eigen$values
+all(Sigma_eigen$values > 0)
+```
+
+* Variance decomposition
+
+Combining the equations \@ref(eq:data) and \@ref(eq:process)
+
+\begin{align*}
+y(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) 
+\end{align*}
+
+we can have
+
+\begin{align*}
+Var \left( y(\mathbf{s}) \right) & = Var \left( \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) \right) \\
+& = Var \left( \mu(\mathbf{s}) \right) + Var \left( \eta(\mathbf{s}) \right) + Var \left( \varepsilon(\mathbf{s}) \right) + \\
+& \hspace{2em} 2 Cov \left( \mu(\mathbf{s}), \varepsilon(\mathbf{s}) \right) + 
+2 Cov \left( \mu(\mathbf{s}), \eta(\mathbf{s}) \right) +
+2 Cov \left( \eta(\mathbf{s}), \varepsilon(\mathbf{s}) \right) \\
+& = 0 + Var \left( \eta(\mathbf{s}) \right) + Var \left( \varepsilon(\mathbf{s}) \right)  + 0 + 0 + 0 \\
+& = \tau^2 + \sigma^2
+\end{align*}
+
+* the total variance is the "sill" $\tau^2 + \sigma^2$
 
 
 
