@@ -236,46 +236,7 @@ dat %>%
 
     * proving that these properties hold is **hard** -- Often rely on spectral methods (showing the eigenvalues of the function are all strictly positive).
     
-### Gaussian process assumptions
 
-* To fit a Gaussian process, we have to make assumptions
-
-    * Why? -- The mean and covariance functions are infinite dimensional but we only observe a finite vector $\mathbf{y} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_1))'$ so we cannot fully specify the model
-   
-* **Stationarity**
-    
-    * Strict stationarity: the probability density function is invariant to shifts
-        * $[y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n)] = [y(\mathbf{s}_1 + \mathbf{h}), \ldots, y(\mathbf{s}_n + \mathbf{h})] \hspace{1em} \forall \mathbf{s}_1, \ldots, \mathbf{s}_n \in \mathcal{D} \mbox{ and } \mathbf{h}$ (such that all points shifted by the vector $\mathbf{h}$ are also in $\mathcal{D}$)
-    
-    * Weak stationarity: mean and covariance function are stationary
-        * $E\left( y(\mathbf{s}) \right) = E\left( y(\mathbf{s} + \mathbf{h}) \right) = \mu \hspace{1em} \forall \mathbf{h}$ 
-        * $C\left( y(\mathbf{s}), y(\mathbf{s} + \mathbf{h}) \right) = C\left( y(\mathbf{0}), y(\mathbf{h}) \right) = C(\mathbf{h}) \hspace{1em} \forall \mathbf{s}, \mathbf{h}$ 
-        * This implies $C\left( y(\mathbf{s}_i), y(\mathbf{s}_j) \right) = C(\mathbf{s}_i - \mathbf{s}_j) = C(\mathbf{d}_{ij})$ where $\mathbf{d}_{ij} = \mathbf{s}_i - \mathbf{s}_j$ is the difference vector between location $\mathbf{s}_i$ and location $\mathbf{s}_j$
-        
-    * Intrinsic stationarity (weakest form)
-        * $Var\left( y(\mathbf{s} + h) - y(\mathbf{s}) \right)$ depends only on $\mathbf{h}$.
-        * Note: intrinsic stationarity doesn't imply weak stationarity.
-            * Example: Brownian motion is intrisically stationary but is not weakly stationary.
-    
-**Insert drawing here**
-
-* Can you think of a process that is not stationary?
-
-<!-- ```{r} -->
-<!-- knitr::include_graphics(here::here("images", "stationarity.jpeg")) -->
-<!-- ``` -->
-
-* Note: for Gaussian processes, a weak stationarity implies strong stationarity.         
-    
-* **Isotropy**
-    * A covariance function is isotropic if it is invariant to direction and rotation.
-    * $C\left( y(\mathbf{s}_i), y(\mathbf{s}_j) \right)  = C(d_{ij})$ where $d_{ij} = \|\mathbf{s}_i - \mathbf{s}_j\|$ is the distance (typically Euclidean) between $\mathbf{s}_i$ and $\mathbf{s}_j$
-        * Can you think of examples where other distances (not Euclidean) might be better?
-    * A covariance function that is not isotropic is called **anisotropic**
-    
-**Insert drawing here**
-
-* Can you think of a process that is anisotropic?
 
 
 
