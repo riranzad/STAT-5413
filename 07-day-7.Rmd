@@ -38,6 +38,76 @@ y(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s})
 
 ### Estimation of the spatial process using variograms
 
+* First, fit a model to the mean to estimate $\hat{\mu}(\mathbf{s})$ (use maximum likelihood, least-squares, etc.)
 
 
+* Next, generate a sequence of $B$ bins based on distance and group each pair of points $(\mathbf{s}_i, \mathbf{s}_j)$ into a bin
+    * Example bins: [0, 1), [1, 2), [2, 3), \ldots
+    
+* Place the pair of observations $\mathbf{s}_i$ and $\mathbf{s}_j$ that are seperated by $d_{b} \in [d_b - \epsilon, d_b + \epsilon)$ into one of the $B$ bins. 
+
+* Calculate the average of the variogram within each bin
+For each of the $k$ bins that have $m_k$ points in each bin, the variogram estimate for bin $k$ centered at the bin interval $\mathbf{h}_k$ is
+
+\begin{align*}
+\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)
+\end{align*}
+
+for the $\ell$th pair of locations $\mathbf{s}_{\ell_1}$ and $\mathbf{s}_{\ell_2}$
+
+
+**insert empirical variogram plot from class here**   
+
+* Can estimate the parameters "by eye" or using least squares
+
+\begin{align*}
+\hat{\boldsymbol{\theta}} & = (\hat{\tau}^2, \hat{\sigma}^2, \hat{\phi}, \hat{\nu})' \\
+& = \underset{\tau^2, \sigma^2, \phi, \nu}{\operatorname{argmax}} \sum_{b=1}^B \left( \hat{\gamma}(d_b) - \gamma(d_b)\right)^2 w_b \\
+& = \underset{\tau^2, \sigma^2, \phi, \nu}{\operatorname{argmax}} \sum_{b=1}^B \left( \hat{\gamma}(d_b) - \left( \sigma^2 + \tau^2 C \left( d_b | \phi, \nu \right) \right) \right)^2 w_b \\
+\end{align*}
+
+given the correlation function $C \left( d_b | \phi, \nu \right)$ and a set of weights $w_b$. 
+
+#### Estimation of the mean function
+
+* What is the least squares estimator of the mean function?
+
+* Recall, if $\mathbf{y} \sim N(\mathbf{X} \boldsymbol{\beta}, \boldsymbol{\Sigma})$, then 
+
+    * $\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} \mathbf{y}$ is an unbiased estimator.
+
+    \begin{align*}
+    E(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} E(\mathbf{y}) \\
+    & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}\mathbf{X} \boldsymbol{\beta} \\
+    & = \boldsymbol{\beta} 
+    \end{align*}
+    
+    * However, 
+    
+    \begin{align*}
+    Cov(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} \boldsymbol{\Sigma} \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \\
+    & \neq \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}
+    \end{align*}
+    
+    which is the least squares covariance estimate of $\hat{\boldsymbol{\beta}}$. Thus the least squares estimate has a biased covariance estimate.
+    
+* Given the fitted covariance matrix $\hat{\boldsymbol{\Sigma}}$ from the variogram, an updated mean function estimate is 
+
+    \begin{align*}
+    \hat{\boldsymbol{\beta}} & = (\mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{X})^{-1} \mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{y}
+    \end{align*}
+    
+    and the covariance is 
+    
+    \begin{align*}
+    Cov(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{X})^{-1}
+    \end{align*}
+
+* This suggests that an iterative approach can be used to fit the model
+
+1) estimate the mean function
+2) using the estimated mean function, update the covariance function
+3) repeat steps 1 and 2 until convergence
+
+* Any issues? Uncertainty estimation?
 

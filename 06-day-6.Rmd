@@ -383,28 +383,7 @@ C(\mathbf{h}) & = C(\mathbf{0}) - \gamma(\mathbf{h})
 
 * It is difficult to estimate the variogram as there is no replication across space -- need to pool information across space.
 
-* First, fit a model to the mean to estimate $\hat{\mu}(\mathbf{s})$ (use maximum likelihood, least-squares, etc.)
-
-
-* Next, generate a sequence of bins based on distance and group each pair of points $(\mathbf{s}_i, \mathbf{s}_j)$ into a bin
-    * Example bins: [0, 1), [1, 2), [2, 3)
-    
-* Place the pair of observations $\mathbf{s}_i$ and $\mathbf{s}_j$ into respecitve bins. 
-
-* Calculate the average of the variogram within each bin
-For each of the $k$ bins that have $m_k$ points in each bin, the variogram estimate for bin $k$ centered at the bin interval $\mathbf{h}_k$ is
-
-\begin{align*}
-\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)
-\end{align*}
-
-for the $\ell$th pair of locations $\mathbf{s}_{\ell_1}$ and $\mathbf{s}_{\ell_2}$
-
-
-**insert empirical variogram plot from class here**    
-
-
-#### Directional variograms
+#### Non-directional variograms
 
 Using the _meuse_ dataset of heavy metal concntrations in the topsoil near the Meuse river near Stein, NL, we can explore the concentration of zinc (log-scale).
 
@@ -416,6 +395,16 @@ bubble(meuse, "zinc")
 ```
 
 Let's explore the correlation in the data with respect to the log(zinc) variable
+
+```{r}
+vg <- variogram(log(zinc) ~ 1, data = meuse)
+fit_vg <- fit.variogram(vg, model = vgm(1, "Exp"))
+plot(vg, fit_vg, as.table = TRUE)
+```
+
+#### Checking for anisotropy -- Directional variograms
+
+Let's explore the directional correlation in the data with respect to the log(zinc) variable
 
 ```{r}
 dir_variogram <- variogram(log(zinc) ~ 1, data = meuse, alpha = c(0, 45, 90, 135))
