@@ -1,2 +1,43 @@
 # Day 7
 
+## Estimation of the spatial process
+
+* Assume we have the model
+
+\begin{align*}
+y(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) 
+\end{align*}
+
+* then, $Cov \left( y(\mathbf{s}_i),  y(\mathbf{s}_j ) \right) = \sigma^2 C(d_{ij} | \nu, \phi) + \tau^2 I\{i = j\}$ where $C(d_{ij} | \nu, \phi)$ is a Matern correlation function with smoothness parameter $\nu$ and range parameter $\phi$.
+
+* We observe the data $\mathbf{y} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n))'$ at $n$ locations $\mathbf{s}_1, \ldots, \mathbf{s}_n$.
+
+* $\mathbf{y} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma}(\boldsymbol{\theta}))$.
+
+* $\boldsymbol{\mu} = \mathbf{X}\left( \mathbf{s} \right) \boldsymbol{\beta}$ is the model for the mean process given the $n \times p$ covariate matrix $\mathbf{X}(\mathbf{s})$ and $\boldsymbol{\Sigma}(\boldsymbol{\theta})$ is the covariance matrix with parameters $\boldsymbol{\theta} = (\tau^2, \sigma^2, \nu, \phi)'$.
+
+* To fit the model, we need to estimate $\boldsymbol{\beta}$ and $\boldsymbol{\theta}$.
+
+* Traditional statistical methods: use replication
+    * With $k = 1, \ldots, K$ replications of the spatial process $\mathbf{y}_k$, we can estimate the spatial mean as 
+    
+    \begin{align*}
+    \widehat{\boldsymbol{\mu}} = \frac{1}{K} \sum_{k=1}^K \mathbf{y}_k
+    \end{align*}
+    
+    and the spatial mean as
+    
+    \begin{align*}
+    \widehat{\boldsymbol{\Sigma}} = \frac{1}{K} \sum_{k=1}^K \left( \mathbf{y}_k - \widehat{\boldsymbol{\mu}} \right) \left( \mathbf{y}_k - \widehat{\boldsymbol{\mu}} \right)'
+    \end{align*}
+    
+    * However, we don't have replication -- we only have the single observation $\mathbf{y}$.
+        
+* We will explore different estimation methods using 1) variograms, 2) maximum liklihood, and 3) Bayesian methods
+
+
+### Estimation of the spatial process using variograms
+
+
+
+
