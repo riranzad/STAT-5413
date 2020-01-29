@@ -1,2 +1,5 @@
 # Day 10
 
+## Announcements
+
+## Asymptotic properties of the MLE

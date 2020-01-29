@@ -32,8 +32,10 @@ library(sp)
         * $Var\left( y(\mathbf{s} + h) - y(\mathbf{s}) \right)$ depends only on $\mathbf{h}$.
         * Note: intrinsic stationarity doesn't imply weak stationarity.
             * Example: Brownian motion is intrisically stationary but is not weakly stationary.
-    
-**Insert drawing here**
+            
+```{r}
+knitr::include_graphics(here::here("images", "covariance-shift.jpg"))
+```
 
 * Can you think of a process that is not stationary?
 

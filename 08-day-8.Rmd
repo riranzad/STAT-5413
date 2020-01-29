@@ -2,4 +2,372 @@
 
 ## Announcements
 
-## Asymptotic properties of the MLE
+## Covariograms and semivariograms
+* How do we choose a covariance function?
+* How do we fit a covariance function?
+* How do we check for _isotropy_?
+
+### Semivariograms and variograms
+
+
+* The semivariogram is defined
+
+\begin{align*}
+\gamma(\mathbf{s}_i, \mathbf{s}_j) & \equiv \frac{1}{2} Var(y(\mathbf{s}_i) - y(\mathbf{s}_j)) \\
+& E\left( \left( \left( y(\mathbf{s}_i) - \mu(\mathbf{s}_i) \right) - \left( y(\mathbf{s}_j) - \mu(\mathbf{s}_j) \right) \right)^2 \right)
+\end{align*}
+
+If the covaraince is stationary this can be written as a function of directional spatial lags $\mathbf{h}_{ij} = \mathbf{s}_i - \mathbf{s}_j$ (e.g., $\mathbf{h}_{ij}$ is not required to equal $\mathbf{h}_{ji}$).
+
+\begin{align*}
+\gamma(\mathbf{h}) & \equiv \frac{1}{2} Var(y(\mathbf{s} + \mathbf{h}) - y(\mathbf{s})) \\
+& = \frac{1}{2} E\left( \left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right) - \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right) \right)^2 \right) \\
+& \frac{1}{2} E\left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right)^2 \right) - 
+E\left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right) \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right) \right) +
+\frac{1}{2} E\left( \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right) \right) \\
+& = C(\mathbf{0}) - C(\mathbf{h})
+\end{align*}
+
+This implies
+\begin{align*}
+\gamma(\mathbf{h}) & = C(\mathbf{0}) - C(\mathbf{h}) \\
+& \mbox{or} \\
+C(\mathbf{h}) & = C(\mathbf{0}) - \gamma(\mathbf{h}) 
+\end{align*}
+
+* The **variogram** is defined as $2 \gamma(\mathbf{h})$.
+
+#### Properties of variograms
+
+* $\gamma(\mathbf{s}_i, \mathbf{s}_j) \geq 0$ because it is the expectation of a square
+* $\gamma(\mathbf{s}_i, \mathbf{s}_i) = \gamma_i(0) = 0$ because $y(\mathbf{s}_1) - y(\mathbf{s}_1) = 0$
+
+```{r, echo = FALSE, out.width = "60%", fig.align = "center"}
+knitr::include_graphics(here::here("images", "theoretical-variogram.jpg"))
+```
+
+#### Estimation of variograms
+
+* It is difficult to estimate the variogram as there is no replication across space -- need to pool information across space.
+
+#### Non-directional variograms
+
+Using the _meuse_ dataset of heavy metal concntrations in the topsoil near the Meuse river near Stein, NL, we can explore the concentration of zinc (log-scale).
+
+```{r, out.width = "50%"}
+data("meuse")
+data("meuse.grid")
+coordinates(meuse) = ~ x + y
+bubble(meuse, "zinc")
+```
+
+Let's explore the correlation in the data with respect to the log(zinc) variable
+
+```{r}
+vg <- variogram(log(zinc) ~ 1, data = meuse)
+fit_vg <- fit.variogram(vg, model = vgm(1, "Exp"))
+plot(vg, fit_vg, as.table = TRUE)
+```
+
+#### Checking for anisotropy -- Directional variograms
+
+Let's explore the directional correlation in the data with respect to the log(zinc) variable
+
+```{r}
+dir_variogram <- variogram(log(zinc) ~ 1, data = meuse, alpha = c(0, 45, 90, 135))
+fit_variogram <- fit.variogram(dir_variogram, model = vgm(1, "Exp"))
+plot(dir_variogram, fit_variogram, as.table = TRUE)
+```
+
+You can explore this variogram as a map
+
+```{r}
+map_variogram <- variogram(log(zinc) ~ 1, data = meuse,
+                           cutoff = 1500, width = 100, map = TRUE)
+plot(map_variogram, threshold = 5)
+```
+
+which appears to show some patterns in the variogram maps suggesting anisotropy. Perhaps there is a covariate that can explain this. Let's use the square-root distance to the river
+
+```{r}
+plot(log(zinc) ~ sqrt(dist), meuse)
+abline(lm(log(zinc) ~ sqrt(dist), meuse), col = "red")
+```
+
+Now, we can look at the directional varigrams of the residuals in the model after accounting for square-root distance to the river
+
+```{r}
+dir_variogram <- variogram(log(zinc) ~ sqrt(dist), data = meuse, alpha = c(0, 45, 90, 135))
+fit_variogram <- fit.variogram(dir_variogram, model = vgm(1, "Exp"))
+plot(dir_variogram, fit_variogram, as.table = TRUE)
+```
+
+where these variograms seem to fit the data better. You can explore this variogram as a map
+
+```{r}
+map_variogram <- variogram(log(zinc) ~ sqrt(dist), data = meuse,
+                           cutoff = 1500, width = 100, map = TRUE)
+plot(map_variogram, threshold = 5)
+```
+
+which shows that after modeling log(zinc) as a function of the square-root distance to the river, the residuals appear isotropic left in the residuals.
+
+## Estimation of the spatial process
+
+* Assume we have the model
+
+\begin{align*}
+y(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) 
+\end{align*}
+
+* then, $Cov \left( y(\mathbf{s}_i),  y(\mathbf{s}_j ) \right) = \sigma^2 C(d_{ij} | \nu, \phi) + \tau^2 I\{i = j\}$ where $C(d_{ij} | \nu, \phi)$ is a Matern correlation function with smoothness parameter $\nu$ and range parameter $\phi$.
+
+* We observe the data $\mathbf{y} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n))'$ at $n$ locations $\mathbf{s}_1, \ldots, \mathbf{s}_n$.
+
+* $\mathbf{y} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma}(\boldsymbol{\theta}))$.
+
+* $\boldsymbol{\mu} = \mathbf{X}\left( \mathbf{s} \right) \boldsymbol{\beta}$ is the model for the mean process given the $n \times p$ covariate matrix $\mathbf{X}(\mathbf{s})$ and $\boldsymbol{\Sigma}(\boldsymbol{\theta})$ is the covariance matrix with parameters $\boldsymbol{\theta} = (\tau^2, \sigma^2, \nu, \phi)'$.
+
+* To fit the model, we need to estimate $\boldsymbol{\beta}$ and $\boldsymbol{\theta}$.
+
+* Traditional statistical methods: use replication
+    * With $k = 1, \ldots, K$ replications of the spatial process $\mathbf{y}_k$, we can estimate the spatial mean as 
+    
+    \begin{align*}
+    \widehat{\boldsymbol{\mu}} = \frac{1}{K} \sum_{k=1}^K \mathbf{y}_k
+    \end{align*}
+    
+    and the spatial mean as
+    
+    \begin{align*}
+    \widehat{\boldsymbol{\Sigma}} = \frac{1}{K} \sum_{k=1}^K \left( \mathbf{y}_k - \widehat{\boldsymbol{\mu}} \right) \left( \mathbf{y}_k - \widehat{\boldsymbol{\mu}} \right)'
+    \end{align*}
+    
+    * However, we don't have replication -- we only have the single observation $\mathbf{y}$.
+        
+* We will explore different estimation methods using 1) variograms, 2) maximum liklihood, and 3) Bayesian methods
+
+
+### Estimation of the spatial process using variograms
+
+* First, fit a model to the mean to estimate $\hat{\mu}(\mathbf{s})$ (use maximum likelihood, least-squares, etc.)
+
+
+* Next, generate a sequence of $B$ bins based on distance and group each pair of points $(\mathbf{s}_i, \mathbf{s}_j)$ into a bin
+    * Example bins: [0, 1), [1, 2), [2, 3), \ldots
+    
+* Place the pair of observations $\mathbf{s}_i$ and $\mathbf{s}_j$ that are seperated by $d_{b} \in [d_b - \epsilon, d_b + \epsilon)$ into one of the $B$ bins. 
+
+* Calculate the average of the variogram within each bin
+For each of the $k$ bins that have $m_k$ points in each bin, the variogram estimate for bin $k$ centered at the bin interval $\mathbf{h}_k$ is
+
+\begin{align*}
+\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)
+\end{align*}
+
+for the $\ell$th pair of locations $\mathbf{s}_{\ell_1}$ and $\mathbf{s}_{\ell_2}$
+
+
+**insert empirical variogram plot from class here**   
+
+* Can estimate the parameters "by eye" or using least squares
+
+\begin{align*}
+\hat{\boldsymbol{\theta}} & = (\hat{\tau}^2, \hat{\sigma}^2, \hat{\phi}, \hat{\nu})' \\
+& = \underset{\tau^2, \sigma^2, \phi, \nu}{\operatorname{argmax}} \sum_{b=1}^B \left( \hat{\gamma}(d_b) - \gamma(d_b)\right)^2 w_b \\
+& = \underset{\tau^2, \sigma^2, \phi, \nu}{\operatorname{argmax}} \sum_{b=1}^B \left( \hat{\gamma}(d_b) - \left( \sigma^2 + \tau^2 C \left( d_b | \phi, \nu \right) \right) \right)^2 w_b 
+(\#eq:variogram)
+\end{align*}
+
+given the correlation function $C \left( d_b | \phi, \nu \right)$ and a set of weights $w_b$. 
+
+#### Estimation of the mean function
+
+* What is the least squares estimator of the mean function?
+
+* Recall, if $\mathbf{y} \sim N(\mathbf{X} \boldsymbol{\beta}, \boldsymbol{\Sigma})$, then 
+
+    * $\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} \mathbf{y}$ is an unbiased estimator.
+
+    \begin{align*}
+    E(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} E(\mathbf{y}) \\
+    & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}\mathbf{X} \boldsymbol{\beta} \\
+    & = \boldsymbol{\beta} 
+    \end{align*}
+    
+    * However, 
+    
+    \begin{align*}
+    Cov(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X} \boldsymbol{\Sigma} \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1} \\
+    & \neq \sigma^2 (\mathbf{X}'\mathbf{X})^{-1}
+    \end{align*}
+    
+    which is the least squares covariance estimate of $\hat{\boldsymbol{\beta}}$. Thus the least squares estimate has a biased covariance estimate.
+    
+* Given the fitted covariance matrix $\hat{\boldsymbol{\Sigma}}$ from the variogram, an updated mean function estimate is 
+
+    \begin{align*}
+    \hat{\boldsymbol{\beta}} & = (\mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{X})^{-1} \mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{y}
+    \end{align*}
+    
+    and the covariance is 
+    
+    \begin{align*}
+    Cov(\hat{\boldsymbol{\beta}}) & = (\mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{X})^{-1}
+    \end{align*}
+
+* This suggests that an iterative approach can be used to fit the model
+
+1) estimate the mean function
+2) using the estimated mean function, update the covariance function
+3) repeat steps 1 and 2 until convergence
+
+* Any issues? Uncertainty estimation?
+    * How do you propogate parameter uncertainty?
+    * Prediction uncertainty is likely to be too small
+    
+### Maximum Likelihood
+
+#### The likelihood
+
+To understand the benefits of Bayesian analysis, it is useful to recall the likelihood framework. Assume that our model can be simplified so that the data are $\mathbf{y} = (y_1, \ldots, y_N)'$ and the parameters are $\boldsymbol{\theta}$. Before observation, the data $\mathbf{y}$ are considered a random variable. After observation, the data $\mathbf{y}$ are considered fixed and known. The likelihood is a formal representation of how likely the data $\mathbf{y}$ are to arise given a probability distribution with parameters $\boldsymbol{\theta}$. The likelihood function $L(\boldsymbol{\theta} | \mathbf{y})$ is defined as
+\begin{align*}
+L(\boldsymbol{\theta} | \mathbf{y}) & = [\mathbf{y} | \boldsymbol{\theta}],
+\end{align*}
+where the function says that the likelihood of the parameter conditional on the data is is the conditional probability density of the data conditional on the parameters.
+
+If one assumes the observations are conditionally independent given the parameters $\boldsymbol{\theta}$, the likelihood can be written as
+\begin{align*}
+L(\boldsymbol{\theta} | \mathbf{y}) & = \prod_{i=1}^N [y_i | \boldsymbol{\theta}],
+\end{align*}
+Note the distinction between the use of the term likelihood function for the left side of the equation with the use of the term likelihood in Bayesian statistics to describe the right side of the above equation. A distinction between the likelihood function and the probability distribution function is in what is considered the random variable. In the likelihood function, the data $\mathbf{y}$ is assumed known and the parameters $\boldsymbol{\theta}$ are random. For the probability distribution function, the data $\mathbf{y}$ are considered are random variable conditional on a fixed, known parameter $\boldsymbol{\theta}$. To illustrate this difference, consider a univariate gamma probability distribution with shape parameter $\alpha = 10$  and scale parameter $\theta=10$. If we observe a single $y=2$, the following figure shows the density function and likelihood function, with $\alpha$ assumed fixed and  known.
+```{r}
+library(latex2exp)
+y <- 2
+alpha <- 10
+theta <- 10
+density_function <- function (x) {
+  return(dgamma(x, alpha, theta))
+}
+likelihood_function <- function (x) {
+  return(dgamma(y, alpha, x))
+}
+layout(matrix(1:2, 2, 1))
+## plot density function
+curve(density_function(x), 0, 4, main = "Density function", xlab="y", 
+      ylab=TeX("$\\lbrack$y|$\\theta$ $\\rbrack$"))
+text(1, 0.4, paste0(
+  "Area = ", round(integrate(density_function, 0, Inf)[1]$value, digits=2)))
+points(2, density_function(2), col="red", pch=16)
+curve(likelihood_function(x), 0, 10, main = "Likelihood function",
+      xlab=TeX("$\\theta$"), ylab=TeX("$L(y|\\theta)$"))
+text(5, 0.3, paste0(
+  "Area = ", round(integrate(likelihood_function, 0, Inf)[1]$value, digits=2)))
+points(10, likelihood_function(10), col="red", pch=16)
+```
+
+Notice that the area under the curve of the density function is 1 (because it is a formal probability distribution) whereas the area under the likelihood function is not 1 (the area is 10). Hence, when performing optimization using a likelihood function, one is **not** optimizing a probability function. Because the likelihood is not a probability, we appeal to frequentist (rather than probabilistic) interpretations when interpreting likelihood analyses. For example, the interpretation of a 95\% confidence interval is "under repeated sampling from the population, 95\% of the confidence intervals will contain the true value," in comparison to the probabilistic interpretation "the probability the interval contains the true value is 95\%." The density function and the likelihood function share a common point at $y=2$ and $\theta=10$, (shown in red in the figure above) given the fixed value of $\alpha$. This suggests that the likelihood and density functions are the same only when the parameter is assumed to be a fixed, known value.
+
+```{r}
+## check that the density function and the likelihood function share the same point
+all.equal(density_function(2), likelihood_function(10))
+```
+
+Philosophically, there is a subtle difference between the density function and the likelihood function that is important to understand. In the likelihood function, we allow the parameter $\theta$ to vary; however, we do not assume that $\theta$ is a random variable. To be a random variable there must be a formal probability distribution for $\theta$. We showed earlier that the likelihood function does not integrate to 1 so we don't view $\theta$ as a random variable and the likelihood function is not a probability distribution for $\theta$.
+
+## Maximum likelihood
+
+Maximum likelihood estimation has the goal of finding the set of parameters $\hat{\boldsymbol{\theta}}$ that were most likely to give rise to the data. Because the likelihood does not integrate to 1, the likelihood by itself is not infomative; only comparisons among likelihoods are meaningful because the likelihood can be shifted up or down in the y-axis by an arbitraty constant $c$. To cancel out the unkown constant $c$, we take ratios of the likelihoods at values $\theta_1$ and $\theta_2$, giving rise to the likelihood ratio
+\begin{align*}
+\frac{L(\theta_1 | y)}{L(\theta_2 | y)} & = \frac{[y|\theta_1]}{[y|\theta_2]}.
+\end{align*}
+The likelihood ratio expresses the strength of evidence in favor of $\theta_1$ relative to $\theta_2$. In general, we use the log likelihood ratio to express the strength of evidence where positive values of the log likelihood ratio give evidence in support of $\theta_1$ and negative values of the log likelihood ratio give evidence in support of $\theta_2$, conditional on the data. 
+
+The maximum likelihood estimate is the value $\hat{\theta}$ such that 
+\begin{align*}
+\log \left( \frac{L(\hat{\theta} | y)}{L(\theta^\star | y)} \right) & \geq 0
+\end{align*}
+for all values of $\theta^\star$. The following figure demonstrates this idea visually.
+```{r}
+layout(matrix(1))
+curve(likelihood_function(x), 0, 10, main = "Likelihood function",
+      xlab=TeX("$\\theta$"), ylab=TeX("$L(y|\\theta)$"), ylim=c(-0.02, 0.66))
+segments(3, 0, 3, likelihood_function(3))
+arrows(3, likelihood_function(3), 0, likelihood_function(3))
+text(3.1, -0.02, TeX("$\\theta_1$ = 3"))
+text(1.5, likelihood_function(3)+ .02, TeX("$L(y|\\theta_1)$"))
+
+segments(6, 0, 6, likelihood_function(6))
+arrows(6, likelihood_function(6), 0, likelihood_function(6))
+text(6.1, -0.02, TeX("$\\theta_2$ = 6"))
+text(1.5, likelihood_function(6) + .02, TeX("$L(y|\\theta_2)$"))
+
+segments(5, 0, 5, likelihood_function(5), lty=2)
+text(5.3, 0.66, TeX("$\\hat{\\theta}_{MLE}$ = 5"))
+```
+
+For example, if $\theta_1 = 3$ and $\theta_2 = 6$, the log likelihood ratio is `r log(likelihood_function(3) / likelihood_function(6))` which suggests evidence is in favor of $\theta_2$ relative to $\theta_1$. In comparison, the log likelihood ratio of the MLE $\hat{\theta}_{MLE}$ is `r log(likelihood_function(5) / likelihood_function(6))` which gives evidence in favor of $\hat{\theta}_{MLE}$.
+
+
+#### Maximum likelihood estimation of the variogram
+
+* Instead of using the variogram in \@ref(eq:variogram), we can use maximum liklihood. 
+* More formal and principled estimation framework.
+
+* Allows for parameter uncertainty quantification.
+
+* Goal: estimate the parameters $\boldsymbol{\beta}$ and $\boldsymbol{\theta} = (\tau^2, \sigma^2, \nu, \phi)'$.
+
+* The log-likelihood to maximize is 
+
+\begin{align*}
+\log[\boldsymbol{\beta}, \boldsymbol{\theta} | \mathbf{y}] & = - \frac{1}{2} \log|\boldsymbol{\Sigma}(\boldsymbol{\theta})| - \frac{1}{2} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right)' \boldsymbol{\Sigma}(\boldsymbol{\theta})^{-1} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right)
+\end{align*}
+
+* This is a multivariate optimization and difficult to optimize directly. Instead, notice the estimate $\hat{\boldsymbol{\beta}}(\boldsymbol{\theta}) = (\mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{X})^{-1} \mathbf{X}' \hat{\boldsymbol{\Sigma}}^{-1} \mathbf{y}$ is a known function of $\boldsymbol{\theta}$ so we can profile it out of the equation. Thus, we can instead optimize the [profile likelihood](https://www.stat.tamu.edu/~suhasini/teaching613/chapter3.pdf)
+
+\begin{align*}
+\log[\boldsymbol{\theta} | \mathbf{y}]_{prof} & = - \frac{1}{2} \log|\boldsymbol{\Sigma}(\boldsymbol{\theta})| - \frac{1}{2} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta}(\boldsymbol{\theta}) \right)' \boldsymbol{\Sigma}(\boldsymbol{\theta})^{-1} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta}(\boldsymbol{\theta}) \right)
+\end{align*}
+
+Note this equation is now just a function of $\boldsymbol{\theta}$.
+
+* Computational complexity -- both the log-likelihood and the profile log-likelihood requre the determinant and inverse of the $n \times n$ covariance matrix $\boldsymbol{\Sigma}(\boldsymbol{\theta})$ which require $O(n^3)$ time
+
+```{r}
+if (!file.exists(here::here("results", "matrix-inverse-timings.RData"))) {
+    n <- c(10, 20, 50, 100, 200, 250, 350, 500, 600, 700, 800, 900, 1000, 1250, 1500)
+    timings <- rep(0, length(n))
+    for (i in 1:length(n)) {
+        Sigma      <- riwish(n[i]+2, diag(n[i]))
+        timings[i] <- system.time(solve(Sigma))[3]
+    }
+    dat <- data.frame(timings = timings, n = n)
+    save(dat, file = here::here("results", "matrix-inverse-timings.RData"))
+} else {
+  load(here::here("results", "matrix-inverse-timings.RData"))
+}
+
+
+## fit the best cubic model to the data
+ggplot(data = dat, aes (x = n, y = timings)) +
+  geom_point(size = 2, color = "red") +
+  stat_smooth(method = "lm", formula = y ~ poly(x, 3), fullrange = TRUE) +
+  ylab("Time to calculate inverse") +
+  xlab("matrix size (n by n)") +
+  ggtitle("Matrix inversion time with fitted polynomial of order 3") +
+  xlim(c(0, 2000)) 
+```
+
+* Solving the MLE for $\boldsymbol{\theta}$
+    * Can use standard optimization routines like _optim()_
+    * Can use REML to guarantee positive variance parameters 
+        * ["restricted maximum likelihood"](https://en.wikipedia.org/wiki/Restricted_maximum_likelihood)
+        * Induces a bias in the estimates but guarantees realistic answers (non-negative variances)
+
+    * Uncertainties can be estimated using the [Fisher information matrix](https://en.wikipedia.org/wiki/Fisher_information)
+        \begin{align*}
+        \mathcal{I}(\boldsymbol{\theta})_{ij} & = E \left( \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_i} \log [\boldsymbol{\theta} | \mathbf{y} \right) \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right) \\
+        & = - E \left( \left( \frac{\mathcal{d}^2 }{\mathcal{d} \boldsymbol{\theta}_i \mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right)
+        \end{align*}
+        
