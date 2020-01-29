@@ -183,3 +183,114 @@ ggplot(dat, aes(x = d, y = y, group = nu, color = nu)) +
 
 
     
+## Covariograms and semivariograms
+* How do we choose a covariance function?
+* How do we fit a covariance function?
+* How do we check for _isotropy_?
+
+### Semivariograms and variograms
+
+
+* The semivariogram is defined
+
+\begin{align*}
+\gamma(\mathbf{s}_i, \mathbf{s}_j) & \equiv \frac{1}{2} Var(y(\mathbf{s}_i) - y(\mathbf{s}_j)) \\
+& = \frac{1}{2}E\left( \left( \left( y(\mathbf{s}_i) - \mu(\mathbf{s}_i) \right) - \left( y(\mathbf{s}_j) - \mu(\mathbf{s}_j) \right) \right)^2 \right)
+\end{align*}
+
+If the covaraince is stationary this can be written as a function of directional spatial lags $\mathbf{h}_{ij} = \mathbf{s}_i - \mathbf{s}_j$ (e.g., $\mathbf{h}_{ij}$ is not required to equal $\mathbf{h}_{ji}$).
+
+\begin{align*}
+\gamma(\mathbf{h}) & \equiv \frac{1}{2} Var(y(\mathbf{s} + \mathbf{h}) - y(\mathbf{s})) \\
+& = \frac{1}{2} E\left( \left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right) - \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right) \right)^2 \right) \\
+& = \frac{1}{2} E\left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right)^2 \right) - 
+2 E\left( \left( y(\mathbf{s} + \mathbf{h}) - \mu(\mathbf{s} + \mathbf{h}) \right) \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right) \right) + \\
+& \hspace{6em}
+\frac{1}{2} E\left( \left( y(\mathbf{s}) - \mu(\mathbf{s}) \right)^2 \right) \\
+& = \frac{1}{2} C(\mathbf{0}) - C(\mathbf{h}) + \frac{1}{2} C(\mathbf{0}) \\
+& = C(\mathbf{0}) - C(\mathbf{h}) 
+\end{align*}
+
+This implies
+\begin{align*}
+\gamma(\mathbf{h}) & = C(\mathbf{0}) - C(\mathbf{h}) \\
+& \mbox{or} \\
+C(\mathbf{h}) & = C(\mathbf{0}) - \gamma(\mathbf{h}) 
+\end{align*}
+
+* The **variogram** is defined as $2 \gamma(\mathbf{h})$.
+
+#### Properties of variograms
+
+* $\gamma(\mathbf{s}_i, \mathbf{s}_j) \geq 0$ because it is the expectation of a square
+* $\gamma(\mathbf{s}_i, \mathbf{s}_i) = \gamma_i(0) = 0$ because $y(\mathbf{s}_1) - y(\mathbf{s}_1) = 0$
+
+```{r, echo = FALSE, out.width = "60%", fig.align = "center"}
+knitr::include_graphics(here::here("images", "theoretical-variogram.jpg"))
+```
+
+#### Estimation of variograms
+
+* It is difficult to estimate the variogram as there is no replication across space -- need to pool information across space.
+
+#### Non-directional variograms
+
+Using the _meuse_ dataset of heavy metal concntrations in the topsoil near the Meuse river near Stein, NL, we can explore the concentration of zinc (log-scale).
+
+```{r, out.width = "50%"}
+data("meuse")
+data("meuse.grid")
+coordinates(meuse) = ~ x + y
+bubble(meuse, "zinc")
+```
+
+Let's explore the correlation in the data with respect to the log(zinc) variable
+
+```{r}
+vg <- variogram(log(zinc) ~ 1, data = meuse)
+fit_vg <- fit.variogram(vg, model = vgm(1, "Exp"))
+plot(vg, fit_vg, as.table = TRUE)
+```
+
+#### Checking for anisotropy -- Directional variograms
+
+Let's explore the directional correlation in the data with respect to the log(zinc) variable
+
+```{r}
+dir_variogram <- variogram(log(zinc) ~ 1, data = meuse, alpha = c(0, 45, 90, 135))
+fit_variogram <- fit.variogram(dir_variogram, model = vgm(1, "Exp"))
+plot(dir_variogram, fit_variogram, as.table = TRUE)
+```
+
+You can explore this variogram as a map
+
+```{r}
+map_variogram <- variogram(log(zinc) ~ 1, data = meuse,
+                           cutoff = 1500, width = 100, map = TRUE)
+plot(map_variogram, threshold = 5)
+```
+
+which appears to show some patterns in the variogram maps suggesting anisotropy. Perhaps there is a covariate that can explain this. Let's use the square-root distance to the river
+
+```{r}
+plot(log(zinc) ~ sqrt(dist), meuse)
+abline(lm(log(zinc) ~ sqrt(dist), meuse), col = "red")
+```
+
+Now, we can look at the directional varigrams of the residuals in the model after accounting for square-root distance to the river
+
+```{r}
+dir_variogram <- variogram(log(zinc) ~ sqrt(dist), data = meuse, alpha = c(0, 45, 90, 135))
+fit_variogram <- fit.variogram(dir_variogram, model = vgm(1, "Exp"))
+plot(dir_variogram, fit_variogram, as.table = TRUE)
+```
+
+where these variograms seem to fit the data better. You can explore this variogram as a map
+
+```{r}
+map_variogram <- variogram(log(zinc) ~ sqrt(dist), data = meuse,
+                           cutoff = 1500, width = 100, map = TRUE)
+plot(map_variogram, threshold = 5)
+```
+
+which shows that after modeling log(zinc) as a function of the square-root distance to the river, the residuals appear isotropic left in the residuals.
