@@ -246,14 +246,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
+<li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>11.2</b> Introduction to MCMC</a></li>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>11.3</b> Example: Simple linear regression</a></li>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#the-posterior-distribution"><i class="fa fa-check"></i><b>11.4</b> The posterior distribution</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>11.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>11.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
+<li class="chapter" data-level="11.4.3" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>11.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="day-11.html"><a href="day-11.html#fitting-the-model"><i class="fa fa-check"></i><b>11.5</b> Fitting the model</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="day-11.html"><a href="day-11.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>11.5.1</b> General recommendations for writing MCMC software</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
 <ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
+<li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>12.2</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#the-proposal-distribution"><i class="fa fa-check"></i><b>12.3</b> The proposal distribution</a></li>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-metropolis-update"><i class="fa fa-check"></i><b>12.4</b> The Metropolis update</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
 <ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
+<li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis-Hastings Algorithm</a></li>
+<li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>13.3</b> The Metropolis-Hastings algorithm</a></li>
+<li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#example-1"><i class="fa fa-check"></i><b>13.4</b> Example</a></li>
+<li class="chapter" data-level="13.5" data-path="day-13.html"><a href="day-13.html#posterior"><i class="fa fa-check"></i><b>13.5</b> Posterior</a></li>
+<li class="chapter" data-level="13.6" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-phi"><i class="fa fa-check"></i><b>13.6</b> Conditional posterior for <span class="math inline">\(\phi\)</span></a></li>
+<li class="chapter" data-level="13.7" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>13.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="13.8" data-path="day-13.html"><a href="day-13.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>13.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
 <ul>
@@ -400,6 +422,238 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 number="13"><span class="header-section-number">13</span> Day 13</h1>
 <div id="announcements-8" class="section level2" number="13.1">
 <h2 number="13.1"><span class="header-section-number">13.1</span> Announcements</h2>
+</div>
+<div id="the-metropolis-hastings-algorithm" class="section level2" number="13.2">
+<h2 number="13.2"><span class="header-section-number">13.2</span> The Metropolis-Hastings Algorithm</h2>
+<!-- Set some knitr options -->
+<p>Last time, we discussed the Metropolis algorithm for sampling from a distribution where the conditional posterior distribution is not known in an analytic form. The Metropolis algorithm assumes the proposal distribution is symmetric. The <a href="https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">Metropolis-Hastings algorithm</a> allows for asymmetric proposal distributions. A good intuition for how the Metropolis Hastings algorithm works is presented by Chib and Greenberg in <a href="http://www.ics.uci.edu/~johnsong/papers/Chib%20and%20Greenberg%20-%20Understanding%20the%20Metropolis-Hastings%20Algorithm.pdf">Understanding the Metropolis-Hastings Algorithm</a>.</p>
+<p>This begs the question: Why would one want to use an asymmetric proposal distribution? There are many reasons, but the most compelling and most common is to guarantee that the proposed value of the parameter is in the support of the parameter space. For example, a variance parameter must be positive and a symmetric normal proposal could generate negative proposals that must be rejected with probability 1. This can result in inefficient MCMC samplers that have very low acceptance rates and therefor exhibit poor mixing. Instead, we can use an asymmetric proposal that guarantees a positive proposal and should lead to higer acceptance rates.</p>
+</div>
+<div id="the-metropolis-hastings-algorithm-1" class="section level2" number="13.3">
+<h2 number="13.3"><span class="header-section-number">13.3</span> The Metropolis-Hastings algorithm</h2>
+<p>Recall for a symmetric proposal, the Metropolis ratio is
+<span class="math display">\[\begin{align*}
+a &amp; = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] }.
+\end{align*}\]</span></p>
+<p>Given an asymmetric proposal <span class="math inline">\([\theta^{\star}|\theta^{(k-1)}]\)</span>, the Metropolis-Hastings ratio is
+<span class="math display">\[\begin{align*}
+a &amp; = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] } \frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]},
+\end{align*}\]</span>
+where <span class="math inline">\(\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]}\)</span> is a correction factor that accounts for the asymmetric proposal. The Metropolis algorithm can be shown to be a special case of the Metropolis-Hastings algorithm by noting that <span class="math inline">\(\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]} = 1\)</span> when the proposal is symmetric.</p>
+</div>
+<div id="example-1" class="section level2" number="13.4">
+<h2 number="13.4"><span class="header-section-number">13.4</span> Example</h2>
+<p>Let’s consider an AR(1) model
+
+where <span class="math inline">\(\varepsilon_t \stackrel{iid} \sim \operatorname{N}(0, \sigma^2)\)</span> and both <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\sigma^2\)</span> are unknown.</p>
+<p>Simulated data are shown below.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="day-13.html#cb181-1"></a>N &lt;-<span class="st"> </span><span class="dv">500</span></span>
+<span id="cb181-2"><a href="day-13.html#cb181-2"></a>phi_sim &lt;-<span class="st"> </span><span class="fl">0.99</span></span>
+<span id="cb181-3"><a href="day-13.html#cb181-3"></a>sigma2_sim &lt;-<span class="st"> </span><span class="fl">1.2</span></span>
+<span id="cb181-4"><a href="day-13.html#cb181-4"></a>y &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, N)</span>
+<span id="cb181-5"><a href="day-13.html#cb181-5"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>N) {</span>
+<span id="cb181-6"><a href="day-13.html#cb181-6"></a>  y[t] &lt;-<span class="st"> </span>phi_sim <span class="op">*</span><span class="st"> </span>y[t<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2_sim))</span>
+<span id="cb181-7"><a href="day-13.html#cb181-7"></a>}</span>
+<span id="cb181-8"><a href="day-13.html#cb181-8"></a><span class="kw">plot</span>(y, <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">xlab=</span><span class="st">&quot;time&quot;</span>, <span class="dt">main=</span><span class="st">&quot;simulated AR(1) data&quot;</span>)</span></code></pre></div>
+<p><img src="figs/unnamed-chunk-113-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>To complete the model, we must assign prior distributions for <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\sigma^2\)</span>. A simple choice of prior for <span class="math inline">\(\phi\)</span> is Uniform(-1, 1) prior and for <span class="math inline">\(\sigma^2\)</span> we assign a half-Cauchy prior where
+
+with <span class="math inline">\(s^2\)</span>=25 where the half-Cauchy has the pdf
+</p>
+</div>
+<div id="posterior" class="section level2" number="13.5">
+<h2 number="13.5"><span class="header-section-number">13.5</span> Posterior</h2>
+<p>The posterior distribution is
+</p>
+</div>
+<div id="conditional-posterior-for-phi" class="section level2" number="13.6">
+<h2 number="13.6"><span class="header-section-number">13.6</span> Conditional posterior for <span class="math inline">\(\phi\)</span></h2>
+<p>The conditional posterior for <span class="math inline">\(\phi\)</span> is
+
+which has no known analytic distribution so we will sample using Metropolis-Hastings.</p>
+</div>
+<div id="conditional-posterior-for-sigma2" class="section level2" number="13.7">
+<h2 number="13.7"><span class="header-section-number">13.7</span> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></h2>
+<p>The conditional posterior for <span class="math inline">\(\phi\)</span> is
+
+which has no known analytic distribution so we will sample using Metropolis-Hastings.</p>
+</div>
+<div id="mcmc-using-a-symmetric-proposal-metropolis" class="section level2" number="13.8">
+<h2 number="13.8"><span class="header-section-number">13.8</span> MCMC using a symmetric proposal (Metropolis)</h2>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="day-13.html#cb182-1"></a><span class="kw">library</span>(LaplacesDemon)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;LaplacesDemon&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:MCMCpack&#39;:
+## 
+##     BayesFactor, ddirichlet, dinvgamma, rdirichlet,
+##     rinvgamma</code></pre>
+<pre><code>## The following objects are masked from &#39;package:mvnfast&#39;:
+## 
+##     dmvn, dmvt, rmvn, rmvt</code></pre>
+<pre><code>## The following objects are masked from &#39;package:spatstat&#39;:
+## 
+##     is.data, is.stationary</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     partial</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="day-13.html#cb188-1"></a>K &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb188-2"><a href="day-13.html#cb188-2"></a>phi &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, N)</span>
+<span id="cb188-3"><a href="day-13.html#cb188-3"></a>sigma2 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, N)</span>
+<span id="cb188-4"><a href="day-13.html#cb188-4"></a></span>
+<span id="cb188-5"><a href="day-13.html#cb188-5"></a><span class="co">## initialize phi and sigma2</span></span>
+<span id="cb188-6"><a href="day-13.html#cb188-6"></a>phi[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">1</span>)</span>
+<span id="cb188-7"><a href="day-13.html#cb188-7"></a>sigma2[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb188-8"><a href="day-13.html#cb188-8"></a></span>
+<span id="cb188-9"><a href="day-13.html#cb188-9"></a><span class="co">## set the tuning parameters</span></span>
+<span id="cb188-10"><a href="day-13.html#cb188-10"></a>phi_tune &lt;-<span class="st"> </span><span class="fl">0.0095</span></span>
+<span id="cb188-11"><a href="day-13.html#cb188-11"></a>accept_phi &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb188-12"><a href="day-13.html#cb188-12"></a>sigma2_tune &lt;-<span class="st"> </span><span class="fl">0.125</span></span>
+<span id="cb188-13"><a href="day-13.html#cb188-13"></a>accept_sigma2 &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb188-14"><a href="day-13.html#cb188-14"></a></span>
+<span id="cb188-15"><a href="day-13.html#cb188-15"></a><span class="co">##</span></span>
+<span id="cb188-16"><a href="day-13.html#cb188-16"></a><span class="co">## MCMC loop</span></span>
+<span id="cb188-17"><a href="day-13.html#cb188-17"></a><span class="co">##</span></span>
+<span id="cb188-18"><a href="day-13.html#cb188-18"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</span>
+<span id="cb188-19"><a href="day-13.html#cb188-19"></a>  <span class="co">## sample phi</span></span>
+<span id="cb188-20"><a href="day-13.html#cb188-20"></a>  phi_star &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, phi[k<span class="dv">-1</span>], phi_tune)</span>
+<span id="cb188-21"><a href="day-13.html#cb188-21"></a>  <span class="co">## check to make sure phi_star is reasonable, if not, we reject and move on</span></span>
+<span id="cb188-22"><a href="day-13.html#cb188-22"></a>  <span class="cf">if</span> (phi_star <span class="op">&gt;</span><span class="st"> </span><span class="dv">-1</span> <span class="op">&amp;</span><span class="st"> </span>phi_star <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span>) {</span>
+<span id="cb188-23"><a href="day-13.html#cb188-23"></a>    mh1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi_star <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>))</span>
+<span id="cb188-24"><a href="day-13.html#cb188-24"></a>    mh2 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k<span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>))</span>
+<span id="cb188-25"><a href="day-13.html#cb188-25"></a>    a &lt;-<span class="st"> </span><span class="kw">exp</span>(mh1<span class="op">-</span>mh2)</span>
+<span id="cb188-26"><a href="day-13.html#cb188-26"></a>    <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb188-27"><a href="day-13.html#cb188-27"></a>      <span class="co">## accept the proposed value</span></span>
+<span id="cb188-28"><a href="day-13.html#cb188-28"></a>      phi[k] &lt;-<span class="st"> </span>phi_star</span>
+<span id="cb188-29"><a href="day-13.html#cb188-29"></a>      accept_phi &lt;-<span class="st"> </span>accept_phi <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>K</span>
+<span id="cb188-30"><a href="day-13.html#cb188-30"></a>    } <span class="cf">else</span> {</span>
+<span id="cb188-31"><a href="day-13.html#cb188-31"></a>      phi[k] &lt;-<span class="st"> </span>phi[k<span class="dv">-1</span>]</span>
+<span id="cb188-32"><a href="day-13.html#cb188-32"></a>    }</span>
+<span id="cb188-33"><a href="day-13.html#cb188-33"></a>  } <span class="cf">else</span> {</span>
+<span id="cb188-34"><a href="day-13.html#cb188-34"></a>    <span class="co">## phi_star was outside the support, keep at the previous value</span></span>
+<span id="cb188-35"><a href="day-13.html#cb188-35"></a>    phi[k] &lt;-<span class="st"> </span>phi[k<span class="dv">-1</span>]</span>
+<span id="cb188-36"><a href="day-13.html#cb188-36"></a>  }</span>
+<span id="cb188-37"><a href="day-13.html#cb188-37"></a></span>
+<span id="cb188-38"><a href="day-13.html#cb188-38"></a>  <span class="co">## sample sigma2</span></span>
+<span id="cb188-39"><a href="day-13.html#cb188-39"></a>  sigma2_star &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, sigma2[k<span class="dv">-1</span>], sigma2_tune)</span>
+<span id="cb188-40"><a href="day-13.html#cb188-40"></a>  <span class="co">## check to make sure sigma2_star is reasonable, if not, we reject and move on</span></span>
+<span id="cb188-41"><a href="day-13.html#cb188-41"></a>  <span class="cf">if</span> (sigma2_star <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb188-42"><a href="day-13.html#cb188-42"></a>    mh1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2_star), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb188-43"><a href="day-13.html#cb188-43"></a><span class="st">      </span><span class="kw">dhalfcauchy</span>(sigma2_star, <span class="kw">sqrt</span>(<span class="dv">25</span>), <span class="dt">log=</span><span class="ot">TRUE</span>)</span>
+<span id="cb188-44"><a href="day-13.html#cb188-44"></a>    mh2 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb188-45"><a href="day-13.html#cb188-45"></a><span class="st">      </span><span class="kw">dhalfcauchy</span>(sigma2[k<span class="dv">-1</span>], <span class="kw">sqrt</span>(<span class="dv">25</span>), <span class="dt">log=</span><span class="ot">TRUE</span>)</span>
+<span id="cb188-46"><a href="day-13.html#cb188-46"></a>    a &lt;-<span class="st"> </span><span class="kw">exp</span>(mh1<span class="op">-</span>mh2)</span>
+<span id="cb188-47"><a href="day-13.html#cb188-47"></a>    <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb188-48"><a href="day-13.html#cb188-48"></a>      <span class="co">## accept the proposed value</span></span>
+<span id="cb188-49"><a href="day-13.html#cb188-49"></a>      sigma2[k] &lt;-sigma2_star</span>
+<span id="cb188-50"><a href="day-13.html#cb188-50"></a>      accept_sigma2 &lt;-<span class="st"> </span>accept_sigma2 <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>K</span>
+<span id="cb188-51"><a href="day-13.html#cb188-51"></a>    } <span class="cf">else</span> {</span>
+<span id="cb188-52"><a href="day-13.html#cb188-52"></a>      sigma2[k] &lt;-<span class="st"> </span>sigma2[k<span class="dv">-1</span>]</span>
+<span id="cb188-53"><a href="day-13.html#cb188-53"></a>    }</span>
+<span id="cb188-54"><a href="day-13.html#cb188-54"></a>  } <span class="cf">else</span> {</span>
+<span id="cb188-55"><a href="day-13.html#cb188-55"></a>    <span class="co">## sigma2_star was outside the support, keep at the previous value</span></span>
+<span id="cb188-56"><a href="day-13.html#cb188-56"></a>    sigma2[k] &lt;-<span class="st"> </span>sigma2[k<span class="dv">-1</span>]</span>
+<span id="cb188-57"><a href="day-13.html#cb188-57"></a>  }</span>
+<span id="cb188-58"><a href="day-13.html#cb188-58"></a>}</span></code></pre></div>
+<p>The trace plots showing the parameter estimates, post burn-in, are below. From these, we see that the MCMC model is estimating the parameters reasonably.</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="day-13.html#cb189-1"></a>burnin &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb189-2"><a href="day-13.html#cb189-2"></a>samples &lt;-<span class="st"> </span><span class="kw">cbind</span>(phi[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], sigma2[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)])</span>
+<span id="cb189-3"><a href="day-13.html#cb189-3"></a><span class="kw">colnames</span>(samples) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;phi&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)</span>
+<span id="cb189-4"><a href="day-13.html#cb189-4"></a></span>
+<span id="cb189-5"><a href="day-13.html#cb189-5"></a><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb189-6"><a href="day-13.html#cb189-6"></a><span class="kw">plot</span>(samples[, <span class="st">&quot;phi&quot;</span>], <span class="dt">type=</span><span class="st">&#39;l&#39;</span>,</span>
+<span id="cb189-7"><a href="day-13.html#cb189-7"></a>     <span class="dt">main=</span><span class="kw">paste0</span>(<span class="st">&quot;Trace plot for phi, acceptance=&quot;</span>, <span class="kw">round</span>(accept_phi, <span class="dt">digits=</span><span class="dv">2</span>)))</span>
+<span id="cb189-8"><a href="day-13.html#cb189-8"></a><span class="kw">abline</span>(<span class="dt">h=</span>phi_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb189-9"><a href="day-13.html#cb189-9"></a><span class="kw">plot</span>(samples[, <span class="st">&quot;sigma2&quot;</span>], <span class="dt">type=</span><span class="st">&#39;l&#39;</span>,</span>
+<span id="cb189-10"><a href="day-13.html#cb189-10"></a>     <span class="dt">main=</span><span class="kw">paste0</span>(<span class="st">&quot;Trace plot for sigma2, acceptance=&quot;</span>, <span class="kw">round</span>(accept_sigma2, <span class="dt">digits=</span><span class="dv">2</span>)))</span>
+<span id="cb189-11"><a href="day-13.html#cb189-11"></a><span class="kw">abline</span>(<span class="dt">h=</span>sigma2_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="figs/unnamed-chunk-115-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="day-13.html#cb190-1"></a><span class="kw">library</span>(coda)</span>
+<span id="cb190-2"><a href="day-13.html#cb190-2"></a><span class="kw">effectiveSize</span>(samples)</span></code></pre></div>
+<pre><code>##    phi sigma2 
+##  618.4  826.8</code></pre>
+<p>In the model above, we used <strong>symmetric</strong> proposals and threw out parameter values that were outside the allowable range. Because <span class="math inline">\(\phi\)</span> has a true value close to the limit of allowable values, the Metropolis algorithm could be very inefficient. To improve efficiency, let’s rewrite the algorithm using truncated normal proposals (which are <strong>asymmetric</strong>).</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="day-13.html#cb192-1"></a><span class="kw">library</span>(LaplacesDemon)</span>
+<span id="cb192-2"><a href="day-13.html#cb192-2"></a><span class="kw">library</span>(truncnorm)</span>
+<span id="cb192-3"><a href="day-13.html#cb192-3"></a>K &lt;-<span class="st"> </span><span class="dv">25000</span></span>
+<span id="cb192-4"><a href="day-13.html#cb192-4"></a>phi &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, N)</span>
+<span id="cb192-5"><a href="day-13.html#cb192-5"></a>sigma2 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, N)</span>
+<span id="cb192-6"><a href="day-13.html#cb192-6"></a></span>
+<span id="cb192-7"><a href="day-13.html#cb192-7"></a><span class="co">## initialize phi and sigma2</span></span>
+<span id="cb192-8"><a href="day-13.html#cb192-8"></a>phi[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">-1</span>, <span class="dv">1</span>)</span>
+<span id="cb192-9"><a href="day-13.html#cb192-9"></a>sigma2[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb192-10"><a href="day-13.html#cb192-10"></a></span>
+<span id="cb192-11"><a href="day-13.html#cb192-11"></a><span class="co">## set the tuning parameters</span></span>
+<span id="cb192-12"><a href="day-13.html#cb192-12"></a>phi_tune &lt;-<span class="st"> </span><span class="fl">0.0175</span></span>
+<span id="cb192-13"><a href="day-13.html#cb192-13"></a>accept_phi &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb192-14"><a href="day-13.html#cb192-14"></a>sigma2_tune &lt;-<span class="st"> </span><span class="fl">0.175</span></span>
+<span id="cb192-15"><a href="day-13.html#cb192-15"></a>accept_sigma2 &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb192-16"><a href="day-13.html#cb192-16"></a></span>
+<span id="cb192-17"><a href="day-13.html#cb192-17"></a><span class="co">##</span></span>
+<span id="cb192-18"><a href="day-13.html#cb192-18"></a><span class="co">## MCMC loop</span></span>
+<span id="cb192-19"><a href="day-13.html#cb192-19"></a><span class="co">##</span></span>
+<span id="cb192-20"><a href="day-13.html#cb192-20"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</span>
+<span id="cb192-21"><a href="day-13.html#cb192-21"></a>  <span class="co">## sample phi</span></span>
+<span id="cb192-22"><a href="day-13.html#cb192-22"></a>  <span class="co">## use truncated normal proposal</span></span>
+<span id="cb192-23"><a href="day-13.html#cb192-23"></a>  phi_star &lt;-<span class="st"> </span><span class="kw">rtruncnorm</span>(<span class="dv">1</span>, <span class="dt">a=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">b=</span><span class="dv">1</span>, phi[k<span class="dv">-1</span>], phi_tune)</span>
+<span id="cb192-24"><a href="day-13.html#cb192-24"></a>  <span class="co">## No need to check if phi_star is between -1 and 1 </span></span>
+<span id="cb192-25"><a href="day-13.html#cb192-25"></a>  mh1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi_star <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span></span>
+<span id="cb192-26"><a href="day-13.html#cb192-26"></a><span class="st">    </span><span class="kw">log</span>(<span class="kw">dtruncnorm</span>(phi[k<span class="dv">-1</span>], <span class="dt">a=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">b=</span><span class="dv">1</span>, phi_star, phi_tune))</span>
+<span id="cb192-27"><a href="day-13.html#cb192-27"></a>  mh2 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k<span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span></span>
+<span id="cb192-28"><a href="day-13.html#cb192-28"></a><span class="st">    </span><span class="kw">log</span>(<span class="kw">dtruncnorm</span>(phi_star, <span class="dt">a=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">b=</span><span class="dv">1</span>, phi[k<span class="dv">-1</span>], phi_tune))</span>
+<span id="cb192-29"><a href="day-13.html#cb192-29"></a>  a &lt;-<span class="st"> </span><span class="kw">exp</span>(mh1<span class="op">-</span>mh2)</span>
+<span id="cb192-30"><a href="day-13.html#cb192-30"></a>  <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb192-31"><a href="day-13.html#cb192-31"></a>    <span class="co">## accept the proposed value</span></span>
+<span id="cb192-32"><a href="day-13.html#cb192-32"></a>    phi[k] &lt;-<span class="st"> </span>phi_star</span>
+<span id="cb192-33"><a href="day-13.html#cb192-33"></a>    accept_phi &lt;-<span class="st"> </span>accept_phi <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>K</span>
+<span id="cb192-34"><a href="day-13.html#cb192-34"></a>  } <span class="cf">else</span> {</span>
+<span id="cb192-35"><a href="day-13.html#cb192-35"></a>    phi[k] &lt;-<span class="st"> </span>phi[k<span class="dv">-1</span>]</span>
+<span id="cb192-36"><a href="day-13.html#cb192-36"></a>  }</span>
+<span id="cb192-37"><a href="day-13.html#cb192-37"></a></span>
+<span id="cb192-38"><a href="day-13.html#cb192-38"></a>  <span class="co">## sample sigma2</span></span>
+<span id="cb192-39"><a href="day-13.html#cb192-39"></a>  sigma2_star &lt;-<span class="st"> </span><span class="kw">rtruncnorm</span>(<span class="dv">1</span>, <span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="ot">Inf</span>, sigma2[k<span class="dv">-1</span>], sigma2_tune)</span>
+<span id="cb192-40"><a href="day-13.html#cb192-40"></a>  <span class="co">## No need to check to make sure sigma2_star is positive</span></span>
+<span id="cb192-41"><a href="day-13.html#cb192-41"></a>  mh1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2_star), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb192-42"><a href="day-13.html#cb192-42"></a><span class="st">    </span><span class="kw">dhalfcauchy</span>(sigma2_star, <span class="kw">sqrt</span>(<span class="dv">25</span>), <span class="dt">log=</span><span class="ot">TRUE</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb192-43"><a href="day-13.html#cb192-43"></a><span class="st">    </span><span class="kw">log</span>(<span class="kw">dtruncnorm</span>(sigma2[k<span class="dv">-1</span>], <span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="ot">Inf</span>, sigma2_star, sigma2_tune))</span>
+<span id="cb192-44"><a href="day-13.html#cb192-44"></a>  mh2 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y[<span class="dv">2</span><span class="op">:</span>N], phi[k] <span class="op">*</span><span class="st"> </span>y[<span class="dv">1</span><span class="op">:</span>(N<span class="dv">-1</span>)], <span class="kw">sqrt</span>(sigma2[k<span class="dv">-1</span>]), <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb192-45"><a href="day-13.html#cb192-45"></a><span class="st">    </span><span class="kw">dhalfcauchy</span>(sigma2[k<span class="dv">-1</span>], <span class="kw">sqrt</span>(<span class="dv">25</span>), <span class="dt">log=</span><span class="ot">TRUE</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb192-46"><a href="day-13.html#cb192-46"></a><span class="st">    </span><span class="kw">log</span>(<span class="kw">dtruncnorm</span>(sigma2_star, <span class="dt">a=</span><span class="dv">0</span>, <span class="dt">b=</span><span class="ot">Inf</span>, sigma2[k<span class="dv">-1</span>], sigma2_tune))</span>
+<span id="cb192-47"><a href="day-13.html#cb192-47"></a>  a &lt;-<span class="st"> </span><span class="kw">exp</span>(mh1<span class="op">-</span>mh2)</span>
+<span id="cb192-48"><a href="day-13.html#cb192-48"></a>  <span class="cf">if</span> (<span class="kw">runif</span>(<span class="dv">1</span>) <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb192-49"><a href="day-13.html#cb192-49"></a>    <span class="co">## accept the proposed value</span></span>
+<span id="cb192-50"><a href="day-13.html#cb192-50"></a>    sigma2[k] &lt;-sigma2_star</span>
+<span id="cb192-51"><a href="day-13.html#cb192-51"></a>    accept_sigma2 &lt;-<span class="st"> </span>accept_sigma2 <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>K</span>
+<span id="cb192-52"><a href="day-13.html#cb192-52"></a>  } <span class="cf">else</span> {</span>
+<span id="cb192-53"><a href="day-13.html#cb192-53"></a>    sigma2[k] &lt;-<span class="st"> </span>sigma2[k<span class="dv">-1</span>]</span>
+<span id="cb192-54"><a href="day-13.html#cb192-54"></a>  }</span>
+<span id="cb192-55"><a href="day-13.html#cb192-55"></a>}</span></code></pre></div>
+<p>The trace plots below show the increased efficiency in the acceptance rate at the same tuning parameter value and show better effective sample size.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="day-13.html#cb193-1"></a>burnin &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb193-2"><a href="day-13.html#cb193-2"></a>samples &lt;-<span class="st"> </span><span class="kw">cbind</span>(phi[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], sigma2[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)])</span>
+<span id="cb193-3"><a href="day-13.html#cb193-3"></a><span class="kw">colnames</span>(samples) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;phi&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)</span>
+<span id="cb193-4"><a href="day-13.html#cb193-4"></a></span>
+<span id="cb193-5"><a href="day-13.html#cb193-5"></a><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb193-6"><a href="day-13.html#cb193-6"></a><span class="kw">plot</span>(samples[, <span class="st">&quot;phi&quot;</span>], <span class="dt">type=</span><span class="st">&#39;l&#39;</span>,</span>
+<span id="cb193-7"><a href="day-13.html#cb193-7"></a>     <span class="dt">main=</span><span class="kw">paste0</span>(<span class="st">&quot;Trace plot for phi, acceptance=&quot;</span>, <span class="kw">round</span>(accept_phi, <span class="dt">digits=</span><span class="dv">2</span>)))</span>
+<span id="cb193-8"><a href="day-13.html#cb193-8"></a><span class="kw">abline</span>(<span class="dt">h=</span>phi_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb193-9"><a href="day-13.html#cb193-9"></a><span class="kw">plot</span>(samples[, <span class="st">&quot;sigma2&quot;</span>], <span class="dt">type=</span><span class="st">&#39;l&#39;</span>,</span>
+<span id="cb193-10"><a href="day-13.html#cb193-10"></a>     <span class="dt">main=</span><span class="kw">paste0</span>(<span class="st">&quot;Trace plot for sigma2, acceptance=&quot;</span>, <span class="kw">round</span>(accept_sigma2, <span class="dt">digits=</span><span class="dv">2</span>)))</span>
+<span id="cb193-11"><a href="day-13.html#cb193-11"></a><span class="kw">abline</span>(<span class="dt">h=</span>sigma2_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="figs/unnamed-chunk-118-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="day-13.html#cb194-1"></a><span class="kw">hist</span>(samples[,<span class="st">&quot;phi&quot;</span>], <span class="dt">breaks=</span><span class="dv">100</span>)</span>
+<span id="cb194-2"><a href="day-13.html#cb194-2"></a><span class="kw">abline</span>(<span class="dt">v=</span>phi_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb194-3"><a href="day-13.html#cb194-3"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">mean</span>(samples[, <span class="st">&quot;phi&quot;</span>]), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb194-4"><a href="day-13.html#cb194-4"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">quantile</span>(samples[, <span class="st">&quot;phi&quot;</span>], <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)), <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb194-5"><a href="day-13.html#cb194-5"></a></span>
+<span id="cb194-6"><a href="day-13.html#cb194-6"></a><span class="kw">hist</span>(samples[,<span class="st">&quot;sigma2&quot;</span>], <span class="dt">breaks=</span><span class="dv">100</span>)</span>
+<span id="cb194-7"><a href="day-13.html#cb194-7"></a><span class="kw">abline</span>(<span class="dt">v=</span>sigma2_sim, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb194-8"><a href="day-13.html#cb194-8"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">mean</span>(samples[, <span class="st">&quot;sigma2&quot;</span>]), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb194-9"><a href="day-13.html#cb194-9"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">quantile</span>(samples[, <span class="st">&quot;sigma2&quot;</span>], <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)), <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb194-10"><a href="day-13.html#cb194-10"></a><span class="kw">library</span>(coda)</span>
+<span id="cb194-11"><a href="day-13.html#cb194-11"></a><span class="kw">effectiveSize</span>(samples)</span></code></pre></div>
+<pre><code>##    phi sigma2 
+##   7381   5362</code></pre>
+<p><img src="figs/unnamed-chunk-119-1.png" width="480" style="display: block; margin: auto;" /><img src="figs/unnamed-chunk-119-2.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

@@ -246,14 +246,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
+<li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>11.2</b> Introduction to MCMC</a></li>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>11.3</b> Example: Simple linear regression</a></li>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#the-posterior-distribution"><i class="fa fa-check"></i><b>11.4</b> The posterior distribution</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>11.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>11.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
+<li class="chapter" data-level="11.4.3" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>11.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="day-11.html"><a href="day-11.html#fitting-the-model"><i class="fa fa-check"></i><b>11.5</b> Fitting the model</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="day-11.html"><a href="day-11.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>11.5.1</b> General recommendations for writing MCMC software</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
 <ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
+<li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>12.2</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#the-proposal-distribution"><i class="fa fa-check"></i><b>12.3</b> The proposal distribution</a></li>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-metropolis-update"><i class="fa fa-check"></i><b>12.4</b> The Metropolis update</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
 <ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
+<li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis-Hastings Algorithm</a></li>
+<li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>13.3</b> The Metropolis-Hastings algorithm</a></li>
+<li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#example-1"><i class="fa fa-check"></i><b>13.4</b> Example</a></li>
+<li class="chapter" data-level="13.5" data-path="day-13.html"><a href="day-13.html#posterior"><i class="fa fa-check"></i><b>13.5</b> Posterior</a></li>
+<li class="chapter" data-level="13.6" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-phi"><i class="fa fa-check"></i><b>13.6</b> Conditional posterior for <span class="math inline">\(\phi\)</span></a></li>
+<li class="chapter" data-level="13.7" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>13.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="13.8" data-path="day-13.html"><a href="day-13.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>13.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
 <ul>
@@ -453,7 +475,7 @@ y(\mathbf{s}) &amp; = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s
 For each of the <span class="math inline">\(k\)</span> bins that have <span class="math inline">\(m_k\)</span> points in each bin, the variogram estimate for bin <span class="math inline">\(k\)</span> centered at the bin interval <span class="math inline">\(\mathbf{h}_k\)</span> is</p></li>
 </ul>
 <p><span class="math display">\[\begin{align*}
-\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)
+\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)^2
 \end{align*}\]</span></p>
 <p>for the <span class="math inline">\(\ell\)</span>th pair of locations <span class="math inline">\(\mathbf{s}_{\ell_1}\)</span> and <span class="math inline">\(\mathbf{s}_{\ell_2}\)</span></p>
 <p><strong>insert empirical variogram plot from class here</strong></p>
@@ -647,8 +669,8 @@ for all values of <span class="math inline">\(\theta^\star\)</span>. The followi
 </ul></li>
 <li>Uncertainties can be estimated using the <a href="https://en.wikipedia.org/wiki/Fisher_information">Fisher information matrix</a>
 <span class="math display">\[\begin{align*}
-  \mathcal{I}(\boldsymbol{\theta})_{ij} &amp; = E \left( \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_i} \log [\boldsymbol{\theta} | \mathbf{y} \right) \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right) \\
-  &amp; = - E \left( \left( \frac{\mathcal{d}^2 }{\mathcal{d} \boldsymbol{\theta}_i \mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right)
+  \mathcal{I}(\boldsymbol{\theta})_{ij} &amp; = E \left( \left( \frac{{\partial d}}{{\partial d} \boldsymbol{\theta}_i} \log [\boldsymbol{\theta} | \mathbf{y} ] \right) \left( \frac{{\partial d}}{{\partial d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} ] \right) \middle| \boldsymbol{\theta} \right) \\
+  &amp; = - E \left( \left( \frac{{\partial d}^2 }{{\partial d} \boldsymbol{\theta}_i {\partial d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} ]\right) \middle| \boldsymbol{\theta} \right)
   \end{align*}\]</span></li>
 </ul></li>
 </ul>

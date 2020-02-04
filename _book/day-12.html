@@ -246,14 +246,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
 <ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
+<li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>11.2</b> Introduction to MCMC</a></li>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>11.3</b> Example: Simple linear regression</a></li>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#the-posterior-distribution"><i class="fa fa-check"></i><b>11.4</b> The posterior distribution</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>11.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>11.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
+<li class="chapter" data-level="11.4.3" data-path="day-11.html"><a href="day-11.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>11.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="day-11.html"><a href="day-11.html#fitting-the-model"><i class="fa fa-check"></i><b>11.5</b> Fitting the model</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="day-11.html"><a href="day-11.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>11.5.1</b> General recommendations for writing MCMC software</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
 <ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
+<li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>12.2</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#the-proposal-distribution"><i class="fa fa-check"></i><b>12.3</b> The proposal distribution</a></li>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-metropolis-update"><i class="fa fa-check"></i><b>12.4</b> The Metropolis update</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
 <ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
+<li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis-Hastings Algorithm</a></li>
+<li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>13.3</b> The Metropolis-Hastings algorithm</a></li>
+<li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#example-1"><i class="fa fa-check"></i><b>13.4</b> Example</a></li>
+<li class="chapter" data-level="13.5" data-path="day-13.html"><a href="day-13.html#posterior"><i class="fa fa-check"></i><b>13.5</b> Posterior</a></li>
+<li class="chapter" data-level="13.6" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-phi"><i class="fa fa-check"></i><b>13.6</b> Conditional posterior for <span class="math inline">\(\phi\)</span></a></li>
+<li class="chapter" data-level="13.7" data-path="day-13.html"><a href="day-13.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>13.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="13.8" data-path="day-13.html"><a href="day-13.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>13.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
 <li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
 <ul>
@@ -400,6 +422,184 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 number="12"><span class="header-section-number">12</span> Day 12</h1>
 <div id="announcements-7" class="section level2" number="12.1">
 <h2 number="12.1"><span class="header-section-number">12.1</span> Announcements</h2>
+</div>
+<div id="the-metropolis-algorithm" class="section level2" number="12.2">
+<h2 number="12.2"><span class="header-section-number">12.2</span> The Metropolis Algorithm</h2>
+<!-- Set some knitr options -->
+<p>Previously we discussed how to sample from a Bayesian Hierarchical model when the conditional posterior distributions are known analytic distributions. Often, the conditional posterior distribution is not available in closed form. There are numerous methods to sample from the conditional posterior in this setting, including <a href="https://en.wikipedia.org/wiki/Importance_sampling">importance sampling</a>, <a href="https://en.wikipedia.org/wiki/Slice_sampling">slice sampling</a>, and <a href="https://arxiv.org/pdf/1206.1901.pdf">hybrid/Hamiltonian sampling</a>, among others. Today we will introduce the <a href="http://bayes.wustl.edu/Manual/EquationOfState.pdf">Metropolis algorithm</a>, one of the most widely used and most effective methods for sampling from a conditional posterior without an analytically known distribution.</p>
+Recall the algorithm for the Gibbs sampler:
+The Metropolis algorithm requires two components: the full conditional distribution (known up to a proportionality constant) and a proposal distribution <span class="math inline">\([ \theta^\star]\)</span> that generates possible values <span class="math inline">\(\theta^{\star}\)</span> for the Markov chain given the value <span class="math inline">\(\theta^{(k-1)}\)</span> of the parameter at iteration <span class="math inline">\(k-1\)</span>. The algorithm is
+</div>
+<div id="the-proposal-distribution" class="section level2" number="12.3">
+<h2 number="12.3"><span class="header-section-number">12.3</span> The proposal distribution</h2>
+<p>The proposal distribution can either be independent of the current state of the Markov chain <span class="math inline">\([ \theta^\star]\)</span> or dependent on the current state <span class="math inline">\([ \theta^\star | \theta^{(k-1)} ]\)</span>. Dependent proposal distributions are the most common, with the random walk proposal the most commonly used proposal.</p>
+<p>The random walk proposal distribution <span class="math inline">\([ \theta^\star | \theta^{(k-1)} ]\)</span> is
+<span class="math display">\[\begin{align*}
+\theta^{\star} &amp; \sim \operatorname{N} (\theta^{(k-1)}, \sigma^2_{\mbox{tune}}),
+\end{align*}\]</span>
+where the mean of the random walk is the previous value of the parameter <span class="math inline">\(\theta^{(k-1)}\)</span> and the variance <span class="math inline">\(\sigma^2_{\mbox{tune}}\)</span> is a tuning parameter that is chosen to “tune” the performance of the MCMC sampler. A small choice of <span class="math inline">\(\sigma^2_{\mbox{tune}}\)</span> will increase the acceptance rate of the Metropolis sampler because the proposed value will be relatively “close” to the previously accepted value <span class="math inline">\(\theta^{(k-1)}\)</span> while a larger <span class="math inline">\(\sigma^2_{\mbox{tune}}\)</span> will allow the Markov chain to make bigger transitions and explore the range of the posterior distribution. Hence, there is a balance between generating proposals that will be accepted relative to faster exploration of the range of the posterior.</p>
+<p>A very important property of the proposal distribution is symmetry. A proposal distribution is symmetric if <span class="math inline">\([ \theta^\star | \theta^{(k-1)} ] = [ \theta^{(k-1)} | \theta^\star ]\)</span> which means that the conditional probability of <span class="math inline">\(\theta^{\star}\)</span> given <span class="math inline">\(\theta^{(k-1)}\)</span> is equal to the conditional probability of <span class="math inline">\(\theta^{(k-1)}\)</span> given <span class="math inline">\(\theta^{\star}\)</span>. The random walk distribution is a symmetric proposal but a log-normal random walk is not symmetric.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="day-12.html#cb165-1"></a>theta_k &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb165-2"><a href="day-12.html#cb165-2"></a>theta_star &lt;-<span class="st"> </span><span class="dv">6</span></span>
+<span id="cb165-3"><a href="day-12.html#cb165-3"></a>sigma2_tune &lt;-<span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb165-4"><a href="day-12.html#cb165-4"></a></span>
+<span id="cb165-5"><a href="day-12.html#cb165-5"></a><span class="co">##  check the symmetry condition for the random walk</span></span>
+<span id="cb165-6"><a href="day-12.html#cb165-6"></a><span class="kw">all.equal</span>(<span class="kw">dnorm</span>(theta_k, theta_star, <span class="kw">sqrt</span>(sigma2_tune)),</span>
+<span id="cb165-7"><a href="day-12.html#cb165-7"></a>          <span class="kw">dnorm</span>(theta_star, theta_k, <span class="kw">sqrt</span>(sigma2_tune)))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="day-12.html#cb167-1"></a><span class="co">##  check the symmetry condition for the log-normal random walk</span></span>
+<span id="cb167-2"><a href="day-12.html#cb167-2"></a><span class="kw">all.equal</span>(<span class="kw">dlnorm</span>(<span class="kw">log</span>(theta_k), <span class="kw">log</span>(theta_star), <span class="kw">sqrt</span>(sigma2_tune)),</span>
+<span id="cb167-3"><a href="day-12.html#cb167-3"></a>          <span class="kw">dlnorm</span>(<span class="kw">log</span>(theta_star), <span class="kw">log</span>(theta_k), <span class="kw">sqrt</span>(sigma2_tune)))</span></code></pre></div>
+<pre><code>## [1] &quot;Mean relative difference: 0.7701&quot;</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="day-12.html#cb169-1"></a><span class="kw">library</span>(latex2exp)</span>
+<span id="cb169-2"><a href="day-12.html#cb169-2"></a><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="fl">2.75</span>,<span class="fl">2.75</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>)</span>
+<span id="cb169-3"><a href="day-12.html#cb169-3"></a></span>
+<span id="cb169-4"><a href="day-12.html#cb169-4"></a><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb169-5"><a href="day-12.html#cb169-5"></a><span class="co">## normal proposal</span></span>
+<span id="cb169-6"><a href="day-12.html#cb169-6"></a><span class="kw">curve</span>(<span class="kw">dnorm</span>(x, theta_k, <span class="kw">sqrt</span>(sigma2_tune)), <span class="dt">from=</span><span class="dv">2</span>, <span class="dt">to=</span><span class="dv">8</span>, </span>
+<span id="cb169-7"><a href="day-12.html#cb169-7"></a>      <span class="dt">main=</span><span class="st">&quot;Normal Proposal&quot;</span>, </span>
+<span id="cb169-8"><a href="day-12.html#cb169-8"></a>      <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;[&quot;</span>, theta<span class="op">^</span>(k<span class="dv">-1</span>), <span class="st">&quot;|&quot;</span>, theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>}, <span class="st">&quot;]&quot;</span>)),</span>
+<span id="cb169-9"><a href="day-12.html#cb169-9"></a>      <span class="dt">xlab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>})))</span>
+<span id="cb169-10"><a href="day-12.html#cb169-10"></a><span class="kw">abline</span>(<span class="dt">v=</span>theta_k, <span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb169-11"><a href="day-12.html#cb169-11"></a><span class="kw">text</span>(<span class="fl">5.65</span>, <span class="fl">0.575</span>, <span class="kw">expression</span>(theta<span class="op">^</span>{(k<span class="dv">-1</span>)}))</span>
+<span id="cb169-12"><a href="day-12.html#cb169-12"></a><span class="co">## reverse of normal proposal</span></span>
+<span id="cb169-13"><a href="day-12.html#cb169-13"></a><span class="kw">curve</span>(<span class="kw">dnorm</span>(theta_star, x, <span class="kw">sqrt</span>(sigma2_tune)), <span class="dt">from=</span><span class="dv">3</span>, <span class="dt">to=</span><span class="dv">9</span>, </span>
+<span id="cb169-14"><a href="day-12.html#cb169-14"></a>      <span class="dt">main=</span><span class="st">&quot;Reverse of Normal Proposal&quot;</span>, </span>
+<span id="cb169-15"><a href="day-12.html#cb169-15"></a>      <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;[&quot;</span>, theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>}, <span class="st">&quot;|&quot;</span>, theta<span class="op">^</span>{(k<span class="dv">-1</span>)}, <span class="st">&quot;]&quot;</span>)),</span>
+<span id="cb169-16"><a href="day-12.html#cb169-16"></a>      <span class="dt">xlab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta<span class="op">^</span>{(k<span class="dv">-1</span>)})))</span>
+<span id="cb169-17"><a href="day-12.html#cb169-17"></a><span class="kw">abline</span>(<span class="dt">v=</span>theta_star, <span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb169-18"><a href="day-12.html#cb169-18"></a><span class="kw">text</span>(<span class="fl">6.35</span>, <span class="fl">0.575</span>, <span class="kw">expression</span>(theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>}))</span>
+<span id="cb169-19"><a href="day-12.html#cb169-19"></a></span>
+<span id="cb169-20"><a href="day-12.html#cb169-20"></a><span class="co">## log-Normal proposal</span></span>
+<span id="cb169-21"><a href="day-12.html#cb169-21"></a><span class="kw">curve</span>(<span class="kw">dlnorm</span>(x, <span class="kw">log</span>(theta_k), <span class="kw">sqrt</span>(sigma2_tune)), <span class="dt">from=</span><span class="dv">1</span>, <span class="dt">to=</span><span class="dv">10</span>, </span>
+<span id="cb169-22"><a href="day-12.html#cb169-22"></a>      <span class="dt">main=</span><span class="st">&quot;log-Normal Proposal&quot;</span>, </span>
+<span id="cb169-23"><a href="day-12.html#cb169-23"></a>      <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;[&quot;</span>, theta<span class="op">^</span>(k<span class="dv">-1</span>), <span class="st">&quot;|&quot;</span>, theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>}, <span class="st">&quot;]&quot;</span>)),</span>
+<span id="cb169-24"><a href="day-12.html#cb169-24"></a>      <span class="dt">xlab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>})))</span>
+<span id="cb169-25"><a href="day-12.html#cb169-25"></a><span class="kw">abline</span>(<span class="dt">v=</span>theta_k, <span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb169-26"><a href="day-12.html#cb169-26"></a><span class="kw">text</span>(<span class="fl">5.75</span>, <span class="fl">0.14</span>, <span class="kw">expression</span>(theta<span class="op">^</span>{(k)}))</span>
+<span id="cb169-27"><a href="day-12.html#cb169-27"></a><span class="co">## reverse of log-Normal proposal</span></span>
+<span id="cb169-28"><a href="day-12.html#cb169-28"></a><span class="kw">curve</span>(<span class="kw">dlnorm</span>(theta_star, x, <span class="kw">sqrt</span>(sigma2_tune)), <span class="dt">from=</span><span class="op">-</span><span class="dv">2</span>, <span class="dt">to=</span><span class="dv">4</span>, </span>
+<span id="cb169-29"><a href="day-12.html#cb169-29"></a>      <span class="dt">main=</span><span class="st">&quot;Reverse of log-Normal Proposal&quot;</span>, </span>
+<span id="cb169-30"><a href="day-12.html#cb169-30"></a>      <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;[&quot;</span>, theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>}, <span class="st">&quot;|&quot;</span>, theta<span class="op">^</span>{(k<span class="dv">-1</span>)}, <span class="st">&quot;]&quot;</span>)),</span>
+<span id="cb169-31"><a href="day-12.html#cb169-31"></a>      <span class="dt">xlab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="kw">log</span>(theta<span class="op">^</span>{(k<span class="dv">-1</span>)}))))</span>
+<span id="cb169-32"><a href="day-12.html#cb169-32"></a><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">log</span>(theta_star), <span class="dt">lty=</span><span class="dv">2</span>)</span>
+<span id="cb169-33"><a href="day-12.html#cb169-33"></a><span class="kw">text</span>(<span class="fl">0.75</span>, <span class="fl">0.095</span>, <span class="kw">expression</span>(<span class="kw">log</span>(theta<span class="op">^</span>{<span class="st">&quot;*&quot;</span>})))</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-100-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Note that the bottom right figure shows a symmetric looking distribution. Symmetry only implies that the conditional probabilities can be interchanged, not that the probability distribution is itself symmetric. The two most commonly used proposal distributions, the normal and the uniform distribution, are symmetric.</p>
+</div>
+<div id="the-metropolis-update" class="section level2" number="12.4">
+<h2 number="12.4"><span class="header-section-number">12.4</span> The Metropolis update</h2>
+<p>The Metropolis update is only valid for symmetric proposal distributions. The more general Metropolis-Hastings update is used for assymetric proposal distributions and will be introduced later.</p>
+<p>If the value of <span class="math inline">\(\theta\)</span> at iteration <span class="math inline">\(k-1\)</span> is <span class="math inline">\(\theta^{(k-1)}\)</span>, then the conditional density for <span class="math inline">\(\theta\)</span> is
+<span class="math display">\[\begin{align*}
+[ \theta^{(k-1)} | \cdot ] &amp; = \frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]},
+\end{align*}\]</span>
+and the conditional density of the proposed value <span class="math inline">\(\theta^{\star}\)</span> is
+<span class="math display">\[\begin{align*}
+[ \theta^{\star} | \cdot ] &amp; =  \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]},
+\end{align*}\]</span>
+where both of these expressions require the difficult evaluation of the marginal data distribution <span class="math inline">\([\mathbf{y}]\)</span>. However, the ratio <span class="math inline">\(a\)</span> of the two distributions
+<span class="math display">\[\begin{align*}
+a &amp; = \frac{[ \theta^{\star} | \cdot ]}{[ \theta^{(k-1)} | \cdot ]} \\
+a &amp; = \frac{\frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]}} {\frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]}} \\
+a &amp; = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]} { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}
+\end{align*}\]</span>
+does not depend on the marginal distribution of the data <span class="math inline">\([\mathbf{y}]\)</span>, eliminating the need to calculate the difficult integral. Given the proposal <span class="math inline">\(\theta^{\star}\)</span> from a symmetric proposal distribution centered on the previous value <span class="math inline">\(\theta^{(k-1)}\)</span>, we accept the new <span class="math inline">\(\theta^\star\)</span> with probability <span class="math inline">\(min(1, a)\)</span> and otherwise reject the proposal and set <span class="math inline">\(\theta^{(k)} = \theta^{(k-1)}\)</span>. The complete Metropolis algorithm is</p>
+<p>For example, consider the model
+<span class="math display">\[\begin{align*}
+y_i &amp; \sim \operatorname{N} (\theta, 1)
+\end{align*}\]</span>
+where <span class="math inline">\(\theta\)</span> is unknown. Assuming a normal prior <span class="math inline">\(\theta \propto \operatorname{N}(0, 1000)\)</span>, we will sample from the conditional posterior <span class="math inline">\([\theta | \cdot] \propto \prod_{i=1}^N \operatorname{N}(\theta, 1) \times 1\)</span>.</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="day-12.html#cb170-1"></a><span class="co">## simulate data according to the model</span></span>
+<span id="cb170-2"><a href="day-12.html#cb170-2"></a>N &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb170-3"><a href="day-12.html#cb170-3"></a>theta &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb170-4"><a href="day-12.html#cb170-4"></a>y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(N, theta, <span class="dv">1</span>)</span></code></pre></div>
+<p>We will run the Metropolis algorithm for <span class="math inline">\(K=5000\)</span> iterations using a normal proposal dsitribution.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="day-12.html#cb171-1"></a>K &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb171-2"><a href="day-12.html#cb171-2"></a>theta_sim &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb171-3"><a href="day-12.html#cb171-3"></a>sigma2_tune &lt;-<span class="st"> </span><span class="fl">0.025</span></span>
+<span id="cb171-4"><a href="day-12.html#cb171-4"></a>accept_prob &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb171-5"><a href="day-12.html#cb171-5"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</span>
+<span id="cb171-6"><a href="day-12.html#cb171-6"></a>  theta_star &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, theta_sim[k<span class="dv">-1</span>], <span class="kw">sqrt</span>(sigma2_tune))</span>
+<span id="cb171-7"><a href="day-12.html#cb171-7"></a>  a &lt;-<span class="st"> </span><span class="kw">prod</span>(<span class="kw">dnorm</span>(y, theta_star, <span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(theta_star, <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1000</span>)) <span class="op">/</span><span class="st"> </span></span>
+<span id="cb171-8"><a href="day-12.html#cb171-8"></a><span class="st">    </span><span class="kw">prod</span>(<span class="kw">dnorm</span>(y, theta_sim[k<span class="dv">-1</span>], <span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(theta_sim[k<span class="dv">-1</span>], <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1000</span>))</span>
+<span id="cb171-9"><a href="day-12.html#cb171-9"></a>  u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb171-10"><a href="day-12.html#cb171-10"></a>  <span class="cf">if</span> (u <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb171-11"><a href="day-12.html#cb171-11"></a>    <span class="co">## accept the proposed theta_star</span></span>
+<span id="cb171-12"><a href="day-12.html#cb171-12"></a>    theta_sim[k] &lt;-<span class="st"> </span>theta_star</span>
+<span id="cb171-13"><a href="day-12.html#cb171-13"></a>    <span class="co">## keep running total of acceptance rate</span></span>
+<span id="cb171-14"><a href="day-12.html#cb171-14"></a>    accept_prob &lt;-<span class="st"> </span>accept_prob <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>K</span>
+<span id="cb171-15"><a href="day-12.html#cb171-15"></a>  } <span class="cf">else</span> {</span>
+<span id="cb171-16"><a href="day-12.html#cb171-16"></a>    <span class="co">## reject the proposed theta_star</span></span>
+<span id="cb171-17"><a href="day-12.html#cb171-17"></a>    theta_sim[k] &lt;-<span class="st"> </span>theta_sim[k<span class="dv">-1</span>]</span>
+<span id="cb171-18"><a href="day-12.html#cb171-18"></a>  }</span>
+<span id="cb171-19"><a href="day-12.html#cb171-19"></a>}</span></code></pre></div>
+<pre><code>## Error in if (u &lt; a) {: missing value where TRUE/FALSE needed</code></pre>
+<p>Oops! We get an error! When working with <span class="math inline">\(a\)</span> directly, we get a product of small likelihoods. Instead, let’s work with the logarithm of the probabilities</p>
+<p><span class="math display">\[\begin{align*}
+a &amp; = \exp \left( \log \left( [\mathbf{y} | \theta^{\star}] [\theta^{\star}] \right) - \log \left( [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] \right) \right) \\
+&amp; = \exp \left( \log [\mathbf{y} | \theta^{\star}]  + \log [\theta^{\star}] - \log  [\mathbf{y} | \theta^{(k-1)}]  - \log [\theta^{(k-1)}] \right),
+\end{align*}\]</span>
+where all we did was re-write the likelihood as the exponential of a log (an identity transformation). What this does is reduce the effect of multiplying small values that go to computer zero (numeric underflow) and cause problems. For example</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="day-12.html#cb173-1"></a><span class="kw">prod</span>(<span class="kw">dnorm</span>(y, <span class="dv">8</span>, <span class="dv">1</span>))</span></code></pre></div>
+<pre><code>## [1] 3.779e-270</code></pre>
+<p>is very very small (close to zero) and gets closer to numeric underflow as N increase, whereas</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="day-12.html#cb175-1"></a><span class="kw">sum</span>(<span class="kw">dnorm</span>(y, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dt">log=</span><span class="ot">TRUE</span>))</span>
+<span id="cb175-2"><a href="day-12.html#cb175-2"></a><span class="kw">all.equal</span>(<span class="kw">prod</span>(<span class="kw">dnorm</span>(y, <span class="dv">8</span>, <span class="dv">1</span>)), <span class="kw">exp</span>(<span class="kw">sum</span>(<span class="kw">dnorm</span>(y, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dt">log=</span><span class="ot">TRUE</span>))))</span></code></pre></div>
+<pre><code>## [1] -620.4
+## [1] TRUE</code></pre>
+<p>is a more reasonable number (nowhere near computer zero), but produces the same answer when exponentiated.</p>
+<p>Writing the Metropolis algorithm on the log-probability scale is</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="day-12.html#cb177-1"></a>K &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb177-2"><a href="day-12.html#cb177-2"></a>theta_sim &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb177-3"><a href="day-12.html#cb177-3"></a>sigma2_tune &lt;-<span class="st"> </span><span class="fl">0.025</span></span>
+<span id="cb177-4"><a href="day-12.html#cb177-4"></a>accept_prob &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb177-5"><a href="day-12.html#cb177-5"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</span>
+<span id="cb177-6"><a href="day-12.html#cb177-6"></a>  theta_star &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, theta_sim[k<span class="dv">-1</span>], <span class="kw">sqrt</span>(sigma2_tune))</span>
+<span id="cb177-7"><a href="day-12.html#cb177-7"></a>  <span class="co">## calcuate the numerator of the ratio</span></span>
+<span id="cb177-8"><a href="day-12.html#cb177-8"></a>  mh1 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y, theta_star, <span class="dv">1</span>, <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span></span>
+<span id="cb177-9"><a href="day-12.html#cb177-9"></a><span class="st">    </span><span class="kw">dnorm</span>(theta_star, <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1000</span>), <span class="dt">log=</span><span class="ot">TRUE</span>) </span>
+<span id="cb177-10"><a href="day-12.html#cb177-10"></a>  <span class="co">## calcuate the denomiator of the ratio</span></span>
+<span id="cb177-11"><a href="day-12.html#cb177-11"></a>  mh2 &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">dnorm</span>(y, theta_sim[k<span class="dv">-1</span>], <span class="dv">1</span>, <span class="dt">log=</span><span class="ot">TRUE</span>)) <span class="op">+</span></span>
+<span id="cb177-12"><a href="day-12.html#cb177-12"></a><span class="st">    </span><span class="kw">dnorm</span>(theta_sim[k<span class="dv">-1</span>], <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1000</span>), <span class="dt">log=</span><span class="ot">TRUE</span>)</span>
+<span id="cb177-13"><a href="day-12.html#cb177-13"></a>  a &lt;-<span class="st"> </span><span class="kw">exp</span>(mh1 <span class="op">-</span><span class="st"> </span>mh2)</span>
+<span id="cb177-14"><a href="day-12.html#cb177-14"></a>  u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb177-15"><a href="day-12.html#cb177-15"></a>  <span class="cf">if</span> (u <span class="op">&lt;</span><span class="st"> </span>a) {</span>
+<span id="cb177-16"><a href="day-12.html#cb177-16"></a>    <span class="co">## accept the proposed theta_star</span></span>
+<span id="cb177-17"><a href="day-12.html#cb177-17"></a>    theta_sim[k] &lt;-<span class="st"> </span>theta_star</span>
+<span id="cb177-18"><a href="day-12.html#cb177-18"></a>    <span class="co">## keep running total of acceptance rate</span></span>
+<span id="cb177-19"><a href="day-12.html#cb177-19"></a>    accept_prob &lt;-<span class="st"> </span>accept_prob <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>K</span>
+<span id="cb177-20"><a href="day-12.html#cb177-20"></a>  } <span class="cf">else</span> {</span>
+<span id="cb177-21"><a href="day-12.html#cb177-21"></a>    <span class="co">## reject the proposed theta_star</span></span>
+<span id="cb177-22"><a href="day-12.html#cb177-22"></a>    theta_sim[k] &lt;-<span class="st"> </span>theta_sim[k<span class="dv">-1</span>]</span>
+<span id="cb177-23"><a href="day-12.html#cb177-23"></a>  }</span>
+<span id="cb177-24"><a href="day-12.html#cb177-24"></a>}</span></code></pre></div>
+<p>Plotting the output below looks much, much better. All thanks to avoiding numeric underflow! The lesson: always evaluate Metropolis ratios on the log scale.</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="day-12.html#cb178-1"></a><span class="co">## Plot the output</span></span>
+<span id="cb178-2"><a href="day-12.html#cb178-2"></a><span class="kw">plot</span>(theta_sim, <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, </span>
+<span id="cb178-3"><a href="day-12.html#cb178-3"></a>     <span class="dt">main=</span><span class="kw">paste0</span>(<span class="st">&quot;acceptance prob = &quot;</span>, <span class="kw">round</span>(accept_prob, <span class="dt">digits=</span><span class="dv">2</span>)), </span>
+<span id="cb178-4"><a href="day-12.html#cb178-4"></a>     <span class="dt">xlab=</span><span class="st">&quot;MCMC iteration&quot;</span>, <span class="dt">ylab=</span><span class="kw">expression</span>(theta))</span>
+<span id="cb178-5"><a href="day-12.html#cb178-5"></a><span class="kw">abline</span>(<span class="dt">h=</span>theta, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-106-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We can also explore the effects of the tuning parameter on the behavior of the model</p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-108-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Let’s examine these plots, throwing away the first 500 samples as “burn-in.”</p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-109-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Notice that the smallest choice of <span class="math inline">\(\sigma^2_{\mbox{tune}}\)</span> produces a chain with high autocorrelation that doesn’t die off at large lags. The choice of <span class="math inline">\(\sigma^2_{\mbox{tune}} = 0.05\)</span> produces the quickest decay in the ACF plot below, and has an acceptance rate of about 0.46 (0.44 is optimal for a univariate Metropolis update). The trace plots for the larger values of the tuning parameter have low acceptance rates and get “stuck” at certain parameter values for long periods of time.</p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-110-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="day-12.html#cb179-1"></a><span class="kw">library</span>(coda)</span>
+<span id="cb179-2"><a href="day-12.html#cb179-2"></a><span class="kw">effectiveSize</span>(theta_sim1[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>)])</span>
+<span id="cb179-3"><a href="day-12.html#cb179-3"></a><span class="kw">effectiveSize</span>(theta_sim2[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>)])</span>
+<span id="cb179-4"><a href="day-12.html#cb179-4"></a><span class="kw">effectiveSize</span>(theta_sim3[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>)])</span>
+<span id="cb179-5"><a href="day-12.html#cb179-5"></a><span class="kw">effectiveSize</span>(theta_sim4[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">500</span>)])</span></code></pre></div>
+<pre><code>##  var1 
+## 227.2 
+## var1 
+## 1103 
+##  var1 
+## 335.6 
+##  var1 
+## 117.9</code></pre>
 
 </div>
 </div>

@@ -2,3 +2,331 @@
 
 ## Announcements
 
+## Introduction to MCMC
+
+```{r, include = FALSE, cache = FALSE}
+library(knitr)
+options(replace.assign=TRUE,width=60)
+options(digits=4)
+opts_chunk$set(tidy=FALSE, fig.align='center', fig.width = 16, fig.height = 9, 
+               results="hold", fig.show = 'hold', par = TRUE)
+```
+
+To estimate models within the Bayesian framework, the most commonly used method is Markov Chain Monte Carlo. Recall that the main difference between a Bayesian posterior distribution and a likelihood function is that the Bayesian posterior distribution integrates to 1 whereas the likelihood function does not. The posterior distribution of $\boldsymbol{\theta}$ given $\mathbf{y}$ is
+
+\begin{align*}
+[\boldsymbol{\theta} | \mathbf{y} ] & = \frac{[\mathbf{y} | \boldsymbol{\theta}] [\boldsymbol{\theta} ]}{[\mathbf{y}]} \\
+(\#eq:posterior)
+& = \frac{[\mathbf{y} | \boldsymbol{\theta}] [\boldsymbol{\theta}]}{ \int_{\boldsymbol{\theta}} [\mathbf{y}|\boldsymbol{\theta}] [\boldsymbol{\theta}] d\boldsymbol{\theta}},
+\end{align*}
+
+where the integral in \@ref(eq:posterior) guarantees that the posterior distribution integrates to 1. For some models, the integral in \@ref(eq:posterior) is analytically tractable (e.g. Normal likelihood and Normal prior), but for most interesting models the integral is not available in a closed form solution. Instead, we can approximate the integral numerically using a technique called Markov Chain Monte Carlo (MCMC) (See the seminal paper by [Gelfand and Smith 1990](http://wwwf.imperial.ac.uk/~das01/MyWeb/SCBI/Papers/GelfandSmith.pdf) for more details). 
+
+Instead of evaluating the probability distribution and calculating the normalizing constant, we can generate samples from the marginal posterior distribution of each parameter in such a way that the joint distribution of the samples from the marginal distributions is equivalent to samples from the posterior, up to Monte Carlo error. 
+
+## Example: Simple linear regression
+
+Consider the simple linear regression model for $i=1, \ldots, N$ observations
+\eq{
+(\#eq:regression)
+y_i & = \mu + x_i \beta + \varepsilon_i
+}
+where $\varepsilon_i \sim N(0, \sigma^2)$ and $x_i$ are known univariate covariates. If we assume the prior distributions $\mu \sim N(\mu_\mu, \sigma^2_\mu)$ with $\mu_\mu$ and $\sigma^2_\mu$ fixed and known, $\beta \sim N(\mu_\beta, \sigma^2_\beta)$ with $\mu_\beta$ and $\sigma^2_\beta$ fixed and known, and $\sigma^2 \sim \operatorname{inverse-gamma}(\alpha_0, \beta_0)$ with $\alpha_0$ and $\beta_0$ fixed and known. where the $\operatorname{inverse-gamma}(\alpha_0, \beta_0)$ distribution is 
+\eq{
+[\sigma^2 | \alpha_0, \beta_0] & = \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\}.
+}
+
+## The posterior distribution
+
+Given the model statement, we can write out the posterior distribution on which we want inference. The posterior distribution is
+\eq{
+[\mu, \beta, \sigma^2 | \mathbf{y}] & = \frac{\prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]}{\int_\mu \int_\beta \int_{\sigma^2} \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2] \,d\sigma^2 \,d\beta \,d\mu}.
+}
+Notice that we don't include $x_i$ in the above statement because it is assumed fixed and known. For the model we defined in \@ref(eq:regression), the posterior distribution is available in closed form because we can evaluate the integrals in the denominator analytically. However, the integrals are challenging and for most interesting models, are not available in closed form. 
+
+Given the posterior distribution, the next step is to find the marginal posterior distributions of $\mu$, $\beta$ and $\sigma^2$.
+
+### Full conditional distribution of $\mu$
+
+The full conditional distribution (marginal posterior) for $\mu$ given all other parameters in the model is
+\eq{
+[\mu | \cdot] & \propto \prod_{i=1^N} [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]  \\
+& \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\mu}}  \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu - \mu_\mu\right)^2 \right\} \\
+& \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\mu^2 - 2 \mu \left(y_i - x_i\beta\right)\right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu^2 - 2 \mu \mu_\mu\right) \right\} \\
+& \propto \exp \left\{ -\frac{1}{2}  \left(\mu^2 \left(\frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu}\right) - 2 \mu \left(\frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}\right)\right) \right\} 
+}
+which is a normal distribution with mean $a_\mu^{-1}b_\mu$ and variance $a_\mu^{-1}$ where
+\eq{
+a_\mu & = \frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu} \\
+b_\mu & = \frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}
+}
+
+### Full conditional distribution for $\beta$
+The marginal posterior for $\beta$ given all other parameters in the model is
+\eq{
+[\beta | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\beta] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\beta}}  \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta - \mu_\beta \right)^2 \right\} \\
+& \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\beta^2 x_i^2 - 2 \beta \left(x_i \left( y_i - \mu \right) \right) \right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta^2 - 2 \beta \mu_\beta \right) \right\} \\
+& \propto \exp \left\{ -\frac{1}{2}  \left(\beta^2 \left(\frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta}\right) - 2 \beta \left(\frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}\right)\right) \right\} 
+}
+which is a normal distribution with mean $a_\beta^{-1}b_\beta$ and variance $a_\beta^{-1}$ where
+\eq{
+a_\beta & = \frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta} \\
+b_\beta & = \frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}
+}
+
+
+### Full conditional distribution for $\sigma^2$
+The marginal posterior for $\sigma^2$ given all other parameters in the model is
+\eq{
+[\sigma^2 | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\sigma^2] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
+& \propto \prod_{i=1}^N \left( \sigma^2 \right)^{-\frac{1}{2}} \exp \left\{ -\frac{1}{\sigma^2}  \frac{\left(y_i - \left(\mu + x_i \beta\right)\right)^2}{2} \right\} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
+& \propto \left( \sigma^2 \right)^{-\frac{N}{2} - \alpha_0 - 1} \exp \left\{ -\frac{1}{\sigma^2}  \left( \sum_{i=1}^N \frac{1}{2} \left( y_i - \left( \mu + x_i \beta \right) \right)^2 + \beta_0 \right) \right\} 
+}
+which is distributed as $\operatorname{inverse-gamma} \left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right)$.
+
+## Fitting the model
+
+To estimate parameters from the regression model, we will consider the _iris_ dataset and let $y$ be the _Petal.Width_ variable and $x$ be the _Petal.Length_ variable in _R_. The data with the fitted regression line using the _lm_ function is shown below.
+
+```{r}
+data(iris)
+library(ggplot2)
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) + stat_smooth(method="lm") +
+  geom_point()
+```
+
+To start, we setup the variables and define default values for the prior constants.
+
+```{r}
+y <- iris$Petal.Width
+x <- iris$Petal.Length
+## these are the prior choices. 
+## We will talk later about how to choose prior distributions and values later
+mu_mu <- 0
+sigma2_mu <- 10000
+mu_beta <- 0
+sigma2_beta <- 10000
+alpha_0 <- 0.01
+beta_0 <- 0.01
+```
+
+Next, we define empty vectors to store the MCMC output. We will run the MCMC sampler for $K=5000$ iterations.
+
+```{r}
+K <- 5000
+mu <- rep(0, K)
+beta <- rep(0, K)
+sigma2 <- rep(0, K)
+```
+
+The MCMC algorithm works by cycling through the marginal posterior distributions. The algorithm is called a Gibbs Sampler and we sample from 
+\eq{
+\mu | \cdot & \sim N(a_\mu^{-1}b_\mu, a_\mu^{-1}) \\
+\beta | \cdot & \sim N(a_\beta^{-1}b_\beta, a_\beta^{-1}) \\
+\sigma^2 | \cdot & \sim \operatorname{inverse-gamma}\left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right) 
+}
+in sequential order. 
+
+
+\begin{algorithm}
+\caption{The Gibbs sampler}
+\begin{algorithmic}[1]
+\State initialize $\mu^{(1)}$, $\beta^{(1)}$, and ${\sigma^2}^{(1)}$
+\For{$k=2$ to $K$}
+  \State sample $\mu^{(k)}$ from $[\mu^{(k)} | \beta^{(k-1)}, {\sigma^2}^{(k-1)}]$
+  \State sample $\beta^{(k)}$ from $[\beta^{(k)} | \mu^{(k)}, {\sigma^2}^{(k-1)}]$ 
+  \State sample ${\sigma^2}^{(k)}$ from $[{\sigma^2}^{(k)} | \mu^{(k)}, \beta^{(k)}]$
+\EndFor
+\Return $\boldsymbol{\mu}^{(1:K)}$, $\boldsymbol{\beta}^{(1:K)}$, and ${\boldsymbol{\sigma}^2}^{(1:K)}$
+\end{algorithmic}
+\end{algorithm}
+
+
+In _R_, the Gibbs sampler is
+
+```{r}
+set.seed(101)
+## initialize 
+mu[1] <- rnorm(1, mu_mu, sqrt(sigma2_mu))
+beta[1] <- rnorm(1, mu_beta, sqrt(sigma2_beta))
+## note that sampling from an inverse gamma is the same as 
+## the inverse of a random gamma variable
+sigma2[1] <- 1 / rgamma(1, alpha_0, beta_0)
+
+## calculate the sample size
+N <- length(y)
+
+for (k in 2:K) {
+  
+  ## sample mu
+  a_mu <- N / sigma2[k-1] + 1 / sigma2_mu
+  b_mu <- sum(y - x * beta[k-1]) / sigma2[k-1] + mu_mu / sigma2_mu
+  mu[k] <- rnorm(1, b_mu / a_mu, sqrt(1 / a_mu))
+  
+  ## sample beta
+  a_beta <- sum(x^2) / sigma2[k-1] + 1 / sigma2_beta
+  b_beta <- sum(x*(y - mu[k])) / sigma2[k-1] + mu_beta / sigma2_beta
+  beta[k] <- rnorm(1, b_beta / a_beta, sqrt(1 / a_beta))
+  
+  ## sample sigma2
+  sigma2[k] <- 1 / rgamma(1, alpha_0 + N/2, 
+                          beta_0 + 1/2 * sum((y - (mu[k] + x * beta[k]))^2))
+}
+```
+
+To visualize the MCMC samples, we can plot what are called trace plots
+
+```{r}
+samples <- c(mu, beta, sigma2)
+library(ggplot2)
+df <- data.frame(
+  sample = 1:K,
+  params = factor(c(rep("mu", K), rep("beta", K), rep("sigma2", K))),
+  values = samples)
+
+ggplot(df, aes(x=sample, y=values, group=params)) + geom_line() + 
+  facet_wrap(~params, scales="free", ncol=1)
+```
+
+The plotting window is strongly influenced by the initial condition. Instead, we can throw away the first 1000 samples (called burn-in) and examine the remaining 4000 samples for each parameter. 
+
+```{r}
+burnin <- 1000
+## subset the samples to only post-burnin
+samples <- cbind(mu[-c(1:burnin)], beta[-c(1:burnin)], sigma2[-c(1:burnin)])
+colnames(samples) <- c("mu", "beta", "sigma2")
+
+df <- data.frame(
+  sample = (burnin+1):K,
+  params = factor(c(rep("mu", K-burnin), rep("beta", K-burnin),
+                    rep("sigma2", K-burnin))),
+  values = c(samples))
+
+## fit the linear model using the MLE
+fit <- lm(y~x)
+df_lm <- data.frame(
+  params = factor(c("mu", "beta", "sigma2")),
+  values = c(fit$coefficients[1], fit$coefficients[2], summary(fit)$sigma^2),
+  row.names = NULL)
+
+ggplot(df, aes(x=sample, y=values, group=params)) + geom_line() + 
+  facet_wrap(~params, scales="free", ncol=1) + 
+  geom_hline(data=df_lm, aes(yintercept=values, group=params), col="red")
+```
+
+
+We can think of each of the $k$ iterations as a time step and can use methods from time series to examine the estimates. For example, the ACF for each parameter is
+
+```{r}
+layout(matrix(1:6, 3, 2, byrow=TRUE))
+acf(samples[,"mu"])
+pacf(samples[, "mu"])
+acf(samples[,"beta"])
+pacf(samples[, "beta"])
+acf(samples[,"sigma2"])
+pacf(samples[, "sigma2"])
+```
+
+We can also ask what is the effective sample size from our estimates (the equivalent sample size of uncorrelated samples)
+
+```{r}
+library(coda)
+effectiveSize(samples)
+```
+
+Because the samples of $\mu$, $\beta$, and $\sigma^2$ obtained from the Gibbs sampler are from probability distributions, we can calculate any quantity of interest directly. For example, the estimate for the mean of the parameters is simply the mean of the MCMC samples
+
+```{r}
+colMeans(samples)
+apply(samples, 2, sd)
+apply(samples, 2, quantile, prob=c(0.025, 0.975))
+```
+
+and we can compare these estimates to those from the MLE
+
+```{r}
+summary(fit)
+```
+
+and the 95\% credible interval for each parameter is simply the 2.5\% and 97.5\% quantiles of the samples.
+
+```{r}
+apply(samples, 2, quantile, prob= c(0.025, 0.975))
+```
+
+We can compare these to the esimates from the MLE
+```{r}
+confint(fit)
+```
+
+We can also plot the posterior distribution
+
+```{r}
+n_pred <- 1000
+x_pred <- seq(min(iris$Petal.Length), max(iris$Petal.Length), length.out = n_pred)
+y_hat <- t(sapply(1:n_pred, function(i) { samples[, "mu"] + x_pred[i] * samples[, "beta"] }))
+
+df_mcmc <- data.frame(
+  x         = x_pred,
+  y_hat     = c(y_hat),
+  iteration = rep(1:ncol(y_hat), each = nrow(y_hat))
+)
+
+if (!file.exists(here::here("images", "posterior-linear-regression.png"))) {
+
+    png(file = here::here("images", "posterior-linear-regression.png"), 
+        width = 16, height = 9, units = "in", res = 400)
+    print(
+        ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) + 
+            geom_point() +
+            geom_line(data = df_mcmc,
+                      aes(x = x, y = y_hat, group = iteration), 
+                      col = "red", alpha = 0.05) + 
+            ggtitle("Posterior Distribution of mean response")
+    )
+    dev.off()
+} 
+```
+
+```{r, out.width = "100%"}
+knitr::include_graphics(here::here("images", "posterior-linear-regression.png"))
+```
+
+Posterior predictive distribution
+
+```{r}
+n_pred <- 1000
+x_pred <- seq(min(iris$Petal.Length), max(iris$Petal.Length), length.out = n_pred)
+y_tilde <- t(samples[, "mu"] + sapply(1:n_pred, function(i) { x_pred[i] * samples[, "beta"] + rnorm(length(samples[, "sigma2"]), 0, sqrt(samples[, "sigma2"]))}))
+
+df_mcmc <- data.frame(
+  x        = x_pred,
+  y_tilde  = apply(y_tilde, 1, mean),
+  lower_95 = apply(y_tilde, 1, quantile, prob = 0.025),
+  upper_95 = apply(y_tilde, 1, quantile, prob = 0.975)
+)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) + 
+    geom_point() +
+    geom_line(data = df_mcmc, aes(x = x, y = y_tilde), col = "red") + 
+    geom_ribbon(data = df_mcmc, aes(x = x, ymin = lower_95, ymax = upper_95),
+                fill = "orange", alpha = 0.25, inherit.aes = FALSE) +
+    ggtitle("Posterior predictive distribution")
+```
+
+
+### General recommendations for writing MCMC software
+
+* Have the first dimension of each object be the number of MCMC samples
+* Start with simple models and build sequentially to the complex model of interest
+    * Example: For spatio-temporal models, first start with linear regression, then add spatial component, then add spatio-temporal model
+* Find a workflow that works
+    1) State the model
+    2) Calculate the full conditional distributions
+    3) Write the MCMC using a template
+    
+
+
+

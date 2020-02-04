@@ -63,7 +63,7 @@ y(\mathbf{s}) & = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s})
 For each of the $k$ bins that have $m_k$ points in each bin, the variogram estimate for bin $k$ centered at the bin interval $\mathbf{h}_k$ is
 
 \begin{align*}
-\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)
+\hat{\gamma}(\mathbf{h}_k) = \frac{1}{m_k} \sum_{\ell=1}^{m_k} \left( y(\mathbf{s}_{\ell_1}) - y(\mathbf{s}_{\ell_2}) \right)^2
 \end{align*}
 
 for the $\ell$th pair of locations $\mathbf{s}_{\ell_1}$ and $\mathbf{s}_{\ell_2}$
@@ -268,7 +268,7 @@ ggplot(data = dat, aes (x = n, y = timings)) +
 
     * Uncertainties can be estimated using the [Fisher information matrix](https://en.wikipedia.org/wiki/Fisher_information)
         \begin{align*}
-        \mathcal{I}(\boldsymbol{\theta})_{ij} & = E \left( \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_i} \log [\boldsymbol{\theta} | \mathbf{y} \right) \left( \frac{\mathcal{d}}{\mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right) \\
-        & = - E \left( \left( \frac{\mathcal{d}^2 }{\mathcal{d} \boldsymbol{\theta}_i \mathcal{d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} \right) \middle| \boldsymbol{\theta} \right)
+        \mathcal{I}(\boldsymbol{\theta})_{ij} & = E \left( \left( \frac{{\partial d}}{{\partial d} \boldsymbol{\theta}_i} \log [\boldsymbol{\theta} | \mathbf{y} ] \right) \left( \frac{{\partial d}}{{\partial d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} ] \right) \middle| \boldsymbol{\theta} \right) \\
+        & = - E \left( \left( \frac{{\partial d}^2 }{{\partial d} \boldsymbol{\theta}_i {\partial d} \boldsymbol{\theta}_j} \log [\boldsymbol{\theta} | \mathbf{y} ]\right) \middle| \boldsymbol{\theta} \right)
         \end{align*}
         
