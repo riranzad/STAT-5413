@@ -2,263 +2,419 @@
 
 ## Announcements
 
-## The Metropolis-Hastings Algorithm
-
+## The Metropolis Algorithm
 
 <!-- Set some knitr options -->
 ```{r, include = FALSE, cache = FALSE}
 library(knitr)
 options(replace.assign=TRUE,width=60)
-opts_chunk$set(tidy=FALSE)
-opts_chunk$set(fig.path='figs/',
-		fig.align='center', fig.width = 5, fig.height = 5, fig.show = 'hold',
-		par = TRUE)
+options(digits=4)
+opts_chunk$set(tidy=FALSE, fig.align='center', fig.width = 5, fig.height = 5, 
+               results="hold", fig.show = 'hold', par = TRUE)
 ```
 
 
+Previously we discussed how to sample from a Bayesian Hierarchical model when the conditional posterior distributions are known analytic distributions. Often, the conditional posterior distribution is not available in closed form. There are numerous methods to sample from the conditional posterior in this setting, including [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling), [slice sampling](https://en.wikipedia.org/wiki/Slice_sampling), and [hybrid/Hamiltonian sampling](https://arxiv.org/pdf/1206.1901.pdf), among others. Today we will introduce the [Metropolis algorithm](http://bayes.wustl.edu/Manual/EquationOfState.pdf), one of the most widely used and most effective methods for sampling from a conditional posterior without an analytically known distribution. 
 
-Last time, we discussed the Metropolis algorithm for sampling from a distribution where the conditional posterior distribution is not known in an analytic form. The Metropolis algorithm assumes the proposal distribution is symmetric. The [Metropolis-Hastings algorithm](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm) allows for asymmetric proposal distributions. A good intuition for how the Metropolis Hastings algorithm works is presented by Chib and Greenberg in [Understanding the Metropolis-Hastings Algorithm](http://www.ics.uci.edu/~johnsong/papers/Chib%20and%20Greenberg%20-%20Understanding%20the%20Metropolis-Hastings%20Algorithm.pdf).
+Recall the algorithm for the Gibbs sampler:
+\begin{algorithm}
+\caption{The Gibbs sampler}
+\begin{algorithmic}[1]
+\State initialize $\mu^{(1)}$, $\beta^{(1)}$, and ${\sigma^2}^{(1)}$
+\For{$k=2$ to $K$}
+  \State sample $\mu^{(k)}$ from $[\mu^{(k)} | \beta^{(k-1)}, {\sigma^2}^{(k-1)}]$
+  \State sample $\beta^{(k)}$ from $[\beta^{(k)} | \mu^{(k)}, {\sigma^2}^{(k-1)}]$ 
+  \State sample ${\sigma^2}^{(k)}$ from $[{\sigma^2}^{(k)} | \mu^{(k)}, \beta^{(k)}]$
+\EndFor
+\Return $\boldsymbol{\mu}^{(1:K)}$, $\boldsymbol{\beta}^{(1:K)}$, and ${\boldsymbol{\sigma}^2}^{(1:K)}$
+\end{algorithmic}
+\end{algorithm}
 
-This begs the question: Why would one want to use an asymmetric proposal distribution? There are many reasons, but the most compelling and most common is to guarantee that the proposed value of the parameter is in the support of the parameter space. For example, a variance parameter must be positive and a symmetric normal proposal could generate negative proposals that must be rejected with probability 1. This can result in inefficient MCMC samplers that have very low acceptance rates and therefor exhibit poor mixing. Instead, we can use an asymmetric proposal that guarantees a positive proposal and should lead to higer acceptance rates. 
 
-## The Metropolis-Hastings algorithm
-Recall for a symmetric proposal, the Metropolis ratio is
+The Metropolis algorithm requires two components: the full conditional distribution (known up to a proportionality constant) and a proposal distribution $[ \theta^\star]$ that generates possible values $\theta^{\star}$ for the Markov chain given the value $\theta^{(k-1)}$ of the parameter at iteration $k-1$. The algorithm is
+\begin{algorithm}
+\caption{The Metropolis update}
+\begin{algorithmic}[1]
+\State Propose a new value $\theta^{\star}$ 
+\State Calculate an acceptance probability based on the ratio of the full conditional distribution at the proposed state relative to the full conditional at the previous value $\theta^{(k-1)}$
+\State Accept the proposed value by setting $\theta^{(k)} = \theta^\star$ with the probability computed above or reject $\theta^{\star}$ and set $\theta^{(k)} = \theta^{(k-1)}$.
+\end{algorithmic}
+\end{algorithm}
+
+## The proposal distribution
+
+The proposal distribution can either be independent of the current state of the Markov chain $[ \theta^\star]$ or dependent on the current state $[ \theta^\star | \theta^{(k-1)} ]$. Dependent proposal distributions are the most common, with the random walk proposal the most commonly used proposal.
+
+The random walk proposal distribution $[ \theta^\star | \theta^{(k-1)} ]$ is
 \begin{align*}
-a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] }.
+\theta^{\star} & \sim \operatorname{N} (\theta^{(k-1)}, \sigma^2_{\mbox{tune}}),
 \end{align*}
+where the mean of the random walk is the previous value of the parameter $\theta^{(k-1)}$ and the variance $\sigma^2_{\mbox{tune}}$ is a tuning parameter that is chosen to "tune" the performance of the MCMC sampler. A small choice of  $\sigma^2_{\mbox{tune}}$ will increase the acceptance rate of the Metropolis sampler because the proposed value will be relatively "close" to the previously accepted value $\theta^{(k-1)}$ while a larger $\sigma^2_{\mbox{tune}}$ will allow the Markov chain to make bigger transitions and explore the range of the posterior distribution. Hence, there is a balance between generating proposals that will be accepted relative to faster exploration of the range of the posterior.
 
-Given an asymmetric proposal $[\theta^{\star}|\theta^{(k-1)}]$, the Metropolis-Hastings ratio is 
-\begin{align*}
-a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] } \frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]},
-\end{align*}
-where $\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]}$ is a correction factor that accounts for the asymmetric proposal. The Metropolis algorithm can be shown to be a special case of the Metropolis-Hastings algorithm by noting that $\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]} = 1$ when the proposal is symmetric.
+A very important property of the proposal distribution is symmetry. A proposal distribution is symmetric if $[ \theta^\star | \theta^{(k-1)} ] = [ \theta^{(k-1)} | \theta^\star ]$ which means that the conditional probability of $\theta^{\star}$ given $\theta^{(k-1)}$ is equal to the conditional probability of $\theta^{(k-1)}$ given $\theta^{\star}$. The random walk distribution is a symmetric proposal but a log-normal random walk is not symmetric.
 
-## Example
-Let's consider an AR(1) model
-\eq{
-y_t & = \phi y_{t-1} + \varepsilon_t
-}
-where $\varepsilon_t \stackrel{iid} \sim \operatorname{N}(0, \sigma^2)$ and both $\phi$ and $\sigma^2$ are unknown. 
-
-Simulated data are shown below. 
 ```{r}
-N <- 500
-phi_sim <- 0.99
-sigma2_sim <- 1.2
-y <- rep(0, N)
-for (t in 2:N) {
-  y[t] <- phi_sim * y[t-1] + rnorm(1, 0, sqrt(sigma2_sim))
-}
-plot(y, type='l', xlab="time", main="simulated AR(1) data")
+theta_k <- 5
+theta_star <- 6
+sigma2_tune <- 0.5
+
+##  check the symmetry condition for the random walk
+all.equal(dnorm(theta_k, theta_star, sqrt(sigma2_tune)),
+          dnorm(theta_star, theta_k, sqrt(sigma2_tune)))
 ```
 
-To complete the model, we must assign prior distributions for $\phi$ and $\sigma^2$. A simple choice of prior for $\phi$ is Uniform(-1, 1) prior and for $\sigma^2$ we assign a half-Cauchy prior where 
-\eq{
-\sigma^2 & \sim \operatorname{Cauchy^+}(s^2)
-}
-with $s^2$=25 where the half-Cauchy has the pdf
-\eq{
-[\sigma^2] = \frac{2 * I(\sigma^2 > 0)}{\pi s (1 + \frac{\sigma^2}{s^2})}.
-}
-
-## Posterior
-The posterior distribution is 
-\eq{
-[\phi, \sigma^2 | \mathbf{y}] & = \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] [\sigma^2] 
-}
-
-## Conditional posterior for $\phi$
-
-The conditional posterior for $\phi$ is 
-\eq{
-[\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] \\
-& \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) I(-1 < \phi < 1)
-}
-which has no known analytic distribution so we will sample using Metropolis-Hastings. 
-
-## Conditional posterior for $\sigma^2$
-
-The conditional posterior for $\phi$ is 
-\eq{
-[\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\sigma^2] \\
-& \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) \operatorname{Cauchy^+}(\sigma^2 | s^2)
-}
-which has no known analytic distribution so we will sample using Metropolis-Hastings. 
-
-
-## MCMC using a symmetric proposal (Metropolis)
+```{r}
+##  check the symmetry condition for the log-normal random walk
+all.equal(dlnorm(log(theta_k), log(theta_star), sqrt(sigma2_tune)),
+          dlnorm(log(theta_star), log(theta_k), sqrt(sigma2_tune)))
+```
 
 ```{r}
-library(LaplacesDemon)
+library(latex2exp)
+par(mar = c(5,5,2.75,2.75) + 0.1)
+
+layout(matrix(1:4, 2, 2))
+## normal proposal
+curve(dnorm(x, theta_k, sqrt(sigma2_tune)), from=2, to=8, 
+      main="Normal Proposal", 
+      ylab = expression(paste("[", theta^(k-1), "|", theta^{"*"}, "]")),
+      xlab = expression(paste(theta^{"*"})))
+abline(v=theta_k, lty=2)
+text(5.65, 0.575, expression(theta^{(k-1)}))
+## reverse of normal proposal
+curve(dnorm(theta_star, x, sqrt(sigma2_tune)), from=3, to=9, 
+      main="Reverse of Normal Proposal", 
+      ylab = expression(paste("[", theta^{"*"}, "|", theta^{(k-1)}, "]")),
+      xlab = expression(paste(theta^{(k-1)})))
+abline(v=theta_star, lty=2)
+text(6.35, 0.575, expression(theta^{"*"}))
+
+## log-Normal proposal
+curve(dlnorm(x, log(theta_k), sqrt(sigma2_tune)), from=1, to=10, 
+      main="log-Normal Proposal", 
+      ylab = expression(paste("[", theta^(k-1), "|", theta^{"*"}, "]")),
+      xlab = expression(paste(theta^{"*"})))
+abline(v=theta_k, lty=2)
+text(5.75, 0.14, expression(theta^{(k)}))
+## reverse of log-Normal proposal
+curve(dlnorm(theta_star, x, sqrt(sigma2_tune)), from=-2, to=4, 
+      main="Reverse of log-Normal Proposal", 
+      ylab = expression(paste("[", theta^{"*"}, "|", theta^{(k-1)}, "]")),
+      xlab = expression(paste(log(theta^{(k-1)}))))
+abline(v=log(theta_star), lty=2)
+text(0.75, 0.095, expression(log(theta^{"*"})))
+```
+
+Note that the bottom right figure shows a symmetric looking distribution. Symmetry only implies that the conditional probabilities can be interchanged, not that the probability distribution is itself symmetric. The two most commonly used proposal distributions, the normal and the uniform distribution, are symmetric.
+
+## The Metropolis update
+
+The Metropolis update is only valid for symmetric proposal distributions. The more general Metropolis-Hastings update is used for assymetric proposal distributions and will be introduced later.
+
+If the value of $\theta$ at iteration $k-1$ is $\theta^{(k-1)}$, then the conditional density for $\theta$ is 
+\begin{align*}
+[ \theta^{(k-1)} | \cdot ] & = \frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]},
+\end{align*}
+and the conditional density of the proposed value $\theta^{\star}$ is
+\begin{align*}
+[ \theta^{\star} | \cdot ] & =  \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]},
+\end{align*}
+where both of these expressions require the difficult evaluation of the marginal data distribution $[\mathbf{y}]$. However, the ratio $a$ of the two distributions
+\begin{align*}
+a & = \frac{[ \theta^{\star} | \cdot ]}{[ \theta^{(k-1)} | \cdot ]} \\
+a & = \frac{\frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]}} {\frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]}} \\
+a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]} { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}
+\end{align*}
+does not depend on the marginal distribution of the data $[\mathbf{y}]$, eliminating the need to calculate the difficult integral. Given the proposal $\theta^{\star}$ from a symmetric proposal distribution centered on the previous value $\theta^{(k-1)}$, we accept the new $\theta^\star$ with probability $min(1, a)$ and otherwise reject the proposal and set $\theta^{(k)} = \theta^{(k-1)}$. The complete Metropolis algorithm is
+
+\begin{algorithm}
+\caption{The Metropolis update}
+\begin{algorithmic}[1]
+\State Propose a new value $\theta^{\star}$ from a symmetric proposal distribution centered at $\theta^{(k-1)}$
+\State Calculate the acceptance probability $a  = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]} { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}$ 
+\State Draw a uniform(0, 1) random variable $u$
+\State If a > u, accept the proposed value by setting $\theta^{(k)} = \theta^\star$ otherwise reject $\theta^{\star}$ and set $\theta^{(k)} = \theta^{(k-1)}$.
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+For example, consider the model
+\begin{align*}
+y_i & \sim \operatorname{N} (\theta, 1)
+\end{align*}
+where $\theta$ is unknown. Assuming a normal prior $\theta \propto \operatorname{N}(0, 1000)$, we will sample from the conditional posterior $[\theta | \cdot] \propto \prod_{i=1}^N \operatorname{N}(\theta, 1) \times 1$.
+
+
+```{r}
+## simulate data according to the model
+N <- 100
+theta <- 5
+y <- rnorm(N, theta, 1)
+```
+
+We will run the Metropolis algorithm for $K=5000$ iterations using a normal proposal dsitribution.
+
+```{r, error=TRUE}
 K <- 5000
-phi <- rep(0, N)
-sigma2 <- rep(0, N)
-
-## initialize phi and sigma2
-phi[1] <- runif(1, -1, 1)
-sigma2[1] <- runif(1, 1, 5)
-
-## set the tuning parameters
-phi_tune <- 0.0095
-accept_phi <- 0
-sigma2_tune <- 0.125
-accept_sigma2 <- 0
-
-##
-## MCMC loop
-##
+theta_sim <- rep(0, K)
+sigma2_tune <- 0.025
+accept_prob <- 0
 for (k in 2:K) {
-  ## sample phi
-  phi_star <- rnorm(1, phi[k-1], phi_tune)
-  ## check to make sure phi_star is reasonable, if not, we reject and move on
-  if (phi_star > -1 & phi_star < 1) {
-    mh1 <- sum(dnorm(y[2:N], phi_star * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE))
-    mh2 <- sum(dnorm(y[2:N], phi[k-1] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE))
-    a <- exp(mh1-mh2)
-    if (runif(1) < a) {
-      ## accept the proposed value
-      phi[k] <- phi_star
-      accept_phi <- accept_phi + 1/K
-    } else {
-      phi[k] <- phi[k-1]
-    }
+  theta_star <- rnorm(1, theta_sim[k-1], sqrt(sigma2_tune))
+  a <- prod(dnorm(y, theta_star, 1)) * dnorm(theta_star, 0, sqrt(1000)) / 
+    prod(dnorm(y, theta_sim[k-1], 1)) * dnorm(theta_sim[k-1], 0, sqrt(1000))
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob <- accept_prob + 1 / K
   } else {
-    ## phi_star was outside the support, keep at the previous value
-    phi[k] <- phi[k-1]
-  }
-
-  ## sample sigma2
-  sigma2_star <- rnorm(1, sigma2[k-1], sigma2_tune)
-  ## check to make sure sigma2_star is reasonable, if not, we reject and move on
-  if (sigma2_star > 0) {
-    mh1 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2_star), log=TRUE)) + 
-      dhalfcauchy(sigma2_star, sqrt(25), log=TRUE)
-    mh2 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) + 
-      dhalfcauchy(sigma2[k-1], sqrt(25), log=TRUE)
-    a <- exp(mh1-mh2)
-    if (runif(1) < a) {
-      ## accept the proposed value
-      sigma2[k] <-sigma2_star
-      accept_sigma2 <- accept_sigma2 + 1/K
-    } else {
-      sigma2[k] <- sigma2[k-1]
-    }
-  } else {
-    ## sigma2_star was outside the support, keep at the previous value
-    sigma2[k] <- sigma2[k-1]
+    ## reject the proposed theta_star
+    theta_sim[k] <- theta_sim[k-1]
   }
 }
 ```
 
-The trace plots showing the parameter estimates, post burn-in, are below. From these, we see that the MCMC model is estimating the parameters reasonably.
+Oops! We get an error! When working with $a$ directly, we get a product of small likelihoods. Instead, let's work with the logarithm of the probabilities
 
+\begin{align*}
+a & = \exp \left( \log \left( [\mathbf{y} | \theta^{\star}] [\theta^{\star}] \right) - \log \left( [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] \right) \right) \\
+& = \exp \left( \log [\mathbf{y} | \theta^{\star}]  + \log [\theta^{\star}] - \log  [\mathbf{y} | \theta^{(k-1)}]  - \log [\theta^{(k-1)}] \right),
+\end{align*}
+where all we did was re-write the likelihood as the exponential of a log (an identity transformation). What this does is reduce the effect of multiplying small values that go to computer zero (numeric underflow) and cause problems. For example
 ```{r}
-burnin <- 1000
-samples <- cbind(phi[-c(1:burnin)], sigma2[-c(1:burnin)])
-colnames(samples) <- c("phi", "sigma2")
+prod(dnorm(y, 8, 1))
+```
+is very very small (close to zero) and gets closer to numeric underflow as N increase, whereas
+```{r}
+sum(dnorm(y, 8, 1, log=TRUE))
+all.equal(prod(dnorm(y, 8, 1)), exp(sum(dnorm(y, 8, 1, log=TRUE))))
+```
+is a more reasonable number (nowhere near computer zero), but produces the same answer when exponentiated.
 
-layout(matrix(1:2, 2, 1))
-plot(samples[, "phi"], type='l',
-     main=paste0("Trace plot for phi, acceptance=", round(accept_phi, digits=2)))
-abline(h=phi_sim, col="red")
-plot(samples[, "sigma2"], type='l',
-     main=paste0("Trace plot for sigma2, acceptance=", round(accept_sigma2, digits=2)))
-abline(h=sigma2_sim, col="red")
+Writing the Metropolis algorithm on the log-probability scale is
+
+```{r, error=TRUE}
+K <- 5000
+theta_sim <- rep(0, K)
+sigma2_tune <- 0.025
+accept_prob <- 0
+for (k in 2:K) {
+  theta_star <- rnorm(1, theta_sim[k-1], sqrt(sigma2_tune))
+  ## calcuate the numerator of the ratio
+  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
+    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
+  ## calcuate the denomiator of the ratio
+  mh2 <- sum(dnorm(y, theta_sim[k-1], 1, log=TRUE)) +
+    dnorm(theta_sim[k-1], 0, sqrt(1000), log=TRUE)
+  a <- exp(mh1 - mh2)
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob <- accept_prob + 1 / K
+  } else {
+    ## reject the proposed theta_star
+    theta_sim[k] <- theta_sim[k-1]
+  }
+}
+```
+
+Plotting the output below looks much, much better. All thanks to avoiding numeric underflow! The lesson: always evaluate Metropolis ratios on the log scale.
+```{r, fig.width=5, fig.height=3}
+## Plot the output
+plot(theta_sim, type='l', 
+     main=paste0("acceptance prob = ", round(accept_prob, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+```
+
+We can also explore the effects of the tuning parameter on the behavior of the model
+
+```{r, error=TRUE, echo=FALSE}
+K <- 5000
+theta_sim1 <- rep(0, K)
+theta_sim2 <- rep(0, K)
+theta_sim3 <- rep(0, K)
+theta_sim4 <- rep(0, K)
+
+## really small sigma2_tune
+sigma2_tune <- 0.0025
+accept_prob1 <- 0
+accept_prob2 <- 0
+accept_prob3 <- 0
+accept_prob4 <- 0
+for (k in 2:K) {
+  theta_star <- rnorm(1, theta_sim1[k-1], sqrt(sigma2_tune))
+  ## calcuate the numerator of the ratio
+  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
+    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
+  ## calcuate the denomiator of the ratio
+  mh2 <- sum(dnorm(y, theta_sim1[k-1], 1, log=TRUE)) +
+    dnorm(theta_sim1[k-1], 0, sqrt(1000), log=TRUE)
+  a <- exp(mh1 - mh2)
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim1[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob1 <- accept_prob1 + 1 / K
+  } else {
+    ## reject the proposed theta_star
+    theta_sim1[k] <- theta_sim1[k-1]
+  }
+}
+## really small sigma2_tune
+sigma2_tune <- 0.05
+for (k in 2:K) {
+  theta_star <- rnorm(1, theta_sim2[k-1], sqrt(sigma2_tune))
+  ## calcuate the numerator of the ratio
+  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
+    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
+  ## calcuate the denomiator of the ratio
+  mh2 <- sum(dnorm(y, theta_sim2[k-1], 1, log=TRUE)) +
+    dnorm(theta_sim2[k-1], 0, sqrt(1000), log=TRUE)
+  a <- exp(mh1 - mh2)
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim2[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob2 <- accept_prob2 + 1 / K
+  } else {
+    ## reject the proposed theta_star
+    theta_sim2[k] <- theta_sim2[k-1]
+  }
+}
+
+## really small sigma2_tune
+sigma2_tune <- 1.5
+for (k in 2:K) {
+  theta_star <- rnorm(1, theta_sim3[k-1], sqrt(sigma2_tune))
+  ## calcuate the numerator of the ratio
+  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
+    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
+  ## calcuate the denomiator of the ratio
+  mh2 <- sum(dnorm(y, theta_sim3[k-1], 1, log=TRUE)) +
+    dnorm(theta_sim3[k-1], 0, sqrt(1000), log=TRUE)
+  a <- exp(mh1 - mh2)
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim3[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob3 <- accept_prob3 + 1 / K
+  } else {
+    ## reject the proposed theta_star
+    theta_sim3[k] <- theta_sim3[k-1]
+  }
+}
+
+## really small sigma2_tune
+sigma2_tune <- 10
+for (k in 2:K) {
+  theta_star <- rnorm(1, theta_sim4[k-1], sqrt(sigma2_tune))
+  ## calcuate the numerator of the ratio
+  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
+    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
+  ## calcuate the denomiator of the ratio
+  mh2 <- sum(dnorm(y, theta_sim4[k-1], 1, log=TRUE)) +
+    dnorm(theta_sim4[k-1], 0, sqrt(1000), log=TRUE)
+  a <- exp(mh1 - mh2)
+  u <- runif(1, 0, 1)
+  if (u < a) {
+    ## accept the proposed theta_star
+    theta_sim4[k] <- theta_star
+    ## keep running total of acceptance rate
+    accept_prob4 <- accept_prob4 + 1 / K
+  } else {
+    ## reject the proposed theta_star
+    theta_sim4[k] <- theta_sim4[k-1]
+  }
+}
+```
+
+```{r, fig.width=6, fig.height=4, echo=FALSE}
+## Plot the output
+layout(matrix(1:4, 2, 2))
+plot(theta_sim1, type='l', 
+     main=paste0("s2_tune = ", 0.0025, 
+                 ", accept = ", round(accept_prob1, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim2, type='l', 
+     main=paste0("s2_tune = ", 0.05, 
+                 ", accept = ", round(accept_prob2, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim3, type='l', 
+     main=paste0("s2_tune = ", 1.5, 
+                 ", accept = ", round(accept_prob3, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim4, type='l', 
+     main=paste0("s2_tune = ", 10, 
+                 ", accept = ", round(accept_prob4, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+```
+
+Let's examine these plots, throwing away the first 500 samples as "burn-in." 
+
+```{r, fig.width=6, fig.height=4, echo=FALSE}
+## Plot the output
+layout(matrix(1:4, 2, 2))
+plot(theta_sim1[-c(1:500)], type='l', 
+     main=paste0("s2_tune = ", 0.0025, 
+                 ", accept = ", round(accept_prob1, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim2[-c(1:500)], type='l', 
+     main=paste0("s2_tune = ", 0.05, 
+                 ", accept = ", round(accept_prob2, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim3[-c(1:500)], type='l', 
+     main=paste0("s2_tune = ", 1.5, 
+                 ", accept = ", round(accept_prob3, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+plot(theta_sim4[-c(1:500)], type='l', 
+     main=paste0("s2_tune = ", 10, 
+                 ", accept = ", round(accept_prob4, digits=2)), 
+     xlab="MCMC iteration", ylab=expression(theta))
+abline(h=theta, col="red")
+```
+
+Notice that the smallest choice of $\sigma^2_{\mbox{tune}}$ produces a chain with high autocorrelation that doesn't die off at large lags. The choice of $\sigma^2_{\mbox{tune}} = 0.05$ produces the quickest decay in the ACF plot below, and has an acceptance rate of about `r round(accept_prob2, digits=2)` (0.44 is optimal for a univariate Metropolis update). The trace plots for the larger values of the tuning parameter have low acceptance rates and get "stuck" at certain parameter values for long periods of time.
+
+```{r, fig.width=6, fig.height=4, echo=FALSE}
+## Plot the output
+layout(matrix(1:4, 2, 2))
+acf(theta_sim1[-c(1:500)], 
+     main=paste0("s2_tune = ", 0.0025, 
+                 ", accept = ", round(accept_prob1, digits=2)))
+acf(theta_sim2[-c(1:500)],
+     main=paste0("s2_tune = ", 0.05, 
+                 ", accept = ", round(accept_prob2, digits=2)))
+acf(theta_sim3[-c(1:500)],
+     main=paste0("s2_tune = ", 1.5, 
+                 ", accept = ", round(accept_prob3, digits=2)))
+acf(theta_sim4[-c(1:500)],
+     main=paste0("s2_tune = ", 10, 
+                 ", accept = ", round(accept_prob4, digits=2)))
 ```
 
 
 ```{r}
 library(coda)
-effectiveSize(samples)
+effectiveSize(theta_sim1[-c(1:500)])
+effectiveSize(theta_sim2[-c(1:500)])
+effectiveSize(theta_sim3[-c(1:500)])
+effectiveSize(theta_sim4[-c(1:500)])
 ```
 
-In the model above, we used **symmetric** proposals and threw out parameter values that were outside the allowable range. Because $\phi$ has a true value close to the limit of allowable values, the Metropolis algorithm could be very inefficient. To improve efficiency, let's rewrite the algorithm using truncated normal proposals (which are **asymmetric**).
-
-```{r}
-library(LaplacesDemon)
-library(truncnorm)
-K <- 25000
-phi <- rep(0, N)
-sigma2 <- rep(0, N)
-
-## initialize phi and sigma2
-phi[1] <- runif(1, -1, 1)
-sigma2[1] <- runif(1, 1, 5)
-
-## set the tuning parameters
-phi_tune <- 0.0175
-accept_phi <- 0
-sigma2_tune <- 0.175
-accept_sigma2 <- 0
-
-##
-## MCMC loop
-##
-for (k in 2:K) {
-  ## sample phi
-  ## use truncated normal proposal
-  phi_star <- rtruncnorm(1, a=-1, b=1, phi[k-1], phi_tune)
-  ## No need to check if phi_star is between -1 and 1 
-  mh1 <- sum(dnorm(y[2:N], phi_star * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) +
-    log(dtruncnorm(phi[k-1], a=-1, b=1, phi_star, phi_tune))
-  mh2 <- sum(dnorm(y[2:N], phi[k-1] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) +
-    log(dtruncnorm(phi_star, a=-1, b=1, phi[k-1], phi_tune))
-  a <- exp(mh1-mh2)
-  if (runif(1) < a) {
-    ## accept the proposed value
-    phi[k] <- phi_star
-    accept_phi <- accept_phi + 1/K
-  } else {
-    phi[k] <- phi[k-1]
-  }
-
-  ## sample sigma2
-  sigma2_star <- rtruncnorm(1, a=0, b=Inf, sigma2[k-1], sigma2_tune)
-  ## No need to check to make sure sigma2_star is positive
-  mh1 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2_star), log=TRUE)) + 
-    dhalfcauchy(sigma2_star, sqrt(25), log=TRUE) + 
-    log(dtruncnorm(sigma2[k-1], a=0, b=Inf, sigma2_star, sigma2_tune))
-  mh2 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) + 
-    dhalfcauchy(sigma2[k-1], sqrt(25), log=TRUE) + 
-    log(dtruncnorm(sigma2_star, a=0, b=Inf, sigma2[k-1], sigma2_tune))
-  a <- exp(mh1-mh2)
-  if (runif(1) < a) {
-    ## accept the proposed value
-    sigma2[k] <-sigma2_star
-    accept_sigma2 <- accept_sigma2 + 1/K
-  } else {
-    sigma2[k] <- sigma2[k-1]
-  }
-}
-```
-
-The trace plots below show the increased efficiency in the acceptance rate at the same tuning parameter value and show better effective sample size.
-
-```{r}
-burnin <- 1000
-samples <- cbind(phi[-c(1:burnin)], sigma2[-c(1:burnin)])
-colnames(samples) <- c("phi", "sigma2")
-
-layout(matrix(1:2, 2, 1))
-plot(samples[, "phi"], type='l',
-     main=paste0("Trace plot for phi, acceptance=", round(accept_phi, digits=2)))
-abline(h=phi_sim, col="red")
-plot(samples[, "sigma2"], type='l',
-     main=paste0("Trace plot for sigma2, acceptance=", round(accept_sigma2, digits=2)))
-abline(h=sigma2_sim, col="red")
-```
-
-
-```{r}
-hist(samples[,"phi"], breaks=100)
-abline(v=phi_sim, col="red")
-abline(v=mean(samples[, "phi"]), col="blue")
-abline(v=quantile(samples[, "phi"], prob=c(0.025, 0.975)), col="green", lwd=2)
-
-hist(samples[,"sigma2"], breaks=100)
-abline(v=sigma2_sim, col="red")
-abline(v=mean(samples[, "sigma2"]), col="blue")
-abline(v=quantile(samples[, "sigma2"], prob=c(0.025, 0.975)), col="green", lwd=2)
-library(coda)
-effectiveSize(samples)
-```

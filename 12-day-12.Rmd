@@ -2,21 +2,135 @@
 
 ## Announcements
 
-## The Metropolis Algorithm
+## Introduction to MCMC
 
-<!-- Set some knitr options -->
 ```{r, include = FALSE, cache = FALSE}
 library(knitr)
 options(replace.assign=TRUE,width=60)
 options(digits=4)
-opts_chunk$set(tidy=FALSE, fig.align='center', fig.width = 5, fig.height = 5, 
+opts_chunk$set(tidy=FALSE, fig.align='center', fig.width = 16, fig.height = 9, 
                results="hold", fig.show = 'hold', par = TRUE)
 ```
 
+To estimate models within the Bayesian framework, the most commonly used method is Markov Chain Monte Carlo. Recall that the main difference between a Bayesian posterior distribution and a likelihood function is that the Bayesian posterior distribution integrates to 1 whereas the likelihood function does not. The posterior distribution of $\boldsymbol{\theta}$ given $\mathbf{y}$ is
 
-Previously we discussed how to sample from a Bayesian Hierarchical model when the conditional posterior distributions are known analytic distributions. Often, the conditional posterior distribution is not available in closed form. There are numerous methods to sample from the conditional posterior in this setting, including [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling), [slice sampling](https://en.wikipedia.org/wiki/Slice_sampling), and [hybrid/Hamiltonian sampling](https://arxiv.org/pdf/1206.1901.pdf), among others. Today we will introduce the [Metropolis algorithm](http://bayes.wustl.edu/Manual/EquationOfState.pdf), one of the most widely used and most effective methods for sampling from a conditional posterior without an analytically known distribution. 
+\begin{align*}
+[\boldsymbol{\theta} | \mathbf{y} ] & = \frac{[\mathbf{y} | \boldsymbol{\theta}] [\boldsymbol{\theta} ]}{[\mathbf{y}]} \\
+(\#eq:posterior)
+& = \frac{[\mathbf{y} | \boldsymbol{\theta}] [\boldsymbol{\theta}]}{ \int_{\boldsymbol{\theta}} [\mathbf{y}|\boldsymbol{\theta}] [\boldsymbol{\theta}] d\boldsymbol{\theta}},
+\end{align*}
 
-Recall the algorithm for the Gibbs sampler:
+where the integral in \@ref(eq:posterior) guarantees that the posterior distribution integrates to 1. For some models, the integral in \@ref(eq:posterior) is analytically tractable (e.g. Normal likelihood and Normal prior), but for most interesting models the integral is not available in a closed form solution. Instead, we can approximate the integral numerically using a technique called Markov Chain Monte Carlo (MCMC) (See the seminal paper by [Gelfand and Smith 1990](http://wwwf.imperial.ac.uk/~das01/MyWeb/SCBI/Papers/GelfandSmith.pdf) for more details). 
+
+Instead of evaluating the probability distribution and calculating the normalizing constant, we can generate samples from the marginal posterior distribution of each parameter in such a way that the joint distribution of the samples from the marginal distributions is equivalent to samples from the posterior, up to Monte Carlo error. 
+
+## Example: Simple linear regression
+
+Consider the simple linear regression model for $i=1, \ldots, N$ observations
+\eq{
+(\#eq:regression)
+y_i & = \mu + x_i \beta + \varepsilon_i
+}
+where $\varepsilon_i \sim N(0, \sigma^2)$ and $x_i$ are known univariate covariates. If we assume the prior distributions $\mu \sim N(\mu_\mu, \sigma^2_\mu)$ with $\mu_\mu$ and $\sigma^2_\mu$ fixed and known, $\beta \sim N(\mu_\beta, \sigma^2_\beta)$ with $\mu_\beta$ and $\sigma^2_\beta$ fixed and known, and $\sigma^2 \sim \operatorname{inverse-gamma}(\alpha_0, \beta_0)$ with $\alpha_0$ and $\beta_0$ fixed and known. where the $\operatorname{inverse-gamma}(\alpha_0, \beta_0)$ distribution is 
+\eq{
+[\sigma^2 | \alpha_0, \beta_0] & = \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\}.
+}
+
+## The posterior distribution
+
+Given the model statement, we can write out the posterior distribution on which we want inference. The posterior distribution is
+\eq{
+[\mu, \beta, \sigma^2 | \mathbf{y}] & = \frac{\prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]}{\int_\mu \int_\beta \int_{\sigma^2} \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2] \,d\sigma^2 \,d\beta \,d\mu}.
+}
+Notice that we don't include $x_i$ in the above statement because it is assumed fixed and known. For the model we defined in \@ref(eq:regression), the posterior distribution is available in closed form because we can evaluate the integrals in the denominator analytically. However, the integrals are challenging and for most interesting models, are not available in closed form. 
+
+Given the posterior distribution, the next step is to find the marginal posterior distributions of $\mu$, $\beta$ and $\sigma^2$.
+
+### Full conditional distribution of $\mu$
+
+The full conditional distribution (marginal posterior) for $\mu$ given all other parameters in the model is
+\eq{
+[\mu | \cdot] & \propto \prod_{i=1^N} [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]  \\
+& \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\mu}}  \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu - \mu_\mu\right)^2 \right\} \\
+& \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\mu^2 - 2 \mu \left(y_i - x_i\beta\right)\right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu^2 - 2 \mu \mu_\mu\right) \right\} \\
+& \propto \exp \left\{ -\frac{1}{2}  \left(\mu^2 \left(\frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu}\right) - 2 \mu \left(\frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}\right)\right) \right\} 
+}
+which is a normal distribution with mean $a_\mu^{-1}b_\mu$ and variance $a_\mu^{-1}$ where
+\eq{
+a_\mu & = \frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu} \\
+b_\mu & = \frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}
+}
+
+### Full conditional distribution for $\beta$
+The marginal posterior for $\beta$ given all other parameters in the model is
+\eq{
+[\beta | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\beta] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\beta}}  \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta - \mu_\beta \right)^2 \right\} \\
+& \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\beta^2 x_i^2 - 2 \beta \left(x_i \left( y_i - \mu \right) \right) \right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta^2 - 2 \beta \mu_\beta \right) \right\} \\
+& \propto \exp \left\{ -\frac{1}{2}  \left(\beta^2 \left(\frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta}\right) - 2 \beta \left(\frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}\right)\right) \right\} 
+}
+which is a normal distribution with mean $a_\beta^{-1}b_\beta$ and variance $a_\beta^{-1}$ where
+\eq{
+a_\beta & = \frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta} \\
+b_\beta & = \frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}
+}
+
+
+### Full conditional distribution for $\sigma^2$
+The marginal posterior for $\sigma^2$ given all other parameters in the model is
+\eq{
+[\sigma^2 | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\sigma^2] \\
+& \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
+& \propto \prod_{i=1}^N \left( \sigma^2 \right)^{-\frac{1}{2}} \exp \left\{ -\frac{1}{\sigma^2}  \frac{\left(y_i - \left(\mu + x_i \beta\right)\right)^2}{2} \right\} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
+& \propto \left( \sigma^2 \right)^{-\frac{N}{2} - \alpha_0 - 1} \exp \left\{ -\frac{1}{\sigma^2}  \left( \sum_{i=1}^N \frac{1}{2} \left( y_i - \left( \mu + x_i \beta \right) \right)^2 + \beta_0 \right) \right\} 
+}
+which is distributed as $\operatorname{inverse-gamma} \left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right)$.
+
+## Fitting the model
+
+To estimate parameters from the regression model, we will consider the _iris_ dataset and let $y$ be the _Petal.Width_ variable and $x$ be the _Petal.Length_ variable in _R_. The data with the fitted regression line using the _lm_ function is shown below.
+
+```{r}
+data(iris)
+library(ggplot2)
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) + stat_smooth(method="lm") +
+  geom_point()
+```
+
+To start, we setup the variables and define default values for the prior constants.
+
+```{r}
+y <- iris$Petal.Width
+x <- iris$Petal.Length
+## these are the prior choices. 
+## We will talk later about how to choose prior distributions and values later
+mu_mu <- 0
+sigma2_mu <- 10000
+mu_beta <- 0
+sigma2_beta <- 10000
+alpha_0 <- 0.01
+beta_0 <- 0.01
+```
+
+Next, we define empty vectors to store the MCMC output. We will run the MCMC sampler for $K=5000$ iterations.
+
+```{r}
+K <- 5000
+mu <- rep(0, K)
+beta <- rep(0, K)
+sigma2 <- rep(0, K)
+```
+
+The MCMC algorithm works by cycling through the marginal posterior distributions. The algorithm is called a Gibbs Sampler and we sample from 
+\eq{
+\mu | \cdot & \sim N(a_\mu^{-1}b_\mu, a_\mu^{-1}) \\
+\beta | \cdot & \sim N(a_\beta^{-1}b_\beta, a_\beta^{-1}) \\
+\sigma^2 | \cdot & \sim \operatorname{inverse-gamma}\left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right) 
+}
+in sequential order. 
+
+
 \begin{algorithm}
 \caption{The Gibbs sampler}
 \begin{algorithmic}[1]
@@ -31,389 +145,186 @@ Recall the algorithm for the Gibbs sampler:
 \end{algorithm}
 
 
-The Metropolis algorithm requires two components: the full conditional distribution (known up to a proportionality constant) and a proposal distribution $[ \theta^\star]$ that generates possible values $\theta^{\star}$ for the Markov chain given the value $\theta^{(k-1)}$ of the parameter at iteration $k-1$. The algorithm is
-\begin{algorithm}
-\caption{The Metropolis update}
-\begin{algorithmic}[1]
-\State Propose a new value $\theta^{\star}$ 
-\State Calculate an acceptance probability based on the ratio of the full conditional distribution at the proposed state relative to the full conditional at the previous value $\theta^{(k-1)}$
-\State Accept the proposed value by setting $\theta^{(k)} = \theta^\star$ with the probability computed above or reject $\theta^{\star}$ and set $\theta^{(k)} = \theta^{(k-1)}$.
-\end{algorithmic}
-\end{algorithm}
-
-## The proposal distribution
-
-The proposal distribution can either be independent of the current state of the Markov chain $[ \theta^\star]$ or dependent on the current state $[ \theta^\star | \theta^{(k-1)} ]$. Dependent proposal distributions are the most common, with the random walk proposal the most commonly used proposal.
-
-The random walk proposal distribution $[ \theta^\star | \theta^{(k-1)} ]$ is
-\begin{align*}
-\theta^{\star} & \sim \operatorname{N} (\theta^{(k-1)}, \sigma^2_{\mbox{tune}}),
-\end{align*}
-where the mean of the random walk is the previous value of the parameter $\theta^{(k-1)}$ and the variance $\sigma^2_{\mbox{tune}}$ is a tuning parameter that is chosen to "tune" the performance of the MCMC sampler. A small choice of  $\sigma^2_{\mbox{tune}}$ will increase the acceptance rate of the Metropolis sampler because the proposed value will be relatively "close" to the previously accepted value $\theta^{(k-1)}$ while a larger $\sigma^2_{\mbox{tune}}$ will allow the Markov chain to make bigger transitions and explore the range of the posterior distribution. Hence, there is a balance between generating proposals that will be accepted relative to faster exploration of the range of the posterior.
-
-A very important property of the proposal distribution is symmetry. A proposal distribution is symmetric if $[ \theta^\star | \theta^{(k-1)} ] = [ \theta^{(k-1)} | \theta^\star ]$ which means that the conditional probability of $\theta^{\star}$ given $\theta^{(k-1)}$ is equal to the conditional probability of $\theta^{(k-1)}$ given $\theta^{\star}$. The random walk distribution is a symmetric proposal but a log-normal random walk is not symmetric.
+In _R_, the Gibbs sampler is
 
 ```{r}
-theta_k <- 5
-theta_star <- 6
-sigma2_tune <- 0.5
+set.seed(101)
+## initialize 
+mu[1] <- rnorm(1, mu_mu, sqrt(sigma2_mu))
+beta[1] <- rnorm(1, mu_beta, sqrt(sigma2_beta))
+## note that sampling from an inverse gamma is the same as 
+## the inverse of a random gamma variable
+sigma2[1] <- 1 / rgamma(1, alpha_0, beta_0)
 
-##  check the symmetry condition for the random walk
-all.equal(dnorm(theta_k, theta_star, sqrt(sigma2_tune)),
-          dnorm(theta_star, theta_k, sqrt(sigma2_tune)))
-```
+## calculate the sample size
+N <- length(y)
 
-```{r}
-##  check the symmetry condition for the log-normal random walk
-all.equal(dlnorm(log(theta_k), log(theta_star), sqrt(sigma2_tune)),
-          dlnorm(log(theta_star), log(theta_k), sqrt(sigma2_tune)))
-```
-
-```{r}
-library(latex2exp)
-par(mar = c(5,5,2.75,2.75) + 0.1)
-
-layout(matrix(1:4, 2, 2))
-## normal proposal
-curve(dnorm(x, theta_k, sqrt(sigma2_tune)), from=2, to=8, 
-      main="Normal Proposal", 
-      ylab = expression(paste("[", theta^(k-1), "|", theta^{"*"}, "]")),
-      xlab = expression(paste(theta^{"*"})))
-abline(v=theta_k, lty=2)
-text(5.65, 0.575, expression(theta^{(k-1)}))
-## reverse of normal proposal
-curve(dnorm(theta_star, x, sqrt(sigma2_tune)), from=3, to=9, 
-      main="Reverse of Normal Proposal", 
-      ylab = expression(paste("[", theta^{"*"}, "|", theta^{(k-1)}, "]")),
-      xlab = expression(paste(theta^{(k-1)})))
-abline(v=theta_star, lty=2)
-text(6.35, 0.575, expression(theta^{"*"}))
-
-## log-Normal proposal
-curve(dlnorm(x, log(theta_k), sqrt(sigma2_tune)), from=1, to=10, 
-      main="log-Normal Proposal", 
-      ylab = expression(paste("[", theta^(k-1), "|", theta^{"*"}, "]")),
-      xlab = expression(paste(theta^{"*"})))
-abline(v=theta_k, lty=2)
-text(5.75, 0.14, expression(theta^{(k)}))
-## reverse of log-Normal proposal
-curve(dlnorm(theta_star, x, sqrt(sigma2_tune)), from=-2, to=4, 
-      main="Reverse of log-Normal Proposal", 
-      ylab = expression(paste("[", theta^{"*"}, "|", theta^{(k-1)}, "]")),
-      xlab = expression(paste(log(theta^{(k-1)}))))
-abline(v=log(theta_star), lty=2)
-text(0.75, 0.095, expression(log(theta^{"*"})))
-```
-
-Note that the bottom right figure shows a symmetric looking distribution. Symmetry only implies that the conditional probabilities can be interchanged, not that the probability distribution is itself symmetric. The two most commonly used proposal distributions, the normal and the uniform distribution, are symmetric.
-
-## The Metropolis update
-
-The Metropolis update is only valid for symmetric proposal distributions. The more general Metropolis-Hastings update is used for assymetric proposal distributions and will be introduced later.
-
-If the value of $\theta$ at iteration $k-1$ is $\theta^{(k-1)}$, then the conditional density for $\theta$ is 
-\begin{align*}
-[ \theta^{(k-1)} | \cdot ] & = \frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]},
-\end{align*}
-and the conditional density of the proposed value $\theta^{\star}$ is
-\begin{align*}
-[ \theta^{\star} | \cdot ] & =  \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]},
-\end{align*}
-where both of these expressions require the difficult evaluation of the marginal data distribution $[\mathbf{y}]$. However, the ratio $a$ of the two distributions
-\begin{align*}
-a & = \frac{[ \theta^{\star} | \cdot ]}{[ \theta^{(k-1)} | \cdot ]} \\
-a & = \frac{\frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]}{[\mathbf{y}]}} {\frac{[\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}{[ \mathbf{y} ]}} \\
-a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]} { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}
-\end{align*}
-does not depend on the marginal distribution of the data $[\mathbf{y}]$, eliminating the need to calculate the difficult integral. Given the proposal $\theta^{\star}$ from a symmetric proposal distribution centered on the previous value $\theta^{(k-1)}$, we accept the new $\theta^\star$ with probability $min(1, a)$ and otherwise reject the proposal and set $\theta^{(k)} = \theta^{(k-1)}$. The complete Metropolis algorithm is
-
-\begin{algorithm}
-\caption{The Metropolis update}
-\begin{algorithmic}[1]
-\State Propose a new value $\theta^{\star}$ from a symmetric proposal distribution centered at $\theta^{(k-1)}$
-\State Calculate the acceptance probability $a  = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}]} { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}]}$ 
-\State Draw a uniform(0, 1) random variable $u$
-\State If a > u, accept the proposed value by setting $\theta^{(k)} = \theta^\star$ otherwise reject $\theta^{\star}$ and set $\theta^{(k)} = \theta^{(k-1)}$.
-\end{algorithmic}
-\end{algorithm}
-
-
-
-
-For example, consider the model
-\begin{align*}
-y_i & \sim \operatorname{N} (\theta, 1)
-\end{align*}
-where $\theta$ is unknown. Assuming a normal prior $\theta \propto \operatorname{N}(0, 1000)$, we will sample from the conditional posterior $[\theta | \cdot] \propto \prod_{i=1}^N \operatorname{N}(\theta, 1) \times 1$.
-
-
-```{r}
-## simulate data according to the model
-N <- 100
-theta <- 5
-y <- rnorm(N, theta, 1)
-```
-
-We will run the Metropolis algorithm for $K=5000$ iterations using a normal proposal dsitribution.
-
-```{r, error=TRUE}
-K <- 5000
-theta_sim <- rep(0, K)
-sigma2_tune <- 0.025
-accept_prob <- 0
 for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim[k-1], sqrt(sigma2_tune))
-  a <- prod(dnorm(y, theta_star, 1)) * dnorm(theta_star, 0, sqrt(1000)) / 
-    prod(dnorm(y, theta_sim[k-1], 1)) * dnorm(theta_sim[k-1], 0, sqrt(1000))
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob <- accept_prob + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim[k] <- theta_sim[k-1]
-  }
+  
+  ## sample mu
+  a_mu <- N / sigma2[k-1] + 1 / sigma2_mu
+  b_mu <- sum(y - x * beta[k-1]) / sigma2[k-1] + mu_mu / sigma2_mu
+  mu[k] <- rnorm(1, b_mu / a_mu, sqrt(1 / a_mu))
+  
+  ## sample beta
+  a_beta <- sum(x^2) / sigma2[k-1] + 1 / sigma2_beta
+  b_beta <- sum(x*(y - mu[k])) / sigma2[k-1] + mu_beta / sigma2_beta
+  beta[k] <- rnorm(1, b_beta / a_beta, sqrt(1 / a_beta))
+  
+  ## sample sigma2
+  sigma2[k] <- 1 / rgamma(1, alpha_0 + N/2, 
+                          beta_0 + 1/2 * sum((y - (mu[k] + x * beta[k]))^2))
 }
 ```
 
-Oops! We get an error! When working with $a$ directly, we get a product of small likelihoods. Instead, let's work with the logarithm of the probabilities
+To visualize the MCMC samples, we can plot what are called trace plots
 
-\begin{align*}
-a & = \exp \left( \log \left( [\mathbf{y} | \theta^{\star}] [\theta^{\star}] \right) - \log \left( [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] \right) \right) \\
-& = \exp \left( \log [\mathbf{y} | \theta^{\star}]  + \log [\theta^{\star}] - \log  [\mathbf{y} | \theta^{(k-1)}]  - \log [\theta^{(k-1)}] \right),
-\end{align*}
-where all we did was re-write the likelihood as the exponential of a log (an identity transformation). What this does is reduce the effect of multiplying small values that go to computer zero (numeric underflow) and cause problems. For example
 ```{r}
-prod(dnorm(y, 8, 1))
+samples <- c(mu, beta, sigma2)
+library(ggplot2)
+df <- data.frame(
+  sample = 1:K,
+  params = factor(c(rep("mu", K), rep("beta", K), rep("sigma2", K))),
+  values = samples)
+
+ggplot(df, aes(x=sample, y=values, group=params)) + geom_line() + 
+  facet_wrap(~params, scales="free", ncol=1)
 ```
-is very very small (close to zero) and gets closer to numeric underflow as N increase, whereas
+
+The plotting window is strongly influenced by the initial condition. Instead, we can throw away the first 1000 samples (called burn-in) and examine the remaining 4000 samples for each parameter. 
+
 ```{r}
-sum(dnorm(y, 8, 1, log=TRUE))
-all.equal(prod(dnorm(y, 8, 1)), exp(sum(dnorm(y, 8, 1, log=TRUE))))
-```
-is a more reasonable number (nowhere near computer zero), but produces the same answer when exponentiated.
+burnin <- 1000
+## subset the samples to only post-burnin
+samples <- cbind(mu[-c(1:burnin)], beta[-c(1:burnin)], sigma2[-c(1:burnin)])
+colnames(samples) <- c("mu", "beta", "sigma2")
 
-Writing the Metropolis algorithm on the log-probability scale is
+df <- data.frame(
+  sample = (burnin+1):K,
+  params = factor(c(rep("mu", K-burnin), rep("beta", K-burnin),
+                    rep("sigma2", K-burnin))),
+  values = c(samples))
 
-```{r, error=TRUE}
-K <- 5000
-theta_sim <- rep(0, K)
-sigma2_tune <- 0.025
-accept_prob <- 0
-for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim[k-1], sqrt(sigma2_tune))
-  ## calcuate the numerator of the ratio
-  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
-    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
-  ## calcuate the denomiator of the ratio
-  mh2 <- sum(dnorm(y, theta_sim[k-1], 1, log=TRUE)) +
-    dnorm(theta_sim[k-1], 0, sqrt(1000), log=TRUE)
-  a <- exp(mh1 - mh2)
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob <- accept_prob + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim[k] <- theta_sim[k-1]
-  }
-}
+## fit the linear model using the MLE
+fit <- lm(y~x)
+df_lm <- data.frame(
+  params = factor(c("mu", "beta", "sigma2")),
+  values = c(fit$coefficients[1], fit$coefficients[2], summary(fit)$sigma^2),
+  row.names = NULL)
+
+ggplot(df, aes(x=sample, y=values, group=params)) + geom_line() + 
+  facet_wrap(~params, scales="free", ncol=1) + 
+  geom_hline(data=df_lm, aes(yintercept=values, group=params), col="red")
 ```
 
-Plotting the output below looks much, much better. All thanks to avoiding numeric underflow! The lesson: always evaluate Metropolis ratios on the log scale.
-```{r, fig.width=5, fig.height=3}
-## Plot the output
-plot(theta_sim, type='l', 
-     main=paste0("acceptance prob = ", round(accept_prob, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
+
+We can think of each of the $k$ iterations as a time step and can use methods from time series to examine the estimates. For example, the ACF for each parameter is
+
+```{r}
+layout(matrix(1:6, 3, 2, byrow=TRUE))
+acf(samples[,"mu"])
+pacf(samples[, "mu"])
+acf(samples[,"beta"])
+pacf(samples[, "beta"])
+acf(samples[,"sigma2"])
+pacf(samples[, "sigma2"])
 ```
 
-We can also explore the effects of the tuning parameter on the behavior of the model
-
-```{r, error=TRUE, echo=FALSE}
-K <- 5000
-theta_sim1 <- rep(0, K)
-theta_sim2 <- rep(0, K)
-theta_sim3 <- rep(0, K)
-theta_sim4 <- rep(0, K)
-
-## really small sigma2_tune
-sigma2_tune <- 0.0025
-accept_prob1 <- 0
-accept_prob2 <- 0
-accept_prob3 <- 0
-accept_prob4 <- 0
-for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim1[k-1], sqrt(sigma2_tune))
-  ## calcuate the numerator of the ratio
-  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
-    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
-  ## calcuate the denomiator of the ratio
-  mh2 <- sum(dnorm(y, theta_sim1[k-1], 1, log=TRUE)) +
-    dnorm(theta_sim1[k-1], 0, sqrt(1000), log=TRUE)
-  a <- exp(mh1 - mh2)
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim1[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob1 <- accept_prob1 + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim1[k] <- theta_sim1[k-1]
-  }
-}
-## really small sigma2_tune
-sigma2_tune <- 0.05
-for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim2[k-1], sqrt(sigma2_tune))
-  ## calcuate the numerator of the ratio
-  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
-    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
-  ## calcuate the denomiator of the ratio
-  mh2 <- sum(dnorm(y, theta_sim2[k-1], 1, log=TRUE)) +
-    dnorm(theta_sim2[k-1], 0, sqrt(1000), log=TRUE)
-  a <- exp(mh1 - mh2)
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim2[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob2 <- accept_prob2 + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim2[k] <- theta_sim2[k-1]
-  }
-}
-
-## really small sigma2_tune
-sigma2_tune <- 1.5
-for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim3[k-1], sqrt(sigma2_tune))
-  ## calcuate the numerator of the ratio
-  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
-    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
-  ## calcuate the denomiator of the ratio
-  mh2 <- sum(dnorm(y, theta_sim3[k-1], 1, log=TRUE)) +
-    dnorm(theta_sim3[k-1], 0, sqrt(1000), log=TRUE)
-  a <- exp(mh1 - mh2)
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim3[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob3 <- accept_prob3 + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim3[k] <- theta_sim3[k-1]
-  }
-}
-
-## really small sigma2_tune
-sigma2_tune <- 10
-for (k in 2:K) {
-  theta_star <- rnorm(1, theta_sim4[k-1], sqrt(sigma2_tune))
-  ## calcuate the numerator of the ratio
-  mh1 <- sum(dnorm(y, theta_star, 1, log=TRUE)) +
-    dnorm(theta_star, 0, sqrt(1000), log=TRUE) 
-  ## calcuate the denomiator of the ratio
-  mh2 <- sum(dnorm(y, theta_sim4[k-1], 1, log=TRUE)) +
-    dnorm(theta_sim4[k-1], 0, sqrt(1000), log=TRUE)
-  a <- exp(mh1 - mh2)
-  u <- runif(1, 0, 1)
-  if (u < a) {
-    ## accept the proposed theta_star
-    theta_sim4[k] <- theta_star
-    ## keep running total of acceptance rate
-    accept_prob4 <- accept_prob4 + 1 / K
-  } else {
-    ## reject the proposed theta_star
-    theta_sim4[k] <- theta_sim4[k-1]
-  }
-}
-```
-
-```{r, fig.width=6, fig.height=4, echo=FALSE}
-## Plot the output
-layout(matrix(1:4, 2, 2))
-plot(theta_sim1, type='l', 
-     main=paste0("s2_tune = ", 0.0025, 
-                 ", accept = ", round(accept_prob1, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim2, type='l', 
-     main=paste0("s2_tune = ", 0.05, 
-                 ", accept = ", round(accept_prob2, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim3, type='l', 
-     main=paste0("s2_tune = ", 1.5, 
-                 ", accept = ", round(accept_prob3, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim4, type='l', 
-     main=paste0("s2_tune = ", 10, 
-                 ", accept = ", round(accept_prob4, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-```
-
-Let's examine these plots, throwing away the first 500 samples as "burn-in." 
-
-```{r, fig.width=6, fig.height=4, echo=FALSE}
-## Plot the output
-layout(matrix(1:4, 2, 2))
-plot(theta_sim1[-c(1:500)], type='l', 
-     main=paste0("s2_tune = ", 0.0025, 
-                 ", accept = ", round(accept_prob1, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim2[-c(1:500)], type='l', 
-     main=paste0("s2_tune = ", 0.05, 
-                 ", accept = ", round(accept_prob2, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim3[-c(1:500)], type='l', 
-     main=paste0("s2_tune = ", 1.5, 
-                 ", accept = ", round(accept_prob3, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-plot(theta_sim4[-c(1:500)], type='l', 
-     main=paste0("s2_tune = ", 10, 
-                 ", accept = ", round(accept_prob4, digits=2)), 
-     xlab="MCMC iteration", ylab=expression(theta))
-abline(h=theta, col="red")
-```
-
-Notice that the smallest choice of $\sigma^2_{\mbox{tune}}$ produces a chain with high autocorrelation that doesn't die off at large lags. The choice of $\sigma^2_{\mbox{tune}} = 0.05$ produces the quickest decay in the ACF plot below, and has an acceptance rate of about `r round(accept_prob2, digits=2)` (0.44 is optimal for a univariate Metropolis update). The trace plots for the larger values of the tuning parameter have low acceptance rates and get "stuck" at certain parameter values for long periods of time.
-
-```{r, fig.width=6, fig.height=4, echo=FALSE}
-## Plot the output
-layout(matrix(1:4, 2, 2))
-acf(theta_sim1[-c(1:500)], 
-     main=paste0("s2_tune = ", 0.0025, 
-                 ", accept = ", round(accept_prob1, digits=2)))
-acf(theta_sim2[-c(1:500)],
-     main=paste0("s2_tune = ", 0.05, 
-                 ", accept = ", round(accept_prob2, digits=2)))
-acf(theta_sim3[-c(1:500)],
-     main=paste0("s2_tune = ", 1.5, 
-                 ", accept = ", round(accept_prob3, digits=2)))
-acf(theta_sim4[-c(1:500)],
-     main=paste0("s2_tune = ", 10, 
-                 ", accept = ", round(accept_prob4, digits=2)))
-```
-
+We can also ask what is the effective sample size from our estimates (the equivalent sample size of uncorrelated samples)
 
 ```{r}
 library(coda)
-effectiveSize(theta_sim1[-c(1:500)])
-effectiveSize(theta_sim2[-c(1:500)])
-effectiveSize(theta_sim3[-c(1:500)])
-effectiveSize(theta_sim4[-c(1:500)])
+effectiveSize(samples)
 ```
+
+Because the samples of $\mu$, $\beta$, and $\sigma^2$ obtained from the Gibbs sampler are from probability distributions, we can calculate any quantity of interest directly. For example, the estimate for the mean of the parameters is simply the mean of the MCMC samples
+
+```{r}
+colMeans(samples)
+apply(samples, 2, sd)
+apply(samples, 2, quantile, prob=c(0.025, 0.975))
+```
+
+and we can compare these estimates to those from the MLE
+
+```{r}
+summary(fit)
+```
+
+and the 95\% credible interval for each parameter is simply the 2.5\% and 97.5\% quantiles of the samples.
+
+```{r}
+apply(samples, 2, quantile, prob= c(0.025, 0.975))
+```
+
+We can compare these to the esimates from the MLE
+```{r}
+confint(fit)
+```
+
+We can also plot the posterior distribution
+
+```{r}
+n_pred <- 1000
+x_pred <- seq(min(iris$Petal.Length), max(iris$Petal.Length), length.out = n_pred)
+y_hat <- t(sapply(1:n_pred, function(i) { samples[, "mu"] + x_pred[i] * samples[, "beta"] }))
+
+df_mcmc <- data.frame(
+  x         = x_pred,
+  y_hat     = c(y_hat),
+  iteration = rep(1:ncol(y_hat), each = nrow(y_hat))
+)
+
+if (!file.exists(here::here("images", "posterior-linear-regression.png"))) {
+
+    png(file = here::here("images", "posterior-linear-regression.png"), 
+        width = 16, height = 9, units = "in", res = 400)
+    print(
+        ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) + 
+            geom_point() +
+            geom_line(data = df_mcmc,
+                      aes(x = x, y = y_hat, group = iteration), 
+                      col = "red", alpha = 0.05) + 
+            ggtitle("Posterior Distribution of mean response")
+    )
+    dev.off()
+} 
+```
+
+```{r, out.width = "100%"}
+knitr::include_graphics(here::here("images", "posterior-linear-regression.png"))
+```
+
+Posterior predictive distribution
+
+```{r}
+n_pred <- 1000
+x_pred <- seq(min(iris$Petal.Length), max(iris$Petal.Length), length.out = n_pred)
+y_tilde <- t(samples[, "mu"] + sapply(1:n_pred, function(i) { x_pred[i] * samples[, "beta"] + rnorm(length(samples[, "sigma2"]), 0, sqrt(samples[, "sigma2"]))}))
+
+df_mcmc <- data.frame(
+  x        = x_pred,
+  y_tilde  = apply(y_tilde, 1, mean),
+  lower_95 = apply(y_tilde, 1, quantile, prob = 0.025),
+  upper_95 = apply(y_tilde, 1, quantile, prob = 0.975)
+)
+ggplot(data = iris, aes(x = Petal.Length, y = Petal.Width)) + 
+    geom_point() +
+    geom_line(data = df_mcmc, aes(x = x, y = y_tilde), col = "red") + 
+    geom_ribbon(data = df_mcmc, aes(x = x, ymin = lower_95, ymax = upper_95),
+                fill = "orange", alpha = 0.25, inherit.aes = FALSE) +
+    ggtitle("Posterior predictive distribution")
+```
+
+
+### General recommendations for writing MCMC software
+
+* Have the first dimension of each object be the number of MCMC samples
+* Start with simple models and build sequentially to the complex model of interest
+    * Example: For spatio-temporal models, first start with linear regression, then add spatial component, then add spatio-temporal model
+* Find a workflow that works
+    1) State the model
+    2) Calculate the full conditional distributions
+    3) Write the MCMC using a template
+    
+

@@ -2,3 +2,264 @@
 
 ## Announcements
 
+## The Metropolis-Hastings Algorithm
+
+
+<!-- Set some knitr options -->
+```{r, include = FALSE, cache = FALSE}
+library(knitr)
+options(replace.assign=TRUE,width=60)
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(
+    fig.align='center', fig.width = 5, fig.height = 5, fig.show = 'hold',
+    par = TRUE)
+```
+
+
+
+Last time, we discussed the Metropolis algorithm for sampling from a distribution where the conditional posterior distribution is not known in an analytic form. The Metropolis algorithm assumes the proposal distribution is symmetric. The [Metropolis-Hastings algorithm](https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm) allows for asymmetric proposal distributions. A good intuition for how the Metropolis Hastings algorithm works is presented by Chib and Greenberg in [Understanding the Metropolis-Hastings Algorithm](http://www.ics.uci.edu/~johnsong/papers/Chib%20and%20Greenberg%20-%20Understanding%20the%20Metropolis-Hastings%20Algorithm.pdf).
+
+This begs the question: Why would one want to use an asymmetric proposal distribution? There are many reasons, but the most compelling and most common is to guarantee that the proposed value of the parameter is in the support of the parameter space. For example, a variance parameter must be positive and a symmetric normal proposal could generate negative proposals that must be rejected with probability 1. This can result in inefficient MCMC samplers that have very low acceptance rates and therefor exhibit poor mixing. Instead, we can use an asymmetric proposal that guarantees a positive proposal and should lead to higer acceptance rates. 
+
+## The Metropolis-Hastings algorithm
+Recall for a symmetric proposal, the Metropolis ratio is
+\begin{align*}
+a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] }.
+\end{align*}
+
+Given an asymmetric proposal $[\theta^{\star}|\theta^{(k-1)}]$, the Metropolis-Hastings ratio is 
+\begin{align*}
+a & = \frac{[\mathbf{y} | \theta^{\star}] [\theta^{\star}] } { [\mathbf{y} | \theta^{(k-1)}] [\theta^{(k-1)}] } \frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]},
+\end{align*}
+where $\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]}$ is a correction factor that accounts for the asymmetric proposal. The Metropolis algorithm can be shown to be a special case of the Metropolis-Hastings algorithm by noting that $\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)}]} = 1$ when the proposal is symmetric.
+
+## Example
+Let's consider an AR(1) model
+\eq{
+y_t & = \phi y_{t-1} + \varepsilon_t
+}
+where $\varepsilon_t \stackrel{iid} \sim \operatorname{N}(0, \sigma^2)$ and both $\phi$ and $\sigma^2$ are unknown. 
+
+Simulated data are shown below. 
+```{r}
+N <- 500
+phi_sim <- 0.99
+sigma2_sim <- 1.2
+y <- rep(0, N)
+for (t in 2:N) {
+  y[t] <- phi_sim * y[t-1] + rnorm(1, 0, sqrt(sigma2_sim))
+}
+plot(y, type='l', xlab="time", main="simulated AR(1) data")
+```
+
+To complete the model, we must assign prior distributions for $\phi$ and $\sigma^2$. A simple choice of prior for $\phi$ is Uniform(-1, 1) prior and for $\sigma^2$ we assign a half-Cauchy prior where 
+\eq{
+\sigma^2 & \sim \operatorname{Cauchy^+}(s^2)
+}
+with $s^2$=25 where the half-Cauchy has the pdf
+\eq{
+[\sigma^2] = \frac{2 * I(\sigma^2 > 0)}{\pi s (1 + \frac{\sigma^2}{s^2})}.
+}
+
+## Posterior
+The posterior distribution is 
+\eq{
+[\phi, \sigma^2 | \mathbf{y}] & = \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] [\sigma^2] 
+}
+
+## Conditional posterior for $\phi$
+
+The conditional posterior for $\phi$ is 
+\eq{
+[\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] \\
+& \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) I(-1 < \phi < 1)
+}
+which has no known analytic distribution so we will sample using Metropolis-Hastings. 
+
+## Conditional posterior for $\sigma^2$
+
+The conditional posterior for $\phi$ is 
+\eq{
+[\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\sigma^2] \\
+& \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) \operatorname{Cauchy^+}(\sigma^2 | s^2)
+}
+which has no known analytic distribution so we will sample using Metropolis-Hastings. 
+
+
+## MCMC using a symmetric proposal (Metropolis)
+
+```{r}
+library(LaplacesDemon)
+K <- 5000
+phi <- rep(0, N)
+sigma2 <- rep(0, N)
+
+## initialize phi and sigma2
+phi[1] <- runif(1, -1, 1)
+sigma2[1] <- runif(1, 1, 5)
+
+## set the tuning parameters
+phi_tune <- 0.0095
+accept_phi <- 0
+sigma2_tune <- 0.125
+accept_sigma2 <- 0
+
+##
+## MCMC loop
+##
+for (k in 2:K) {
+  ## sample phi
+  phi_star <- rnorm(1, phi[k-1], phi_tune)
+  ## check to make sure phi_star is reasonable, if not, we reject and move on
+  if (phi_star > -1 & phi_star < 1) {
+    mh1 <- sum(dnorm(y[2:N], phi_star * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE))
+    mh2 <- sum(dnorm(y[2:N], phi[k-1] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE))
+    a <- exp(mh1-mh2)
+    if (runif(1) < a) {
+      ## accept the proposed value
+      phi[k] <- phi_star
+      accept_phi <- accept_phi + 1/K
+    } else {
+      phi[k] <- phi[k-1]
+    }
+  } else {
+    ## phi_star was outside the support, keep at the previous value
+    phi[k] <- phi[k-1]
+  }
+
+  ## sample sigma2
+  sigma2_star <- rnorm(1, sigma2[k-1], sigma2_tune)
+  ## check to make sure sigma2_star is reasonable, if not, we reject and move on
+  if (sigma2_star > 0) {
+    mh1 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2_star), log=TRUE)) + 
+      dhalfcauchy(sigma2_star, sqrt(25), log=TRUE)
+    mh2 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) + 
+      dhalfcauchy(sigma2[k-1], sqrt(25), log=TRUE)
+    a <- exp(mh1-mh2)
+    if (runif(1) < a) {
+      ## accept the proposed value
+      sigma2[k] <-sigma2_star
+      accept_sigma2 <- accept_sigma2 + 1/K
+    } else {
+      sigma2[k] <- sigma2[k-1]
+    }
+  } else {
+    ## sigma2_star was outside the support, keep at the previous value
+    sigma2[k] <- sigma2[k-1]
+  }
+}
+```
+
+The trace plots showing the parameter estimates, post burn-in, are below. From these, we see that the MCMC model is estimating the parameters reasonably.
+
+```{r}
+burnin <- 1000
+samples <- cbind(phi[-c(1:burnin)], sigma2[-c(1:burnin)])
+colnames(samples) <- c("phi", "sigma2")
+
+layout(matrix(1:2, 2, 1))
+plot(samples[, "phi"], type='l',
+     main=paste0("Trace plot for phi, acceptance=", round(accept_phi, digits=2)))
+abline(h=phi_sim, col="red")
+plot(samples[, "sigma2"], type='l',
+     main=paste0("Trace plot for sigma2, acceptance=", round(accept_sigma2, digits=2)))
+abline(h=sigma2_sim, col="red")
+```
+
+
+```{r}
+library(coda)
+effectiveSize(samples)
+```
+
+In the model above, we used **symmetric** proposals and threw out parameter values that were outside the allowable range. Because $\phi$ has a true value close to the limit of allowable values, the Metropolis algorithm could be very inefficient. To improve efficiency, let's rewrite the algorithm using truncated normal proposals (which are **asymmetric**).
+
+```{r}
+library(LaplacesDemon)
+library(truncnorm)
+K <- 25000
+phi <- rep(0, N)
+sigma2 <- rep(0, N)
+
+## initialize phi and sigma2
+phi[1] <- runif(1, -1, 1)
+sigma2[1] <- runif(1, 1, 5)
+
+## set the tuning parameters
+phi_tune <- 0.0175
+accept_phi <- 0
+sigma2_tune <- 0.175
+accept_sigma2 <- 0
+
+##
+## MCMC loop
+##
+for (k in 2:K) {
+  ## sample phi
+  ## use truncated normal proposal
+  phi_star <- rtruncnorm(1, a=-1, b=1, phi[k-1], phi_tune)
+  ## No need to check if phi_star is between -1 and 1 
+  mh1 <- sum(dnorm(y[2:N], phi_star * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) +
+    log(dtruncnorm(phi[k-1], a=-1, b=1, phi_star, phi_tune))
+  mh2 <- sum(dnorm(y[2:N], phi[k-1] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) +
+    log(dtruncnorm(phi_star, a=-1, b=1, phi[k-1], phi_tune))
+  a <- exp(mh1-mh2)
+  if (runif(1) < a) {
+    ## accept the proposed value
+    phi[k] <- phi_star
+    accept_phi <- accept_phi + 1/K
+  } else {
+    phi[k] <- phi[k-1]
+  }
+
+  ## sample sigma2
+  sigma2_star <- rtruncnorm(1, a=0, b=Inf, sigma2[k-1], sigma2_tune)
+  ## No need to check to make sure sigma2_star is positive
+  mh1 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2_star), log=TRUE)) + 
+    dhalfcauchy(sigma2_star, sqrt(25), log=TRUE) + 
+    log(dtruncnorm(sigma2[k-1], a=0, b=Inf, sigma2_star, sigma2_tune))
+  mh2 <- sum(dnorm(y[2:N], phi[k] * y[1:(N-1)], sqrt(sigma2[k-1]), log=TRUE)) + 
+    dhalfcauchy(sigma2[k-1], sqrt(25), log=TRUE) + 
+    log(dtruncnorm(sigma2_star, a=0, b=Inf, sigma2[k-1], sigma2_tune))
+  a <- exp(mh1-mh2)
+  if (runif(1) < a) {
+    ## accept the proposed value
+    sigma2[k] <-sigma2_star
+    accept_sigma2 <- accept_sigma2 + 1/K
+  } else {
+    sigma2[k] <- sigma2[k-1]
+  }
+}
+```
+
+The trace plots below show the increased efficiency in the acceptance rate at the same tuning parameter value and show better effective sample size.
+
+```{r}
+burnin <- 1000
+samples <- cbind(phi[-c(1:burnin)], sigma2[-c(1:burnin)])
+colnames(samples) <- c("phi", "sigma2")
+
+layout(matrix(1:2, 2, 1))
+plot(samples[, "phi"], type='l',
+     main=paste0("Trace plot for phi, acceptance=", round(accept_phi, digits=2)))
+abline(h=phi_sim, col="red")
+plot(samples[, "sigma2"], type='l',
+     main=paste0("Trace plot for sigma2, acceptance=", round(accept_sigma2, digits=2)))
+abline(h=sigma2_sim, col="red")
+```
+
+
+```{r}
+hist(samples[,"phi"], breaks=100)
+abline(v=phi_sim, col="red")
+abline(v=mean(samples[, "phi"]), col="blue")
+abline(v=quantile(samples[, "phi"], prob=c(0.025, 0.975)), col="green", lwd=2)
+
+hist(samples[,"sigma2"], breaks=100)
+abline(v=sigma2_sim, col="red")
+abline(v=mean(samples[, "sigma2"]), col="blue")
+abline(v=quantile(samples[, "sigma2"], prob=c(0.025, 0.975)), col="green", lwd=2)
+library(coda)
+effectiveSize(samples)
+```
+
