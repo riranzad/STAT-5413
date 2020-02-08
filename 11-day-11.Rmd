@@ -470,3 +470,257 @@ ggplot(dat_pred, aes(x = lon, y = lat, fill = var)) +
   ggtitle("Average July max Temperature prediction Variance in 1990")  +
   coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
 ```
+
+
+## Kriging
+
+* Given a set of $n$ locations $\mathbf{s}_{obs} = \{ \mathbf{s}_1, \ldots, \mathbf{s}_n \}$, the goal is often to make a prediction at a set of $n_0$ new locations $\mathbf{s}_{unobs} = \{\mathbf{s}_{unobs_1}, \ldots, \mathbf{s}_{unobs_{n_0}} \}$.
+
+* Out of date terms (but still commonly used)
+    * Ordinary Kriging -- Kriging using a constant mean function
+    * Universal Kriging -- Kriging with an estimated polynomial mean function
+    * Not really a useful distinction -- now, all Kriging is universal Kriging    
+
+* [Kriging](https://en.wikipedia.org/wiki/Kriging) is named after Danie G. Krige who did early work on spatial interpolation.
+
+
+* For now, assume $E(y(\mathbf{s})) = 0 \hspace{1em} \forall \mathbf{s}$ 
+
+* Because our model is a Gaussian process, the joint distribution of the process  $\mathbf{y}_{unobs} = (y(\mathbf{s}_{unobs_1}), \ldots, y(\mathbf{s}_{{unobs_{n_0}}}))'$ at the unobserved locations and the process $\mathbf{y}_{obs} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n))'$ at the observed locations is 
+
+\begin{align*}
+\begin{pmatrix} \mathbf{y}_{unobs} \\ \dots \\ \mathbf{y}_{obs} \end{pmatrix} & \sim \operatorname{N} \left( \begin{pmatrix} \mathbf{0}_{unobs} \\ \dots \\ \mathbf{0}_{obs} \end{pmatrix} ,
+\begin{pmatrix} \Sigma_{unobs} & \vdots & \boldsymbol{\Sigma}_{unobs,obs} \\ \dots \\ \boldsymbol{\Sigma}_{obs, unobs} & \vdots & \boldsymbol{\Sigma}_{obs} \end{pmatrix}
+\right),
+\end{align*}
+
+where $\boldsymbol{\Sigma}_{unobs} = \{ Cov \left( y(\mathbf{s}_{unobs_i}),  y(\mathbf{s}_{unobs_j}) \right) \}_{i,j=1}^{n_0}$ is the $n_{unobs} \times n_{unobs}$ covariance matrix that represents the covariance function evaluated at the unobserved locations, $\boldsymbol{\Sigma}_{unobs,obs} = \boldsymbol{\Sigma}_{obs,unobs}' = \{ Cov \left( y(\mathbf{s}_{unobs_i}),  y(\mathbf{s}_{j}) \right) \}_{i=1,\ldots, n_0; j=1, \ldots, n}$ is the $n_{unobs} \times n$ cross-covariance matrix that represents the covariance function evaluated between the unobserved and observed locations, and $\boldsymbol{\Sigma}_{obs} = \{ Cov \left( y(\mathbf{s}_{i}),  y(\mathbf{s}_{j}) \right) \}_{i,j=1}^{n}$ is the $n \times n$ covariance matrix that represents the covariance function evaluated at the observed locations.
+
+* Using the properties of [conditional multivariate normal distributions](https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions), we have the conditional distribution
+
+$$
+\begin{align}
+\mathbf{y}_{unobs} | \mathbf{y}_{obs} & \sim \operatorname{N} \left( \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \mathbf{y}_{obs}, \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \boldsymbol{\Sigma}_{obs,unobs} \right)
+\end{align}
+$$
+
+* Can plug in the MLE estimate $\boldsymbol{\Sigma}(\hat{\boldsymbol{\theta}})$ to get the estimated distribution (not accounting for parameter uncertainty).
+
+* The Kriging approach gets the same solution by not assuming normality and solving for the best linear unbiased predictor (BLUP)
+
+We generate the predictive maps from the example above using this formula
+
+```{r}
+fit <- geoR::likfit(
+    data         = dat$mean_Tmax,
+    coords       = cbind(dat$lat, dat$lon),
+    cov.model    = "exponential",
+    ini.cov.pars = c(var(dat$mean_Tmax), 1) 
+)
+```
+
+```{r}
+sigma2 <- fit$nugget
+tau2   <- fit$sigmasq
+phi    <- fit$phi
+
+## prediction locations
+pred_locations <- expand.grid(
+  seq(min(dat$lat), max(dat$lat), length.out = 100),
+  seq(min(dat$lon), max(dat$lon), length.out = 100)
+)
+names(pred_locations) <- c("lat", "lon")
+```
+
+```{r, error = TRUE}
+## calculate pairwise distance matrices -- be careful with large data
+locs        <- cbind(dat$lat, dat$lon)
+D           <- rdist(locs)
+D_unobs     <- rdist(pred_locations)
+D_unobs_obs <- rdist(pred_locations, locs)
+
+Cov           <- diag(nrow(dat)) * sigma2 + tau2 * exp( - D / phi)
+Cov_unobs     <- diag(nrow(pred_locations)) * sigma2 + tau2 * exp( - D_unobs / phi)
+Cov_unobs_obs <- tau2 * exp( - D_unobs_obs / phi)
+
+Cov_inv <- solve(Cov)
+
+## Kriging mean -- note we subtract the mean to get mean 0 then add it back in
+pred_mean <- Cov_unobs_obs %*% Cov_inv %*% (dat$mean_Tmax - mean(dat$mean_Tmax)) + mean(dat$mean_Tmax)
+
+## Kriging variance
+pred_var      <- diag(Cov_unobs) - diag(Cov_unobs_obs %*% Cov_inv %*% t(Cov_unobs_obs))
+pred_var_fast <- diag(Cov_unobs) - rowSums((Cov_unobs_obs %*% Cov_inv) * Cov_unobs_obs)
+
+system.time(diag(Cov_unobs_obs %*% Cov_inv %*% t(Cov_unobs_obs)))
+system.time(rowSums((Cov_unobs_obs %*% Cov_inv) * Cov_unobs_obs))
+
+all.equal(pred_var, pred_var_fast)
+```
+
+
+```{r, out.width = "49%", fig.show = "hold"}
+dat_pred <- data.frame(
+  preds = pred_mean,
+  var   = pred_var,
+  lat   = pred_locations$lat,
+  lon   = pred_locations$lon
+) 
+
+ggplot(dat_pred, aes(x = lon, y = lat, fill = preds)) +
+  geom_raster() +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               colour = "black", fill = NA) +
+  scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Predicted Average July max Temperature in 1990") +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+
+ggplot(dat_pred, aes(x = lon, y = lat, fill = var)) +
+  geom_raster() +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               colour = "black", fill = NA) +
+  scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Average July max Temperature prediction variance in 1990")  +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+```
+
+
+### Kriging Equations with mean $\mu = 0$
+
+
+
+* **Assumptions -- BLUP**
+    * We will assume we are wanting predictions at a single site $\mathbf{s}_0$
+    * Without loss of generality, assume that $E(y(\mathbf{s})) = 0$ -- can always subtract the mean and add it back in (see code above)
+    * $Cov(\mathbf{y}) = \boldsymbol{\Sigma}$ is the covariance of the data
+    * $Cov(y(\mathbf{s}_0), y(\mathbf{s}_i)) = \boldsymbol{\Sigma}_{0i}$
+    * The optimal prediction at unobserved location $\mathbf{s}_0$ is a **linear combination of the observed sites** $\Rightarrow$ $\hat{y}(\mathbf{s}_0) = \sum_{i=1}^n w_i y(\mathbf{s}_i)$ for a set of unknown weights $w_i$
+    * The optimal predictor is **unbiased** $\Rightarrow$ $E(\hat{y}(\mathbf{s}_0)) = 0$
+
+Therefore, unbiasedness implies that $E(\hat{y}(\mathbf{s}_0)) = \sum_{i=1}^n w_i E(y(\mathbf{s}_i)) = \sum_{i=1}^n w_i 0 = 0$. Because $\mu = 0$, this is trivially easy and we only need to minimize the variance to have the BLUP.
+
+The MSE is 
+
+$$
+\begin{align*}
+MSE & = E((\hat{y}(\mathbf{s}_0) - y(\mathbf{s}_0))^2) \\
+& = E(\hat{y}(\mathbf{s}_0)^2 - 2 \hat{y}(\mathbf{s}_0) y(\mathbf{s}_0) + y(\mathbf{s}_0)^2) \\
+& = E(\hat{y}(\mathbf{s}_0)^2) - 2 E(\hat{y}(\mathbf{s}_0) y(\mathbf{s}_0)) + E(y(\mathbf{s}_0)^2) 
+\end{align*}
+$$
+
+Because $\mu = 0$, we have $E(\hat{y}(\mathbf{s}_0)^2) = Var(\hat{y}(\mathbf{s}_0))$, $E(y(\mathbf{s}_0)^2) = Var(y(\mathbf{s}_0))$, and $E(\hat{y}(\mathbf{s}_0)y(\mathbf{s}_0)) = Cov(\hat{y}(\mathbf{s}_0), y(\mathbf{s}_0))$. Thus, the MSE is 
+
+\begin{align*}
+MSE & = E(\hat{y}(\mathbf{s}_0)^2) - 2 E(\hat{y}(\mathbf{s}_0) y(\mathbf{s}_0)) + E(y(\mathbf{s}_0)^2) \\
+& = Var(\hat{y}(\mathbf{s}_0)) - 2 Cov(\hat{y}(\mathbf{s}_0), y(\mathbf{s}_0)) + Var(y(\mathbf{s}_0)) \\
+& Var \left( \sum_{i=1}^n w_i y(\mathbf{s}_i) \right) - 2 Cov( \sum_{i=1}^n w_i y(\mathbf{s}_i), y(\mathbf{s}_0)) + \Sigma_0 \\
+& = \sum_{i=1}^n \sum_{j=1}^n w_i w_j \Sigma_{ij} - 2 \sum_{i=1}^n w_i \Sigma_{0i}
+ + \Sigma_{00} \\
+& = \mathbf{w}' \boldsymbol{\Sigma} \mathbf{w} - 2 \mathbf{w}' \boldsymbol{\Sigma}_{0} + \Sigma_{00}
+\end{align*}
+  
+To minimize the MSE, we take a derivative with respect to the Kriging weights $\mathbf{w}$ and solve the equation when set equal to 0
+
+
+\begin{align*}
+\frac{\partial}{\partial \mathbf{w}} MSE & = \frac{\partial}{\partial \mathbf{w}} \mathbf{w}' \boldsymbol{\Sigma} \mathbf{w} - 2 \mathbf{w}' \boldsymbol{\Sigma}_{0} + \Sigma_{00} \\
+& = 2 \boldsymbol{\Sigma} \mathbf{w} - 2 \boldsymbol{\Sigma}_{0}
+\end{align*}
+
+which has solution $\mathbf{w} = \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_0$. 
+
+
+### Kriging Equations with unknown mean
+
+First, we assume the mean as the form $\mu(\mathbf{s}) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}$ and can the regression coefficents can be estimated from the MLE (take derivative of the log-likelhood and set equal to 0 -- [generalized least squares](https://en.wikipedia.org/wiki/Generalized_least_squares)) as $\hat{\boldsymbol{\beta}} = (\mathbf{X}' \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}' \boldsymbol{\Sigma}^{-1} \mathbf{y}$. We also assume that the covariate value $\mathbf{x}(\mathbf{s}_0)$ at the prediction location is known 
+
+The Kriging estimate is 
+
+$$
+\begin{align*}
+\hat{y}(\mathbf{s}_0) = \hat{\mu}(\mathbf{s}_0) + \boldsymbol{\Sigma}_0 \boldsymbol{\Sigma}^{-1} (y(\mathbf{s}) - \hat{\mu}(\mathbf{s})).
+\end{align*}
+$$
+
+which has variance 
+
+$$
+\begin{align*}
+Var(\hat{y}(\mathbf{s}_0)) = \boldsymbol{\Sigma}_{00} - \boldsymbol{\Sigma}_0 \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_0,
+\end{align*}
+$$
+
+Where $\boldsymbol{\Sigma}_{00}$ is the unconditional variance of the process at location $\mathbf{s}_0$. From this equation, we see that the Kriging variance is smaller than the unconditional variance.
+
+We generate the predictive maps from the example above using the Universal Kriging formula
+
+```{r}
+fit_coef <- geoR::likfit(
+    data         = dat$mean_Tmax,
+    trend        = ~ dat$lat + dat$lon,
+    coords       = cbind(dat$lat, dat$lon),
+    cov.model    = "exponential",
+    ini.cov.pars = c(var(dat$mean_Tmax), 1) 
+)
+```
+
+```{r}
+sigma2 <- fit_coef$nugget
+tau2   <- fit_coef$sigmasq
+phi    <- fit_coef$phi
+beta   <- fit_coef$beta
+
+## prediction locations
+pred_locations <- expand.grid(
+  seq(min(dat$lat), max(dat$lat), length.out = 100),
+  seq(min(dat$lon), max(dat$lon), length.out = 100)
+)
+names(pred_locations) <- c("lat", "lon")
+```
+
+```{r, error = TRUE}
+## calculate pairwise distance matrices -- be careful with large data
+locs        <- cbind(dat$lat, dat$lon)
+D           <- rdist(locs)
+D_unobs     <- rdist(pred_locations)
+D_unobs_obs <- rdist(pred_locations, locs)
+
+Cov           <- diag(nrow(dat)) * sigma2 + tau2 * exp( - D / phi)
+Cov_unobs     <- diag(nrow(pred_locations)) * sigma2 + tau2 * exp( - D_unobs / phi)
+Cov_unobs_obs <- tau2 * exp( - D_unobs_obs / phi)
+
+Cov_inv <- solve(Cov)
+
+## Kriging mean -- note we subtract the mean to get mean 0 then add it back in
+pred_mean <- Cov_unobs_obs %*% Cov_inv %*% (dat$mean_Tmax - cbind(1, locs) %*% beta) + as.matrix(cbind(1, pred_locations)) %*% beta
+
+## Kriging variance -- fast form
+pred_var <- diag(Cov_unobs) - rowSums((Cov_unobs_obs %*% Cov_inv) * Cov_unobs_obs)
+```
+
+
+```{r, out.width = "49%", fig.show = "hold"}
+dat_pred <- data.frame(
+  preds = pred_mean,
+  var   = pred_var,
+  lat   = pred_locations$lat,
+  lon   = pred_locations$lon
+) 
+
+ggplot(dat_pred, aes(x = lon, y = lat, fill = preds)) +
+  geom_raster() +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               colour = "black", fill = NA) +
+  scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Predicted Average July max Temperature in 1990") +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+
+ggplot(dat_pred, aes(x = lon, y = lat, fill = var)) +
+  geom_raster() +
+  geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+               colour = "black", fill = NA) +
+  scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Average July max Temperature prediction variance in 1990")  +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+```

@@ -253,6 +253,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="11.3.2" data-path="day-11.html"><a href="day-11.html#fitting-a-spatial-model-using-the-nlme-package"><i class="fa fa-check"></i><b>11.3.2</b> Fitting a spatial model using the <em>nlme</em> package</a></li>
 <li class="chapter" data-level="11.3.3" data-path="day-11.html"><a href="day-11.html#model-fitting-with-autokrige-function"><i class="fa fa-check"></i><b>11.3.3</b> model fitting with <em>autokrige</em> function</a></li>
 </ul></li>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-mean-mu-0"><i class="fa fa-check"></i><b>11.4.1</b> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-unknown-mean"><i class="fa fa-check"></i><b>11.4.2</b> Kriging Equations with unknown mean</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
 <ul>
@@ -1066,6 +1071,242 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb211-21"><a href="day-11.html#cb211-21"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction Variance in 1990&quot;</span>)  <span class="op">+</span></span>
 <span id="cb211-22"><a href="day-11.html#cb211-22"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-102-1.png" width="49%" /><img src="STAT-5413_files/figure-html/unnamed-chunk-102-2.png" width="49%" /></p>
+</div>
+</div>
+<div id="kriging" class="section level2" number="11.4">
+<h2 number="11.4"><span class="header-section-number">11.4</span> Kriging</h2>
+<ul>
+<li><p>Given a set of <span class="math inline">\(n\)</span> locations <span class="math inline">\(\mathbf{s}_{obs} = \{ \mathbf{s}_1, \ldots, \mathbf{s}_n \}\)</span>, the goal is often to make a prediction at a set of <span class="math inline">\(n_0\)</span> new locations <span class="math inline">\(\mathbf{s}_{unobs} = \{\mathbf{s}_{unobs_1}, \ldots, \mathbf{s}_{unobs_{n_0}} \}\)</span>.</p></li>
+<li><p>Out of date terms (but still commonly used)</p>
+<ul>
+<li>Ordinary Kriging – Kriging using a constant mean function</li>
+<li>Universal Kriging – Kriging with an estimated polynomial mean function</li>
+<li>Not really a useful distinction – now, all Kriging is universal Kriging</li>
+</ul></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Kriging">Kriging</a> is named after Danie G. Krige who did early work on spatial interpolation.</p></li>
+<li><p>For now, assume <span class="math inline">\(E(y(\mathbf{s})) = 0 \hspace{1em} \forall \mathbf{s}\)</span></p></li>
+<li><p>Because our model is a Gaussian process, the joint distribution of the process <span class="math inline">\(\mathbf{y}_{unobs} = (y(\mathbf{s}_{unobs_1}), \ldots, y(\mathbf{s}_{{unobs_{n_0}}}))&#39;\)</span> at the unobserved locations and the process <span class="math inline">\(\mathbf{y}_{obs} = (y(\mathbf{s}_1), \ldots, y(\mathbf{s}_n))&#39;\)</span> at the observed locations is</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\begin{pmatrix} \mathbf{y}_{unobs} \\ \dots \\ \mathbf{y}_{obs} \end{pmatrix} &amp; \sim \operatorname{N} \left( \begin{pmatrix} \mathbf{0}_{unobs} \\ \dots \\ \mathbf{0}_{obs} \end{pmatrix} ,
+\begin{pmatrix} \Sigma_{unobs} &amp; \vdots &amp; \boldsymbol{\Sigma}_{unobs,obs} \\ \dots \\ \boldsymbol{\Sigma}_{obs, unobs} &amp; \vdots &amp; \boldsymbol{\Sigma}_{obs} \end{pmatrix}
+\right),
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\Sigma}_{unobs} = \{ Cov \left( y(\mathbf{s}_{unobs_i}), y(\mathbf{s}_{unobs_j}) \right) \}_{i,j=1}^{n_0}\)</span> is the <span class="math inline">\(n_{unobs} \times n_{unobs}\)</span> covariance matrix that represents the covariance function evaluated at the unobserved locations, <span class="math inline">\(\boldsymbol{\Sigma}_{unobs,obs} = \boldsymbol{\Sigma}_{obs,unobs}&#39; = \{ Cov \left( y(\mathbf{s}_{unobs_i}), y(\mathbf{s}_{j}) \right) \}_{i=1,\ldots, n_0; j=1, \ldots, n}\)</span> is the <span class="math inline">\(n_{unobs} \times n\)</span> cross-covariance matrix that represents the covariance function evaluated between the unobserved and observed locations, and <span class="math inline">\(\boldsymbol{\Sigma}_{obs} = \{ Cov \left( y(\mathbf{s}_{i}), y(\mathbf{s}_{j}) \right) \}_{i,j=1}^{n}\)</span> is the <span class="math inline">\(n \times n\)</span> covariance matrix that represents the covariance function evaluated at the observed locations.</p>
+<ul>
+<li>Using the properties of <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions">conditional multivariate normal distributions</a>, we have the conditional distribution</li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+\mathbf{y}_{unobs} | \mathbf{y}_{obs} &amp; \sim \operatorname{N} \left( \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \mathbf{y}_{obs}, \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \boldsymbol{\Sigma}_{obs,unobs} \right)
+\end{align}
+\]</span></p>
+<ul>
+<li><p>Can plug in the MLE estimate <span class="math inline">\(\boldsymbol{\Sigma}(\hat{\boldsymbol{\theta}})\)</span> to get the estimated distribution (not accounting for parameter uncertainty).</p></li>
+<li><p>The Kriging approach gets the same solution by not assuming normality and solving for the best linear unbiased predictor (BLUP)</p></li>
+</ul>
+<p>We generate the predictive maps from the example above using this formula</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="day-11.html#cb212-1"></a>fit &lt;-<span class="st"> </span>geoR<span class="op">::</span><span class="kw">likfit</span>(</span>
+<span id="cb212-2"><a href="day-11.html#cb212-2"></a>    <span class="dt">data         =</span> dat<span class="op">$</span>mean_Tmax,</span>
+<span id="cb212-3"><a href="day-11.html#cb212-3"></a>    <span class="dt">coords       =</span> <span class="kw">cbind</span>(dat<span class="op">$</span>lat, dat<span class="op">$</span>lon),</span>
+<span id="cb212-4"><a href="day-11.html#cb212-4"></a>    <span class="dt">cov.model    =</span> <span class="st">&quot;exponential&quot;</span>,</span>
+<span id="cb212-5"><a href="day-11.html#cb212-5"></a>    <span class="dt">ini.cov.pars =</span> <span class="kw">c</span>(<span class="kw">var</span>(dat<span class="op">$</span>mean_Tmax), <span class="dv">1</span>) </span>
+<span id="cb212-6"><a href="day-11.html#cb212-6"></a>)</span></code></pre></div>
+<pre><code>## kappa not used for the exponential correlation function
+## ---------------------------------------------------------------
+## likfit: likelihood maximisation using the function optim.
+## likfit: Use control() to pass additional
+##          arguments for the maximisation function.
+##         For further details see documentation for optim.
+## likfit: It is highly advisable to run this function several
+##         times with different initial values for the parameters.
+## likfit: WARNING: This step can be time demanding!
+## ---------------------------------------------------------------
+## likfit: end of numerical maximisation.</code></pre>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="day-11.html#cb214-1"></a>sigma2 &lt;-<span class="st"> </span>fit<span class="op">$</span>nugget</span>
+<span id="cb214-2"><a href="day-11.html#cb214-2"></a>tau2   &lt;-<span class="st"> </span>fit<span class="op">$</span>sigmasq</span>
+<span id="cb214-3"><a href="day-11.html#cb214-3"></a>phi    &lt;-<span class="st"> </span>fit<span class="op">$</span>phi</span>
+<span id="cb214-4"><a href="day-11.html#cb214-4"></a></span>
+<span id="cb214-5"><a href="day-11.html#cb214-5"></a><span class="co">## prediction locations</span></span>
+<span id="cb214-6"><a href="day-11.html#cb214-6"></a>pred_locations &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb214-7"><a href="day-11.html#cb214-7"></a>  <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length.out =</span> <span class="dv">100</span>),</span>
+<span id="cb214-8"><a href="day-11.html#cb214-8"></a>  <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb214-9"><a href="day-11.html#cb214-9"></a>)</span>
+<span id="cb214-10"><a href="day-11.html#cb214-10"></a><span class="kw">names</span>(pred_locations) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="day-11.html#cb215-1"></a><span class="co">## calculate pairwise distance matrices -- be careful with large data</span></span>
+<span id="cb215-2"><a href="day-11.html#cb215-2"></a>locs        &lt;-<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>lat, dat<span class="op">$</span>lon)</span>
+<span id="cb215-3"><a href="day-11.html#cb215-3"></a>D           &lt;-<span class="st"> </span><span class="kw">rdist</span>(locs)</span>
+<span id="cb215-4"><a href="day-11.html#cb215-4"></a>D_unobs     &lt;-<span class="st"> </span><span class="kw">rdist</span>(pred_locations)</span>
+<span id="cb215-5"><a href="day-11.html#cb215-5"></a>D_unobs_obs &lt;-<span class="st"> </span><span class="kw">rdist</span>(pred_locations, locs)</span>
+<span id="cb215-6"><a href="day-11.html#cb215-6"></a></span>
+<span id="cb215-7"><a href="day-11.html#cb215-7"></a>Cov           &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">nrow</span>(dat)) <span class="op">*</span><span class="st"> </span>sigma2 <span class="op">+</span><span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb215-8"><a href="day-11.html#cb215-8"></a>Cov_unobs     &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">nrow</span>(pred_locations)) <span class="op">*</span><span class="st"> </span>sigma2 <span class="op">+</span><span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_unobs <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb215-9"><a href="day-11.html#cb215-9"></a>Cov_unobs_obs &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_unobs_obs <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb215-10"><a href="day-11.html#cb215-10"></a></span>
+<span id="cb215-11"><a href="day-11.html#cb215-11"></a>Cov_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(Cov)</span>
+<span id="cb215-12"><a href="day-11.html#cb215-12"></a></span>
+<span id="cb215-13"><a href="day-11.html#cb215-13"></a><span class="co">## Kriging mean -- note we subtract the mean to get mean 0 then add it back in</span></span>
+<span id="cb215-14"><a href="day-11.html#cb215-14"></a>pred_mean &lt;-<span class="st"> </span>Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv <span class="op">%*%</span><span class="st"> </span>(dat<span class="op">$</span>mean_Tmax <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(dat<span class="op">$</span>mean_Tmax)) <span class="op">+</span><span class="st"> </span><span class="kw">mean</span>(dat<span class="op">$</span>mean_Tmax)</span>
+<span id="cb215-15"><a href="day-11.html#cb215-15"></a></span>
+<span id="cb215-16"><a href="day-11.html#cb215-16"></a><span class="co">## Kriging variance</span></span>
+<span id="cb215-17"><a href="day-11.html#cb215-17"></a>pred_var      &lt;-<span class="st"> </span><span class="kw">diag</span>(Cov_unobs) <span class="op">-</span><span class="st"> </span><span class="kw">diag</span>(Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Cov_unobs_obs))</span>
+<span id="cb215-18"><a href="day-11.html#cb215-18"></a>pred_var_fast &lt;-<span class="st"> </span><span class="kw">diag</span>(Cov_unobs) <span class="op">-</span><span class="st"> </span><span class="kw">rowSums</span>((Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv) <span class="op">*</span><span class="st"> </span>Cov_unobs_obs)</span>
+<span id="cb215-19"><a href="day-11.html#cb215-19"></a></span>
+<span id="cb215-20"><a href="day-11.html#cb215-20"></a><span class="kw">system.time</span>(<span class="kw">diag</span>(Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Cov_unobs_obs)))</span></code></pre></div>
+<pre><code>##    user  system elapsed 
+##   8.401   0.174   8.599</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="day-11.html#cb217-1"></a><span class="kw">system.time</span>(<span class="kw">rowSums</span>((Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv) <span class="op">*</span><span class="st"> </span>Cov_unobs_obs))</span></code></pre></div>
+<pre><code>##    user  system elapsed 
+##   0.120   0.000   0.121</code></pre>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="day-11.html#cb219-1"></a><span class="kw">all.equal</span>(pred_var, pred_var_fast)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="day-11.html#cb221-1"></a>dat_pred &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb221-2"><a href="day-11.html#cb221-2"></a>  <span class="dt">preds =</span> pred_mean,</span>
+<span id="cb221-3"><a href="day-11.html#cb221-3"></a>  <span class="dt">var   =</span> pred_var,</span>
+<span id="cb221-4"><a href="day-11.html#cb221-4"></a>  <span class="dt">lat   =</span> pred_locations<span class="op">$</span>lat,</span>
+<span id="cb221-5"><a href="day-11.html#cb221-5"></a>  <span class="dt">lon   =</span> pred_locations<span class="op">$</span>lon</span>
+<span id="cb221-6"><a href="day-11.html#cb221-6"></a>) </span>
+<span id="cb221-7"><a href="day-11.html#cb221-7"></a></span>
+<span id="cb221-8"><a href="day-11.html#cb221-8"></a><span class="kw">ggplot</span>(dat_pred, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> preds)) <span class="op">+</span></span>
+<span id="cb221-9"><a href="day-11.html#cb221-9"></a><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb221-10"><a href="day-11.html#cb221-10"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb221-11"><a href="day-11.html#cb221-11"></a>               <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb221-12"><a href="day-11.html#cb221-12"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb221-13"><a href="day-11.html#cb221-13"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>) <span class="op">+</span></span>
+<span id="cb221-14"><a href="day-11.html#cb221-14"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span>
+<span id="cb221-15"><a href="day-11.html#cb221-15"></a></span>
+<span id="cb221-16"><a href="day-11.html#cb221-16"></a><span class="kw">ggplot</span>(dat_pred, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> var)) <span class="op">+</span></span>
+<span id="cb221-17"><a href="day-11.html#cb221-17"></a><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb221-18"><a href="day-11.html#cb221-18"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb221-19"><a href="day-11.html#cb221-19"></a>               <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb221-20"><a href="day-11.html#cb221-20"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb221-21"><a href="day-11.html#cb221-21"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction variance in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb221-22"><a href="day-11.html#cb221-22"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-106-1.png" width="49%" /><img src="STAT-5413_files/figure-html/unnamed-chunk-106-2.png" width="49%" /></p>
+<div id="kriging-equations-with-mean-mu-0" class="section level3" number="11.4.1">
+<h3 number="11.4.1"><span class="header-section-number">11.4.1</span> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></h3>
+<ul>
+<li><strong>Assumptions – BLUP</strong>
+<ul>
+<li>We will assume we are wanting predictions at a single site <span class="math inline">\(\mathbf{s}_0\)</span></li>
+<li>Without loss of generality, assume that <span class="math inline">\(E(y(\mathbf{s})) = 0\)</span> – can always subtract the mean and add it back in (see code above)</li>
+<li><span class="math inline">\(Cov(\mathbf{y}) = \boldsymbol{\Sigma}\)</span> is the covariance of the data</li>
+<li><span class="math inline">\(Cov(y(\mathbf{s}_0), y(\mathbf{s}_i)) = \boldsymbol{\Sigma}_{0i}\)</span></li>
+<li>The optimal prediction at unobserved location <span class="math inline">\(\mathbf{s}_0\)</span> is a <strong>linear combination of the observed sites</strong> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(\hat{y}(\mathbf{s}_0) = \sum_{i=1}^n w_i y(\mathbf{s}_i)\)</span> for a set of unknown weights <span class="math inline">\(w_i\)</span></li>
+<li>The optimal predictor is <strong>unbiased</strong> <span class="math inline">\(\Rightarrow\)</span> <span class="math inline">\(E(\hat{y}(\mathbf{s}_0)) = 0\)</span></li>
+</ul></li>
+</ul>
+<p>Therefore, unbiasedness implies that <span class="math inline">\(E(\hat{y}(\mathbf{s}_0)) = \sum_{i=1}^n w_i E(y(\mathbf{s}_i)) = \sum_{i=1}^n w_i 0 = 0\)</span>. Because <span class="math inline">\(\mu = 0\)</span>, this is trivially easy and we only need to minimize the variance to have the BLUP.</p>
+<p>The MSE is</p>
+<p><span class="math display">\[
+\begin{align*}
+MSE &amp; = E((\hat{y}(\mathbf{s}_0) - y(\mathbf{s}_0))^2) \\
+&amp; = E(\hat{y}(\mathbf{s}_0)^2 - 2 \hat{y}(\mathbf{s}_0) y(\mathbf{s}_0) + y(\mathbf{s}_0)^2) \\
+&amp; = E(\hat{y}(\mathbf{s}_0)^2) - 2 E(\hat{y}(\mathbf{s}_0) y(\mathbf{s}_0)) + E(y(\mathbf{s}_0)^2) 
+\end{align*}
+\]</span></p>
+<p>Because <span class="math inline">\(\mu = 0\)</span>, we have <span class="math inline">\(E(\hat{y}(\mathbf{s}_0)^2) = Var(\hat{y}(\mathbf{s}_0))\)</span>, <span class="math inline">\(E(y(\mathbf{s}_0)^2) = Var(y(\mathbf{s}_0))\)</span>, and <span class="math inline">\(E(\hat{y}(\mathbf{s}_0)y(\mathbf{s}_0)) = Cov(\hat{y}(\mathbf{s}_0), y(\mathbf{s}_0))\)</span>. Thus, the MSE is</p>
+<p><span class="math display">\[\begin{align*}
+MSE &amp; = E(\hat{y}(\mathbf{s}_0)^2) - 2 E(\hat{y}(\mathbf{s}_0) y(\mathbf{s}_0)) + E(y(\mathbf{s}_0)^2) \\
+&amp; = Var(\hat{y}(\mathbf{s}_0)) - 2 Cov(\hat{y}(\mathbf{s}_0), y(\mathbf{s}_0)) + Var(y(\mathbf{s}_0)) \\
+&amp; Var \left( \sum_{i=1}^n w_i y(\mathbf{s}_i) \right) - 2 Cov( \sum_{i=1}^n w_i y(\mathbf{s}_i), y(\mathbf{s}_0)) + \Sigma_0 \\
+&amp; = \sum_{i=1}^n \sum_{j=1}^n w_i w_j \Sigma_{ij} - 2 \sum_{i=1}^n w_i \Sigma_{0i}
+ + \Sigma_{00} \\
+&amp; = \mathbf{w}&#39; \boldsymbol{\Sigma} \mathbf{w} - 2 \mathbf{w}&#39; \boldsymbol{\Sigma}_{0} + \Sigma_{00}
+\end{align*}\]</span></p>
+<p>To minimize the MSE, we take a derivative with respect to the Kriging weights <span class="math inline">\(\mathbf{w}\)</span> and solve the equation when set equal to 0</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial}{\partial \mathbf{w}} MSE &amp; = \frac{\partial}{\partial \mathbf{w}} \mathbf{w}&#39; \boldsymbol{\Sigma} \mathbf{w} - 2 \mathbf{w}&#39; \boldsymbol{\Sigma}_{0} + \Sigma_{00} \\
+&amp; = 2 \boldsymbol{\Sigma} \mathbf{w} - 2 \boldsymbol{\Sigma}_{0}
+\end{align*}\]</span></p>
+<p>which has solution <span class="math inline">\(\mathbf{w} = \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_0\)</span>.</p>
+</div>
+<div id="kriging-equations-with-unknown-mean" class="section level3" number="11.4.2">
+<h3 number="11.4.2"><span class="header-section-number">11.4.2</span> Kriging Equations with unknown mean</h3>
+<p>First, we assume the mean as the form <span class="math inline">\(\mu(\mathbf{s}) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}\)</span> and can the regression coefficents can be estimated from the MLE (take derivative of the log-likelhood and set equal to 0 – <a href="https://en.wikipedia.org/wiki/Generalized_least_squares">generalized least squares</a>) as <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}&#39; \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}&#39; \boldsymbol{\Sigma}^{-1} \mathbf{y}\)</span>. We also assume that the covariate value <span class="math inline">\(\mathbf{x}(\mathbf{s}_0)\)</span> at the prediction location is known</p>
+<p>The Kriging estimate is</p>
+<p><span class="math display">\[
+\begin{align*}
+\hat{y}(\mathbf{s}_0) = \hat{\mu}(\mathbf{s}_0) + \boldsymbol{\Sigma}_0 \boldsymbol{\Sigma}^{-1} (y(\mathbf{s}) - \hat{\mu}(\mathbf{s})).
+\end{align*}
+\]</span></p>
+<p>which has variance</p>
+<p><span class="math display">\[
+\begin{align*}
+Var(\hat{y}(\mathbf{s}_0)) = \boldsymbol{\Sigma}_{00} - \boldsymbol{\Sigma}_0 \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_0,
+\end{align*}
+\]</span></p>
+<p>Where <span class="math inline">\(\boldsymbol{\Sigma}_{00}\)</span> is the unconditional variance of the process at location <span class="math inline">\(\mathbf{s}_0\)</span>. From this equation, we see that the Kriging variance is smaller than the unconditional variance.</p>
+<p>We generate the predictive maps from the example above using the Universal Kriging formula</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="day-11.html#cb222-1"></a>fit_coef &lt;-<span class="st"> </span>geoR<span class="op">::</span><span class="kw">likfit</span>(</span>
+<span id="cb222-2"><a href="day-11.html#cb222-2"></a>    <span class="dt">data         =</span> dat<span class="op">$</span>mean_Tmax,</span>
+<span id="cb222-3"><a href="day-11.html#cb222-3"></a>    <span class="dt">trend        =</span> <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>lat <span class="op">+</span><span class="st"> </span>dat<span class="op">$</span>lon,</span>
+<span id="cb222-4"><a href="day-11.html#cb222-4"></a>    <span class="dt">coords       =</span> <span class="kw">cbind</span>(dat<span class="op">$</span>lat, dat<span class="op">$</span>lon),</span>
+<span id="cb222-5"><a href="day-11.html#cb222-5"></a>    <span class="dt">cov.model    =</span> <span class="st">&quot;exponential&quot;</span>,</span>
+<span id="cb222-6"><a href="day-11.html#cb222-6"></a>    <span class="dt">ini.cov.pars =</span> <span class="kw">c</span>(<span class="kw">var</span>(dat<span class="op">$</span>mean_Tmax), <span class="dv">1</span>) </span>
+<span id="cb222-7"><a href="day-11.html#cb222-7"></a>)</span></code></pre></div>
+<pre><code>## kappa not used for the exponential correlation function
+## ---------------------------------------------------------------
+## likfit: likelihood maximisation using the function optim.
+## likfit: Use control() to pass additional
+##          arguments for the maximisation function.
+##         For further details see documentation for optim.
+## likfit: It is highly advisable to run this function several
+##         times with different initial values for the parameters.
+## likfit: WARNING: This step can be time demanding!
+## ---------------------------------------------------------------
+## likfit: end of numerical maximisation.</code></pre>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="day-11.html#cb224-1"></a>sigma2 &lt;-<span class="st"> </span>fit_coef<span class="op">$</span>nugget</span>
+<span id="cb224-2"><a href="day-11.html#cb224-2"></a>tau2   &lt;-<span class="st"> </span>fit_coef<span class="op">$</span>sigmasq</span>
+<span id="cb224-3"><a href="day-11.html#cb224-3"></a>phi    &lt;-<span class="st"> </span>fit_coef<span class="op">$</span>phi</span>
+<span id="cb224-4"><a href="day-11.html#cb224-4"></a>beta   &lt;-<span class="st"> </span>fit_coef<span class="op">$</span>beta</span>
+<span id="cb224-5"><a href="day-11.html#cb224-5"></a></span>
+<span id="cb224-6"><a href="day-11.html#cb224-6"></a><span class="co">## prediction locations</span></span>
+<span id="cb224-7"><a href="day-11.html#cb224-7"></a>pred_locations &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb224-8"><a href="day-11.html#cb224-8"></a>  <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length.out =</span> <span class="dv">100</span>),</span>
+<span id="cb224-9"><a href="day-11.html#cb224-9"></a>  <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb224-10"><a href="day-11.html#cb224-10"></a>)</span>
+<span id="cb224-11"><a href="day-11.html#cb224-11"></a><span class="kw">names</span>(pred_locations) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;lon&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="day-11.html#cb225-1"></a><span class="co">## calculate pairwise distance matrices -- be careful with large data</span></span>
+<span id="cb225-2"><a href="day-11.html#cb225-2"></a>locs        &lt;-<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>lat, dat<span class="op">$</span>lon)</span>
+<span id="cb225-3"><a href="day-11.html#cb225-3"></a>D           &lt;-<span class="st"> </span><span class="kw">rdist</span>(locs)</span>
+<span id="cb225-4"><a href="day-11.html#cb225-4"></a>D_unobs     &lt;-<span class="st"> </span><span class="kw">rdist</span>(pred_locations)</span>
+<span id="cb225-5"><a href="day-11.html#cb225-5"></a>D_unobs_obs &lt;-<span class="st"> </span><span class="kw">rdist</span>(pred_locations, locs)</span>
+<span id="cb225-6"><a href="day-11.html#cb225-6"></a></span>
+<span id="cb225-7"><a href="day-11.html#cb225-7"></a>Cov           &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">nrow</span>(dat)) <span class="op">*</span><span class="st"> </span>sigma2 <span class="op">+</span><span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb225-8"><a href="day-11.html#cb225-8"></a>Cov_unobs     &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">nrow</span>(pred_locations)) <span class="op">*</span><span class="st"> </span>sigma2 <span class="op">+</span><span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_unobs <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb225-9"><a href="day-11.html#cb225-9"></a>Cov_unobs_obs &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_unobs_obs <span class="op">/</span><span class="st"> </span>phi)</span>
+<span id="cb225-10"><a href="day-11.html#cb225-10"></a></span>
+<span id="cb225-11"><a href="day-11.html#cb225-11"></a>Cov_inv &lt;-<span class="st"> </span><span class="kw">solve</span>(Cov)</span>
+<span id="cb225-12"><a href="day-11.html#cb225-12"></a></span>
+<span id="cb225-13"><a href="day-11.html#cb225-13"></a><span class="co">## Kriging mean -- note we subtract the mean to get mean 0 then add it back in</span></span>
+<span id="cb225-14"><a href="day-11.html#cb225-14"></a>pred_mean &lt;-<span class="st"> </span>Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv <span class="op">%*%</span><span class="st"> </span>(dat<span class="op">$</span>mean_Tmax <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, locs) <span class="op">%*%</span><span class="st"> </span>beta) <span class="op">+</span><span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">cbind</span>(<span class="dv">1</span>, pred_locations)) <span class="op">%*%</span><span class="st"> </span>beta</span>
+<span id="cb225-15"><a href="day-11.html#cb225-15"></a></span>
+<span id="cb225-16"><a href="day-11.html#cb225-16"></a><span class="co">## Kriging variance -- fast form</span></span>
+<span id="cb225-17"><a href="day-11.html#cb225-17"></a>pred_var &lt;-<span class="st"> </span><span class="kw">diag</span>(Cov_unobs) <span class="op">-</span><span class="st"> </span><span class="kw">rowSums</span>((Cov_unobs_obs <span class="op">%*%</span><span class="st"> </span>Cov_inv) <span class="op">*</span><span class="st"> </span>Cov_unobs_obs)</span></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="day-11.html#cb226-1"></a>dat_pred &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb226-2"><a href="day-11.html#cb226-2"></a>  <span class="dt">preds =</span> pred_mean,</span>
+<span id="cb226-3"><a href="day-11.html#cb226-3"></a>  <span class="dt">var   =</span> pred_var,</span>
+<span id="cb226-4"><a href="day-11.html#cb226-4"></a>  <span class="dt">lat   =</span> pred_locations<span class="op">$</span>lat,</span>
+<span id="cb226-5"><a href="day-11.html#cb226-5"></a>  <span class="dt">lon   =</span> pred_locations<span class="op">$</span>lon</span>
+<span id="cb226-6"><a href="day-11.html#cb226-6"></a>) </span>
+<span id="cb226-7"><a href="day-11.html#cb226-7"></a></span>
+<span id="cb226-8"><a href="day-11.html#cb226-8"></a><span class="kw">ggplot</span>(dat_pred, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> preds)) <span class="op">+</span></span>
+<span id="cb226-9"><a href="day-11.html#cb226-9"></a><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb226-10"><a href="day-11.html#cb226-10"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb226-11"><a href="day-11.html#cb226-11"></a>               <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb226-12"><a href="day-11.html#cb226-12"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb226-13"><a href="day-11.html#cb226-13"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>) <span class="op">+</span></span>
+<span id="cb226-14"><a href="day-11.html#cb226-14"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span>
+<span id="cb226-15"><a href="day-11.html#cb226-15"></a></span>
+<span id="cb226-16"><a href="day-11.html#cb226-16"></a><span class="kw">ggplot</span>(dat_pred, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> var)) <span class="op">+</span></span>
+<span id="cb226-17"><a href="day-11.html#cb226-17"></a><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb226-18"><a href="day-11.html#cb226-18"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb226-19"><a href="day-11.html#cb226-19"></a>               <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb226-20"><a href="day-11.html#cb226-20"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb226-21"><a href="day-11.html#cb226-21"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction variance in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb226-22"><a href="day-11.html#cb226-22"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-110-1.png" width="49%" /><img src="STAT-5413_files/figure-html/unnamed-chunk-110-2.png" width="49%" /></p>
 
 </div>
 </div>
