@@ -71,6 +71,12 @@ dat %>%
 ```
 
 * The histogram looks non-normal. Is this a problem?
+    * No. What matters are the residuals
+    
+```{r}
+hist(resid(lm(dat$mean_Tmax ~ dat$lat)))
+```
+
 
 ### Fit the maximum likelihood estimate using the _geoR_ package
 
@@ -101,7 +107,7 @@ phi    <- fit$phi
 
 
 d   <- seq(0, 150, length.out = 1000)
-cov <- ifelse(d == 0, tau2, 0) + tau2 * exp( -  d / phi)
+cov <- ifelse(d == 0, sigma2, 0) + tau2 * exp( -  d / phi)
 cor <- cov / cov[1]
 data.frame(
     d   = d[-1], 
@@ -160,7 +166,7 @@ phi    <- fit_coef$phi
 
 
 d   <- seq(0, 150, length.out = 1000)
-cov <- ifelse(d == 0, tau2, 0) + tau2 * exp( -  d / phi)
+cov <- ifelse(d == 0, sigma2, 0) + tau2 * exp( -  d / phi)
 cor <- cov / cov[1]
 data.frame(
     d   = d[-1], 
@@ -269,7 +275,7 @@ summary(fit)$BIC
 
 * Plot the estimated covariance/correaltion function
 
-Note: the _gls_ function partitions the variance using a single overall variance $\sigma^2_{gls}$ and a proportion constant $\rho \in (0, 1)$ so that our nugget $sigma^2 = \rho * \sigma^2_{gls}$ and our partial sill $\tau^2 = (1 - \rho) * \sigma^2_{gls}$.
+Note: the _gls_ function partitions the variance using a single overall variance $\sigma^2_{gls}$ and a proportion constant $\rho \in (0, 1)$ so that our nugget $\sigma^2 = \rho * \sigma^2_{gls}$ and our partial sill $\tau^2 = (1 - \rho) * \sigma^2_{gls}$.
 
 ```{r}
 ## extract the model parameters from the gls fit
@@ -281,7 +287,7 @@ tau2   <- fit$sigma^2 * (1-rho)
 
 
 d   <- seq(0, 150, length.out = 1000)
-cov <- ifelse(d == 0, tau2, 0) + tau2 * exp( -  d / phi)
+cov <- ifelse(d == 0, sigma2, 0) + tau2 * exp( -  d / phi)
 cor <- cov / cov[1]
 data.frame(
     d   = d[-1], 
@@ -340,7 +346,7 @@ tau2   <- fit_coef$sigma^2 * (1-rho)
 
 
 d   <- seq(0, 150, length.out = 1000)
-cov <- ifelse(d == 0, tau2, 0) + tau2 * exp( -  d / phi)
+cov <- ifelse(d == 0, sigma2, 0) + tau2 * exp( -  d / phi)
 cor <- cov / cov[1]
 data.frame(
     d   = d[-1], 
@@ -500,7 +506,7 @@ where $\boldsymbol{\Sigma}_{unobs} = \{ Cov \left( y(\mathbf{s}_{unobs_i}),  y(\
 
 $$
 \begin{align}
-\mathbf{y}_{unobs} | \mathbf{y}_{obs} & \sim \operatorname{N} \left( \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \mathbf{y}_{obs}, \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \boldsymbol{\Sigma}_{obs,unobs} \right)
+\mathbf{y}_{unobs} | \mathbf{y}_{obs} & \sim \operatorname{N} \left( \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \mathbf{y}_{obs}, \boldsymbol{\Sigma}_{unobs,unobs} - \boldsymbol{\Sigma}_{unobs,obs} \boldsymbol{\Sigma}_{obs}^{-1} \boldsymbol{\Sigma}_{obs,unobs} \right)
 \end{align}
 $$
 
@@ -544,12 +550,15 @@ Cov_unobs     <- diag(nrow(pred_locations)) * sigma2 + tau2 * exp( - D_unobs / p
 Cov_unobs_obs <- tau2 * exp( - D_unobs_obs / phi)
 
 Cov_inv <- solve(Cov)
+Cov_inv <- chol2inv(chol(Cov))
 
 ## Kriging mean -- note we subtract the mean to get mean 0 then add it back in
 pred_mean <- Cov_unobs_obs %*% Cov_inv %*% (dat$mean_Tmax - mean(dat$mean_Tmax)) + mean(dat$mean_Tmax)
 
+pred_mean_fast <- Cov_unobs_obs %*% (Cov_inv %*% (dat$mean_Tmax - mean(dat$mean_Tmax))) + mean(dat$mean_Tmax)
+
 ## Kriging variance
-pred_var      <- diag(Cov_unobs) - diag(Cov_unobs_obs %*% Cov_inv %*% t(Cov_unobs_obs))
+pred_var      <- diag(Cov_unobs - Cov_unobs_obs %*% Cov_inv %*% t(Cov_unobs_obs))
 pred_var_fast <- diag(Cov_unobs) - rowSums((Cov_unobs_obs %*% Cov_inv) * Cov_unobs_obs)
 
 system.time(diag(Cov_unobs_obs %*% Cov_inv %*% t(Cov_unobs_obs)))

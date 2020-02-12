@@ -33,7 +33,6 @@
 <link rel="prev" href="day-5.html"/>
 <link rel="next" href="day-7.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<script src="libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -65,26 +64,25 @@
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -93,9 +91,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -145,15 +143,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a>
-<ul>
+<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a><ul>
 <li class="chapter" data-level="1.1" data-path="day-1.html"><a href="day-1.html#notation"><i class="fa fa-check"></i><b>1.1</b> Notation</a></li>
-<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a>
-<ul>
+<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="day-1.html"><a href="day-1.html#example-linear-regression"><i class="fa fa-check"></i><b>1.2.1</b> Example: linear regression</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a>
-<ul>
+<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="day-1.html"><a href="day-1.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>1.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
 <li class="chapter" data-level="1.3.2" data-path="day-1.html"><a href="day-1.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>1.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
 <li class="chapter" data-level="1.3.3" data-path="day-1.html"><a href="day-1.html#data-model"><i class="fa fa-check"></i><b>1.3.3</b> Data Model</a></li>
@@ -163,127 +158,102 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3.7" data-path="day-1.html"><a href="day-1.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>1.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a>
-<ul>
+<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a><ul>
 <li class="chapter" data-level="2.1" data-path="day-2.html"><a href="day-2.html#spatial-data"><i class="fa fa-check"></i><b>2.1</b> Spatial Data</a></li>
-<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a>
-<ul>
+<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="day-2.html"><a href="day-2.html#geostatistical-data"><i class="fa fa-check"></i><b>2.2.1</b> Geostatistical data</a></li>
 <li class="chapter" data-level="2.2.2" data-path="day-2.html"><a href="day-2.html#areal-data"><i class="fa fa-check"></i><b>2.2.2</b> Areal data</a></li>
 <li class="chapter" data-level="2.2.3" data-path="day-2.html"><a href="day-2.html#point-process-data"><i class="fa fa-check"></i><b>2.2.3</b> Point process data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a>
-<ul>
+<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a><ul>
 <li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#anouncements"><i class="fa fa-check"></i><b>3.1</b> Anouncements</a></li>
 <li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Files for spatial data</a></li>
 <li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a></li>
-<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a>
-<ul>
+<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.4.1</b> Spatial visualization using <em>fields</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a>
-<ul>
+<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a><ul>
 <li class="chapter" data-level="4.1" data-path="day-4.html"><a href="day-4.html#announcements"><i class="fa fa-check"></i><b>4.1</b> Announcements</a></li>
-<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a>
-<ul>
+<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="day-4.html"><a href="day-4.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>4.2.1</b> Spatial visualization using <em>fields</em></a></li>
 <li class="chapter" data-level="4.2.2" data-path="day-4.html"><a href="day-4.html#in-class-activity"><i class="fa fa-check"></i><b>4.2.2</b> In Class Activity:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a>
-<ul>
+<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="day-4.html"><a href="day-4.html#interactive-display-of-data"><i class="fa fa-check"></i><b>4.3.1</b> Interactive display of data</a></li>
 <li class="chapter" data-level="4.3.2" data-path="day-4.html"><a href="day-4.html#animations"><i class="fa fa-check"></i><b>4.3.2</b> Animations</a></li>
 <li class="chapter" data-level="4.3.3" data-path="day-4.html"><a href="day-4.html#interactive-plotting-using-plotly"><i class="fa fa-check"></i><b>4.3.3</b> Interactive plotting using <em>plotly</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a>
-<ul>
+<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a><ul>
 <li class="chapter" data-level="5.1" data-path="day-5.html"><a href="day-5.html#announcements-1"><i class="fa fa-check"></i><b>5.1</b> Announcements</a></li>
-<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a>
-<ul>
+<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="day-5.html"><a href="day-5.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2.1</b> Gaussian processes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a>
-<ul>
+<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a><ul>
 <li class="chapter" data-level="6.1" data-path="day-6.html"><a href="day-6.html#announcements-2"><i class="fa fa-check"></i><b>6.1</b> Announcements</a></li>
 <li class="chapter" data-level="6.2" data-path="day-6.html"><a href="day-6.html#gaussian-process-assumptions"><i class="fa fa-check"></i><b>6.2</b> Gaussian process assumptions</a></li>
-<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a>
-<ul>
+<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a><ul>
 <li class="chapter" data-level="6.3.1" data-path="day-6.html"><a href="day-6.html#data-model-1"><i class="fa fa-check"></i><b>6.3.1</b> Data Model</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a>
-<ul>
+<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a><ul>
 <li class="chapter" data-level="7.1" data-path="day-7.html"><a href="day-7.html#common-isotropic-correlation-functions"><i class="fa fa-check"></i><b>7.1</b> Common isotropic correlation functions</a></li>
-<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a>
-<ul>
+<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a><ul>
 <li class="chapter" data-level="7.2.1" data-path="day-7.html"><a href="day-7.html#semivariograms-and-variograms"><i class="fa fa-check"></i><b>7.2.1</b> Semivariograms and variograms</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a>
-<ul>
+<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a><ul>
 <li class="chapter" data-level="8.1" data-path="day-8.html"><a href="day-8.html#announcements-3"><i class="fa fa-check"></i><b>8.1</b> Announcements</a></li>
-<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a>
-<ul>
+<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process-using-variograms"><i class="fa fa-check"></i><b>8.2.1</b> Estimation of the spatial process using variograms</a></li>
 <li class="chapter" data-level="8.2.2" data-path="day-8.html"><a href="day-8.html#maximum-likelihood"><i class="fa fa-check"></i><b>8.2.2</b> Maximum Likelihood</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="day-8.html"><a href="day-8.html#maximum-likelihood-1"><i class="fa fa-check"></i><b>8.3</b> Maximum likelihood</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a>
-<ul>
+<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a><ul>
 <li class="chapter" data-level="9.1" data-path="day-9.html"><a href="day-9.html#announcements-4"><i class="fa fa-check"></i><b>9.1</b> Announcements</a></li>
 <li class="chapter" data-level="9.2" data-path="day-9.html"><a href="day-9.html#asymptotic-properties-of-the-mle"><i class="fa fa-check"></i><b>9.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a>
-<ul>
+<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a><ul>
 <li class="chapter" data-level="10.1" data-path="day-10.html"><a href="day-10.html#announcements-5"><i class="fa fa-check"></i><b>10.1</b> Announcements</a></li>
 <li class="chapter" data-level="10.2" data-path="day-10.html"><a href="day-10.html#asymptotic-properties-of-the-mle-1"><i class="fa fa-check"></i><b>10.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
-<ul>
+<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a><ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
 <li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#example-spatial-analysis"><i class="fa fa-check"></i><b>11.2</b> Example spatial analysis</a></li>
-<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a>
-<ul>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="day-11.html"><a href="day-11.html#fit-the-maximum-likelihood-estimate-using-the-geor-package"><i class="fa fa-check"></i><b>11.3.1</b> Fit the maximum likelihood estimate using the <em>geoR</em> package</a></li>
 <li class="chapter" data-level="11.3.2" data-path="day-11.html"><a href="day-11.html#fitting-a-spatial-model-using-the-nlme-package"><i class="fa fa-check"></i><b>11.3.2</b> Fitting a spatial model using the <em>nlme</em> package</a></li>
 <li class="chapter" data-level="11.3.3" data-path="day-11.html"><a href="day-11.html#model-fitting-with-autokrige-function"><i class="fa fa-check"></i><b>11.3.3</b> model fitting with <em>autokrige</em> function</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a>
-<ul>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a><ul>
 <li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-mean-mu-0"><i class="fa fa-check"></i><b>11.4.1</b> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></a></li>
 <li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-unknown-mean"><i class="fa fa-check"></i><b>11.4.2</b> Kriging Equations with unknown mean</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
-<ul>
+<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a><ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
 <li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>12.2</b> Introduction to MCMC</a></li>
 <li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>12.3</b> Example: Simple linear regression</a></li>
-<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a>
-<ul>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a><ul>
 <li class="chapter" data-level="12.4.1" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>12.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
 <li class="chapter" data-level="12.4.2" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>12.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
 <li class="chapter" data-level="12.4.3" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>12.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a>
-<ul>
+<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a><ul>
 <li class="chapter" data-level="12.5.1" data-path="day-12.html"><a href="day-12.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>12.5.1</b> General recommendations for writing MCMC software</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
-<ul>
+<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a><ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
 <li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis Algorithm</a></li>
 <li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-proposal-distribution"><i class="fa fa-check"></i><b>13.3</b> The proposal distribution</a></li>
 <li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#the-metropolis-update"><i class="fa fa-check"></i><b>13.4</b> The Metropolis update</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
-<ul>
+<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a><ul>
 <li class="chapter" data-level="14.1" data-path="day-14.html"><a href="day-14.html#announcements-9"><i class="fa fa-check"></i><b>14.1</b> Announcements</a></li>
 <li class="chapter" data-level="14.2" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>14.2</b> The Metropolis-Hastings Algorithm</a></li>
 <li class="chapter" data-level="14.3" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>14.3</b> The Metropolis-Hastings algorithm</a></li>
@@ -293,120 +263,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14.7" data-path="day-14.html"><a href="day-14.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>14.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
 <li class="chapter" data-level="14.8" data-path="day-14.html"><a href="day-14.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>14.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a>
-<ul>
+<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a><ul>
 <li class="chapter" data-level="15.1" data-path="day-15.html"><a href="day-15.html#announcements-10"><i class="fa fa-check"></i><b>15.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a>
-<ul>
+<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a><ul>
 <li class="chapter" data-level="16.1" data-path="day-16.html"><a href="day-16.html#announcements-11"><i class="fa fa-check"></i><b>16.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a>
-<ul>
+<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a><ul>
 <li class="chapter" data-level="17.1" data-path="day-17.html"><a href="day-17.html#announcements-12"><i class="fa fa-check"></i><b>17.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a>
-<ul>
+<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a><ul>
 <li class="chapter" data-level="18.1" data-path="day-18.html"><a href="day-18.html#announcements-13"><i class="fa fa-check"></i><b>18.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a>
-<ul>
+<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a><ul>
 <li class="chapter" data-level="19.1" data-path="day-19.html"><a href="day-19.html#announcements-14"><i class="fa fa-check"></i><b>19.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a>
-<ul>
+<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a><ul>
 <li class="chapter" data-level="20.1" data-path="day-20.html"><a href="day-20.html#announcements-15"><i class="fa fa-check"></i><b>20.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a>
-<ul>
+<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a><ul>
 <li class="chapter" data-level="21.1" data-path="day-21.html"><a href="day-21.html#announcements-16"><i class="fa fa-check"></i><b>21.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a>
-<ul>
+<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a><ul>
 <li class="chapter" data-level="22.1" data-path="day-22.html"><a href="day-22.html#announcements-17"><i class="fa fa-check"></i><b>22.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a>
-<ul>
+<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a><ul>
 <li class="chapter" data-level="23.1" data-path="day-23.html"><a href="day-23.html#announcements-18"><i class="fa fa-check"></i><b>23.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="day-24.html"><a href="day-24.html"><i class="fa fa-check"></i><b>24</b> Day 24</a>
-<ul>
+<li class="chapter" data-level="24" data-path="day-24.html"><a href="day-24.html"><i class="fa fa-check"></i><b>24</b> Day 24</a><ul>
 <li class="chapter" data-level="24.1" data-path="day-24.html"><a href="day-24.html#announcements-19"><i class="fa fa-check"></i><b>24.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="25" data-path="day-25.html"><a href="day-25.html"><i class="fa fa-check"></i><b>25</b> Day 25</a>
-<ul>
+<li class="chapter" data-level="25" data-path="day-25.html"><a href="day-25.html"><i class="fa fa-check"></i><b>25</b> Day 25</a><ul>
 <li class="chapter" data-level="25.1" data-path="day-25.html"><a href="day-25.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a>
-<ul>
+<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a><ul>
 <li class="chapter" data-level="26.1" data-path="day-26.html"><a href="day-26.html#announcements-21"><i class="fa fa-check"></i><b>26.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a>
-<ul>
+<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a><ul>
 <li class="chapter" data-level="27.1" data-path="day-27.html"><a href="day-27.html#announcements-22"><i class="fa fa-check"></i><b>27.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a>
-<ul>
+<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a><ul>
 <li class="chapter" data-level="28.1" data-path="day-28.html"><a href="day-28.html#announcements-23"><i class="fa fa-check"></i><b>28.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a>
-<ul>
+<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a>
-<ul>
+<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a>
-<ul>
+<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a>
-<ul>
+<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a>
-<ul>
+<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a>
-<ul>
+<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a>
-<ul>
+<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a><ul>
 <li class="chapter" data-level="35.1" data-path="day-35.html"><a href="day-35.html#announcements-30"><i class="fa fa-check"></i><b>35.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a>
-<ul>
+<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a><ul>
 <li class="chapter" data-level="36.1" data-path="day-36.html"><a href="day-36.html#announcements-31"><i class="fa fa-check"></i><b>36.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a>
-<ul>
+<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a><ul>
 <li class="chapter" data-level="37.1" data-path="day-37.html"><a href="day-37.html#announcements-32"><i class="fa fa-check"></i><b>37.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a>
-<ul>
+<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a><ul>
 <li class="chapter" data-level="38.1" data-path="day-38.html"><a href="day-38.html#announcements-33"><i class="fa fa-check"></i><b>38.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a>
-<ul>
+<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a><ul>
 <li class="chapter" data-level="39.1" data-path="day-39.html"><a href="day-39.html#announcements-34"><i class="fa fa-check"></i><b>39.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a>
-<ul>
+<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a><ul>
 <li class="chapter" data-level="40.1" data-path="day-40.html"><a href="day-40.html#announcements-35"><i class="fa fa-check"></i><b>40.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a>
-<ul>
+<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a><ul>
 <li class="chapter" data-level="41.1" data-path="day-41.html"><a href="day-41.html#announcements-36"><i class="fa fa-check"></i><b>41.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a>
-<ul>
+<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a><ul>
 <li class="chapter" data-level="42.1" data-path="day-42.html"><a href="day-42.html#announcements-37"><i class="fa fa-check"></i><b>42.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a>
-<ul>
+<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a><ul>
 <li class="chapter" data-level="43.1" data-path="day-43.html"><a href="day-43.html#announcements-38"><i class="fa fa-check"></i><b>43.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -430,21 +371,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="day-6" class="section level1" number="6">
-<h1 number="6"><span class="header-section-number">6</span> Day 6</h1>
-<div id="announcements-2" class="section level2" number="6.1">
-<h2 number="6.1"><span class="header-section-number">6.1</span> Announcements</h2>
+<div id="day-6" class="section level1">
+<h1><span class="header-section-number">6</span> Day 6</h1>
+<div id="announcements-2" class="section level2">
+<h2><span class="header-section-number">6.1</span> Announcements</h2>
 <ul>
 <li>Assigned reading: <a href="https://github.com/jtipton25/STAT-5413/blob/master/readings/MODEL%20SELECTION%20FOR%20GEOSTATISTICAL%20MODELS.pdf">Model Selection for Geostatistical Models</a></li>
 </ul>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="day-6.html#cb113-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb113-2"><a href="day-6.html#cb113-2"></a><span class="kw">library</span>(fields)</span>
-<span id="cb113-3"><a href="day-6.html#cb113-3"></a><span class="kw">library</span>(mvnfast)</span>
-<span id="cb113-4"><a href="day-6.html#cb113-4"></a><span class="kw">library</span>(gstat)</span>
-<span id="cb113-5"><a href="day-6.html#cb113-5"></a><span class="kw">library</span>(sp)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb113-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb113-3" data-line-number="3"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb113-4" data-line-number="4"><span class="kw">library</span>(gstat)</a>
+<a class="sourceLine" id="cb113-5" data-line-number="5"><span class="kw">library</span>(sp)</a></code></pre></div>
 </div>
-<div id="gaussian-process-assumptions" class="section level2" number="6.2">
-<h2 number="6.2"><span class="header-section-number">6.2</span> Gaussian process assumptions</h2>
+<div id="gaussian-process-assumptions" class="section level2">
+<h2><span class="header-section-number">6.2</span> Gaussian process assumptions</h2>
 <ul>
 <li><p>To fit a Gaussian process, we have to make assumptions</p>
 <ul>
@@ -472,7 +413,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="day-6.html#cb114-1"></a>knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;covariance-shift.jpg&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;covariance-shift.jpg&quot;</span>))</a></code></pre></div>
 <p><img src="images/covariance-shift.jpg" width="2016" /></p>
 <ul>
 <li>Can you think of a process that is not stationary?</li>
@@ -482,7 +423,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- ``` -->
 <ul>
 <li><p>Note: for Gaussian processes, a weak stationarity implies strong stationarity.</p></li>
-<li><p><strong>Isotropy</strong></p>
+<li><strong>Isotropy</strong>
 <ul>
 <li>A covariance function is isotropic if it is invariant to direction and rotation.</li>
 <li><span class="math inline">\(C\left( y(\mathbf{s}_i), y(\mathbf{s}_j) \right) = C(d_{ij})\)</span> where <span class="math inline">\(d_{ij} = \|\mathbf{s}_i - \mathbf{s}_j\|\)</span> is the distance (typically Euclidean) between <span class="math inline">\(\mathbf{s}_i\)</span> and <span class="math inline">\(\mathbf{s}_j\)</span>
@@ -497,19 +438,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Can you think of a process that is anisotropic?</li>
 </ul>
 </div>
-<div id="recall-hierachical-modeling" class="section level2" number="6.3">
-<h2 number="6.3"><span class="header-section-number">6.3</span> Recall Hierachical modeling</h2>
-<div id="data-model-1" class="section level3" number="6.3.1">
-<h3 number="6.3.1"><span class="header-section-number">6.3.1</span> Data Model</h3>
+<div id="recall-hierachical-modeling" class="section level2">
+<h2><span class="header-section-number">6.3</span> Recall Hierachical modeling</h2>
+<div id="data-model-1" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Data Model</h3>
 <p><span class="math display" id="eq:data">\[\begin{align*}
 y(\mathbf{s}) &amp; = z(\mathbf{s}) + \varepsilon(\mathbf{s})  \\
-\tag{1}
+\tag{6.1}
 \varepsilon(\mathbf{s}) \stackrel{iid}{\sim} N(0, \sigma^2)
 \end{align*}\]</span></p>
 <ul>
 <li><p><span class="math inline">\(y(\mathbf{s})\)</span> is the observation at site <span class="math inline">\(\mathbf{s}\)</span></p></li>
 <li><p><span class="math inline">\(z(\mathbf{s})\)</span> is the process of interest at site <span class="math inline">\(\mathbf{s}\)</span></p></li>
-<li><p><span class="math inline">\(\varepsilon(\mathbf{s}) \sim N(0, \sigma^2)\)</span> is the measurement error</p>
+<li><span class="math inline">\(\varepsilon(\mathbf{s}) \sim N(0, \sigma^2)\)</span> is the measurement error
 <ul>
 <li>Commonly called the <strong>nugget</strong></li>
 <li>Geostatistics came from mining</li>
@@ -522,7 +463,7 @@ y(\mathbf{s}) &amp; = z(\mathbf{s}) + \varepsilon(\mathbf{s})  \\
 </ul>
 <p><span class="math display" id="eq:process">\[\begin{align*}
 z(\mathbf{s}) &amp; = \mu(\mathbf{s}) + \eta(\mathbf{s}) 
-\tag{2}
+\tag{6.2}
 \end{align*}\]</span></p>
 <ul>
 <li><p><span class="math inline">\(\mu(\mathbf{s})\)</span> is the GP mean function</p></li>
@@ -533,47 +474,47 @@ z(\mathbf{s}) &amp; = \mu(\mathbf{s}) + \eta(\mathbf{s})
 <li><p><span class="math inline">\(\tau^2\)</span> is often called the <strong>partial sill</strong> parameter</p></li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="day-6.html#cb115-1"></a><span class="kw">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb115-2"><a href="day-6.html#cb115-2"></a>n &lt;-<span class="st"> </span><span class="dv">40</span></span>
-<span id="cb115-3"><a href="day-6.html#cb115-3"></a>s &lt;-<span class="st"> </span><span class="kw">runif</span>(n)</span>
-<span id="cb115-4"><a href="day-6.html#cb115-4"></a><span class="co">## mean function</span></span>
-<span id="cb115-5"><a href="day-6.html#cb115-5"></a>mu &lt;-<span class="st"> </span>s</span>
-<span id="cb115-6"><a href="day-6.html#cb115-6"></a><span class="co">## covariance function -- this is positive definite</span></span>
-<span id="cb115-7"><a href="day-6.html#cb115-7"></a>Sigma &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span><span class="kw">rdist</span>(s) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</span>
-<span id="cb115-8"><a href="day-6.html#cb115-8"></a></span>
-<span id="cb115-9"><a href="day-6.html#cb115-9"></a><span class="co">## generate the spatially (1-d) correlated process</span></span>
-<span id="cb115-10"><a href="day-6.html#cb115-10"></a><span class="co">## rmvn returns a matrix -- use c() to coerce to a vector</span></span>
-<span id="cb115-11"><a href="day-6.html#cb115-11"></a>eta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), Sigma))            </span>
-<span id="cb115-12"><a href="day-6.html#cb115-12"></a>z &lt;-<span class="st"> </span>mu <span class="op">+</span><span class="st"> </span>eta</span>
-<span id="cb115-13"><a href="day-6.html#cb115-13"></a>epsilon &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="fl">0.25</span>)</span>
-<span id="cb115-14"><a href="day-6.html#cb115-14"></a>y &lt;-<span class="st"> </span>z <span class="op">+</span><span class="st"> </span>epsilon</span>
-<span id="cb115-15"><a href="day-6.html#cb115-15"></a></span>
-<span id="cb115-16"><a href="day-6.html#cb115-16"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb115-17"><a href="day-6.html#cb115-17"></a>    <span class="dt">s =</span> s,</span>
-<span id="cb115-18"><a href="day-6.html#cb115-18"></a>    <span class="dt">y =</span> y,</span>
-<span id="cb115-19"><a href="day-6.html#cb115-19"></a>    <span class="dt">z =</span> z,</span>
-<span id="cb115-20"><a href="day-6.html#cb115-20"></a>    <span class="dt">mu =</span> mu, </span>
-<span id="cb115-21"><a href="day-6.html#cb115-21"></a>    <span class="dt">eta =</span> eta, </span>
-<span id="cb115-22"><a href="day-6.html#cb115-22"></a>    <span class="dt">epsilon =</span> epsilon</span>
-<span id="cb115-23"><a href="day-6.html#cb115-23"></a>)</span>
-<span id="cb115-24"><a href="day-6.html#cb115-24"></a></span>
-<span id="cb115-25"><a href="day-6.html#cb115-25"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb115-26"><a href="day-6.html#cb115-26"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> y)) <span class="op">+</span></span>
-<span id="cb115-27"><a href="day-6.html#cb115-27"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb115-28"><a href="day-6.html#cb115-28"></a><span class="st">    </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend =</span> s, <span class="dt">yend =</span> z), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
-<span id="cb115-29"><a href="day-6.html#cb115-29"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> z), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
-<span id="cb115-30"><a href="day-6.html#cb115-30"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> mu), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb115-31"><a href="day-6.html#cb115-31"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> eta), <span class="dt">color =</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></span>
-<span id="cb115-32"><a href="day-6.html#cb115-32"></a><span class="st">    </span><span class="kw">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a>
+<a class="sourceLine" id="cb115-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span></a>
+<a class="sourceLine" id="cb115-3" data-line-number="3">s &lt;-<span class="st"> </span><span class="kw">runif</span>(n)</a>
+<a class="sourceLine" id="cb115-4" data-line-number="4"><span class="co">## mean function</span></a>
+<a class="sourceLine" id="cb115-5" data-line-number="5">mu &lt;-<span class="st"> </span>s</a>
+<a class="sourceLine" id="cb115-6" data-line-number="6"><span class="co">## covariance function -- this is positive definite</span></a>
+<a class="sourceLine" id="cb115-7" data-line-number="7">Sigma &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span><span class="kw">rdist</span>(s) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb115-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb115-9" data-line-number="9"><span class="co">## generate the spatially (1-d) correlated process</span></a>
+<a class="sourceLine" id="cb115-10" data-line-number="10"><span class="co">## rmvn returns a matrix -- use c() to coerce to a vector</span></a>
+<a class="sourceLine" id="cb115-11" data-line-number="11">eta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), Sigma))            </a>
+<a class="sourceLine" id="cb115-12" data-line-number="12">z &lt;-<span class="st"> </span>mu <span class="op">+</span><span class="st"> </span>eta</a>
+<a class="sourceLine" id="cb115-13" data-line-number="13">epsilon &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="fl">0.25</span>)</a>
+<a class="sourceLine" id="cb115-14" data-line-number="14">y &lt;-<span class="st"> </span>z <span class="op">+</span><span class="st"> </span>epsilon</a>
+<a class="sourceLine" id="cb115-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb115-16" data-line-number="16">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb115-17" data-line-number="17">    <span class="dt">s =</span> s,</a>
+<a class="sourceLine" id="cb115-18" data-line-number="18">    <span class="dt">y =</span> y,</a>
+<a class="sourceLine" id="cb115-19" data-line-number="19">    <span class="dt">z =</span> z,</a>
+<a class="sourceLine" id="cb115-20" data-line-number="20">    <span class="dt">mu =</span> mu, </a>
+<a class="sourceLine" id="cb115-21" data-line-number="21">    <span class="dt">eta =</span> eta, </a>
+<a class="sourceLine" id="cb115-22" data-line-number="22">    <span class="dt">epsilon =</span> epsilon</a>
+<a class="sourceLine" id="cb115-23" data-line-number="23">)</a>
+<a class="sourceLine" id="cb115-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb115-25" data-line-number="25">dat <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-26" data-line-number="26"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-27" data-line-number="27"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-28" data-line-number="28"><span class="st">    </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend =</span> s, <span class="dt">yend =</span> z), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-29" data-line-number="29"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> z), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-30" data-line-number="30"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> mu), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-31" data-line-number="31"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> s, <span class="dt">y =</span> eta), <span class="dt">color =</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb115-32" data-line-number="32"><span class="st">    </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
 <p>A quick check if Sigma meets the conditions of a symmetric positive-definite matrix</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="day-6.html#cb116-1"></a><span class="co">## check is Sigma is symmetric</span></span>
-<span id="cb116-2"><a href="day-6.html#cb116-2"></a><span class="kw">all.equal</span>(Sigma, <span class="kw">t</span>(Sigma))</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="co">## check is Sigma is symmetric</span></a>
+<a class="sourceLine" id="cb116-2" data-line-number="2"><span class="kw">all.equal</span>(Sigma, <span class="kw">t</span>(Sigma))</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="day-6.html#cb118-1"></a><span class="co">## check is Sigma is posivitive definite</span></span>
-<span id="cb118-2"><a href="day-6.html#cb118-2"></a>Sigma_eigen &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</span>
-<span id="cb118-3"><a href="day-6.html#cb118-3"></a><span class="co">## check that all eigenvalues are positive</span></span>
-<span id="cb118-4"><a href="day-6.html#cb118-4"></a>Sigma_eigen<span class="op">$</span>values</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="co">## check is Sigma is posivitive definite</span></a>
+<a class="sourceLine" id="cb118-2" data-line-number="2">Sigma_eigen &lt;-<span class="st"> </span><span class="kw">eigen</span>(Sigma)</a>
+<a class="sourceLine" id="cb118-3" data-line-number="3"><span class="co">## check that all eigenvalues are positive</span></a>
+<a class="sourceLine" id="cb118-4" data-line-number="4">Sigma_eigen<span class="op">$</span>values</a></code></pre></div>
 <pre><code>##  [1] 68.614998226  6.469640157  1.846887044  1.013225060  0.526987113
 ##  [6]  0.350879290  0.221671629  0.170657210  0.116756563  0.076631073
 ## [11]  0.067533590  0.058658782  0.053014720  0.043488483  0.037433411
@@ -582,12 +523,12 @@ z(\mathbf{s}) &amp; = \mu(\mathbf{s}) + \eta(\mathbf{s})
 ## [26]  0.013423514  0.010922956  0.009497946  0.008886870  0.008231217
 ## [31]  0.007208472  0.005444425  0.005026785  0.004599434  0.004534839
 ## [36]  0.004238142  0.003219602  0.002366398  0.001348648  0.001117710</code></pre>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="day-6.html#cb120-1"></a><span class="kw">all</span>(Sigma_eigen<span class="op">$</span>values <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="kw">all</span>(Sigma_eigen<span class="op">$</span>values <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <ul>
 <li>Variance decomposition</li>
 </ul>
-<p>Combining the equations <a href="day-6.html#eq:data">(1)</a> and <a href="day-6.html#eq:process">(2)</a></p>
+<p>Combining the equations <a href="day-6.html#eq:data">(6.1)</a> and <a href="day-6.html#eq:process">(6.2)</a></p>
 <p><span class="math display">\[\begin{align*}
 y(\mathbf{s}) &amp; = \mu(\mathbf{s}) + \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) 
 \end{align*}\]</span></p>
