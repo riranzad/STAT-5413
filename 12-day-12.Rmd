@@ -27,21 +27,24 @@ Instead of evaluating the probability distribution and calculating the normalizi
 ## Example: Simple linear regression
 
 Consider the simple linear regression model for $i=1, \ldots, N$ observations
-\eq{
+
+\begin{align}
 (\#eq:regression)
 y_i & = \mu + x_i \beta + \varepsilon_i
-}
+\end{align}
+
 where $\varepsilon_i \sim N(0, \sigma^2)$ and $x_i$ are known univariate covariates. If we assume the prior distributions $\mu \sim N(\mu_\mu, \sigma^2_\mu)$ with $\mu_\mu$ and $\sigma^2_\mu$ fixed and known, $\beta \sim N(\mu_\beta, \sigma^2_\beta)$ with $\mu_\beta$ and $\sigma^2_\beta$ fixed and known, and $\sigma^2 \sim \operatorname{inverse-gamma}(\alpha_0, \beta_0)$ with $\alpha_0$ and $\beta_0$ fixed and known. where the $\operatorname{inverse-gamma}(\alpha_0, \beta_0)$ distribution is 
-\eq{
+\begin{align}
 [\sigma^2 | \alpha_0, \beta_0] & = \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\}.
-}
+\end{align}
 
 ## The posterior distribution
 
 Given the model statement, we can write out the posterior distribution on which we want inference. The posterior distribution is
-\eq{
+
+\begin{align}
 [\mu, \beta, \sigma^2 | \mathbf{y}] & = \frac{\prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]}{\int_\mu \int_\beta \int_{\sigma^2} \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2] \,d\sigma^2 \,d\beta \,d\mu}.
-}
+\end{align}
 Notice that we don't include $x_i$ in the above statement because it is assumed fixed and known. For the model we defined in \@ref(eq:regression), the posterior distribution is available in closed form because we can evaluate the integrals in the denominator analytically. However, the integrals are challenging and for most interesting models, are not available in closed form. 
 
 Given the posterior distribution, the next step is to find the marginal posterior distributions of $\mu$, $\beta$ and $\sigma^2$.
@@ -49,42 +52,50 @@ Given the posterior distribution, the next step is to find the marginal posterio
 ### Full conditional distribution of $\mu$
 
 The full conditional distribution (marginal posterior) for $\mu$ given all other parameters in the model is
-\eq{
+
+\begin{align}
 [\mu | \cdot] & \propto \prod_{i=1^N} [y_i | \mu, \beta, \sigma^2 ] [\mu] [\beta] [\sigma^2]  \\
 & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\mu] \\
 & \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\mu}}  \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu - \mu_\mu\right)^2 \right\} \\
 & \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\mu^2 - 2 \mu \left(y_i - x_i\beta\right)\right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\mu^2}  \left(\mu^2 - 2 \mu \mu_\mu\right) \right\} \\
 & \propto \exp \left\{ -\frac{1}{2}  \left(\mu^2 \left(\frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu}\right) - 2 \mu \left(\frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}\right)\right) \right\} 
-}
+\end{align}
+
 which is a normal distribution with mean $a_\mu^{-1}b_\mu$ and variance $a_\mu^{-1}$ where
-\eq{
+
+\begin{align}
 a_\mu & = \frac{N}{\sigma^2} + \frac{1}{\sigma^2_\mu} \\
 b_\mu & = \frac{ \sum_{i=1}^N y_i - x_i\beta }{\sigma^2} + \frac{\mu_\mu}{\sigma^2_\mu}
-}
+\end{align}
 
 ### Full conditional distribution for $\beta$
 The marginal posterior for $\beta$ given all other parameters in the model is
-\eq{
+
+\begin{align}
 [\beta | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\beta] \\
 & \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{1}{\sqrt{2 \pi \sigma^2_\beta}}  \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta - \mu_\beta \right)^2 \right\} \\
 & \propto \prod_{i=1}^N \exp \left\{ -\frac{1}{2 \sigma^2}  \left(\beta^2 x_i^2 - 2 \beta \left(x_i \left( y_i - \mu \right) \right) \right) \right\} \exp \left\{ -\frac{1}{2 \sigma_\beta^2}  \left(\beta^2 - 2 \beta \mu_\beta \right) \right\} \\
 & \propto \exp \left\{ -\frac{1}{2}  \left(\beta^2 \left(\frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta}\right) - 2 \beta \left(\frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}\right)\right) \right\} 
-}
+\end{align}
+
 which is a normal distribution with mean $a_\beta^{-1}b_\beta$ and variance $a_\beta^{-1}$ where
-\eq{
+
+\begin{align}
 a_\beta & = \frac{\sum_{i=1}^N x_i^2}{\sigma^2} + \frac{1}{\sigma^2_\beta} \\
 b_\beta & = \frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \frac{\mu_\beta}{\sigma^2_\beta}
-}
+\end{align}
 
 
 ### Full conditional distribution for $\sigma^2$
 The marginal posterior for $\sigma^2$ given all other parameters in the model is
-\eq{
+
+\begin{align}
 [\sigma^2 | \cdot] & \propto \prod_{i=1}^N [y_i | \mu, \beta, \sigma^2 ] [\sigma^2] \\
 & \propto \prod_{i=1}^N \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left\{ -\frac{1}{2 \sigma^2}  \left(y_i - \left(\mu + x_i \beta\right)\right)^2 \right\} \frac{\beta_0^{\alpha_0}} {\Gamma(\alpha_0)} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
 & \propto \prod_{i=1}^N \left( \sigma^2 \right)^{-\frac{1}{2}} \exp \left\{ -\frac{1}{\sigma^2}  \frac{\left(y_i - \left(\mu + x_i \beta\right)\right)^2}{2} \right\} (\sigma^2)^{-\alpha_0 - 1} \exp\left\{ - \frac{\beta_0}{\sigma^2} \right\} \\
 & \propto \left( \sigma^2 \right)^{-\frac{N}{2} - \alpha_0 - 1} \exp \left\{ -\frac{1}{\sigma^2}  \left( \sum_{i=1}^N \frac{1}{2} \left( y_i - \left( \mu + x_i \beta \right) \right)^2 + \beta_0 \right) \right\} 
-}
+\end{align}
+
 which is distributed as $\operatorname{inverse-gamma} \left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right)$.
 
 ## Fitting the model
@@ -123,11 +134,12 @@ sigma2 <- rep(0, K)
 ```
 
 The MCMC algorithm works by cycling through the marginal posterior distributions. The algorithm is called a Gibbs Sampler and we sample from 
-\eq{
+
+\begin{align}
 \mu | \cdot & \sim N(a_\mu^{-1}b_\mu, a_\mu^{-1}) \\
 \beta | \cdot & \sim N(a_\beta^{-1}b_\beta, a_\beta^{-1}) \\
 \sigma^2 | \cdot & \sim \operatorname{inverse-gamma}\left( \alpha_0 + \frac{N}{2} , \beta_0 + \frac{1}{2} \sum_{i=1}^N \left( y_i - \left(\mu + x_i \beta \right) \right)^2 \right) 
-}
+\end{align}
 in sequential order. 
 
 
