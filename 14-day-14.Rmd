@@ -35,9 +35,9 @@ where $\frac{[\theta^{(k-1)} | \theta^{\star}]} {[\theta^{\star} | \theta^{(k-1)
 
 ## Example
 Let's consider an AR(1) model
-\eq{
+\begin{align*}
 y_t & = \phi y_{t-1} + \varepsilon_t
-}
+\end{align*}
 where $\varepsilon_t \stackrel{iid} \sim \operatorname{N}(0, \sigma^2)$ and both $\phi$ and $\sigma^2$ are unknown. 
 
 Simulated data are shown below. 
@@ -53,36 +53,37 @@ plot(y, type='l', xlab="time", main="simulated AR(1) data")
 ```
 
 To complete the model, we must assign prior distributions for $\phi$ and $\sigma^2$. A simple choice of prior for $\phi$ is Uniform(-1, 1) prior and for $\sigma^2$ we assign a half-Cauchy prior where 
-\eq{
+
+\begin{align*}
 \sigma^2 & \sim \operatorname{Cauchy^+}(s^2)
-}
+\end{align*}
 with $s^2$=25 where the half-Cauchy has the pdf
-\eq{
+\begin{align*}
 [\sigma^2] = \frac{2 * I(\sigma^2 > 0)}{\pi s (1 + \frac{\sigma^2}{s^2})}.
-}
+\end{align*}
 
 ## Posterior
 The posterior distribution is 
-\eq{
-[\phi, \sigma^2 | \mathbf{y}] & = \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] [\sigma^2] 
-}
+\begin{align*}
+[\phi, \sigma^2 | \mathbf{y}] & = \prod_{t=1}^N [y_t | y_{t-1}, \phi, \sigma^2] [\phi] [\sigma^2] 
+\end{align*}
 
 ## Conditional posterior for $\phi$
 
 The conditional posterior for $\phi$ is 
-\eq{
+\begin{align*}
 [\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\phi] \\
 & \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) I(-1 < \phi < 1)
-}
+\end{align*}}
 which has no known analytic distribution so we will sample using Metropolis-Hastings. 
 
 ## Conditional posterior for $\sigma^2$
 
 The conditional posterior for $\phi$ is 
-\eq{
+\begin{align*}
 [\phi | \cdot] & \propto \prod_{t=1^N} [y_t | y_{t-1}, \phi, \sigma^2] [\sigma^2] \\
 & \propto \prod_{t=1^N} N(y_t | \phi y_{t-1}, \sigma^2 ) \operatorname{Cauchy^+}(\sigma^2 | s^2)
-}
+\end{align*}
 which has no known analytic distribution so we will sample using Metropolis-Hastings. 
 
 
