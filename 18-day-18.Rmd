@@ -2,3 +2,10 @@
 
 ## Announcements
 
+* [Reading Assignment 3](https://drive.google.com/file/d/1r9FnpBz3-zcHE-fo36MHSb-JG2ObLf00/view) is due Monday 3/4 in class.
+
+* [Data Camp HW 3 - Nonlinear modeling in R with GAMs](https://sites.google.com/view/stat-5413-spring-2020/assignments) due Monday 3/4 at 11:59PM CST.
+
+* HW 3 - [Bayesian spatial models](https://drive.google.com/file/d/1HlxQRUXt1A6poXQkC3tRQkluMK1oTQMV/view) is due Wednesday 3/4 by 5PM. The raw Rmarkdown file is available [here](https://drive.google.com/file/d/11UcZKWSrnOOaskucIBKKCkigUDcfKF6x/view)
+
+## Gaussian process representations continued

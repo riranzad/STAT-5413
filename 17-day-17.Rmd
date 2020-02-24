@@ -2,3 +2,6 @@
 
 ## Announcements
 
+## Gaussian process representations 
+
+* Karhunen-Lo&egrave;ve expansion
