@@ -185,6 +185,11 @@ preds <- spPredict(
 pred_coords$pred_mean <- apply(preds$p.y.predictive.samples, 1, mean)
 pred_coords$pred_var <- apply(preds$p.y.predictive.samples, 1, var)
 
+## calculate 95% credible intervals for the predictions
+pred.summary <- apply(pred$p.y.predictive.samples^2, 1, function(x) {
+    quantile(x, prob = c(0.025, 0.5, 0.975))
+})
+
 ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
     geom_raster() +
     geom_polygon(data = states, aes(x = long, y = lat, group = group), 
