@@ -2,3 +2,4 @@
 
 ## Announcements
 
+## Gaussian process representations continued

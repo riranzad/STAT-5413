@@ -1,4 +1,517 @@
 # Day 20
 
+```{r, message = FALSE}
+library(tidyverse)
+library(STRbook)
+library(fields)
+library(mvnfast)
+library(fda)
+library(spBayes)
+library(coda)
+```
+
 ## Announcements
 
+
+## spBayes example
+
+Fitting a spatial model using the `NOAA_df_1990` data.frame from the `STRbook` package. We will focus on the average max temperature for July 1990.
+
+
+
+```{r}
+data("NOAA_df_1990")
+## add a factor variable for left_join
+NOAA_df_1990$id_factor <- factor(NOAA_df_1990$id)
+dat <- NOAA_df_1990 %>%
+    subset(year == 1990 & month == 7 & proc == "Tmax") %>%
+    group_by(id_factor) %>% 
+    summarize(mean_Tmax = mean(z)) #
+
+## add back in the lat/lon variables
+dat <- NOAA_df_1990 %>%
+    subset(year == 1990 & month == 7 & proc == "Tmax" & day == 1) %>%
+    left_join(dat, by = "id_factor") 
+```
+
+
+```{r}
+n.samples <- 5000
+
+starting <- list(phi = 3/100, sigma.sq = 2, tau.sq = 2)
+tuning <- list(phi = 2.5, sigma.sq = 0.1, tau.sq = 0.1)
+p <- 3 ## use lat and lon as predictors (plus an intercept)
+coords <- as.matrix(cbind(dat$lon, dat$lat))
+max_dist <- max(rdist(coords))
+priors <- list(
+    beta.Norm   = list(rep(0, p), diag(1e+06, p)),
+    phi.Unif    = c( 0.00001, 10000),
+    sigma.sq.IG = c(2, 2), 
+    tau.sq.IG   = c(2, 2)
+)
+cov.model <- "exponential"
+
+fit_e <- spLM(
+    dat$z ~ dat$lon + dat$lat,
+    coords    = coords,
+    starting  = starting,
+    tuning    = tuning, 
+    priors    = priors, 
+    cov.model = cov.model, 
+    n.samples = n.samples,
+    n.report  = 1000
+)
+```
+
+The above fits the model. However, sometimes it is hard to "tune" the model to get the desired Metropolis acceptance rate. `spLM` has an option for adaptive MCMC tuning. To enable this option, we add an `amcmc` option. We are also going to change to a Matern covarince function in the next code as well.
+
+```{r}
+n.samples    <- 5000
+batch.length <- 50
+n.batch      <- n.samples / batch.length
+
+## must add in values for the smoothness paramter nu
+starting <- list(phi = 3/100, sigma.sq = 2, tau.sq = 2, nu = 1)
+tuning <- list(phi = 2.5, sigma.sq = 0.1, tau.sq = 0.1, nu = 0.1)
+p <- 3 ## use lat and lon as predictors (plus an intercept)
+coords <- as.matrix(cbind(dat$lon, dat$lat))
+max_dist <- max(rdist(coords))
+priors <- list(
+    beta.Norm   = list(rep(0, p), diag(1e+06, p)),
+    phi.Unif    = c( 0.00001, 10000),
+    nu.Unif     = c( 0.00001, 10000),
+    sigma.sq.IG = c(2, 2), 
+    tau.sq.IG   = c(2, 2)
+)
+cov.model <- "matern"
+
+fit_m <- spLM(
+    dat$z ~ dat$lon + dat$lat,
+    coords    = coords,
+    starting  = starting,
+    tuning    = tuning, 
+    priors    = priors, 
+    cov.model = cov.model, 
+    n.samples = n.samples,
+    amcmc     = list(
+        n.batch = n.batch, 
+        batch.length = batch.length,
+        accept.rate = 0.44
+    ),
+    n.report  = 10 ## report every 10 adaptive batches
+)
+## can update the initial tuning parameters given the adapted values
+```
+
+```{r}
+tuning <- list(phi = 0.5, sigma.sq = 0.38, tau.sq = 0.6, nu = 0.3)
+fit_m <- spLM(
+    dat$z ~ dat$lon + dat$lat,
+    coords    = coords,
+    starting  = starting,
+    tuning    = tuning, 
+    priors    = priors, 
+    cov.model = cov.model, 
+    n.samples = n.samples,
+    amcmc     = list(
+        n.batch = n.batch, 
+        batch.length = batch.length,
+        accept.rate = 0.44
+    ),
+    n.report  = 10 ## report every 10 adaptive batches
+)
+## can update the initial tuning parameters given the adapted values
+```
+
+
+To get the fitted parameters, we can recover these with composition sampling.
+
+```{r}
+## discard the first half of the samples as burn-in
+burn.in <- 0.5 * n.samples
+## trace plots for the exponential model
+fit_e <- spRecover(fit_e, start = burn.in, thin = 2, verbose = FALSE)
+theta.samps <- mcmc.list(fit_e$p.theta.samples, fit_e$p.theta.samples)
+plot(theta.samps, density = FALSE)
+beta.samps <- mcmc.list(fit_e$p.beta.recover.samples, fit_e$p.beta.recover.samples)  
+plot(beta.samps, density = FALSE)
+```
+
+```{r}
+## trace plots for the matern model
+fit_m <- spRecover(fit_m, start = burn.in, thin = 2, verbose = FALSE)
+theta.samps <- mcmc.list(fit_m$p.theta.samples, fit_m$p.theta.samples)
+plot(theta.samps, density = FALSE)
+beta.samps <- mcmc.list(fit_m$p.beta.recover.samples, fit_m$p.beta.recover.samples)  
+plot(beta.samps, density = FALSE)
+round(summary(theta.samps)$quantiles, 3)
+```
+
+```{r}
+## recover the spatial random effects
+fit_e_w <- fit_e$p.w.recover.samples
+fit_m_w <- fit_m$p.w.recover.samples
+
+## recover the spatial random effects (eta's in our class notation)
+w.samps <- cbind(fit_e_w, fit_m_w)
+w.summary <- apply(w.samps, 1, function(x) {
+    quantile(x, prob = c(0.025, 0.5, 0.975))
+})
+```
+
+Next we can genereate predictions for the exponential model
+
+```{r}
+states <- map_data("state")
+
+pred_coords <- as.data.frame(
+    expand.grid(
+        seq(min(dat$lon), max(dat$lon), length = 100), 
+        seq(min(dat$lat), max(dat$lat), length = 100)
+    )
+)
+colnames(pred_coords) <- c("lon", "lat")
+
+## predict using the tuned Matern fit
+preds <- spPredict(
+    fit_m, 
+    start = burn.in, 
+    thin = 10, 
+    pred.coords = cbind(pred_coords$lon, pred_coords$lat), 
+    pred.covars = cbind(1, pred_coords$lon, pred_coords$lat)
+)
+
+## Calculate the prediction means and variances
+pred_coords$pred_mean <- apply(preds$p.y.predictive.samples, 1, mean)
+pred_coords$pred_var <- apply(preds$p.y.predictive.samples, 1, var)
+
+ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
+    geom_raster() +
+    geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+                 colour = "black", fill = NA) +
+    scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Predicted Average July max Temperature in 1990")  +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+
+
+ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_var)) +
+    geom_raster() +
+    geom_polygon(data = states, aes(x = long, y = lat, group = group), 
+                 colour = "black", fill = NA) +
+    scale_fill_viridis_c(option = "plasma") +
+  ggtitle("Average July max Temperature prediction variance in 1990")  +
+  coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
+
+```
+
+
+## Global vs. Local Basis function
+
+* simulate some data
+
+```{r}
+set.seed(44)
+n <- 1000
+sigma <- 0.2
+x <- seq(0, 1, length.out = n)
+Sigma <- exp( - rdist(x)^2 / 0.02)
+
+## Gaussian covariance with a small amount of "error"
+mu <- c(rmvn(1, rep(0, n), Sigma + 1e-10 * diag(n))) 
+y <- mu + rnorm(n, 0, sigma)
+dat <- data.frame(
+    x  = x,
+    y  = y, 
+    mu = mu
+)
+ggplot(data = dat, aes(x = x, y = mu)) +
+    geom_line() +
+    geom_point(aes(x = x, y = y))
+```
+
+
+### An example global basis: Fourier Basis
+
+```{r}
+make_fourier_basis <- function(x, num_freq) {
+    # if (!is.integer(num_freq)) {
+    #     stop("num_freq must be an odd integer")
+    # }
+    # if (num_freq %% 2 == 0) {
+    #     stop("num_freq must be an odd integer")
+    # }
+    
+    X_fourier <- cbind(
+        1, 
+        do.call(
+            cbind, 
+            sapply(
+                1:((num_freq - 1) / 2), function(i) { 
+                    cbind(sin(2 * i * pi * x), cos(2 * i * pi * x))
+                }, 
+            simplify = FALSE
+            )
+        )
+    )
+    
+return(X_fourier)
+}
+
+X_fourier <- make_fourier_basis(x, num_freq = 5)
+dat <- data.frame(
+    x         = x, 
+    y         = y,
+    mu        = mu,
+    X_fourier = c(X_fourier),
+    basis     = factor(rep(1:ncol(X_fourier), each = n))
+)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    # geom_point() +
+    geom_line(aes(x = x, y = X_fourier, group = basis, color = basis)) +
+    scale_color_viridis_d(option = "magma") +
+    theme_dark()
+```
+
+
+```{r}
+## fit a model using the Fourier basis
+fit <- lm(y ~ X_fourier - 1)
+```
+
+```{r}
+## plot the basis with fitted coefficients
+dat$fitted_basis <- c(
+    sapply(1:ncol(X_fourier), function(i) X_fourier[, i] * fit$coefficients[i])
+)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(aes(x = x, y = fitted_basis, color = basis, group = basis)) +
+    ggtitle("Weighted Fourier Basis functions")
+```
+
+
+```{r}
+## calculate the fitted function -- the sum of the bases
+dat$mu_hat <- apply(sapply(1:ncol(X_fourier), function(i) X_fourier[, i] * fit$coefficients[i]), 1, sum)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(aes(x = x, y = mu_hat), color = "red", lwd  = 2) +
+    geom_line(aes(x = x, y = mu), color = "blue", lwd = 2) +
+    ggtitle("Fitted function vs. simulated function")
+```
+
+- The Fourier basis is global
+
+```{r}
+## only a small percentage of these values are zero
+mean(X_fourier == 0)
+```
+
+## example local basis
+
+- B-splines are piecewise polynomial functions
+
+- degrees of freedom are the number of functions
+
+    - More degrees of freedom -- more "wiggly" fit -- potential for overfitting
+    
+```{r}
+## B-splines
+X_bs <- bs(x, intercept = TRUE, df = 6)
+dat <- data.frame(
+    x     = x, 
+    y     = y,
+    mu    = mu,
+    X_bs  = c(X_bs),
+    basis = factor(rep(1:ncol(X_bs), each = n))
+)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    # geom_point() +
+    geom_line(aes(x = x, y = X_bs, group = basis, color = basis)) +
+    scale_color_viridis_d(option = "magma") +
+    theme_dark()
+```
+
+
+```{r}
+## fit a model using the B-spline basis
+fit <- lm(y ~ X_bs - 1)
+```
+
+```{r}
+## plot the basis with fitted coefficients
+dat$fitted_basis <- c(
+    sapply(1:ncol(X_bs), function(i) X_bs[, i] * fit$coefficients[i])
+)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(aes(x = x, y = fitted_basis, color = basis, group = basis)) +
+    ggtitle("Weighted B-spline Basis functions")
+```
+
+
+```{r}
+## calculate the fitted function -- the sum of the bases
+dat$mu_hat <- apply(sapply(1:ncol(X_bs), function(i) X_bs[, i] * fit$coefficients[i]), 1, sum)
+
+ggplot(data = dat, aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(aes(x = x, y = mu_hat), color = "red", lwd  = 2) +
+    geom_line(aes(x = x, y = mu), color = "blue", lwd = 2) +
+    ggtitle("Fitted function vs. simulated function")
+```
+
+- The B-spline basis is local
+
+```{r}
+## a much larger percentage of these values are zero -- can use sparse matrix
+##     routines to solve these equations much faster
+mean(X_bs == 0)
+```
+
+
+## Fitting spatial models many ways
+
+## Empirical Orthogonal Functions
+
+- Recall the Karhunen-Lo&egrave;ve expansion
+
+- Analog for PCA for spatio-temporal data
+
+- Use the sea surface temperature (SST) data in @wikle2019spatio
+
+```{r}
+data("SSTlandmask", package = "STRbook")
+data("SSTlonlat", package = "STRbook") 
+data("SSTdata", package = "STRbook")
+```
+
+Delete the values of SST that are over land (e.g. `SSTlandmask` is 1)
+
+```{r}
+delete_rows <- which(SSTlandmask == 1)
+SSTdata <- SSTdata[-delete_rows, 1:396]
+```
+
+The eigen decomposition of the sample covariance of the data is equivalent to the singular value decomposition of the scaled and detrended data $\mathbf{y}$.
+
+\begin{align*}
+\tilde{\mathbf{y}} & \equiv \frac{1}{\sqrt{T - 1}} \left( \right)
+\end{align*}
+
+
+To get a spatial EOF, we need to transform the data into space-wide format
+
+```{r}
+y <- t(SSTdata)
+dim(y)
+```
+
+To use the equation above, we need to calculate the spatial mean and the number of spatial replicates and scale and detrend the data
+
+```{r}
+spatial_mean <- apply(SSTdata, 1, mean)
+nT <- ncol(SSTdata)
+y_tilde <- 1 / sqrt(nT - 1) * (y - outer(rep(1, nT), spatial_mean))
+```
+
+We carry out the SVD on this scaled and detrended data
+
+```{r}
+svd_y <- svd(y_tilde)
+```
+
+which returns a list with three elements $\mathbf{U}$ $\mathbf{D}$ $\mathbf{V}$
+
+\begin{align*}
+\tilde{\mathbf{y}} & = \mathbf{U} \mathbf{D} \mathbf{V}
+\end{align*}
+
+```{r}
+V <- svd_y$v
+colnames(V) <- paste0("EOF", 1:ncol(SSTdata))
+EOFs <- cbind(SSTlonlat[ - delete_rows, ], V)
+glimpse(EOFs[, 1:6, ])
+```
+
+Plot the EOFs
+
+```{r}
+ggplot(data = EOFs, aes(x = lon, y = lat, fill = EOF1)) +
+    geom_raster() +
+    scale_fill_viridis_c(option = "magma") +
+    coord_fixed(ratio = 1.3) +
+    theme_bw() +
+    xlab("Longitude (deg)") + 
+    ylab("Latitude (deg)") +
+    ggtitle("First EOF")
+```
+
+```{r}
+ggplot(data = EOFs, aes(x = lon, y = lat, fill = EOF2)) +
+    geom_raster() +
+    scale_fill_viridis_c(option = "magma") +
+    coord_fixed(ratio = 1.3) +
+    theme_bw() +
+    xlab("Longitude (deg)") + 
+    ylab("Latitude (deg)") +
+    ggtitle("Second EOF")
+```
+
+* Let's assume I have data for January 1970. 
+
+```{r}
+y <- SST_df %>%
+    subset(Year == 1970 & Month == "Jan")
+EOFs$y <- y$sst[ - delete_rows]
+```
+
+Model the data using the first few EOFs as basis functions
+
+```{r}
+mod <- lm(y ~ EOF1, data = EOFs)
+summary(mod)
+plot(EOFs$y, predict(mod), main = "Fitted vs. Predicted")
+abline(0, 1, col = "red")
+```
+
+
+```{r}
+mod <- lm(y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5, data = EOFs)
+summary(mod)
+plot(EOFs$y, predict(mod), main = "Fitted vs. Predicted")
+abline(0, 1, col = "red")
+```
+
+```{r}
+mod <- lm(y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5 + 
+              EOF6 + EOF7 + EOF8 + EOF9 + EOF10, data = EOFs)
+summary(mod)
+plot(EOFs$y, predict(mod), main = "Fitted vs. Predicted")
+abline(0, 1, col = "red")
+```
+
+```{r}
+mod <- lm(y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5 + 
+              EOF6 + EOF7 + EOF8 + EOF9 + EOF10 +
+              EOF11 + EOF12 + EOF13 + EOF14 + EOF15 + 
+              EOF16 + EOF17 + EOF18 + EOF19 + EOF20, data = EOFs)
+summary(mod)
+plot(EOFs$y, predict(mod), main = "Fitted vs. Predicted")
+abline(0, 1, col = "red")
+```
+
+
+- Disadvantages
+
+    - Calculation of the SVD scales with $O(n^3)$
+    - Each of the EOFs are global (almost always nonzero)
+    
+    
+##     
+    
