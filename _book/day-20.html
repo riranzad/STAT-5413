@@ -50,6 +50,18 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.10/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -307,8 +319,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a>
 <ul>
 <li class="chapter" data-level="20.1" data-path="day-20.html"><a href="day-20.html#announcements-15"><i class="fa fa-check"></i><b>20.1</b> Announcements</a></li>
-<li class="chapter" data-level="20.2" data-path="day-20.html"><a href="day-20.html#fitting-spatial-models-many-ways"><i class="fa fa-check"></i><b>20.2</b> Fitting spatial models many ways</a></li>
-<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#empirical-orthogonal-functions"><i class="fa fa-check"></i><b>20.3</b> Empirical Orthogonal Functions</a></li>
+<li class="chapter" data-level="20.2" data-path="day-20.html"><a href="day-20.html#spbayes-example"><i class="fa fa-check"></i><b>20.2</b> spBayes example</a></li>
+<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.-local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a>
+<ul>
+<li class="chapter" data-level="20.3.1" data-path="day-20.html"><a href="day-20.html#an-example-global-basis-fourier-basis"><i class="fa fa-check"></i><b>20.3.1</b> An example global basis: Fourier Basis</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="day-20.html"><a href="day-20.html#example-local-basis"><i class="fa fa-check"></i><b>20.4</b> example local basis</a></li>
+<li class="chapter" data-level="20.5" data-path="day-20.html"><a href="day-20.html#fitting-spatial-models-many-ways"><i class="fa fa-check"></i><b>20.5</b> Fitting spatial models many ways</a></li>
+<li class="chapter" data-level="20.6" data-path="day-20.html"><a href="day-20.html#empirical-orthogonal-functions"><i class="fa fa-check"></i><b>20.6</b> Empirical Orthogonal Functions</a></li>
+<li class="chapter" data-level="20.7" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-mgcv-package"><i class="fa fa-check"></i><b>20.7</b> Spatial modeling with <code>mgcv</code> package</a></li>
+<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a>
+<ul>
+<li class="chapter" data-level="20.8.1" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-ridge-penalty"><i class="fa fa-check"></i><b>20.8.1</b> Kernel regression with a ridge penalty</a></li>
+<li class="chapter" data-level="20.8.2" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-lasso-penalty"><i class="fa fa-check"></i><b>20.8.2</b> Kernel regression with a lasso penalty</a></li>
+<li class="chapter" data-level="20.8.3" data-path="day-20.html"><a href="day-20.html#truncated-kernels---local-support"><i class="fa fa-check"></i><b>20.8.3</b> Truncated Kernels - local support</a></li>
+</ul></li>
+<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.-dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
 </ul></li>
 <li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a>
 <ul>
@@ -425,75 +451,1132 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-20" class="section level1" number="20">
 <h1 number="20"><span class="header-section-number">20</span> Day 20</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="day-20.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="day-20.html#cb1-2"></a><span class="kw">library</span>(STRbook)</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="day-20.html#cb280-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb280-2"><a href="day-20.html#cb280-2"></a><span class="kw">library</span>(STRbook)</span>
+<span id="cb280-3"><a href="day-20.html#cb280-3"></a><span class="kw">library</span>(fields)</span>
+<span id="cb280-4"><a href="day-20.html#cb280-4"></a><span class="kw">library</span>(mvnfast)</span>
+<span id="cb280-5"><a href="day-20.html#cb280-5"></a><span class="kw">library</span>(fda)</span>
+<span id="cb280-6"><a href="day-20.html#cb280-6"></a><span class="kw">library</span>(spBayes)</span>
+<span id="cb280-7"><a href="day-20.html#cb280-7"></a><span class="kw">library</span>(coda)</span>
+<span id="cb280-8"><a href="day-20.html#cb280-8"></a><span class="kw">library</span>(mgcv)</span>
+<span id="cb280-9"><a href="day-20.html#cb280-9"></a><span class="kw">library</span>(glmnet)</span>
+<span id="cb280-10"><a href="day-20.html#cb280-10"></a><span class="kw">library</span>(microbenchmark)</span></code></pre></div>
 <div id="announcements-15" class="section level2" number="20.1">
 <h2 number="20.1"><span class="header-section-number">20.1</span> Announcements</h2>
 </div>
-<div id="fitting-spatial-models-many-ways" class="section level2" number="20.2">
-<h2 number="20.2"><span class="header-section-number">20.2</span> Fitting spatial models many ways</h2>
+<div id="spbayes-example" class="section level2" number="20.2">
+<h2 number="20.2"><span class="header-section-number">20.2</span> spBayes example</h2>
+<p>Fitting a spatial model using the <code>NOAA_df_1990</code> data.frame from the <code>STRbook</code> package. We will focus on the average max temperature for July 1990.</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="day-20.html#cb281-1"></a><span class="kw">data</span>(<span class="st">&quot;NOAA_df_1990&quot;</span>)</span>
+<span id="cb281-2"><a href="day-20.html#cb281-2"></a><span class="co">## add a factor variable for left_join</span></span>
+<span id="cb281-3"><a href="day-20.html#cb281-3"></a>NOAA_df_<span class="dv">1990</span><span class="op">$</span>id_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>id)</span>
+<span id="cb281-4"><a href="day-20.html#cb281-4"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb281-5"><a href="day-20.html#cb281-5"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb281-6"><a href="day-20.html#cb281-6"></a><span class="st">    </span><span class="kw">group_by</span>(id_factor) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb281-7"><a href="day-20.html#cb281-7"></a><span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean_Tmax =</span> <span class="kw">mean</span>(z)) <span class="co">#</span></span>
+<span id="cb281-8"><a href="day-20.html#cb281-8"></a></span>
+<span id="cb281-9"><a href="day-20.html#cb281-9"></a><span class="co">## add back in the lat/lon variables</span></span>
+<span id="cb281-10"><a href="day-20.html#cb281-10"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb281-11"><a href="day-20.html#cb281-11"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span> <span class="op">&amp;</span><span class="st"> </span>day <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb281-12"><a href="day-20.html#cb281-12"></a><span class="st">    </span><span class="kw">left_join</span>(dat, <span class="dt">by =</span> <span class="st">&quot;id_factor&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="day-20.html#cb282-1"></a>n.samples &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb282-2"><a href="day-20.html#cb282-2"></a></span>
+<span id="cb282-3"><a href="day-20.html#cb282-3"></a>starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">phi =</span> <span class="dv">3</span><span class="op">/</span><span class="dv">100</span>, <span class="dt">sigma.sq =</span> <span class="dv">2</span>, <span class="dt">tau.sq =</span> <span class="dv">2</span>)</span>
+<span id="cb282-4"><a href="day-20.html#cb282-4"></a>tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">phi =</span> <span class="fl">2.5</span>, <span class="dt">sigma.sq =</span> <span class="fl">0.1</span>, <span class="dt">tau.sq =</span> <span class="fl">0.1</span>)</span>
+<span id="cb282-5"><a href="day-20.html#cb282-5"></a>p &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co">## use lat and lon as predictors (plus an intercept)</span></span>
+<span id="cb282-6"><a href="day-20.html#cb282-6"></a>coords &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">cbind</span>(dat<span class="op">$</span>lon, dat<span class="op">$</span>lat))</span>
+<span id="cb282-7"><a href="day-20.html#cb282-7"></a>max_dist &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">rdist</span>(coords))</span>
+<span id="cb282-8"><a href="day-20.html#cb282-8"></a>priors &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb282-9"><a href="day-20.html#cb282-9"></a>    <span class="dt">beta.Norm   =</span> <span class="kw">list</span>(<span class="kw">rep</span>(<span class="dv">0</span>, p), <span class="kw">diag</span>(<span class="fl">1e+06</span>, p)),</span>
+<span id="cb282-10"><a href="day-20.html#cb282-10"></a>    <span class="dt">phi.Unif    =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="dv">100</span>),</span>
+<span id="cb282-11"><a href="day-20.html#cb282-11"></a>    <span class="dt">sigma.sq.IG =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), </span>
+<span id="cb282-12"><a href="day-20.html#cb282-12"></a>    <span class="dt">tau.sq.IG   =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb282-13"><a href="day-20.html#cb282-13"></a>)</span>
+<span id="cb282-14"><a href="day-20.html#cb282-14"></a>cov.model &lt;-<span class="st"> &quot;exponential&quot;</span></span>
+<span id="cb282-15"><a href="day-20.html#cb282-15"></a></span>
+<span id="cb282-16"><a href="day-20.html#cb282-16"></a>fit_e &lt;-<span class="st"> </span><span class="kw">spLM</span>(</span>
+<span id="cb282-17"><a href="day-20.html#cb282-17"></a>    dat<span class="op">$</span>z <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>lon <span class="op">+</span><span class="st"> </span>dat<span class="op">$</span>lat,</span>
+<span id="cb282-18"><a href="day-20.html#cb282-18"></a>    <span class="dt">coords    =</span> coords,</span>
+<span id="cb282-19"><a href="day-20.html#cb282-19"></a>    <span class="dt">starting  =</span> starting,</span>
+<span id="cb282-20"><a href="day-20.html#cb282-20"></a>    <span class="dt">tuning    =</span> tuning, </span>
+<span id="cb282-21"><a href="day-20.html#cb282-21"></a>    <span class="dt">priors    =</span> priors, </span>
+<span id="cb282-22"><a href="day-20.html#cb282-22"></a>    <span class="dt">cov.model =</span> cov.model, </span>
+<span id="cb282-23"><a href="day-20.html#cb282-23"></a>    <span class="dt">n.samples =</span> n.samples,</span>
+<span id="cb282-24"><a href="day-20.html#cb282-24"></a>    <span class="dt">n.report  =</span> <span class="dv">1000</span></span>
+<span id="cb282-25"><a href="day-20.html#cb282-25"></a>)</span></code></pre></div>
+<pre><code>## ----------------------------------------
+##  General model description
+## ----------------------------------------
+## Model fit with 136 observations.
+## 
+## Number of covariates 3 (including intercept if specified).
+## 
+## Using the exponential spatial correlation model.
+## 
+## Number of MCMC samples 5000.
+## 
+## Priors and hyperpriors:
+##  beta normal:
+##  mu: 0.000   0.000   0.000   
+##  cov:
+##  1000000.000 0.000   0.000   
+##  0.000   1000000.000 0.000   
+##  0.000   0.000   1000000.000 
+## 
+##  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  tau.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  phi Unif hyperpriors a=0.01000 and b=100.00000
+## -------------------------------------------------
+##      Sampling
+## -------------------------------------------------
+## Sampled: 1000 of 5000, 20.00%
+## Report interval Metrop. Acceptance rate: 12.20%
+## Overall Metrop. Acceptance rate: 12.20%
+## -------------------------------------------------
+## Sampled: 2000 of 5000, 40.00%
+## Report interval Metrop. Acceptance rate: 8.70%
+## Overall Metrop. Acceptance rate: 10.45%
+## -------------------------------------------------
+## Sampled: 3000 of 5000, 60.00%
+## Report interval Metrop. Acceptance rate: 11.00%
+## Overall Metrop. Acceptance rate: 10.63%
+## -------------------------------------------------
+## Sampled: 4000 of 5000, 80.00%
+## Report interval Metrop. Acceptance rate: 10.40%
+## Overall Metrop. Acceptance rate: 10.57%
+## -------------------------------------------------
+## Sampled: 5000 of 5000, 100.00%
+## Report interval Metrop. Acceptance rate: 11.50%
+## Overall Metrop. Acceptance rate: 10.76%
+## -------------------------------------------------</code></pre>
+<p>The above fits the model. However, sometimes it is hard to “tune” the model to get the desired Metropolis acceptance rate. <code>spLM</code> has an option for adaptive MCMC tuning. To enable this option, we add an <code>amcmc</code> option. We are also going to change to a Matern covarince function in the next code as well.</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="day-20.html#cb284-1"></a>n.samples    &lt;-<span class="st"> </span><span class="dv">5000</span></span>
+<span id="cb284-2"><a href="day-20.html#cb284-2"></a>batch.length &lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb284-3"><a href="day-20.html#cb284-3"></a>n.batch      &lt;-<span class="st"> </span>n.samples <span class="op">/</span><span class="st"> </span>batch.length</span>
+<span id="cb284-4"><a href="day-20.html#cb284-4"></a></span>
+<span id="cb284-5"><a href="day-20.html#cb284-5"></a><span class="co">## must add in values for the smoothness paramter nu</span></span>
+<span id="cb284-6"><a href="day-20.html#cb284-6"></a>starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">phi =</span> <span class="dv">3</span><span class="op">/</span><span class="dv">100</span>, <span class="dt">sigma.sq =</span> <span class="dv">2</span>, <span class="dt">tau.sq =</span> <span class="dv">2</span>, <span class="dt">nu =</span> <span class="dv">1</span>)</span>
+<span id="cb284-7"><a href="day-20.html#cb284-7"></a>tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">phi =</span> <span class="fl">2.5</span>, <span class="dt">sigma.sq =</span> <span class="fl">0.1</span>, <span class="dt">tau.sq =</span> <span class="fl">0.1</span>, <span class="dt">nu =</span> <span class="fl">0.1</span>)</span>
+<span id="cb284-8"><a href="day-20.html#cb284-8"></a>p &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co">## use lat and lon as predictors (plus an intercept)</span></span>
+<span id="cb284-9"><a href="day-20.html#cb284-9"></a>coords &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">cbind</span>(dat<span class="op">$</span>lon, dat<span class="op">$</span>lat))</span>
+<span id="cb284-10"><a href="day-20.html#cb284-10"></a>max_dist &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">rdist</span>(coords))</span>
+<span id="cb284-11"><a href="day-20.html#cb284-11"></a>priors &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb284-12"><a href="day-20.html#cb284-12"></a>    <span class="dt">beta.Norm   =</span> <span class="kw">list</span>(<span class="kw">rep</span>(<span class="dv">0</span>, p), <span class="kw">diag</span>(<span class="fl">1e+06</span>, p)),</span>
+<span id="cb284-13"><a href="day-20.html#cb284-13"></a>    <span class="dt">phi.Unif    =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="dv">100</span>),</span>
+<span id="cb284-14"><a href="day-20.html#cb284-14"></a>    <span class="dt">nu.Unif     =</span> <span class="kw">c</span>(<span class="fl">0.01</span>, <span class="dv">100</span>),</span>
+<span id="cb284-15"><a href="day-20.html#cb284-15"></a>    <span class="dt">sigma.sq.IG =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), </span>
+<span id="cb284-16"><a href="day-20.html#cb284-16"></a>    <span class="dt">tau.sq.IG   =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb284-17"><a href="day-20.html#cb284-17"></a>)</span>
+<span id="cb284-18"><a href="day-20.html#cb284-18"></a>cov.model &lt;-<span class="st"> &quot;matern&quot;</span></span>
+<span id="cb284-19"><a href="day-20.html#cb284-19"></a></span>
+<span id="cb284-20"><a href="day-20.html#cb284-20"></a>fit_m &lt;-<span class="st"> </span><span class="kw">spLM</span>(</span>
+<span id="cb284-21"><a href="day-20.html#cb284-21"></a>    dat<span class="op">$</span>z <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>lon <span class="op">+</span><span class="st"> </span>dat<span class="op">$</span>lat,</span>
+<span id="cb284-22"><a href="day-20.html#cb284-22"></a>    <span class="dt">coords    =</span> coords,</span>
+<span id="cb284-23"><a href="day-20.html#cb284-23"></a>    <span class="dt">starting  =</span> starting,</span>
+<span id="cb284-24"><a href="day-20.html#cb284-24"></a>    <span class="dt">tuning    =</span> tuning, </span>
+<span id="cb284-25"><a href="day-20.html#cb284-25"></a>    <span class="dt">priors    =</span> priors, </span>
+<span id="cb284-26"><a href="day-20.html#cb284-26"></a>    <span class="dt">cov.model =</span> cov.model, </span>
+<span id="cb284-27"><a href="day-20.html#cb284-27"></a>    <span class="dt">n.samples =</span> n.samples,</span>
+<span id="cb284-28"><a href="day-20.html#cb284-28"></a>    <span class="dt">amcmc     =</span> <span class="kw">list</span>(</span>
+<span id="cb284-29"><a href="day-20.html#cb284-29"></a>        <span class="dt">n.batch =</span> n.batch, </span>
+<span id="cb284-30"><a href="day-20.html#cb284-30"></a>        <span class="dt">batch.length =</span> batch.length,</span>
+<span id="cb284-31"><a href="day-20.html#cb284-31"></a>        <span class="dt">accept.rate =</span> <span class="fl">0.44</span></span>
+<span id="cb284-32"><a href="day-20.html#cb284-32"></a>    ),</span>
+<span id="cb284-33"><a href="day-20.html#cb284-33"></a>    <span class="dt">n.report  =</span> <span class="dv">10</span> <span class="co">## report every 10 adaptive batches</span></span>
+<span id="cb284-34"><a href="day-20.html#cb284-34"></a>)</span>
+<span id="cb284-35"><a href="day-20.html#cb284-35"></a><span class="co">## can update the initial tuning parameters given the adapted values</span></span></code></pre></div>
+<pre><code>## ----------------------------------------
+##  General model description
+## ----------------------------------------
+## Model fit with 136 observations.
+## 
+## Number of covariates 3 (including intercept if specified).
+## 
+## Using the matern spatial correlation model.
+## 
+## Using adaptive MCMC.
+## 
+##  Number of batches 100.
+##  Batch length 50.
+##  Target acceptance rate 0.44000.
+## 
+## Priors and hyperpriors:
+##  beta normal:
+##  mu: 0.000   0.000   0.000   
+##  cov:
+##  1000000.000 0.000   0.000   
+##  0.000   1000000.000 0.000   
+##  0.000   0.000   1000000.000 
+## 
+##  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  tau.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  phi Unif hyperpriors a=0.01000 and b=100.00000
+##  nu Unif hyperpriors a=0.01000 and b=100.00000
+## -------------------------------------------------
+##      Sampling
+## -------------------------------------------------
+## Batch: 10 of 100, 10.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    46.0        0.33578
+##  tau.sq      52.0        0.34949
+##  phi     6.0     1.43067
+##  nu      44.0        0.28613
+## -------------------------------------------------
+## Batch: 20 of 100, 20.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    58.0        0.36375
+##  tau.sq      48.0        0.36375
+##  phi     6.0     1.29453
+##  nu      86.0        0.30997
+## -------------------------------------------------
+## Batch: 30 of 100, 30.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    48.0        0.39404
+##  tau.sq      60.0        0.37859
+##  phi     8.0     1.17134
+##  nu      40.0        0.32913
+## -------------------------------------------------
+## Batch: 40 of 100, 40.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    48.0        0.37859
+##  tau.sq      54.0        0.41841
+##  phi     12.0        1.05987
+##  nu      40.0        0.29781
+## -------------------------------------------------
+## Batch: 50 of 100, 50.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    42.0        0.39404
+##  tau.sq      40.0        0.43549
+##  phi     18.0        0.95901
+##  nu      64.0        0.30997
+## -------------------------------------------------
+## Batch: 60 of 100, 60.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    58.0        0.42686
+##  tau.sq      38.0        0.41013
+##  phi     18.0        0.86775
+##  nu      56.0        0.34257
+## -------------------------------------------------
+## Batch: 70 of 100, 70.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    34.0        0.43549
+##  tau.sq      64.0        0.39404
+##  phi     26.0        0.78517
+##  nu      66.0        0.37859
+## -------------------------------------------------
+## Batch: 80 of 100, 80.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    54.0        0.45326
+##  tau.sq      40.0        0.37859
+##  phi     22.0        0.71045
+##  nu      84.0        0.41841
+## -------------------------------------------------
+## Batch: 90 of 100, 90.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    38.0        0.44428
+##  tau.sq      40.0        0.38624
+##  phi     22.0        0.64284
+##  nu      56.0        0.46241
+## -------------------------------------------------
+## Batch: 100 of 100, 100.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    42.0        0.43549
+##  tau.sq      56.0        0.39404
+##  phi     32.0        0.58167
+##  nu      80.0        0.51105
+## -------------------------------------------------</code></pre>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="day-20.html#cb286-1"></a>tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">phi =</span> <span class="fl">0.5</span>, <span class="dt">sigma.sq =</span> <span class="fl">0.38</span>, <span class="dt">tau.sq =</span> <span class="fl">0.6</span>, <span class="dt">nu =</span> <span class="fl">0.3</span>)</span>
+<span id="cb286-2"><a href="day-20.html#cb286-2"></a>fit_m &lt;-<span class="st"> </span><span class="kw">spLM</span>(</span>
+<span id="cb286-3"><a href="day-20.html#cb286-3"></a>    dat<span class="op">$</span>z <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>lon <span class="op">+</span><span class="st"> </span>dat<span class="op">$</span>lat,</span>
+<span id="cb286-4"><a href="day-20.html#cb286-4"></a>    <span class="dt">coords    =</span> coords,</span>
+<span id="cb286-5"><a href="day-20.html#cb286-5"></a>    <span class="dt">starting  =</span> starting,</span>
+<span id="cb286-6"><a href="day-20.html#cb286-6"></a>    <span class="dt">tuning    =</span> tuning, </span>
+<span id="cb286-7"><a href="day-20.html#cb286-7"></a>    <span class="dt">priors    =</span> priors, </span>
+<span id="cb286-8"><a href="day-20.html#cb286-8"></a>    <span class="dt">cov.model =</span> cov.model, </span>
+<span id="cb286-9"><a href="day-20.html#cb286-9"></a>    <span class="dt">n.samples =</span> n.samples,</span>
+<span id="cb286-10"><a href="day-20.html#cb286-10"></a>    <span class="dt">amcmc     =</span> <span class="kw">list</span>(</span>
+<span id="cb286-11"><a href="day-20.html#cb286-11"></a>        <span class="dt">n.batch =</span> n.batch, </span>
+<span id="cb286-12"><a href="day-20.html#cb286-12"></a>        <span class="dt">batch.length =</span> batch.length,</span>
+<span id="cb286-13"><a href="day-20.html#cb286-13"></a>        <span class="dt">accept.rate =</span> <span class="fl">0.44</span></span>
+<span id="cb286-14"><a href="day-20.html#cb286-14"></a>    ),</span>
+<span id="cb286-15"><a href="day-20.html#cb286-15"></a>    <span class="dt">n.report  =</span> <span class="dv">10</span> <span class="co">## report every 10 adaptive batches</span></span>
+<span id="cb286-16"><a href="day-20.html#cb286-16"></a>)</span>
+<span id="cb286-17"><a href="day-20.html#cb286-17"></a><span class="co">## can update the initial tuning parameters given the adapted values</span></span></code></pre></div>
+<pre><code>## ----------------------------------------
+##  General model description
+## ----------------------------------------
+## Model fit with 136 observations.
+## 
+## Number of covariates 3 (including intercept if specified).
+## 
+## Using the matern spatial correlation model.
+## 
+## Using adaptive MCMC.
+## 
+##  Number of batches 100.
+##  Batch length 50.
+##  Target acceptance rate 0.44000.
+## 
+## Priors and hyperpriors:
+##  beta normal:
+##  mu: 0.000   0.000   0.000   
+##  cov:
+##  1000000.000 0.000   0.000   
+##  0.000   1000000.000 0.000   
+##  0.000   0.000   1000000.000 
+## 
+##  sigma.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  tau.sq IG hyperpriors shape=2.00000 and scale=2.00000
+##  phi Unif hyperpriors a=0.01000 and b=100.00000
+##  nu Unif hyperpriors a=0.01000 and b=100.00000
+## -------------------------------------------------
+##      Sampling
+## -------------------------------------------------
+## Batch: 10 of 100, 10.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    40.0        0.55778
+##  tau.sq      28.0        0.79024
+##  phi     12.0        0.63982
+##  nu      24.0        0.49560
+## -------------------------------------------------
+## Batch: 20 of 100, 20.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    30.0        0.51490
+##  tau.sq      30.0        0.75926
+##  phi     22.0        0.57893
+##  nu      24.0        0.44844
+## -------------------------------------------------
+## Batch: 30 of 100, 30.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    42.0        0.47531
+##  tau.sq      44.0        0.71504
+##  phi     32.0        0.52384
+##  nu      36.0        0.42232
+## -------------------------------------------------
+## Batch: 40 of 100, 40.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    34.0        0.46590
+##  tau.sq      40.0        0.70088
+##  phi     26.0        0.47399
+##  nu      28.0        0.38213
+## -------------------------------------------------
+## Batch: 50 of 100, 50.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    34.0        0.43008
+##  tau.sq      58.0        0.71504
+##  phi     18.0        0.43755
+##  nu      24.0        0.34577
+## -------------------------------------------------
+## Batch: 60 of 100, 60.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    40.0        0.41321
+##  tau.sq      38.0        0.71504
+##  phi     30.0        0.39591
+##  nu      42.0        0.31286
+## -------------------------------------------------
+## Batch: 70 of 100, 70.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    34.0        0.39701
+##  tau.sq      50.0        0.74422
+##  phi     26.0        0.35823
+##  nu      34.0        0.28881
+## -------------------------------------------------
+## Batch: 80 of 100, 80.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    50.0        0.39701
+##  tau.sq      32.0        0.75926
+##  phi     34.0        0.33069
+##  nu      46.0        0.26661
+## -------------------------------------------------
+## Batch: 90 of 100, 90.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    30.0        0.38915
+##  tau.sq      46.0        0.74422
+##  phi     52.0        0.30527
+##  nu      38.0        0.24611
+## -------------------------------------------------
+## Batch: 100 of 100, 100.00%
+##  parameter   acceptance  tuning
+##  sigma.sq    48.0        0.39701
+##  tau.sq      32.0        0.72949
+##  phi     28.0        0.29922
+##  nu      54.0        0.26133
+## -------------------------------------------------</code></pre>
+<p>To get the fitted parameters, we can recover these with composition sampling.</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="day-20.html#cb288-1"></a><span class="co">## discard the first half of the samples as burn-in</span></span>
+<span id="cb288-2"><a href="day-20.html#cb288-2"></a>burn.in &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>n.samples</span>
+<span id="cb288-3"><a href="day-20.html#cb288-3"></a><span class="co">## trace plots for the exponential model</span></span>
+<span id="cb288-4"><a href="day-20.html#cb288-4"></a>fit_e &lt;-<span class="st"> </span><span class="kw">spRecover</span>(fit_e, <span class="dt">start =</span> burn.in, <span class="dt">thin =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb288-5"><a href="day-20.html#cb288-5"></a>theta.samps &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(fit_e<span class="op">$</span>p.theta.samples, fit_e<span class="op">$</span>p.theta.samples)</span>
+<span id="cb288-6"><a href="day-20.html#cb288-6"></a><span class="kw">plot</span>(theta.samps, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb288-7"><a href="day-20.html#cb288-7"></a>beta.samps &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(fit_e<span class="op">$</span>p.beta.recover.samples, fit_e<span class="op">$</span>p.beta.recover.samples)  </span>
+<span id="cb288-8"><a href="day-20.html#cb288-8"></a><span class="kw">plot</span>(beta.samps, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-156-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-156-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="day-20.html#cb289-1"></a><span class="co">## trace plots for the matern model</span></span>
+<span id="cb289-2"><a href="day-20.html#cb289-2"></a>fit_m &lt;-<span class="st"> </span><span class="kw">spRecover</span>(fit_m, <span class="dt">start =</span> burn.in, <span class="dt">thin =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb289-3"><a href="day-20.html#cb289-3"></a>theta.samps &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(fit_m<span class="op">$</span>p.theta.samples, fit_m<span class="op">$</span>p.theta.samples)</span>
+<span id="cb289-4"><a href="day-20.html#cb289-4"></a><span class="kw">plot</span>(theta.samps, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb289-5"><a href="day-20.html#cb289-5"></a>beta.samps &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(fit_m<span class="op">$</span>p.beta.recover.samples, fit_m<span class="op">$</span>p.beta.recover.samples)  </span>
+<span id="cb289-6"><a href="day-20.html#cb289-6"></a><span class="kw">plot</span>(beta.samps, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb289-7"><a href="day-20.html#cb289-7"></a><span class="kw">round</span>(<span class="kw">summary</span>(theta.samps)<span class="op">$</span>quantiles, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##            2.5%    25%    50%    75%  97.5%
+## sigma.sq 14.437 20.865 25.640 32.910 62.267
+## tau.sq    0.538  1.029  1.430  1.917  3.239
+## phi       0.167  0.335  0.472  0.648  1.495
+## nu        0.602  0.819  1.033  1.425  4.846</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-157-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-157-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="day-20.html#cb291-1"></a><span class="co">## recover the spatial random effects</span></span>
+<span id="cb291-2"><a href="day-20.html#cb291-2"></a>fit_e_w &lt;-<span class="st"> </span>fit_e<span class="op">$</span>p.w.recover.samples</span>
+<span id="cb291-3"><a href="day-20.html#cb291-3"></a>fit_m_w &lt;-<span class="st"> </span>fit_m<span class="op">$</span>p.w.recover.samples</span>
+<span id="cb291-4"><a href="day-20.html#cb291-4"></a></span>
+<span id="cb291-5"><a href="day-20.html#cb291-5"></a><span class="co">## recover the spatial random effects (eta&#39;s in our class notation)</span></span>
+<span id="cb291-6"><a href="day-20.html#cb291-6"></a>w.samps &lt;-<span class="st"> </span><span class="kw">cbind</span>(fit_e_w, fit_m_w)</span>
+<span id="cb291-7"><a href="day-20.html#cb291-7"></a>w.summary &lt;-<span class="st"> </span><span class="kw">apply</span>(w.samps, <span class="dv">1</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb291-8"><a href="day-20.html#cb291-8"></a>    <span class="kw">quantile</span>(x, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</span>
+<span id="cb291-9"><a href="day-20.html#cb291-9"></a>})</span></code></pre></div>
+<p>Next we can genereate predictions for the exponential model</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="day-20.html#cb292-1"></a>states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>)</span>
+<span id="cb292-2"><a href="day-20.html#cb292-2"></a></span>
+<span id="cb292-3"><a href="day-20.html#cb292-3"></a>pred_coords &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(</span>
+<span id="cb292-4"><a href="day-20.html#cb292-4"></a>    <span class="kw">expand.grid</span>(</span>
+<span id="cb292-5"><a href="day-20.html#cb292-5"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="dv">100</span>), </span>
+<span id="cb292-6"><a href="day-20.html#cb292-6"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="dv">100</span>)</span>
+<span id="cb292-7"><a href="day-20.html#cb292-7"></a>    )</span>
+<span id="cb292-8"><a href="day-20.html#cb292-8"></a>)</span>
+<span id="cb292-9"><a href="day-20.html#cb292-9"></a><span class="kw">colnames</span>(pred_coords) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb292-10"><a href="day-20.html#cb292-10"></a></span>
+<span id="cb292-11"><a href="day-20.html#cb292-11"></a><span class="co">## predict using the tuned Matern fit</span></span>
+<span id="cb292-12"><a href="day-20.html#cb292-12"></a>preds &lt;-<span class="st"> </span><span class="kw">spPredict</span>(</span>
+<span id="cb292-13"><a href="day-20.html#cb292-13"></a>    fit_m, </span>
+<span id="cb292-14"><a href="day-20.html#cb292-14"></a>    <span class="dt">start =</span> burn.in, </span>
+<span id="cb292-15"><a href="day-20.html#cb292-15"></a>    <span class="dt">thin =</span> <span class="dv">10</span>, </span>
+<span id="cb292-16"><a href="day-20.html#cb292-16"></a>    <span class="dt">pred.coords =</span> <span class="kw">cbind</span>(pred_coords<span class="op">$</span>lon, pred_coords<span class="op">$</span>lat), </span>
+<span id="cb292-17"><a href="day-20.html#cb292-17"></a>    <span class="dt">pred.covars =</span> <span class="kw">cbind</span>(<span class="dv">1</span>, pred_coords<span class="op">$</span>lon, pred_coords<span class="op">$</span>lat)</span>
+<span id="cb292-18"><a href="day-20.html#cb292-18"></a>)</span>
+<span id="cb292-19"><a href="day-20.html#cb292-19"></a></span>
+<span id="cb292-20"><a href="day-20.html#cb292-20"></a><span class="co">## Calculate the prediction means and variances</span></span>
+<span id="cb292-21"><a href="day-20.html#cb292-21"></a>pred_coords<span class="op">$</span>pred_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(preds<span class="op">$</span>p.y.predictive.samples, <span class="dv">1</span>, mean)</span>
+<span id="cb292-22"><a href="day-20.html#cb292-22"></a>pred_coords<span class="op">$</span>pred_var &lt;-<span class="st"> </span><span class="kw">apply</span>(preds<span class="op">$</span>p.y.predictive.samples, <span class="dv">1</span>, var)</span>
+<span id="cb292-23"><a href="day-20.html#cb292-23"></a></span>
+<span id="cb292-24"><a href="day-20.html#cb292-24"></a><span class="co">## calculate 95% credible intervals for the predictions</span></span>
+<span id="cb292-25"><a href="day-20.html#cb292-25"></a>pred.summary &lt;-<span class="st"> </span><span class="kw">apply</span>(preds<span class="op">$</span>p.y.predictive.samples, <span class="dv">1</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb292-26"><a href="day-20.html#cb292-26"></a>    <span class="kw">quantile</span>(x, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</span>
+<span id="cb292-27"><a href="day-20.html#cb292-27"></a>})</span>
+<span id="cb292-28"><a href="day-20.html#cb292-28"></a></span>
+<span id="cb292-29"><a href="day-20.html#cb292-29"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_mean)) <span class="op">+</span></span>
+<span id="cb292-30"><a href="day-20.html#cb292-30"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb292-31"><a href="day-20.html#cb292-31"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb292-32"><a href="day-20.html#cb292-32"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb292-33"><a href="day-20.html#cb292-33"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb292-34"><a href="day-20.html#cb292-34"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb292-35"><a href="day-20.html#cb292-35"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span>
+<span id="cb292-36"><a href="day-20.html#cb292-36"></a></span>
+<span id="cb292-37"><a href="day-20.html#cb292-37"></a></span>
+<span id="cb292-38"><a href="day-20.html#cb292-38"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_var)) <span class="op">+</span></span>
+<span id="cb292-39"><a href="day-20.html#cb292-39"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb292-40"><a href="day-20.html#cb292-40"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb292-41"><a href="day-20.html#cb292-41"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb292-42"><a href="day-20.html#cb292-42"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb292-43"><a href="day-20.html#cb292-43"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction variance in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb292-44"><a href="day-20.html#cb292-44"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<pre><code>## ----------------------------------------
+##  General model description
+## ----------------------------------------
+## Model fit with 136 observations.
+## 
+## Prediction at 10000 locations.
+## 
+## Number of covariates 3 (including intercept if specified).
+## 
+## Using the matern spatial correlation model.
+## 
+## -------------------------------------------------
+##      Sampling
+## -------------------------------------------------
+## Sampled: 100 of 251, 39.44%
+## Sampled: 200 of 251, 79.28%</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-159-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-159-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Note these variances are higher than the MLE estimates (potentially by a lot – link to MLE fits day 11)</p>
 </div>
-<div id="empirical-orthogonal-functions" class="section level2" number="20.3">
-<h2 number="20.3"><span class="header-section-number">20.3</span> Empirical Orthogonal Functions</h2>
+<div id="global-vs.-local-basis-function" class="section level2" number="20.3">
+<h2 number="20.3"><span class="header-section-number">20.3</span> Global vs. Local Basis function</h2>
+<ul>
+<li>simulate some data</li>
+</ul>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="day-20.html#cb294-1"></a><span class="kw">set.seed</span>(<span class="dv">44</span>)</span>
+<span id="cb294-2"><a href="day-20.html#cb294-2"></a>n &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb294-3"><a href="day-20.html#cb294-3"></a>sigma &lt;-<span class="st"> </span><span class="fl">0.2</span></span>
+<span id="cb294-4"><a href="day-20.html#cb294-4"></a>x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n)</span>
+<span id="cb294-5"><a href="day-20.html#cb294-5"></a>Sigma &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span><span class="kw">rdist</span>(x)<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.02</span>)</span>
+<span id="cb294-6"><a href="day-20.html#cb294-6"></a></span>
+<span id="cb294-7"><a href="day-20.html#cb294-7"></a><span class="co">## Gaussian covariance with a small amount of &quot;error&quot;</span></span>
+<span id="cb294-8"><a href="day-20.html#cb294-8"></a>mu &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), Sigma <span class="op">+</span><span class="st"> </span><span class="fl">1e-10</span> <span class="op">*</span><span class="st"> </span><span class="kw">diag</span>(n))) </span>
+<span id="cb294-9"><a href="day-20.html#cb294-9"></a>y &lt;-<span class="st"> </span>mu <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, sigma)</span>
+<span id="cb294-10"><a href="day-20.html#cb294-10"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb294-11"><a href="day-20.html#cb294-11"></a>    <span class="dt">x  =</span> x,</span>
+<span id="cb294-12"><a href="day-20.html#cb294-12"></a>    <span class="dt">y  =</span> y, </span>
+<span id="cb294-13"><a href="day-20.html#cb294-13"></a>    <span class="dt">mu =</span> mu</span>
+<span id="cb294-14"><a href="day-20.html#cb294-14"></a>)</span>
+<span id="cb294-15"><a href="day-20.html#cb294-15"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu)) <span class="op">+</span></span>
+<span id="cb294-16"><a href="day-20.html#cb294-16"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb294-17"><a href="day-20.html#cb294-17"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y))</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-160-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="an-example-global-basis-fourier-basis" class="section level3" number="20.3.1">
+<h3 number="20.3.1"><span class="header-section-number">20.3.1</span> An example global basis: Fourier Basis</h3>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="day-20.html#cb295-1"></a>make_fourier_basis &lt;-<span class="st"> </span><span class="cf">function</span>(x, num_freq) {</span>
+<span id="cb295-2"><a href="day-20.html#cb295-2"></a>    <span class="co"># if (!is.integer(num_freq)) {</span></span>
+<span id="cb295-3"><a href="day-20.html#cb295-3"></a>    <span class="co">#     stop(&quot;num_freq must be an odd integer&quot;)</span></span>
+<span id="cb295-4"><a href="day-20.html#cb295-4"></a>    <span class="co"># }</span></span>
+<span id="cb295-5"><a href="day-20.html#cb295-5"></a>    <span class="co"># if (num_freq %% 2 == 0) {</span></span>
+<span id="cb295-6"><a href="day-20.html#cb295-6"></a>    <span class="co">#     stop(&quot;num_freq must be an odd integer&quot;)</span></span>
+<span id="cb295-7"><a href="day-20.html#cb295-7"></a>    <span class="co"># }</span></span>
+<span id="cb295-8"><a href="day-20.html#cb295-8"></a>    </span>
+<span id="cb295-9"><a href="day-20.html#cb295-9"></a>    X_fourier &lt;-<span class="st"> </span><span class="kw">cbind</span>(</span>
+<span id="cb295-10"><a href="day-20.html#cb295-10"></a>        <span class="dv">1</span>, </span>
+<span id="cb295-11"><a href="day-20.html#cb295-11"></a>        <span class="kw">do.call</span>(</span>
+<span id="cb295-12"><a href="day-20.html#cb295-12"></a>            cbind, </span>
+<span id="cb295-13"><a href="day-20.html#cb295-13"></a>            <span class="kw">sapply</span>(</span>
+<span id="cb295-14"><a href="day-20.html#cb295-14"></a>                <span class="dv">1</span><span class="op">:</span>((num_freq <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>), <span class="cf">function</span>(i) { </span>
+<span id="cb295-15"><a href="day-20.html#cb295-15"></a>                    <span class="kw">cbind</span>(<span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>i <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>x), <span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>i <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>x))</span>
+<span id="cb295-16"><a href="day-20.html#cb295-16"></a>                }, </span>
+<span id="cb295-17"><a href="day-20.html#cb295-17"></a>            <span class="dt">simplify =</span> <span class="ot">FALSE</span></span>
+<span id="cb295-18"><a href="day-20.html#cb295-18"></a>            )</span>
+<span id="cb295-19"><a href="day-20.html#cb295-19"></a>        )</span>
+<span id="cb295-20"><a href="day-20.html#cb295-20"></a>    )</span>
+<span id="cb295-21"><a href="day-20.html#cb295-21"></a>    </span>
+<span id="cb295-22"><a href="day-20.html#cb295-22"></a><span class="kw">return</span>(X_fourier)</span>
+<span id="cb295-23"><a href="day-20.html#cb295-23"></a>}</span>
+<span id="cb295-24"><a href="day-20.html#cb295-24"></a></span>
+<span id="cb295-25"><a href="day-20.html#cb295-25"></a>X_fourier &lt;-<span class="st"> </span><span class="kw">make_fourier_basis</span>(x, <span class="dt">num_freq =</span> <span class="dv">5</span>)</span>
+<span id="cb295-26"><a href="day-20.html#cb295-26"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb295-27"><a href="day-20.html#cb295-27"></a>    <span class="dt">x         =</span> x, </span>
+<span id="cb295-28"><a href="day-20.html#cb295-28"></a>    <span class="dt">y         =</span> y,</span>
+<span id="cb295-29"><a href="day-20.html#cb295-29"></a>    <span class="dt">mu        =</span> mu,</span>
+<span id="cb295-30"><a href="day-20.html#cb295-30"></a>    <span class="dt">X_fourier =</span> <span class="kw">c</span>(X_fourier),</span>
+<span id="cb295-31"><a href="day-20.html#cb295-31"></a>    <span class="dt">basis     =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_fourier), <span class="dt">each =</span> n))</span>
+<span id="cb295-32"><a href="day-20.html#cb295-32"></a>)</span>
+<span id="cb295-33"><a href="day-20.html#cb295-33"></a></span>
+<span id="cb295-34"><a href="day-20.html#cb295-34"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb295-35"><a href="day-20.html#cb295-35"></a><span class="st">    </span><span class="co"># geom_point() +</span></span>
+<span id="cb295-36"><a href="day-20.html#cb295-36"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> X_fourier, <span class="dt">group =</span> basis, <span class="dt">color =</span> basis)) <span class="op">+</span></span>
+<span id="cb295-37"><a href="day-20.html#cb295-37"></a><span class="st">    </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
+<span id="cb295-38"><a href="day-20.html#cb295-38"></a><span class="st">    </span><span class="kw">theme_dark</span>()</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-161-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="day-20.html#cb296-1"></a><span class="co">## fit a model using the Fourier basis</span></span>
+<span id="cb296-2"><a href="day-20.html#cb296-2"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X_fourier <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="day-20.html#cb297-1"></a><span class="co">## plot the basis with fitted coefficients</span></span>
+<span id="cb297-2"><a href="day-20.html#cb297-2"></a>dat<span class="op">$</span>fitted_basis &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb297-3"><a href="day-20.html#cb297-3"></a>    <span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_fourier), <span class="cf">function</span>(i) X_fourier[, i] <span class="op">*</span><span class="st"> </span>fit<span class="op">$</span>coefficients[i])</span>
+<span id="cb297-4"><a href="day-20.html#cb297-4"></a>)</span>
+<span id="cb297-5"><a href="day-20.html#cb297-5"></a></span>
+<span id="cb297-6"><a href="day-20.html#cb297-6"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb297-7"><a href="day-20.html#cb297-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb297-8"><a href="day-20.html#cb297-8"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> fitted_basis, <span class="dt">color =</span> basis, <span class="dt">group =</span> basis)) <span class="op">+</span></span>
+<span id="cb297-9"><a href="day-20.html#cb297-9"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Weighted Fourier Basis functions&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-163-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="day-20.html#cb298-1"></a><span class="co">## calculate the fitted function -- the sum of the bases</span></span>
+<span id="cb298-2"><a href="day-20.html#cb298-2"></a>dat<span class="op">$</span>mu_hat &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_fourier), <span class="cf">function</span>(i) X_fourier[, i] <span class="op">*</span><span class="st"> </span>fit<span class="op">$</span>coefficients[i]), <span class="dv">1</span>, sum)</span>
+<span id="cb298-3"><a href="day-20.html#cb298-3"></a></span>
+<span id="cb298-4"><a href="day-20.html#cb298-4"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb298-5"><a href="day-20.html#cb298-5"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb298-6"><a href="day-20.html#cb298-6"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu_hat), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd  =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb298-7"><a href="day-20.html#cb298-7"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb298-8"><a href="day-20.html#cb298-8"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Fitted function vs. simulated function&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-164-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>The Fourier basis is global</li>
+</ul>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="day-20.html#cb299-1"></a><span class="co">## only a small percentage of these values are zero</span></span>
+<span id="cb299-2"><a href="day-20.html#cb299-2"></a><span class="kw">mean</span>(X_fourier <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 4e-04</code></pre>
+</div>
+</div>
+<div id="example-local-basis" class="section level2" number="20.4">
+<h2 number="20.4"><span class="header-section-number">20.4</span> example local basis</h2>
+<ul>
+<li><p>B-splines are piecewise polynomial functions</p></li>
+<li><p>degrees of freedom are the number of functions</p>
+<ul>
+<li>More degrees of freedom – more “wiggly” fit – potential for overfitting</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="day-20.html#cb301-1"></a><span class="co">## B-splines</span></span>
+<span id="cb301-2"><a href="day-20.html#cb301-2"></a>X_bs &lt;-<span class="st"> </span><span class="kw">bs</span>(x, <span class="dt">intercept =</span> <span class="ot">TRUE</span>, <span class="dt">df =</span> <span class="dv">6</span>)</span>
+<span id="cb301-3"><a href="day-20.html#cb301-3"></a>dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb301-4"><a href="day-20.html#cb301-4"></a>    <span class="dt">x     =</span> x, </span>
+<span id="cb301-5"><a href="day-20.html#cb301-5"></a>    <span class="dt">y     =</span> y,</span>
+<span id="cb301-6"><a href="day-20.html#cb301-6"></a>    <span class="dt">mu    =</span> mu,</span>
+<span id="cb301-7"><a href="day-20.html#cb301-7"></a>    <span class="dt">X_bs  =</span> <span class="kw">c</span>(X_bs),</span>
+<span id="cb301-8"><a href="day-20.html#cb301-8"></a>    <span class="dt">basis =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_bs), <span class="dt">each =</span> n))</span>
+<span id="cb301-9"><a href="day-20.html#cb301-9"></a>)</span>
+<span id="cb301-10"><a href="day-20.html#cb301-10"></a></span>
+<span id="cb301-11"><a href="day-20.html#cb301-11"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb301-12"><a href="day-20.html#cb301-12"></a><span class="st">    </span><span class="co"># geom_point() +</span></span>
+<span id="cb301-13"><a href="day-20.html#cb301-13"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> X_bs, <span class="dt">group =</span> basis, <span class="dt">color =</span> basis)) <span class="op">+</span></span>
+<span id="cb301-14"><a href="day-20.html#cb301-14"></a><span class="st">    </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
+<span id="cb301-15"><a href="day-20.html#cb301-15"></a><span class="st">    </span><span class="kw">theme_dark</span>()</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-166-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="day-20.html#cb302-1"></a><span class="co">## fit a model using the B-spline basis</span></span>
+<span id="cb302-2"><a href="day-20.html#cb302-2"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X_bs <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="day-20.html#cb303-1"></a><span class="co">## plot the basis with fitted coefficients</span></span>
+<span id="cb303-2"><a href="day-20.html#cb303-2"></a>dat<span class="op">$</span>fitted_basis &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb303-3"><a href="day-20.html#cb303-3"></a>    <span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_bs), <span class="cf">function</span>(i) X_bs[, i] <span class="op">*</span><span class="st"> </span>fit<span class="op">$</span>coefficients[i])</span>
+<span id="cb303-4"><a href="day-20.html#cb303-4"></a>)</span>
+<span id="cb303-5"><a href="day-20.html#cb303-5"></a></span>
+<span id="cb303-6"><a href="day-20.html#cb303-6"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb303-7"><a href="day-20.html#cb303-7"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb303-8"><a href="day-20.html#cb303-8"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> fitted_basis, <span class="dt">color =</span> basis, <span class="dt">group =</span> basis)) <span class="op">+</span></span>
+<span id="cb303-9"><a href="day-20.html#cb303-9"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Weighted B-spline Basis functions&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-168-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="day-20.html#cb304-1"></a><span class="co">## calculate the fitted function -- the sum of the bases</span></span>
+<span id="cb304-2"><a href="day-20.html#cb304-2"></a>dat<span class="op">$</span>mu_hat &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_bs), <span class="cf">function</span>(i) X_bs[, i] <span class="op">*</span><span class="st"> </span>fit<span class="op">$</span>coefficients[i]), <span class="dv">1</span>, sum)</span>
+<span id="cb304-3"><a href="day-20.html#cb304-3"></a></span>
+<span id="cb304-4"><a href="day-20.html#cb304-4"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb304-5"><a href="day-20.html#cb304-5"></a><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb304-6"><a href="day-20.html#cb304-6"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu_hat), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd  =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb304-7"><a href="day-20.html#cb304-7"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb304-8"><a href="day-20.html#cb304-8"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Fitted function vs. simulated function&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-169-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>The B-spline basis is local</li>
+</ul>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="day-20.html#cb305-1"></a><span class="co">## a much larger percentage of these values are zero -- can use sparse matrix</span></span>
+<span id="cb305-2"><a href="day-20.html#cb305-2"></a><span class="co">##     routines to solve these equations much faster</span></span>
+<span id="cb305-3"><a href="day-20.html#cb305-3"></a><span class="kw">mean</span>(X_bs <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0.3347</code></pre>
+</div>
+<div id="fitting-spatial-models-many-ways" class="section level2" number="20.5">
+<h2 number="20.5"><span class="header-section-number">20.5</span> Fitting spatial models many ways</h2>
+</div>
+<div id="empirical-orthogonal-functions" class="section level2" number="20.6">
+<h2 number="20.6"><span class="header-section-number">20.6</span> Empirical Orthogonal Functions</h2>
 <ul>
 <li><p>Recall the Karhunen-Loève expansion</p></li>
 <li><p>Analog for PCA for spatio-temporal data</p></li>
 <li><p>Use the sea surface temperature (SST) data in <span class="citation">Wikle, Zammit-Mangion, and Cressie (<a href="references.html#ref-wikle2019spatio" role="doc-biblioref">2019</a>)</span></p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="day-20.html#cb2-1"></a><span class="kw">data</span>(<span class="st">&quot;SSTlandmask&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</span>
-<span id="cb2-2"><a href="day-20.html#cb2-2"></a><span class="kw">data</span>(<span class="st">&quot;SSTlonlat&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>) </span>
-<span id="cb2-3"><a href="day-20.html#cb2-3"></a><span class="kw">data</span>(<span class="st">&quot;SSTdata&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="day-20.html#cb307-1"></a><span class="kw">data</span>(<span class="st">&quot;SSTlandmask&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</span>
+<span id="cb307-2"><a href="day-20.html#cb307-2"></a><span class="kw">data</span>(<span class="st">&quot;SSTlonlat&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>) </span>
+<span id="cb307-3"><a href="day-20.html#cb307-3"></a><span class="kw">data</span>(<span class="st">&quot;SSTdata&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</span></code></pre></div>
 <p>Delete the values of SST that are over land (e.g. <code>SSTlandmask</code> is 1)</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="day-20.html#cb3-1"></a>delete_rows &lt;-<span class="st"> </span><span class="kw">which</span>(SSTlandmask <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb3-2"><a href="day-20.html#cb3-2"></a>SSTdata &lt;-<span class="st"> </span>SSTdata[<span class="op">-</span>delete_rows, <span class="dv">1</span><span class="op">:</span><span class="dv">396</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="day-20.html#cb308-1"></a>delete_rows &lt;-<span class="st"> </span><span class="kw">which</span>(SSTlandmask <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb308-2"><a href="day-20.html#cb308-2"></a>SSTdata &lt;-<span class="st"> </span>SSTdata[<span class="op">-</span>delete_rows, <span class="dv">1</span><span class="op">:</span><span class="dv">396</span>]</span></code></pre></div>
 <p>The eigen decomposition of the sample covariance of the data is equivalent to the singular value decomposition of the scaled and detrended data <span class="math inline">\(\mathbf{y}\)</span>.</p>
 <p><span class="math display">\[\begin{align*}
 \tilde{\mathbf{y}} &amp; \equiv \frac{1}{\sqrt{T - 1}} \left( \right)
 \end{align*}\]</span></p>
 <p>To get a spatial EOF, we need to transform the data into space-wide format</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="day-20.html#cb4-1"></a>y &lt;-<span class="st"> </span><span class="kw">t</span>(SSTdata)</span>
-<span id="cb4-2"><a href="day-20.html#cb4-2"></a><span class="kw">dim</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="day-20.html#cb309-1"></a>y &lt;-<span class="st"> </span><span class="kw">t</span>(SSTdata)</span>
+<span id="cb309-2"><a href="day-20.html#cb309-2"></a><span class="kw">dim</span>(y)</span></code></pre></div>
 <pre><code>## [1]  396 2261</code></pre>
 <p>To use the equation above, we need to calculate the spatial mean and the number of spatial replicates and scale and detrend the data</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="day-20.html#cb6-1"></a>spatial_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(SSTdata, <span class="dv">1</span>, mean)</span>
-<span id="cb6-2"><a href="day-20.html#cb6-2"></a>nT &lt;-<span class="st"> </span><span class="kw">ncol</span>(SSTdata)</span>
-<span id="cb6-3"><a href="day-20.html#cb6-3"></a>y_tilde &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(nT <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">outer</span>(<span class="kw">rep</span>(<span class="dv">1</span>, nT), spatial_mean))</span></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="day-20.html#cb311-1"></a>spatial_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(SSTdata, <span class="dv">1</span>, mean)</span>
+<span id="cb311-2"><a href="day-20.html#cb311-2"></a>nT &lt;-<span class="st"> </span><span class="kw">ncol</span>(SSTdata)</span>
+<span id="cb311-3"><a href="day-20.html#cb311-3"></a>y_tilde &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(nT <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>(y <span class="op">-</span><span class="st"> </span><span class="kw">outer</span>(<span class="kw">rep</span>(<span class="dv">1</span>, nT), spatial_mean))</span></code></pre></div>
 <p>We carry out the SVD on this scaled and detrended data</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="day-20.html#cb7-1"></a>svd_y &lt;-<span class="st"> </span><span class="kw">svd</span>(y_tilde)</span></code></pre></div>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="day-20.html#cb312-1"></a>svd_y &lt;-<span class="st"> </span><span class="kw">svd</span>(y_tilde)</span></code></pre></div>
 <p>which returns a list with three elements <span class="math inline">\(\mathbf{U}\)</span> <span class="math inline">\(\mathbf{D}\)</span> <span class="math inline">\(\mathbf{V}\)</span></p>
 <p><span class="math display">\[\begin{align*}
 \tilde{\mathbf{y}} &amp; = \mathbf{U} \mathbf{D} \mathbf{V}
 \end{align*}\]</span></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="day-20.html#cb8-1"></a>V &lt;-<span class="st"> </span>svd_y<span class="op">$</span>v</span>
-<span id="cb8-2"><a href="day-20.html#cb8-2"></a><span class="kw">colnames</span>(V) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;EOF&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(SSTdata))</span>
-<span id="cb8-3"><a href="day-20.html#cb8-3"></a>EOFs &lt;-<span class="st"> </span><span class="kw">cbind</span>(SSTlonlat[ <span class="op">-</span><span class="st"> </span>delete_rows, ], V)</span>
-<span id="cb8-4"><a href="day-20.html#cb8-4"></a><span class="kw">glimpse</span>(EOFs[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, ])</span></code></pre></div>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="day-20.html#cb313-1"></a>V &lt;-<span class="st"> </span>svd_y<span class="op">$</span>v</span>
+<span id="cb313-2"><a href="day-20.html#cb313-2"></a><span class="kw">colnames</span>(V) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;EOF&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(SSTdata))</span>
+<span id="cb313-3"><a href="day-20.html#cb313-3"></a>EOFs &lt;-<span class="st"> </span><span class="kw">cbind</span>(SSTlonlat[ <span class="op">-</span><span class="st"> </span>delete_rows, ], V)</span>
+<span id="cb313-4"><a href="day-20.html#cb313-4"></a><span class="kw">glimpse</span>(EOFs[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, ])</span></code></pre></div>
 <pre><code>## Observations: 2,261
 ## Variables: 6
-## $ lon  &lt;dbl&gt; 154, 156, 158, 160, 162, 164, 166, 168, 170, 172, 174, 176, 178,…
-## $ lat  &lt;dbl&gt; -29, -29, -29, -29, -29, -29, -29, -29, -29, -29, -29, -29, -29,…
-## $ EOF1 &lt;dbl&gt; -0.004915064, -0.001412275, 0.000245909, 0.001454972, 0.00226577…
-## $ EOF2 &lt;dbl&gt; -1.212957e-02, -2.276177e-03, 2.298082e-03, 2.303585e-03, 1.6431…
-## $ EOF3 &lt;dbl&gt; -0.02882162, -0.02552841, -0.01933020, -0.01905901, -0.02251571,…
-## $ EOF4 &lt;dbl&gt; 8.540892e-05, 6.726077e-03, 8.591251e-03, 1.025538e-02, 1.125295…</code></pre>
+## $ lon  &lt;dbl&gt; 154, 156, 158, 160, 162, 164, 166, 168, 170,…
+## $ lat  &lt;dbl&gt; -29, -29, -29, -29, -29, -29, -29, -29, -29,…
+## $ EOF1 &lt;dbl&gt; -0.0049151, -0.0014123, 0.0002459, 0.0014550…
+## $ EOF2 &lt;dbl&gt; -1.213e-02, -2.276e-03, 2.298e-03, 2.304e-03…
+## $ EOF3 &lt;dbl&gt; -0.02882, -0.02553, -0.01933, -0.01906, -0.0…
+## $ EOF4 &lt;dbl&gt; 8.541e-05, 6.726e-03, 8.591e-03, 1.026e-02, …</code></pre>
 <p>Plot the EOFs</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="day-20.html#cb10-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> EOFs, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> EOF1)) <span class="op">+</span></span>
-<span id="cb10-2"><a href="day-20.html#cb10-2"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
-<span id="cb10-3"><a href="day-20.html#cb10-3"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
-<span id="cb10-4"><a href="day-20.html#cb10-4"></a><span class="st">    </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="fl">1.3</span>) <span class="op">+</span></span>
-<span id="cb10-5"><a href="day-20.html#cb10-5"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb10-6"><a href="day-20.html#cb10-6"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude (deg)&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb10-7"><a href="day-20.html#cb10-7"></a><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude (deg)&quot;</span>)</span></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="day-20.html#cb11-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> EOFs, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> EOF2)) <span class="op">+</span></span>
-<span id="cb11-2"><a href="day-20.html#cb11-2"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
-<span id="cb11-3"><a href="day-20.html#cb11-3"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
-<span id="cb11-4"><a href="day-20.html#cb11-4"></a><span class="st">    </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="fl">1.3</span>) <span class="op">+</span></span>
-<span id="cb11-5"><a href="day-20.html#cb11-5"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb11-6"><a href="day-20.html#cb11-6"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude (deg)&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb11-7"><a href="day-20.html#cb11-7"></a><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude (deg)&quot;</span>)</span></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>Recall the</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="day-20.html#cb315-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> EOFs, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> EOF1)) <span class="op">+</span></span>
+<span id="cb315-2"><a href="day-20.html#cb315-2"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb315-3"><a href="day-20.html#cb315-3"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
+<span id="cb315-4"><a href="day-20.html#cb315-4"></a><span class="st">    </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="fl">1.3</span>) <span class="op">+</span></span>
+<span id="cb315-5"><a href="day-20.html#cb315-5"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb315-6"><a href="day-20.html#cb315-6"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude (deg)&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb315-7"><a href="day-20.html#cb315-7"></a><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude (deg)&quot;</span>) <span class="op">+</span></span>
+<span id="cb315-8"><a href="day-20.html#cb315-8"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;First EOF&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-177-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="day-20.html#cb316-1"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> EOFs, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> EOF2)) <span class="op">+</span></span>
+<span id="cb316-2"><a href="day-20.html#cb316-2"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb316-3"><a href="day-20.html#cb316-3"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
+<span id="cb316-4"><a href="day-20.html#cb316-4"></a><span class="st">    </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="fl">1.3</span>) <span class="op">+</span></span>
+<span id="cb316-5"><a href="day-20.html#cb316-5"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb316-6"><a href="day-20.html#cb316-6"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;Longitude (deg)&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb316-7"><a href="day-20.html#cb316-7"></a><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Latitude (deg)&quot;</span>) <span class="op">+</span></span>
+<span id="cb316-8"><a href="day-20.html#cb316-8"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Second EOF&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-178-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Let’s assume I have data for January 1970.</li>
+</ul>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="day-20.html#cb317-1"></a>dat &lt;-<span class="st"> </span>SST_df <span class="op">%&gt;%</span></span>
+<span id="cb317-2"><a href="day-20.html#cb317-2"></a><span class="st">    </span><span class="kw">subset</span>(Year <span class="op">==</span><span class="st"> </span><span class="dv">1970</span> <span class="op">&amp;</span><span class="st"> </span>Month <span class="op">==</span><span class="st"> &quot;Jan&quot;</span>)</span>
+<span id="cb317-3"><a href="day-20.html#cb317-3"></a>EOFs<span class="op">$</span>y &lt;-<span class="st"> </span>dat<span class="op">$</span>sst[ <span class="op">-</span><span class="st"> </span>delete_rows]</span></code></pre></div>
+<p>Model the data using the first few EOFs as basis functions</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="day-20.html#cb318-1"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>EOF1, <span class="dt">data =</span> EOFs)</span>
+<span id="cb318-2"><a href="day-20.html#cb318-2"></a><span class="kw">summary</span>(mod)</span>
+<span id="cb318-3"><a href="day-20.html#cb318-3"></a><span class="kw">plot</span>(EOFs<span class="op">$</span>y, <span class="kw">predict</span>(mod), <span class="dt">main =</span> <span class="st">&quot;Fitted vs. Predicted&quot;</span>)</span>
+<span id="cb318-4"><a href="day-20.html#cb318-4"></a><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ EOF1, data = EOFs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.0443 -0.2771  0.0635  0.3283  1.0750 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.2824     0.0111    25.5   &lt;2e-16 ***
+## EOF1         -7.9894     0.5259   -15.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.455 on 2259 degrees of freedom
+## Multiple R-squared:  0.0927, Adjusted R-squared:  0.0923 
+## F-statistic:  231 on 1 and 2259 DF,  p-value: &lt;2e-16</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-180-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="day-20.html#cb320-1"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>EOF1 <span class="op">+</span><span class="st"> </span>EOF2 <span class="op">+</span><span class="st"> </span>EOF3 <span class="op">+</span><span class="st"> </span>EOF4 <span class="op">+</span><span class="st"> </span>EOF5, <span class="dt">data =</span> EOFs)</span>
+<span id="cb320-2"><a href="day-20.html#cb320-2"></a><span class="kw">summary</span>(mod)</span>
+<span id="cb320-3"><a href="day-20.html#cb320-3"></a><span class="kw">plot</span>(EOFs<span class="op">$</span>y, <span class="kw">predict</span>(mod), <span class="dt">main =</span> <span class="st">&quot;Fitted vs. Predicted&quot;</span>)</span>
+<span id="cb320-4"><a href="day-20.html#cb320-4"></a><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5, data = EOFs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.6775 -0.2141  0.0033  0.2330  0.8828 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.2095     0.0217   -9.67   &lt;2e-16 ***
+## EOF1        -19.7556     0.6232  -31.70   &lt;2e-16 ***
+## EOF2        -12.3421     0.6165  -20.02   &lt;2e-16 ***
+## EOF3        -11.8236     0.6720  -17.59   &lt;2e-16 ***
+## EOF4         11.3313     0.3695   30.67   &lt;2e-16 ***
+## EOF5         13.5727     0.4285   31.67   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.346 on 2255 degrees of freedom
+## Multiple R-squared:  0.474,  Adjusted R-squared:  0.473 
+## F-statistic:  407 on 5 and 2255 DF,  p-value: &lt;2e-16</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-181-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="day-20.html#cb322-1"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>EOF1 <span class="op">+</span><span class="st"> </span>EOF2 <span class="op">+</span><span class="st"> </span>EOF3 <span class="op">+</span><span class="st"> </span>EOF4 <span class="op">+</span><span class="st"> </span>EOF5 <span class="op">+</span><span class="st"> </span></span>
+<span id="cb322-2"><a href="day-20.html#cb322-2"></a><span class="st">              </span>EOF6 <span class="op">+</span><span class="st"> </span>EOF7 <span class="op">+</span><span class="st"> </span>EOF8 <span class="op">+</span><span class="st"> </span>EOF9 <span class="op">+</span><span class="st"> </span>EOF10, <span class="dt">data =</span> EOFs)</span>
+<span id="cb322-3"><a href="day-20.html#cb322-3"></a><span class="kw">summary</span>(mod)</span>
+<span id="cb322-4"><a href="day-20.html#cb322-4"></a><span class="kw">plot</span>(EOFs<span class="op">$</span>y, <span class="kw">predict</span>(mod), <span class="dt">main =</span> <span class="st">&quot;Fitted vs. Predicted&quot;</span>)</span>
+<span id="cb322-5"><a href="day-20.html#cb322-5"></a><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5 + EOF6 + EOF7 + 
+##     EOF8 + EOF9 + EOF10, data = EOFs)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -1.505 -0.210  0.009  0.228  0.968 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.2330     0.0229  -10.16  &lt; 2e-16 ***
+## EOF1        -20.3188     0.6398  -31.76  &lt; 2e-16 ***
+## EOF2        -12.8966     0.6325  -20.39  &lt; 2e-16 ***
+## EOF3        -12.4496     0.6930  -17.97  &lt; 2e-16 ***
+## EOF4         11.4713     0.3565   32.18  &lt; 2e-16 ***
+## EOF5         13.8471     0.4241   32.65  &lt; 2e-16 ***
+## EOF6         -4.1098     0.3349  -12.27  &lt; 2e-16 ***
+## EOF7          1.5233     0.3294    4.62  4.0e-06 ***
+## EOF8         -2.5908     0.3538   -7.32  3.4e-13 ***
+## EOF9          0.4330     0.3308    1.31    0.191    
+## EOF10         0.5836     0.3365    1.73    0.083 .  
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.329 on 2250 degrees of freedom
+## Multiple R-squared:  0.525,  Adjusted R-squared:  0.523 
+## F-statistic:  249 on 10 and 2250 DF,  p-value: &lt;2e-16</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-182-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="day-20.html#cb324-1"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>EOF1 <span class="op">+</span><span class="st"> </span>EOF2 <span class="op">+</span><span class="st"> </span>EOF3 <span class="op">+</span><span class="st"> </span>EOF4 <span class="op">+</span><span class="st"> </span>EOF5 <span class="op">+</span><span class="st"> </span></span>
+<span id="cb324-2"><a href="day-20.html#cb324-2"></a><span class="st">              </span>EOF6 <span class="op">+</span><span class="st"> </span>EOF7 <span class="op">+</span><span class="st"> </span>EOF8 <span class="op">+</span><span class="st"> </span>EOF9 <span class="op">+</span><span class="st"> </span>EOF10 <span class="op">+</span></span>
+<span id="cb324-3"><a href="day-20.html#cb324-3"></a><span class="st">              </span>EOF11 <span class="op">+</span><span class="st"> </span>EOF12 <span class="op">+</span><span class="st"> </span>EOF13 <span class="op">+</span><span class="st"> </span>EOF14 <span class="op">+</span><span class="st"> </span>EOF15 <span class="op">+</span><span class="st"> </span></span>
+<span id="cb324-4"><a href="day-20.html#cb324-4"></a><span class="st">              </span>EOF16 <span class="op">+</span><span class="st"> </span>EOF17 <span class="op">+</span><span class="st"> </span>EOF18 <span class="op">+</span><span class="st"> </span>EOF19 <span class="op">+</span><span class="st"> </span>EOF20, <span class="dt">data =</span> EOFs)</span>
+<span id="cb324-5"><a href="day-20.html#cb324-5"></a><span class="kw">summary</span>(mod)</span>
+<span id="cb324-6"><a href="day-20.html#cb324-6"></a><span class="kw">plot</span>(EOFs<span class="op">$</span>y, <span class="kw">predict</span>(mod), <span class="dt">main =</span> <span class="st">&quot;Fitted vs. Predicted&quot;</span>)</span>
+<span id="cb324-7"><a href="day-20.html#cb324-7"></a><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ EOF1 + EOF2 + EOF3 + EOF4 + EOF5 + EOF6 + EOF7 + 
+##     EOF8 + EOF9 + EOF10 + EOF11 + EOF12 + EOF13 + EOF14 + EOF15 + 
+##     EOF16 + EOF17 + EOF18 + EOF19 + EOF20, data = EOFs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.9760 -0.1509  0.0125  0.1632  0.6419 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.1694     0.0228   -7.44  1.4e-13 ***
+## EOF1        -18.7965     0.5955  -31.56  &lt; 2e-16 ***
+## EOF2        -11.3979     0.5879  -19.39  &lt; 2e-16 ***
+## EOF3        -10.7575     0.6516  -16.51  &lt; 2e-16 ***
+## EOF4         11.0929     0.2766   40.10  &lt; 2e-16 ***
+## EOF5         13.1056     0.3585   36.55  &lt; 2e-16 ***
+## EOF6         -4.2775     0.2486  -17.21  &lt; 2e-16 ***
+## EOF7          1.5256     0.2412    6.32  3.1e-10 ***
+## EOF8         -2.2324     0.2732   -8.17  5.0e-16 ***
+## EOF9          0.3487     0.2431    1.43    0.152    
+## EOF10         0.3939     0.2506    1.57    0.116    
+## EOF11        -0.4529     0.2419   -1.87    0.061 .  
+## EOF12        -1.6805     0.2417   -6.95  4.7e-12 ***
+## EOF13         1.4899     0.2412    6.18  7.8e-10 ***
+## EOF14        -1.2705     0.2442   -5.20  2.1e-07 ***
+## EOF15        -1.9499     0.2422   -8.05  1.3e-15 ***
+## EOF16         3.8331     0.2975   12.88  &lt; 2e-16 ***
+## EOF17        -3.7016     0.2470  -14.99  &lt; 2e-16 ***
+## EOF18         3.7071     0.2597   14.27  &lt; 2e-16 ***
+## EOF19        -5.5411     0.2420  -22.90  &lt; 2e-16 ***
+## EOF20         5.5816     0.2487   22.45  &lt; 2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.241 on 2240 degrees of freedom
+## Multiple R-squared:  0.747,  Adjusted R-squared:  0.744 
+## F-statistic:  330 on 20 and 2240 DF,  p-value: &lt;2e-16</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-183-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>Disadvantages</p>
+<ul>
+<li>Calculation of the SVD scales with <span class="math inline">\(O(n^3)\)</span></li>
+<li>Each of the EOFs are global (almost always nonzero)</li>
+</ul></li>
+</ul>
+</div>
+<div id="spatial-modeling-with-mgcv-package" class="section level2" number="20.7">
+<h2 number="20.7"><span class="header-section-number">20.7</span> Spatial modeling with <code>mgcv</code> package</h2>
+<p>Use the same temperature data</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="day-20.html#cb326-1"></a><span class="kw">data</span>(<span class="st">&quot;NOAA_df_1990&quot;</span>)</span>
+<span id="cb326-2"><a href="day-20.html#cb326-2"></a><span class="co">## add a factor variable for left_join</span></span>
+<span id="cb326-3"><a href="day-20.html#cb326-3"></a>NOAA_df_<span class="dv">1990</span><span class="op">$</span>id_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>id)</span>
+<span id="cb326-4"><a href="day-20.html#cb326-4"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb326-5"><a href="day-20.html#cb326-5"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb326-6"><a href="day-20.html#cb326-6"></a><span class="st">    </span><span class="kw">group_by</span>(id_factor) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb326-7"><a href="day-20.html#cb326-7"></a><span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean_Tmax =</span> <span class="kw">mean</span>(z)) <span class="co">#</span></span>
+<span id="cb326-8"><a href="day-20.html#cb326-8"></a></span>
+<span id="cb326-9"><a href="day-20.html#cb326-9"></a><span class="co">## add back in the lat/lon variables</span></span>
+<span id="cb326-10"><a href="day-20.html#cb326-10"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb326-11"><a href="day-20.html#cb326-11"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span> <span class="op">&amp;</span><span class="st"> </span>day <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb326-12"><a href="day-20.html#cb326-12"></a><span class="st">    </span><span class="kw">left_join</span>(dat, <span class="dt">by =</span> <span class="st">&quot;id_factor&quot;</span>) </span>
+<span id="cb326-13"><a href="day-20.html#cb326-13"></a></span>
+<span id="cb326-14"><a href="day-20.html#cb326-14"></a>fit &lt;-<span class="st"> </span><span class="kw">gam</span>(z <span class="op">~</span><span class="st"> </span>lon <span class="op">+</span><span class="st"> </span>lat <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat, <span class="dt">bs =</span> <span class="st">&quot;tp&quot;</span>, <span class="dt">k =</span> <span class="dv">30</span>), <span class="dt">data =</span> dat)</span>
+<span id="cb326-15"><a href="day-20.html#cb326-15"></a><span class="co"># tensor product of a 2-d thin plate regression spline and 1-d cr spline  </span></span></code></pre></div>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="day-20.html#cb327-1"></a><span class="co">## explore model residuals</span></span>
+<span id="cb327-2"><a href="day-20.html#cb327-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb327-3"><a href="day-20.html#cb327-3"></a><span class="kw">gam.check</span>(fit)</span></code></pre></div>
+<pre><code>## 
+## Method: GCV   Optimizer: magic
+## Smoothing parameter selection converged after 5 iterations.
+## The RMS GCV score gradient at convergence was 0.0005041 .
+## The Hessian was positive definite.
+## Model rank =  30 / 32 
+## 
+## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
+## indicate that k is too low, especially if edf is close to k&#39;.
+## 
+##            k&#39; edf k-index p-value
+## s(lon,lat) 29  24    0.97     0.3</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-185-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="day-20.html#cb329-1"></a><span class="co">## generate model predictions</span></span>
+<span id="cb329-2"><a href="day-20.html#cb329-2"></a>pred_coords &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(</span>
+<span id="cb329-3"><a href="day-20.html#cb329-3"></a>    <span class="kw">expand.grid</span>(</span>
+<span id="cb329-4"><a href="day-20.html#cb329-4"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="dv">100</span>), </span>
+<span id="cb329-5"><a href="day-20.html#cb329-5"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="dv">100</span>)</span>
+<span id="cb329-6"><a href="day-20.html#cb329-6"></a>    )</span>
+<span id="cb329-7"><a href="day-20.html#cb329-7"></a>)</span>
+<span id="cb329-8"><a href="day-20.html#cb329-8"></a><span class="kw">colnames</span>(pred_coords) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb329-9"><a href="day-20.html#cb329-9"></a></span>
+<span id="cb329-10"><a href="day-20.html#cb329-10"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit, <span class="dt">newdata =</span> pred_coords, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb329-11"><a href="day-20.html#cb329-11"></a>pred_coords<span class="op">$</span>pred_mean &lt;-<span class="st"> </span>preds<span class="op">$</span>fit</span>
+<span id="cb329-12"><a href="day-20.html#cb329-12"></a>pred_coords<span class="op">$</span>pred_var &lt;-<span class="st"> </span>preds<span class="op">$</span>se.fit<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb329-13"><a href="day-20.html#cb329-13"></a></span>
+<span id="cb329-14"><a href="day-20.html#cb329-14"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_mean)) <span class="op">+</span></span>
+<span id="cb329-15"><a href="day-20.html#cb329-15"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb329-16"><a href="day-20.html#cb329-16"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb329-17"><a href="day-20.html#cb329-17"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb329-18"><a href="day-20.html#cb329-18"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb329-19"><a href="day-20.html#cb329-19"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb329-20"><a href="day-20.html#cb329-20"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span>
+<span id="cb329-21"><a href="day-20.html#cb329-21"></a></span>
+<span id="cb329-22"><a href="day-20.html#cb329-22"></a></span>
+<span id="cb329-23"><a href="day-20.html#cb329-23"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_var)) <span class="op">+</span></span>
+<span id="cb329-24"><a href="day-20.html#cb329-24"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb329-25"><a href="day-20.html#cb329-25"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb329-26"><a href="day-20.html#cb329-26"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb329-27"><a href="day-20.html#cb329-27"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb329-28"><a href="day-20.html#cb329-28"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction variance in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb329-29"><a href="day-20.html#cb329-29"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-186-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-186-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="spatial-modeling-with-kernels" class="section level2" number="20.8">
+<h2 number="20.8"><span class="header-section-number">20.8</span> Spatial modeling with Kernels</h2>
+<ul>
+<li><p>Kernel functions can be either local or global</p>
+<ul>
+<li>Gaussian, exponential kernels are global</li>
+<li>Truncated Gaussian and truncated exponential are local</li>
+</ul></li>
+<li><p>Kernel functions require specifying a kernel shape, a “bandwith”, and the number of “knots”.</p></li>
+</ul>
+<p>Use the same temperature data with Gaussian Kernels</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="day-20.html#cb330-1"></a><span class="kw">data</span>(<span class="st">&quot;NOAA_df_1990&quot;</span>)</span>
+<span id="cb330-2"><a href="day-20.html#cb330-2"></a><span class="co">## add a factor variable for left_join</span></span>
+<span id="cb330-3"><a href="day-20.html#cb330-3"></a>NOAA_df_<span class="dv">1990</span><span class="op">$</span>id_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(NOAA_df_<span class="dv">1990</span><span class="op">$</span>id)</span>
+<span id="cb330-4"><a href="day-20.html#cb330-4"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb330-5"><a href="day-20.html#cb330-5"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb330-6"><a href="day-20.html#cb330-6"></a><span class="st">    </span><span class="kw">group_by</span>(id_factor) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb330-7"><a href="day-20.html#cb330-7"></a><span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean_Tmax =</span> <span class="kw">mean</span>(z)) <span class="co">#</span></span>
+<span id="cb330-8"><a href="day-20.html#cb330-8"></a></span>
+<span id="cb330-9"><a href="day-20.html#cb330-9"></a><span class="co">## add back in the lat/lon variables</span></span>
+<span id="cb330-10"><a href="day-20.html#cb330-10"></a>dat &lt;-<span class="st"> </span>NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></span>
+<span id="cb330-11"><a href="day-20.html#cb330-11"></a><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>month <span class="op">==</span><span class="st"> </span><span class="dv">7</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span> <span class="op">&amp;</span><span class="st"> </span>day <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb330-12"><a href="day-20.html#cb330-12"></a><span class="st">    </span><span class="kw">left_join</span>(dat, <span class="dt">by =</span> <span class="st">&quot;id_factor&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="day-20.html#cb331-1"></a><span class="co">## For simplicity, assume this is a square number</span></span>
+<span id="cb331-2"><a href="day-20.html#cb331-2"></a>n_knots &lt;-<span class="st"> </span><span class="dv">25</span></span>
+<span id="cb331-3"><a href="day-20.html#cb331-3"></a>knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb331-4"><a href="day-20.html#cb331-4"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots)), </span>
+<span id="cb331-5"><a href="day-20.html#cb331-5"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots))</span>
+<span id="cb331-6"><a href="day-20.html#cb331-6"></a>)</span>
+<span id="cb331-7"><a href="day-20.html#cb331-7"></a></span>
+<span id="cb331-8"><a href="day-20.html#cb331-8"></a>make_kernel_basis &lt;-<span class="st"> </span><span class="cf">function</span>(coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="dt">bandwith =</span> <span class="dv">1</span>, <span class="dt">threshold =</span> <span class="ot">NULL</span>) {</span>
+<span id="cb331-9"><a href="day-20.html#cb331-9"></a>    <span class="cf">if</span> (<span class="op">!</span>(kernel <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;gaussian&quot;</span>, <span class="st">&quot;exponential&quot;</span>))) {</span>
+<span id="cb331-10"><a href="day-20.html#cb331-10"></a>        <span class="kw">stop</span>(<span class="st">&quot;only kernels available are gaussian and exponential&quot;</span>)</span>
+<span id="cb331-11"><a href="day-20.html#cb331-11"></a>    }</span>
+<span id="cb331-12"><a href="day-20.html#cb331-12"></a>    D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(<span class="kw">as.matrix</span>(coords), <span class="kw">as.matrix</span>(knots))</span>
+<span id="cb331-13"><a href="day-20.html#cb331-13"></a>    X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="kw">nrow</span>(D), <span class="kw">ncol</span>(D))</span>
+<span id="cb331-14"><a href="day-20.html#cb331-14"></a>    <span class="cf">if</span> (kernel <span class="op">==</span><span class="st"> &quot;exponential&quot;</span>) {</span>
+<span id="cb331-15"><a href="day-20.html#cb331-15"></a>        X &lt;-<span class="st"> </span><span class="kw">exp</span> (<span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>bandwith)</span>
+<span id="cb331-16"><a href="day-20.html#cb331-16"></a>    } <span class="cf">else</span> <span class="cf">if</span> (kernel <span class="op">==</span><span class="st"> &quot;gaussian&quot;</span>) {</span>
+<span id="cb331-17"><a href="day-20.html#cb331-17"></a>        X &lt;-<span class="st"> </span><span class="kw">exp</span> (<span class="op">-</span><span class="st"> </span>D<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>bandwith)</span>
+<span id="cb331-18"><a href="day-20.html#cb331-18"></a>    }</span>
+<span id="cb331-19"><a href="day-20.html#cb331-19"></a>    </span>
+<span id="cb331-20"><a href="day-20.html#cb331-20"></a>    <span class="co">## add in a minimum distance threshold</span></span>
+<span id="cb331-21"><a href="day-20.html#cb331-21"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(threshold)) {</span>
+<span id="cb331-22"><a href="day-20.html#cb331-22"></a>        X[D <span class="op">&gt;</span><span class="st"> </span>threshold] &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb331-23"><a href="day-20.html#cb331-23"></a>    }</span>
+<span id="cb331-24"><a href="day-20.html#cb331-24"></a></span>
+<span id="cb331-25"><a href="day-20.html#cb331-25"></a>    <span class="kw">return</span>(X)</span>
+<span id="cb331-26"><a href="day-20.html#cb331-26"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="day-20.html#cb332-1"></a>coords_plot &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb332-2"><a href="day-20.html#cb332-2"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="dv">100</span>), </span>
+<span id="cb332-3"><a href="day-20.html#cb332-3"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="dv">100</span>)</span>
+<span id="cb332-4"><a href="day-20.html#cb332-4"></a>)</span>
+<span id="cb332-5"><a href="day-20.html#cb332-5"></a><span class="kw">colnames</span>(coords_plot) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb332-6"><a href="day-20.html#cb332-6"></a></span>
+<span id="cb332-7"><a href="day-20.html#cb332-7"></a>X_plot &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(coords_plot, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="dt">bandwith =</span> <span class="dv">10</span>)<span class="co">## plot the kernel basis</span></span>
+<span id="cb332-8"><a href="day-20.html#cb332-8"></a>dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb332-9"><a href="day-20.html#cb332-9"></a>    <span class="dt">x     =</span> coords_plot[, <span class="dv">1</span>], </span>
+<span id="cb332-10"><a href="day-20.html#cb332-10"></a>    <span class="dt">y     =</span> coords_plot[, <span class="dv">2</span>],</span>
+<span id="cb332-11"><a href="day-20.html#cb332-11"></a>    <span class="dt">X     =</span> <span class="kw">c</span>(X_plot),</span>
+<span id="cb332-12"><a href="day-20.html#cb332-12"></a>    <span class="dt">basis =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X_plot), <span class="dt">each =</span> <span class="kw">nrow</span>(coords_plot)))</span>
+<span id="cb332-13"><a href="day-20.html#cb332-13"></a>)</span>
+<span id="cb332-14"><a href="day-20.html#cb332-14"></a></span>
+<span id="cb332-15"><a href="day-20.html#cb332-15"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> X)) <span class="op">+</span></span>
+<span id="cb332-16"><a href="day-20.html#cb332-16"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb332-17"><a href="day-20.html#cb332-17"></a><span class="st">    </span><span class="co"># geom_point() +</span></span>
+<span id="cb332-18"><a href="day-20.html#cb332-18"></a><span class="st">    </span><span class="co"># geom(aes(x = x, y = X_fourier, group = basis, color = basis)) +</span></span>
+<span id="cb332-19"><a href="day-20.html#cb332-19"></a><span class="st">    </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>) <span class="op">+</span></span>
+<span id="cb332-20"><a href="day-20.html#cb332-20"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb332-21"><a href="day-20.html#cb332-21"></a><span class="st">    </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>basis, <span class="dt">ncol =</span> <span class="kw">sqrt</span>(n_knots)) <span class="op">+</span></span>
+<span id="cb332-22"><a href="day-20.html#cb332-22"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Kernel Basis&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-189-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="day-20.html#cb333-1"></a><span class="co">## apply the kernel basis to the data</span></span>
+<span id="cb333-2"><a href="day-20.html#cb333-2"></a>check_AICc &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">8</span>) </span>
+<span id="cb333-3"><a href="day-20.html#cb333-3"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>) {</span>
+<span id="cb333-4"><a href="day-20.html#cb333-4"></a>    n_knots &lt;-<span class="st"> </span>j<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb333-5"><a href="day-20.html#cb333-5"></a>    knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb333-6"><a href="day-20.html#cb333-6"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots)), </span>
+<span id="cb333-7"><a href="day-20.html#cb333-7"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots))</span>
+<span id="cb333-8"><a href="day-20.html#cb333-8"></a>    )</span>
+<span id="cb333-9"><a href="day-20.html#cb333-9"></a>    X &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="dt">bandwith =</span> <span class="dv">10</span>)</span>
+<span id="cb333-10"><a href="day-20.html#cb333-10"></a>    <span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X))</span>
+<span id="cb333-11"><a href="day-20.html#cb333-11"></a>    X &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X)</span>
+<span id="cb333-12"><a href="day-20.html#cb333-12"></a>    fit &lt;-<span class="st"> </span><span class="kw">lm</span>(dat<span class="op">$</span>z <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> X)</span>
+<span id="cb333-13"><a href="day-20.html#cb333-13"></a>    check_AICc[j] &lt;-<span class="st"> </span><span class="kw">AIC</span>(fit) <span class="op">+</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(j<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(j<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">/</span><span class="st"> </span>(<span class="kw">nrow</span>(X) <span class="op">-</span><span class="st"> </span>j<span class="op">^</span><span class="dv">2</span>)</span>
+<span id="cb333-14"><a href="day-20.html#cb333-14"></a>}</span>
+<span id="cb333-15"><a href="day-20.html#cb333-15"></a><span class="kw">plot</span>(check_AICc)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-190-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="day-20.html#cb334-1"></a>n_knots &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">^</span><span class="dv">2</span></span>
+<span id="cb334-2"><a href="day-20.html#cb334-2"></a>knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb334-3"><a href="day-20.html#cb334-3"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots)), </span>
+<span id="cb334-4"><a href="day-20.html#cb334-4"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots))</span>
+<span id="cb334-5"><a href="day-20.html#cb334-5"></a>)</span>
+<span id="cb334-6"><a href="day-20.html#cb334-6"></a>X &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="dt">bandwith =</span> <span class="dv">10</span>)</span>
+<span id="cb334-7"><a href="day-20.html#cb334-7"></a><span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X))</span>
+<span id="cb334-8"><a href="day-20.html#cb334-8"></a>X &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X)</span>
+<span id="cb334-9"><a href="day-20.html#cb334-9"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(dat<span class="op">$</span>z <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> X)</span></code></pre></div>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="day-20.html#cb335-1"></a><span class="co">## generate model predictions</span></span>
+<span id="cb335-2"><a href="day-20.html#cb335-2"></a>pred_coords &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(</span>
+<span id="cb335-3"><a href="day-20.html#cb335-3"></a>    <span class="kw">expand.grid</span>(</span>
+<span id="cb335-4"><a href="day-20.html#cb335-4"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="dv">100</span>), </span>
+<span id="cb335-5"><a href="day-20.html#cb335-5"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="dv">100</span>)</span>
+<span id="cb335-6"><a href="day-20.html#cb335-6"></a>    )</span>
+<span id="cb335-7"><a href="day-20.html#cb335-7"></a>)</span>
+<span id="cb335-8"><a href="day-20.html#cb335-8"></a><span class="kw">colnames</span>(pred_coords) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb335-9"><a href="day-20.html#cb335-9"></a>X_pred &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(pred_coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>, <span class="dt">bandwith =</span> <span class="dv">10</span>)</span>
+<span id="cb335-10"><a href="day-20.html#cb335-10"></a><span class="kw">colnames</span>(X_pred) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(X))</span>
+<span id="cb335-11"><a href="day-20.html#cb335-11"></a>X_pred &lt;-<span class="st"> </span><span class="kw">data.frame</span>(X_pred)</span>
+<span id="cb335-12"><a href="day-20.html#cb335-12"></a></span>
+<span id="cb335-13"><a href="day-20.html#cb335-13"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit, <span class="dt">newdata =</span> X_pred, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb335-14"><a href="day-20.html#cb335-14"></a>pred_coords<span class="op">$</span>pred_mean &lt;-<span class="st"> </span>preds<span class="op">$</span>fit</span>
+<span id="cb335-15"><a href="day-20.html#cb335-15"></a>pred_coords<span class="op">$</span>pred_var &lt;-<span class="st"> </span>preds<span class="op">$</span>se.fit<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb335-16"><a href="day-20.html#cb335-16"></a></span>
+<span id="cb335-17"><a href="day-20.html#cb335-17"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_mean)) <span class="op">+</span></span>
+<span id="cb335-18"><a href="day-20.html#cb335-18"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb335-19"><a href="day-20.html#cb335-19"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb335-20"><a href="day-20.html#cb335-20"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb335-21"><a href="day-20.html#cb335-21"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb335-22"><a href="day-20.html#cb335-22"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb335-23"><a href="day-20.html#cb335-23"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span>
+<span id="cb335-24"><a href="day-20.html#cb335-24"></a></span>
+<span id="cb335-25"><a href="day-20.html#cb335-25"></a></span>
+<span id="cb335-26"><a href="day-20.html#cb335-26"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_var)) <span class="op">+</span></span>
+<span id="cb335-27"><a href="day-20.html#cb335-27"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb335-28"><a href="day-20.html#cb335-28"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb335-29"><a href="day-20.html#cb335-29"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb335-30"><a href="day-20.html#cb335-30"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb335-31"><a href="day-20.html#cb335-31"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Average July max Temperature prediction variance in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb335-32"><a href="day-20.html#cb335-32"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-192-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-192-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Notice that the above model is overfit – see the large variance surface. This can be resolved with penalized models (ridge, lasso, elastic net, etc).</p>
+<div id="kernel-regression-with-a-ridge-penalty" class="section level3" number="20.8.1">
+<h3 number="20.8.1"><span class="header-section-number">20.8.1</span> Kernel regression with a ridge penalty</h3>
+<ul>
+<li>Note: glmnet doesn’t have a theoretically-motivated method for calculating prediction standard errors</li>
+</ul>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="day-20.html#cb336-1"></a><span class="co">## set alpha = 0 for ridge regression</span></span>
+<span id="cb336-2"><a href="day-20.html#cb336-2"></a>cv_fit &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="kw">as.matrix</span>(X), dat<span class="op">$</span>z, <span class="dt">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb336-3"><a href="day-20.html#cb336-3"></a>fit &lt;-<span class="st"> </span><span class="kw">glmnet</span>(<span class="kw">as.matrix</span>(X), dat<span class="op">$</span>z, <span class="dt">alpha =</span> <span class="dv">0</span>, <span class="dt">lambda =</span> cv_fit<span class="op">$</span>lambda.min)</span>
+<span id="cb336-4"><a href="day-20.html#cb336-4"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit, <span class="dt">newx =</span> <span class="kw">as.matrix</span>(X_pred))</span></code></pre></div>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="day-20.html#cb337-1"></a>pred_coords<span class="op">$</span>pred_mean &lt;-<span class="st"> </span>preds</span>
+<span id="cb337-2"><a href="day-20.html#cb337-2"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_mean)) <span class="op">+</span></span>
+<span id="cb337-3"><a href="day-20.html#cb337-3"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb337-4"><a href="day-20.html#cb337-4"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb337-5"><a href="day-20.html#cb337-5"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb337-6"><a href="day-20.html#cb337-6"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb337-7"><a href="day-20.html#cb337-7"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb337-8"><a href="day-20.html#cb337-8"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-194-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="kernel-regression-with-a-lasso-penalty" class="section level3" number="20.8.2">
+<h3 number="20.8.2"><span class="header-section-number">20.8.2</span> Kernel regression with a lasso penalty</h3>
+<ul>
+<li>Note: glmnet doesn’t have a theoretically-motivated method for calculating prediction standard errors</li>
+</ul>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="day-20.html#cb338-1"></a><span class="co">## set alpha = 0 for ridge regression</span></span>
+<span id="cb338-2"><a href="day-20.html#cb338-2"></a>cv_fit &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(<span class="kw">as.matrix</span>(X), dat<span class="op">$</span>z, <span class="dt">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb338-3"><a href="day-20.html#cb338-3"></a>fit &lt;-<span class="st"> </span><span class="kw">glmnet</span>(<span class="kw">as.matrix</span>(X), dat<span class="op">$</span>z, <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="dt">lambda =</span> cv_fit<span class="op">$</span>lambda.min)</span>
+<span id="cb338-4"><a href="day-20.html#cb338-4"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit, <span class="dt">newx =</span> <span class="kw">as.matrix</span>(X_pred))</span></code></pre></div>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="day-20.html#cb339-1"></a>pred_coords<span class="op">$</span>pred_mean &lt;-<span class="st"> </span>preds</span>
+<span id="cb339-2"><a href="day-20.html#cb339-2"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> pred_coords, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> pred_mean)) <span class="op">+</span></span>
+<span id="cb339-3"><a href="day-20.html#cb339-3"></a><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></span>
+<span id="cb339-4"><a href="day-20.html#cb339-4"></a><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </span>
+<span id="cb339-5"><a href="day-20.html#cb339-5"></a>                 <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></span>
+<span id="cb339-6"><a href="day-20.html#cb339-6"></a><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="op">+</span></span>
+<span id="cb339-7"><a href="day-20.html#cb339-7"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Predicted Average July max Temperature in 1990&quot;</span>)  <span class="op">+</span></span>
+<span id="cb339-8"><a href="day-20.html#cb339-8"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lon), <span class="dt">ylim =</span> <span class="kw">range</span>(dat<span class="op">$</span>lat), <span class="dt">ratio =</span> <span class="fl">1.3</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-196-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="truncated-kernels---local-support" class="section level3" number="20.8.3">
+<h3 number="20.8.3"><span class="header-section-number">20.8.3</span> Truncated Kernels - local support</h3>
+<p>The kernels constructed above are globally supported (dense)</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="day-20.html#cb340-1"></a><span class="kw">mean</span>(X_pred <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<ul>
+<li>Can use traditional kernels and truncate using a threshold</li>
+</ul>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="day-20.html#cb342-1"></a>X_threshold &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(pred_coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb342-2"><a href="day-20.html#cb342-2"></a>                                 <span class="dt">bandwith =</span> <span class="dv">10</span>, <span class="dt">threshold =</span> <span class="dv">100</span>)</span>
+<span id="cb342-3"><a href="day-20.html#cb342-3"></a><span class="kw">mean</span>(X_threshold <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0.9883</code></pre>
+<p>Can use other functions as a kernel:
+- Wendland basis</p>
+<p><span class="math display">\[\begin{align*}
+\frac{(1 - d)^6 (35 d^2 + 18d + 3)}{3} I\{d &lt; 1\}
+\end{align*}\]</span></p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="day-20.html#cb344-1"></a>wendland_basis &lt;-<span class="st"> </span><span class="cf">function</span>(d, radius) {</span>
+<span id="cb344-2"><a href="day-20.html#cb344-2"></a>    <span class="cf">if</span> (<span class="kw">any</span>(d <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>)) {</span>
+<span id="cb344-3"><a href="day-20.html#cb344-3"></a>        <span class="kw">stop</span>(<span class="st">&quot;d must be nonnegative&quot;</span>)</span>
+<span id="cb344-4"><a href="day-20.html#cb344-4"></a>    }</span>
+<span id="cb344-5"><a href="day-20.html#cb344-5"></a>    d &lt;-<span class="st"> </span>d <span class="op">/</span><span class="st"> </span>radius</span>
+<span id="cb344-6"><a href="day-20.html#cb344-6"></a>    <span class="kw">return</span>(((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>d)<span class="op">^</span><span class="dv">6</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">35</span> <span class="op">*</span><span class="st"> </span>d<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">18</span> <span class="op">*</span><span class="st"> </span>d <span class="op">+</span><span class="st"> </span><span class="dv">3</span>)) <span class="op">/</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>(d <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span>))</span>
+<span id="cb344-7"><a href="day-20.html#cb344-7"></a>}</span>
+<span id="cb344-8"><a href="day-20.html#cb344-8"></a></span>
+<span id="cb344-9"><a href="day-20.html#cb344-9"></a><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb344-10"><a href="day-20.html#cb344-10"></a><span class="kw">curve</span>(<span class="kw">wendland_basis</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>), <span class="dt">radius =</span> <span class="fl">0.15</span>), <span class="dt">n =</span> <span class="dv">1000</span>)</span>
+<span id="cb344-11"><a href="day-20.html#cb344-11"></a><span class="kw">curve</span>(<span class="kw">wendland_basis</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span>), <span class="dt">radius =</span> <span class="fl">0.15</span>), <span class="dt">n =</span> <span class="dv">1000</span>)</span>
+<span id="cb344-12"><a href="day-20.html#cb344-12"></a><span class="kw">curve</span>(<span class="kw">wendland_basis</span>(<span class="kw">abs</span>(x <span class="op">-</span><span class="st"> </span><span class="fl">0.75</span>), <span class="dt">radius =</span> <span class="fl">0.15</span>), <span class="dt">n =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-199-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="sparse-vs.-dense-matrix-computation" class="section level2" number="20.9">
+<h2 number="20.9"><span class="header-section-number">20.9</span> Sparse vs. Dense matrix computation</h2>
+<ul>
+<li><p>uses the <code>spam64</code> package</p></li>
+<li><p>compute time of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> for dense vs. sparse matrices</p></li>
+</ul>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="day-20.html#cb345-1"></a>coords &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(</span>
+<span id="cb345-2"><a href="day-20.html#cb345-2"></a>    <span class="kw">expand.grid</span>(</span>
+<span id="cb345-3"><a href="day-20.html#cb345-3"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="dv">50</span>), </span>
+<span id="cb345-4"><a href="day-20.html#cb345-4"></a>        <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="dv">50</span>)</span>
+<span id="cb345-5"><a href="day-20.html#cb345-5"></a>    )</span>
+<span id="cb345-6"><a href="day-20.html#cb345-6"></a>)</span>
+<span id="cb345-7"><a href="day-20.html#cb345-7"></a><span class="kw">colnames</span>(coords) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb345-8"><a href="day-20.html#cb345-8"></a></span>
+<span id="cb345-9"><a href="day-20.html#cb345-9"></a>n_knots &lt;-<span class="st"> </span><span class="dv">25</span><span class="op">^</span><span class="dv">2</span></span>
+<span id="cb345-10"><a href="day-20.html#cb345-10"></a>knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</span>
+<span id="cb345-11"><a href="day-20.html#cb345-11"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lon), <span class="kw">max</span>(dat<span class="op">$</span>lon), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots)), </span>
+<span id="cb345-12"><a href="day-20.html#cb345-12"></a>    <span class="kw">seq</span>(<span class="kw">min</span>(dat<span class="op">$</span>lat), <span class="kw">max</span>(dat<span class="op">$</span>lat), <span class="dt">length =</span> <span class="kw">sqrt</span>(n_knots))</span>
+<span id="cb345-13"><a href="day-20.html#cb345-13"></a>)</span>
+<span id="cb345-14"><a href="day-20.html#cb345-14"></a></span>
+<span id="cb345-15"><a href="day-20.html#cb345-15"></a>X_dense &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb345-16"><a href="day-20.html#cb345-16"></a>                                 <span class="dt">bandwith =</span> <span class="dv">5</span>)</span>
+<span id="cb345-17"><a href="day-20.html#cb345-17"></a>X_sparse &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>,</span>
+<span id="cb345-18"><a href="day-20.html#cb345-18"></a>                                 <span class="dt">bandwith =</span> <span class="dv">5</span>, <span class="dt">threshold =</span> <span class="dv">5</span>)</span>
+<span id="cb345-19"><a href="day-20.html#cb345-19"></a><span class="kw">mean</span>(X_dense <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb345-20"><a href="day-20.html#cb345-20"></a><span class="kw">mean</span>(X_sparse <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb345-21"><a href="day-20.html#cb345-21"></a><span class="co">## convert to a sparse matrix format</span></span>
+<span id="cb345-22"><a href="day-20.html#cb345-22"></a>X_sparse &lt;-<span class="st"> </span><span class="kw">as.spam</span>(X_sparse)</span>
+<span id="cb345-23"><a href="day-20.html#cb345-23"></a></span>
+<span id="cb345-24"><a href="day-20.html#cb345-24"></a><span class="co">## calcuate t(X) %*% X for dense and sparse matrices</span></span>
+<span id="cb345-25"><a href="day-20.html#cb345-25"></a>bm &lt;-<span class="st"> </span><span class="kw">microbenchmark</span>(</span>
+<span id="cb345-26"><a href="day-20.html#cb345-26"></a>    <span class="kw">crossprod</span>(X_dense, X_dense),</span>
+<span id="cb345-27"><a href="day-20.html#cb345-27"></a>    <span class="kw">crossprod.spam</span>(X_sparse, X_sparse),</span>
+<span id="cb345-28"><a href="day-20.html#cb345-28"></a>    <span class="dt">times =</span> <span class="dv">10</span></span>
+<span id="cb345-29"><a href="day-20.html#cb345-29"></a>)</span>
+<span id="cb345-30"><a href="day-20.html#cb345-30"></a></span>
+<span id="cb345-31"><a href="day-20.html#cb345-31"></a>bm</span>
+<span id="cb345-32"><a href="day-20.html#cb345-32"></a><span class="kw">plot</span>(bm)</span></code></pre></div>
+<pre><code>## [1] 0
+## [1] 0.7948
+## Unit: milliseconds
+##                                expr   min    lq  mean
+##         crossprod(X_dense, X_dense) 977.7 981.5 984.9
+##  crossprod.spam(X_sparse, X_sparse) 129.7 130.7 131.8
+##  median    uq   max neval
+##   983.9 989.3 992.6    10
+##   131.3 132.0 138.0    10</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-200-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>almost a 10-fold speedup in computation time by using sparse matrix operations</li>
+</ul>
 
 </div>
 </div>
