@@ -538,7 +538,7 @@ pred_locations <- expand.grid(
 names(pred_locations) <- c("lat", "lon")
 ```
 
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 ## calculate pairwise distance matrices -- be careful with large data
 locs        <- cbind(dat$lat, dat$lon)
 D           <- rdist(locs)
@@ -688,7 +688,7 @@ pred_locations <- expand.grid(
 names(pred_locations) <- c("lat", "lon")
 ```
 
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 ## calculate pairwise distance matrices -- be careful with large data
 locs        <- cbind(dat$lat, dat$lon)
 D           <- rdist(locs)

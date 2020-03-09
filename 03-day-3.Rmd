@@ -23,7 +23,7 @@ library(showtext)
 font_add("myfont", here::here("fonts", "Gerry.otf"))
 ```
 
-```{r fig.showtext=TRUE, fig.width=7, fig.height=7}
+```{r fig.showtext=TRUE, fig.width=7, fig.height=7, cache = TRUE}
 plot(cars, family = "myfont")
 title(
     main = "This Font is made of \n Gerrymandered Political Districts", 

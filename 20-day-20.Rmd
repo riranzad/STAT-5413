@@ -164,7 +164,7 @@ w.summary <- apply(w.samps, 1, function(x) {
 
 Next we can genereate predictions for the exponential model
 
-```{r}
+```{r, cache = TRUE}
 states <- map_data("state")
 
 pred_coords <- as.data.frame(

@@ -32,7 +32,7 @@ glimpse(NOAA_df_1990)
 ```
 
 
-```{r, fig.width=16, fig.height = 9}
+```{r, fig.width=16, fig.height = 9, cache = TRUE}
 ## Only plot the states with data
 states <- map_data("state") 
 states <- states %>%
@@ -68,7 +68,7 @@ glimpse(MOcounties)
 MOcounties <- left_join(MOcounties, BEA, by = "NAME10")
 ```
 
-```{r}
+```{r, cache = TRUE}
 ggplot(MOcounties) +
     geom_polygon(aes(x = long,
                      y = lat, # county boundary
