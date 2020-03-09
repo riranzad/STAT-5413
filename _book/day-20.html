@@ -1461,7 +1461,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" data-line-number="1">X_threshold &lt;-<span class="st"> </span><span class="kw">make_kernel_basis</span>(pred_coords, knots, <span class="dt">kernel =</span> <span class="st">&quot;gaussian&quot;</span>,</a>
 <a class="sourceLine" id="cb347-2" data-line-number="2">                                 <span class="dt">bandwith =</span> <span class="dv">10</span>, <span class="dt">threshold =</span> <span class="dv">100</span>)</a>
 <a class="sourceLine" id="cb347-3" data-line-number="3"><span class="kw">mean</span>(X_threshold <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
-<pre><code>## [1] 0.7105</code></pre>
+<pre><code>## [1] 0.7155</code></pre>
 <p>Can use other functions as a kernel:
 - Wendland basis</p>
 <p><span class="math display">\[\begin{align*}
@@ -1524,11 +1524,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [1] 0.7948
 ## Unit: milliseconds
 ##                                expr    min     lq   mean
-##         crossprod(X_dense, X_dense) 1113.3 1121.0 1134.4
-##  crossprod.spam(X_sparse, X_sparse)  175.9  181.2  195.3
+##         crossprod(X_dense, X_dense) 1112.5 1131.6 1141.0
+##  crossprod.spam(X_sparse, X_sparse)  178.3  184.8  188.1
 ##  median     uq    max neval
-##  1133.5 1145.1 1163.1    10
-##   184.5  187.4  303.5    10</code></pre>
+##    1143 1151.2 1166.6    10
+##     187  191.7  198.2    10</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-200-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>almost a 10-fold speedup in computation time by using sparse matrix operations</li>

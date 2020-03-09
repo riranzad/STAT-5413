@@ -608,58 +608,19 @@ Cov \left( \mathbf{c}^{\star} {\mathbf{C}^{\star}}^{-1} \boldsymbol{\eta}^{\star
 <a class="sourceLine" id="cb356-64" data-line-number="64">  )</a>
 <a class="sourceLine" id="cb356-65" data-line-number="65">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;PP.RData&quot;</span>))</a>
 <a class="sourceLine" id="cb356-66" data-line-number="66">}</a></code></pre></div>
-<pre><code>## Warning in model.matrix.default(mt, mf, contrasts): non-list
-## contrasts argument ignored</code></pre>
-<pre><code>## ----------------------------------------
-##  General model description
-## ----------------------------------------
-## Model fit with 1000 observations.
-## 
-## Number of covariates 2 (including intercept if specified).
-## 
-## Using the exponential spatial correlation model.
-## 
-## Using modified predictive process with 64 knots.
-## 
-## Using adaptive MCMC.
-## 
-##  Number of batches 20.
-##  Batch length 50.
-##  Target acceptance rate 0.44000.
-## 
-## Priors and hyperpriors:
-##  beta flat.
-##  sigma.sq IG hyperpriors shape=2.00000 and scale=5.00000
-##  tau.sq IG hyperpriors shape=2.00000 and scale=1.00000
-##  phi Unif hyperpriors a=0.30000 and b=3000.00000
-## -------------------------------------------------
-##      Sampling
-## -------------------------------------------------
-## Batch: 10 of 20, 50.00%
-##  parameter   acceptance  tuning
-##  sigma.sq    16.0        0.63982
-##  tau.sq      12.0        0.63982
-##  phi     6.0     0.63982
-## -------------------------------------------------
-## Batch: 20 of 20, 100.00%
-##  parameter   acceptance  tuning
-##  sigma.sq    22.0        0.57893
-##  tau.sq      8.0     0.57893
-##  phi     18.0        0.57893
-## -------------------------------------------------</code></pre>
 <p>To get the fitted parameters, we can recover these with composition sampling.</p>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" data-line-number="1"><span class="co">## discard the first half of the samples as burn-in</span></a>
-<a class="sourceLine" id="cb359-2" data-line-number="2">burn.in &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>n.samples</a>
-<a class="sourceLine" id="cb359-3" data-line-number="3"><span class="co">## trace plots for the exponential model</span></a>
-<a class="sourceLine" id="cb359-4" data-line-number="4">recovered_params &lt;-<span class="st"> </span><span class="kw">spRecover</span>(fit, <span class="dt">start =</span> burn.in, <span class="dt">thin =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb359-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb359-6" data-line-number="6">theta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.theta.samples)</a>
-<a class="sourceLine" id="cb359-7" data-line-number="7"><span class="kw">plot</span>(theta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb359-8" data-line-number="8"><span class="kw">round</span>(<span class="kw">summary</span>(theta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb359-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb359-10" data-line-number="10">beta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.beta.recover.samples)  </a>
-<a class="sourceLine" id="cb359-11" data-line-number="11"><span class="kw">plot</span>(beta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb359-12" data-line-number="12"><span class="kw">round</span>(<span class="kw">summary</span>(beta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb357-1" data-line-number="1"><span class="co">## discard the first half of the samples as burn-in</span></a>
+<a class="sourceLine" id="cb357-2" data-line-number="2">burn.in &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>n.samples</a>
+<a class="sourceLine" id="cb357-3" data-line-number="3"><span class="co">## trace plots for the exponential model</span></a>
+<a class="sourceLine" id="cb357-4" data-line-number="4">recovered_params &lt;-<span class="st"> </span><span class="kw">spRecover</span>(fit, <span class="dt">start =</span> burn.in, <span class="dt">thin =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb357-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb357-6" data-line-number="6">theta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.theta.samples)</a>
+<a class="sourceLine" id="cb357-7" data-line-number="7"><span class="kw">plot</span>(theta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb357-8" data-line-number="8"><span class="kw">round</span>(<span class="kw">summary</span>(theta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb357-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb357-10" data-line-number="10">beta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.beta.recover.samples)  </a>
+<a class="sourceLine" id="cb357-11" data-line-number="11"><span class="kw">plot</span>(beta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb357-12" data-line-number="12"><span class="kw">round</span>(<span class="kw">summary</span>(beta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>##           2.5%   25%   50%   75%  97.5%
 ## sigma.sq 4.367 6.283 7.073 8.686 13.703
 ## tau.sq   0.607 0.832 0.943 1.033  1.269
@@ -668,11 +629,11 @@ Cov \left( \mathbf{c}^{\star} {\mathbf{C}^{\star}}^{-1} \boldsymbol{\eta}^{\star
 ## X1 -3.315 -0.865 -0.078 0.98 3.056
 ## X2  4.882  4.929  4.960 4.99 5.048</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-203-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-203-2.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb361-1" data-line-number="1"><span class="co">## recover the spatial random effects</span></a>
-<a class="sourceLine" id="cb361-2" data-line-number="2">estimated_w &lt;-<span class="st"> </span>recovered_params<span class="op">$</span>p.w.recover.samples</a>
-<a class="sourceLine" id="cb361-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb361-4" data-line-number="4"><span class="kw">plot</span>(<span class="kw">apply</span>(estimated_w, <span class="dv">1</span>, mean), w)</a>
-<a class="sourceLine" id="cb361-5" data-line-number="5"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" data-line-number="1"><span class="co">## recover the spatial random effects</span></a>
+<a class="sourceLine" id="cb359-2" data-line-number="2">estimated_w &lt;-<span class="st"> </span>recovered_params<span class="op">$</span>p.w.recover.samples</a>
+<a class="sourceLine" id="cb359-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb359-4" data-line-number="4"><span class="kw">plot</span>(<span class="kw">apply</span>(estimated_w, <span class="dv">1</span>, mean), w)</a>
+<a class="sourceLine" id="cb359-5" data-line-number="5"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-204-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="sparse-matrix-routines" class="section level3">
@@ -821,56 +782,56 @@ C(d) = C_t(d | \gamma) C(d | \boldsymbol{\theta})
 </ul></li>
 <li><p>Used in <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5927603/">nearest neighbor Gaussian Processes</a></p></li>
 </ul>
-<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb362-1" data-line-number="1"><span class="co">## Make some data</span></a>
-<a class="sourceLine" id="cb362-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb362-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb362-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb362-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb362-6" data-line-number="6">x &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb362-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb362-8" data-line-number="8">B &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb362-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb362-10" data-line-number="10">sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb362-11" data-line-number="11">tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb362-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span><span class="op">/</span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb362-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb362-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
-<a class="sourceLine" id="cb362-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</a>
-<a class="sourceLine" id="cb362-16" data-line-number="16">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq<span class="op">*</span>R))</a>
-<a class="sourceLine" id="cb362-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, x<span class="op">%*%</span>B <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</a>
-<a class="sourceLine" id="cb362-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb362-19" data-line-number="19"><span class="co">##Fit a Response and Latent NNGP model</span></a>
-<a class="sourceLine" id="cb362-20" data-line-number="20">n.samples &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb362-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb362-22" data-line-number="22">starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=phi, <span class="st">&quot;sigma.sq&quot;</span>=<span class="dv">5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb362-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb362-24" data-line-number="24">tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;sigma.sq&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb362-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb362-26" data-line-number="26">priors &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi.Unif&quot;</span>=<span class="kw">c</span>(<span class="dv">3</span><span class="op">/</span><span class="dv">1</span>, <span class="dv">3</span><span class="op">/</span><span class="fl">0.01</span>), <span class="st">&quot;sigma.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>), <span class="st">&quot;tau.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb362-27" data-line-number="27"></a>
-<a class="sourceLine" id="cb362-28" data-line-number="28">cov.model &lt;-<span class="st"> &quot;exponential&quot;</span></a>
-<a class="sourceLine" id="cb362-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb362-30" data-line-number="30"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))) {</a>
-<a class="sourceLine" id="cb362-31" data-line-number="31">    <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb362-32" data-line-number="32">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb362-33" data-line-number="33">  fit &lt;-<span class="st"> </span><span class="kw">spNNGP</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb362-34" data-line-number="34">                <span class="dt">coords        =</span> coords,</a>
-<a class="sourceLine" id="cb362-35" data-line-number="35">                <span class="dt">starting      =</span> starting,</a>
-<a class="sourceLine" id="cb362-36" data-line-number="36">                <span class="dt">method        =</span> <span class="st">&quot;latent&quot;</span>,</a>
-<a class="sourceLine" id="cb362-37" data-line-number="37">                <span class="co"># method        = &quot;response&quot;,    ## use for large n</span></a>
-<a class="sourceLine" id="cb362-38" data-line-number="38">                <span class="dt">n.neighbors   =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb362-39" data-line-number="39">                <span class="dt">tuning        =</span> tuning,</a>
-<a class="sourceLine" id="cb362-40" data-line-number="40">                <span class="dt">priors        =</span> priors, </a>
-<a class="sourceLine" id="cb362-41" data-line-number="41">                <span class="dt">cov.model     =</span> cov.model,</a>
-<a class="sourceLine" id="cb362-42" data-line-number="42">                <span class="dt">n.samples     =</span> n.samples,</a>
-<a class="sourceLine" id="cb362-43" data-line-number="43">                <span class="dt">n.omp.threads =</span> <span class="dv">1</span></a>
-<a class="sourceLine" id="cb362-44" data-line-number="44">  )</a>
-<a class="sourceLine" id="cb362-45" data-line-number="45">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb362-46" data-line-number="46">}</a>
-<a class="sourceLine" id="cb362-47" data-line-number="47"></a>
-<a class="sourceLine" id="cb362-48" data-line-number="48"><span class="kw">summary</span>(fit)</a>
-<a class="sourceLine" id="cb362-49" data-line-number="49"><span class="kw">plot</span>(<span class="kw">apply</span>(fit<span class="op">$</span>p.w.samples, <span class="dv">1</span>, median), w)</a>
-<a class="sourceLine" id="cb362-50" data-line-number="50"><span class="kw">abline</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb360-1" data-line-number="1"><span class="co">## Make some data</span></a>
+<a class="sourceLine" id="cb360-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb360-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb360-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb360-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb360-6" data-line-number="6">x &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb360-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb360-8" data-line-number="8">B &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb360-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb360-10" data-line-number="10">sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb360-11" data-line-number="11">tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb360-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span><span class="op">/</span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb360-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb360-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
+<a class="sourceLine" id="cb360-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</a>
+<a class="sourceLine" id="cb360-16" data-line-number="16">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq<span class="op">*</span>R))</a>
+<a class="sourceLine" id="cb360-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, x<span class="op">%*%</span>B <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</a>
+<a class="sourceLine" id="cb360-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb360-19" data-line-number="19"><span class="co">##Fit a Response and Latent NNGP model</span></a>
+<a class="sourceLine" id="cb360-20" data-line-number="20">n.samples &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb360-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb360-22" data-line-number="22">starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=phi, <span class="st">&quot;sigma.sq&quot;</span>=<span class="dv">5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb360-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb360-24" data-line-number="24">tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;sigma.sq&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb360-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb360-26" data-line-number="26">priors &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi.Unif&quot;</span>=<span class="kw">c</span>(<span class="dv">3</span><span class="op">/</span><span class="dv">1</span>, <span class="dv">3</span><span class="op">/</span><span class="fl">0.01</span>), <span class="st">&quot;sigma.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>), <span class="st">&quot;tau.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb360-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb360-28" data-line-number="28">cov.model &lt;-<span class="st"> &quot;exponential&quot;</span></a>
+<a class="sourceLine" id="cb360-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb360-30" data-line-number="30"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))) {</a>
+<a class="sourceLine" id="cb360-31" data-line-number="31">    <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb360-32" data-line-number="32">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb360-33" data-line-number="33">  fit &lt;-<span class="st"> </span><span class="kw">spNNGP</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb360-34" data-line-number="34">                <span class="dt">coords        =</span> coords,</a>
+<a class="sourceLine" id="cb360-35" data-line-number="35">                <span class="dt">starting      =</span> starting,</a>
+<a class="sourceLine" id="cb360-36" data-line-number="36">                <span class="dt">method        =</span> <span class="st">&quot;latent&quot;</span>,</a>
+<a class="sourceLine" id="cb360-37" data-line-number="37">                <span class="co"># method        = &quot;response&quot;,    ## use for large n</span></a>
+<a class="sourceLine" id="cb360-38" data-line-number="38">                <span class="dt">n.neighbors   =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb360-39" data-line-number="39">                <span class="dt">tuning        =</span> tuning,</a>
+<a class="sourceLine" id="cb360-40" data-line-number="40">                <span class="dt">priors        =</span> priors, </a>
+<a class="sourceLine" id="cb360-41" data-line-number="41">                <span class="dt">cov.model     =</span> cov.model,</a>
+<a class="sourceLine" id="cb360-42" data-line-number="42">                <span class="dt">n.samples     =</span> n.samples,</a>
+<a class="sourceLine" id="cb360-43" data-line-number="43">                <span class="dt">n.omp.threads =</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb360-44" data-line-number="44">  )</a>
+<a class="sourceLine" id="cb360-45" data-line-number="45">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb360-46" data-line-number="46">}</a>
+<a class="sourceLine" id="cb360-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb360-48" data-line-number="48"><span class="kw">summary</span>(fit)</a>
+<a class="sourceLine" id="cb360-49" data-line-number="49"><span class="kw">plot</span>(<span class="kw">apply</span>(fit<span class="op">$</span>p.w.samples, <span class="dv">1</span>, median), w)</a>
+<a class="sourceLine" id="cb360-50" data-line-number="50"><span class="kw">abline</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <pre><code>## ----------------------------------------
 ##  Building the neighbor list
 ## ----------------------------------------
