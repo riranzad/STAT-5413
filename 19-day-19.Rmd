@@ -2,4 +2,7 @@
 
 ## Announcements
 
-## Gaussian process representations continued
+## Stochastic Integration
+
+[https://en.wikipedia.org/wiki/It%C3%B4_calculus](https://en.wikipedia.org/wiki/It%C3%B4_calculus)
+

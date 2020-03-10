@@ -640,57 +640,71 @@ make_kernel_basis <- function(coords, knots, kernel = "gaussian", bandwith = 1, 
 }
 ```
 
+We can plot the kernels over the domain of interest using the code below. Note that it is useful to change the bandwith parameter so that the kernel covers multiple other knots
 
 ```{r, cache = TRUE}
+coords <- cbind(dat$lon, dat$lat)
 coords_plot <- expand.grid(
     seq(min(dat$lon), max(dat$lon), length = 100), 
     seq(min(dat$lat), max(dat$lat), length = 100)
 )
 colnames(coords_plot) <- c("lon", "lat")
 
-X_plot <- make_kernel_basis(coords_plot, knots, kernel = "gaussian", bandwith = 10)## plot the kernel basis
+X_plot <- make_kernel_basis(coords_plot, knots, kernel = "gaussian", bandwith = 20)
+
+## plot the kernel basis
 dat_plot <- data.frame(
     x     = coords_plot[, 1], 
     y     = coords_plot[, 2],
     X     = c(X_plot),
     basis = factor(rep(1:ncol(X_plot), each = nrow(coords_plot)))
 )
+dat_knots <- data.frame(
+  x = knots[, 1],
+  y = knots[, 2]
+)
 
 ggplot(data = dat_plot, aes(x = x, y = y, fill = X)) +
-    geom_raster() +
-    # geom_point() +
-    # geom(aes(x = x, y = X_fourier, group = basis, color = basis)) +
-    scale_color_viridis_d(option = "magma") +
-    theme_bw() +
-    facet_wrap( ~ basis, ncol = sqrt(n_knots)) +
-    ggtitle("Kernel Basis")
+  geom_raster() +
+  # geom(aes(x = x, y = X_fourier, group = basis, color = basis)) +
+  scale_color_viridis_d(option = "magma") +
+  theme_bw() +
+  facet_wrap( ~ basis, ncol = sqrt(n_knots)) +
+  ggtitle("Kernel Basis") +
+  geom_point(data = dat_knots, aes(x = x, y = y), color = "red", size = 0.25, inherit.aes = FALSE) 
 ```
 
 ```{r}
 ## apply the kernel basis to the data
-check_AICc <- rep(0, 8) 
+bw <- c(1, 10, 20, 30, 40, 50, 75, 100, 1000)
+check_AICc <- matrix(0, 8, length(bw)) 
 for (j in 1:8) {
+  for (k in 1:length(bw)) {
     n_knots <- j^2
     knots <- expand.grid(
-        seq(min(dat$lon), max(dat$lon), length = sqrt(n_knots)), 
-        seq(min(dat$lat), max(dat$lat), length = sqrt(n_knots))
+      seq(min(dat$lon), max(dat$lon), length = sqrt(n_knots)), 
+      seq(min(dat$lat), max(dat$lat), length = sqrt(n_knots))
     )
-    X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = 10)
+    X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = bw[k])
     colnames(X) <- paste0("X", 1:ncol(X))
     X <- data.frame(X)
     fit <- lm(dat$z ~ ., data = X)
-    check_AICc[j] <- AIC(fit) + (2 * (j^2 + 1)^2 + 2 * (j^2 + 1)) / (nrow(X) - j^2)
+    check_AICc[j, k] <- AIC(fit) + (2 * (j^2 + 1)^2 + 2 * (j^2 + 1)) / (nrow(X) - j^2)
+  }
 }
-plot(check_AICc)
+matplot(check_AICc, type = 'p')
+best_idx <- which(check_AICc == min(check_AICc), arr.ind = TRUE)
+## the best fitting model has 5 knots and bandwidth 20
+best_idx
 ```
 
 ```{r}
-n_knots <- 5^2
+n_knots <- best_idx[1]^2
 knots <- expand.grid(
     seq(min(dat$lon), max(dat$lon), length = sqrt(n_knots)), 
     seq(min(dat$lat), max(dat$lat), length = sqrt(n_knots))
 )
-X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = 10)
+X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
 colnames(X) <- paste0("X", 1:ncol(X))
 X <- data.frame(X)
 fit <- lm(dat$z ~ ., data = X)
@@ -705,15 +719,22 @@ pred_coords <- as.data.frame(
     )
 )
 colnames(pred_coords) <- c("lon", "lat")
-X_pred <- make_kernel_basis(pred_coords, knots, kernel = "gaussian", bandwith = 10)
+X_pred <- make_kernel_basis(pred_coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
 colnames(X_pred) <- paste0("X", 1:ncol(X))
 X_pred <- data.frame(X_pred)
 
 preds <- predict(fit, newdata = X_pred, se.fit = TRUE)
-pred_coords$pred_mean <- preds$fit
-pred_coords$pred_var <- preds$se.fit^2
 
-ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
+dat_pred <- data.frame(
+  lon       = pred_coords$lon,
+  lat       = pred_coords$lat,
+  ## prediction mean
+  pred_mean = preds$fit,
+  ## prediction variance
+  pred_var  = preds$se.fit^2
+)
+
+ggplot(data = dat_pred, aes(x = lon, y = lat, fill = pred_mean)) +
     geom_raster() +
     geom_polygon(data = states, aes(x = long, y = lat, group = group), 
                  colour = "black", fill = NA) +
@@ -722,7 +743,7 @@ ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
   coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
 
 
-ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_var)) +
+ggplot(data = dat_pred, aes(x = lon, y = lat, fill = pred_var)) +
     geom_raster() +
     geom_polygon(data = states, aes(x = long, y = lat, group = group), 
                  colour = "black", fill = NA) +
@@ -731,7 +752,8 @@ ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_var)) +
   coord_fixed(xlim = range(dat$lon), ylim = range(dat$lat), ratio = 1.3)
 ```
     
-Notice that the above model is overfit -- see the large variance surface. This can be resolved with penalized models (ridge, lasso, elastic net, etc).
+
+Notice that the above model is overfit -- see the large variance surface. This can be resolved with penalized models (ridge, lasso, elastic net, etc). Many basis-function models show "edge effects" in the model fit. This is because at the edges of the domain there are one or two basis functions that see little data and therefore have high variability in the estimate. One can either add duplicate knots or extend the spatial domain of the knots and add a penalty term to the fit.
 
 ### Kernel regression with a ridge penalty
 
@@ -739,14 +761,36 @@ Notice that the above model is overfit -- see the large variance surface. This c
 
 ```{r}
 ## set alpha = 0 for ridge regression
+X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
+colnames(X) <- paste0("X", 1:ncol(X))
+X <- data.frame(X)
+
 cv_fit <- cv.glmnet(as.matrix(X), dat$z, alpha = 0)
 fit <- glmnet(as.matrix(X), dat$z, alpha = 0, lambda = cv_fit$lambda.min)
+
+## generate model predictions
+pred_coords <- as.data.frame(
+    expand.grid(
+        seq(min(dat$lon), max(dat$lon), length = 100), 
+        seq(min(dat$lat), max(dat$lat), length = 100)
+    )
+)
+colnames(pred_coords) <- c("lon", "lat")
+
+X_pred <- make_kernel_basis(pred_coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
+colnames(X_pred) <- paste0("X", 1:ncol(X))
+X_pred <- data.frame(X_pred)
+
 preds <- predict(fit, newx = as.matrix(X_pred))
 ```
 
 ```{r}
-pred_coords$pred_mean <- preds
-ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
+dat_pred <- data.frame(
+  lon       = pred_coords$lon,
+  lat       = pred_coords$lat,
+  pred_mean = c(preds)
+)
+ggplot(data = dat_pred, aes(x = lon, y = lat, fill = pred_mean)) +
     geom_raster() +
     geom_polygon(data = states, aes(x = long, y = lat, group = group), 
                  colour = "black", fill = NA) +
@@ -759,16 +803,39 @@ ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
 
 * Note: glmnet doesn't have a theoretically-motivated method for calculating prediction standard errors
 
+
 ```{r}
-## set alpha = 0 for ridge regression
+## set alpha = 1 for ridge regression
+X <- make_kernel_basis(coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
+colnames(X) <- paste0("X", 1:ncol(X))
+X <- data.frame(X)
+
 cv_fit <- cv.glmnet(as.matrix(X), dat$z, alpha = 1)
 fit <- glmnet(as.matrix(X), dat$z, alpha = 1, lambda = cv_fit$lambda.min)
+
+## generate model predictions
+pred_coords <- as.data.frame(
+    expand.grid(
+        seq(min(dat$lon), max(dat$lon), length = 100), 
+        seq(min(dat$lat), max(dat$lat), length = 100)
+    )
+)
+colnames(pred_coords) <- c("lon", "lat")
+
+X_pred <- make_kernel_basis(pred_coords, knots, kernel = "gaussian", bandwith = bw[best_idx[2]])
+colnames(X_pred) <- paste0("X", 1:ncol(X))
+X_pred <- data.frame(X_pred)
+
 preds <- predict(fit, newx = as.matrix(X_pred))
 ```
 
 ```{r}
-pred_coords$pred_mean <- preds
-ggplot(data = pred_coords, aes(x = lon, y = lat, fill = pred_mean)) +
+dat_pred <- data.frame(
+  lon       = pred_coords$lon,
+  lat       = pred_coords$lat,
+  pred_mean = c(preds)
+)
+ggplot(data = dat_pred, aes(x = lon, y = lat, fill = pred_mean)) +
     geom_raster() +
     geom_polygon(data = states, aes(x = long, y = lat, group = group), 
                  colour = "black", fill = NA) +
@@ -789,14 +856,14 @@ mean(X_pred == 0)
 
 ```{r}
 X_threshold <- make_kernel_basis(pred_coords, knots, kernel = "gaussian",
-                                 bandwith = 10, threshold = 100)
+                                 bandwith = bw[best_idx[2]], threshold = 10)
 mean(X_threshold == 0)
 ```
 
 
- Can use other functions as a kernel:
-    - Wendland basis
-    
+Can use other functions as a kernel:
+- Wendland basis
+
 \begin{align*}
 \frac{(1 - d)^6 (35 d^2 + 18d + 3)}{3} I\{d < 1\}
 \end{align*}
@@ -811,10 +878,11 @@ wendland_basis <- function(d, radius) {
     return(((1 - d)^6 * (35 * d^2 + 18 * d + 3)) / 3 * (d < 1))
 }
 
-layout(matrix(1:3, 1, 3))
+layout(matrix(1:4, 2, 2, byrow = TRUE))
 curve(wendland_basis(abs(x - 0.25), radius = 0.15), n = 1000)
-curve(wendland_basis(abs(x - 0.5), radius = 0.15), n = 1000)
 curve(wendland_basis(abs(x - 0.75), radius = 0.15), n = 1000)
+curve(wendland_basis(abs(x - 0.25), radius = 0.5), n = 1000)
+curve(wendland_basis(abs(x - 0.75), radius = 0.5), n = 1000)
 ```
 
 ## Sparse vs. Dense matrix computation

@@ -1,4 +1,385 @@
 # Day 26
 
+```{r, message = FALSE}
+library(tidyverse)
+library(fields)
+library(mvnfast)
+library(LaplacesDemon)
+library(patchwork)
+library(GGally)
+```
+
 ## Announcements
 
+
+## Multivariate Data
+
+- At each location $\mathbf{s} \in \mathcal{D}$ there are $p$ variables $y_1(\mathbf{s}), \ldots, y_p(\mathbf{s})$ measured
+
+    - Examples: 
+        - temperature and ozone
+        - precipitation and humidity
+
+- Advantages of a joint model -- why not just model each variable independently?
+
+    - Learn about any potential dependence between the variables
+    - Use cross-correlation to "borrow strength" among the variables to improve prediction and estimation
+    - Sometimes the processes are only partially observed (i.e., if there are two varaibles of interest, you might only observe one variable at a handful of sites, the other variable at other sites, and both variables at a subset to sites)
+    
+    **draw picture**
+
+    - can even fit a model if none of the variables are co-located if you make assumptions about the spatial co-dependence
+    
+    
+## Classical Multivariate Geostatistics
+
+### cross-variograms and cross-covariance functions
+
+- The cross-variograms between variables $i$ and $j$ at lag $\mathbf{h}$ is
+
+\begin{align*}
+\gamma_{ij}(\mathbf{h}) = \frac{1}{2} E\left( \left( y_i(\mathbf{s} + \mathbf{h}) - y_i(\mathbf{s}) \right) \left( y_j(\mathbf{s} + \mathbf{h}) - y_j(\mathbf{s}) \right) \right)
+\end{align*}
+
+where we assume that  $E\left( y_i(\mathbf{s} + \mathbf{h}) - y_i(\mathbf{s}) \right) = 0$ for all $\mathbf{s}$ and $\mathbf{s} + \mathbf{h} \in \mathcal{D}$
+
+- The cross-covariance function is
+
+\begin{align*}
+C_{ij}(\mathbf{h}) = E\left( \left( y_i(\mathbf{s} + \mathbf{h}) - \mu_i \right) \left( y_j(\mathbf{s} + \mathbf{h}) - \mu_j \right) \right)
+\end{align*}
+
+where a constant mean $\mu_i$ is assumed.
+   
+- Note: cross-covariace function satisfies $| C_{ij}(\mathbf{h}) |^2 \leq C_{ii}(\mathbf{0})C_{jj}(\mathbf{0})$ but $| C_{ij}(\mathbf{h}) |$ need not be $\leq C_{ij}(\mathbf{0})$
+
+
+### Cokriging
+
+- use the multivariate vector for prediction by "borrowing strength"
+
+- assume valid mean and cross-covariance functions, then cokriging can be done using multivariate normal distributions
+
+- Let $\mathbf{y} = \left(y_1(\mathbf{s_1}), \ldots, y_1(\mathbf{s_n}), y_2(\mathbf{s_1}), \ldots, y_2(\mathbf{s_n}), \ldots, y_p(\mathbf{s_1}), \ldots, y_p(\mathbf{s_n}) \right)'$ 
+
+\begin{align*}
+\mathbf{y} & \sim N(\mathbf{X} \boldsymbol{\beta}, \boldsymbol{\Sigma})
+\end{align*}    
+
+- in general, it is hard to choose a valid cross-covariance function so the matrix $\boldsymbol{\Sigma}$ is hard to specify
+
+- Instead, one can use a "seperable" covariance function
+
+\begin{align*}
+C_{ij}(\mathbf{h}) & = \sigma_{ij} C(\mathbf{h})
+\end{align*}  
+
+where $\sigma_{ij}$ is a cross-correlation between variable $i$ and $j$ that is independent of spatial location and $C(\mathbf{h})$ is a purely spatial covariance function
+
+- This implies:
+    - Variance $Var(y_i(\mathbf{s})) = \sigma_{ii}$
+    
+    - Cross-covariance $Cov(y_i(\mathbf{s}), y_j(\mathbf{s})) = \sigma_{ij}$
+    
+    - Spatial covariance $Cov(y_i(\mathbf{s}), y_i(\mathbf{s}')) = \sigma_{ii} C(\mathbf{s} - \mathbf{s}')$
+    
+    - Cross spatial covariance $Cov(y_i(\mathbf{s}), y_j(\mathbf{s}')) = \sigma_{ij} C(\mathbf{s} - \mathbf{s}')$
+    
+- Hence, seperability implies the cross-covariance between responses is the same from site to site (the interrelationships between the variables are constant across space) and the spatial correlation is the same for each of the variable types
+    
+- Then, $\boldsymbol{\Sigma} = \boldsymbol{\Sigma}_p \otimes \mathbf{R}_n$ where $\boldsymbol{\Sigma}_p$ is the $p \times p$ covariance matrix among the $p$ variables and $\mathbf{R}_n$ is the $n \times n$ spatial correlation matrix.
+
+```{r, message = FALSE}
+## Make some data
+set.seed(1)
+n <- 20^2
+p <- 4
+coords <- expand.grid(
+    seq(0, 1, length.out = sqrt(n)),
+    seq(0, 1, length.out = sqrt(n))
+)
+
+
+X <- cbind(1, rnorm(n, 0, 0.5))
+
+beta <- list(p)
+for (j in 1:p) {
+    beta[[j]] <- as.matrix(c(1, rnorm(1, 0, 0.5)))
+}
+
+Xbeta <- rep(0, n * p)
+for (j in 1:p) {
+    Xbeta[1:n + (j-1)*n] <- X %*% beta[[j]]
+}
+sigma2 <- 1
+phi <- 3 / 0.5
+
+D <- as.matrix(rdist(coords))
+R_n <- exp(-phi * D)
+
+## simulate a 4 by 4 covariance matrix for the 
+nu <- p+1
+Sigma_p <- nu * rinvwishart(nu, diag(p))
+ggcorr(data = NULL, cor_matrix = cov2cor(Sigma_p), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+```
+
+
+
+- Note: we need to evaluate the Cholesky of $\boldsymbol{\Sigma}_p \otimes \mathbf{R}_n$ for both simulation and estimation of the process. However, this is enabled computationally by noticing that
+
+\begin{align*}
+\boldsymbol{\Sigma}_p \otimes \mathbf{R}_n & \mathbf{L}\mathbf{L}' \\
+& = \mathbf{L}_n \otimes \mathbf{L}_p
+\end{align*}
+
+- This is commonly called "tensor products" or "tensor multiplication" -- Google's Tensorflow
+
+```{r, cache = TRUE}
+all.equal(
+    kronecker(chol(Sigma_p), chol(R_n)),
+    chol(kronecker(Sigma_p, R_n))
+) 
+
+## calcuate the timings of the different operations
+bm <- microbenchmark(
+    kronecker(chol(Sigma_p), chol(R_n)),
+    chol(kronecker(Sigma_p, R_n)),
+    times = 10
+)
+
+bm
+plot(bm)
+```
+
+```{r, cache = TRUE, dependson = -2}
+## Note: this is slow
+# w <- c(mvnfast::rmvn(1, rep(0, n*p), kronecker(Sigma_p, R_n))) 
+ 
+## instead use the decomposed Cholesky represntation
+w <- c(mvnfast::rmvn(1, rep(0, n*p), kronecker(chol(Sigma_p), chol(R_n)), isChol = TRUE))
+
+y <- rnorm(n * p, Xbeta + w, sqrt(sigma2))
+```
+
+```{r}
+dat <- data.frame(
+    lon   = coords[, 1],
+    lat   = coords[, 2],
+    mu    = Xbeta,
+    w     = w,
+    y     = y,
+    var   = rep(1:p, each = n)
+)
+
+p1 <- ggplot(data = dat, aes(x = lon, y = lat, fill = w)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("spatial random effects")
+p2 <- ggplot(data = dat, aes(x = lon, y = lat, fill = mu)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("fixed effects")
+p3 <- ggplot(data = dat, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("observed data")
+## plot using patchwork package
+p1 / p2 / p3
+```
+
+
+
+
+### Linear Model of Coregionalization
+
+- essentially a spatial version of factor analysis
+
+- the responses are a $p$-vector $(y_1(\mathbf{s}), \ldots, y_p(\mathbf{s}))'$ at each location (maybe only partially observed)
+
+- Idea: instead of there being $p$ different processes, these can be represented by $L < p$ latent (unobserved) sources $f_1(\mathbf{s}), \ldots, f_L(\mathbf{s})$
+ 
+    - very common in pollution / air quality monitoring
+    - each of the $f_\ell(\mathbf{s})$ can be thought of as different sources of pollutions (e.g., cars, power plants, manufacturing plants, etc.)
+    
+- The factor analysis model (linear model of coregionalization) is
+
+
+\begin{align*}
+y_i(\mathbf{s}) & = \sum_{\ell = 1}^L A_{i \ell} f_{\ell}(\mathbf{s}) + \varepsilon{s}
+\end{align*}
+
+where $\varepsilon(\mathbf{s}) \stackrel{iid}{\sim} N(0, \sigma^2)$
+
+- The joint model is 
+
+\begin{align*}
+\mathbf{y}(\mathbf{s}) = \begin{pmatrix} y_1(\mathbf{s}) \\ \vdots \\ y_p(\mathbf{s}) \sim N(\mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{D}) \end{pmatrix},
+\end{align*}
+
+where $\mathbf{A} = \begin{pmatrix} \mathcal{R}^+ & 0 & \cdots & 0\\ \mathcal{R} & \mathcal{R}^+ & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ \mathcal{R} & \cdots & \mathcal{R} & \mathcal{R} \end{pmatrix}$ is a $p \times L$ lower triangular matrix with positive diagonal elements ($\mathcal{R}^+$) and unconstrained values in the lower triangle ($\mathcal{R}$). These requirements are to ensure the model is identifiable. The $\mathbf{f}(\mathbf{s}) = (f_1(\mathbf{s}), \ldots, f_p(\mathbf{s}))'$ is a $p$-vector of spatially correlated latent factors, and $\mathbf{D} = \begin{pmatrix} \sigma^2_{11} & 0 & \cdots & 0\\ 0 & \sigma^2_{22} & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots  & \sigma^2_{pp} \end{pmatrix}$ is a diagonal matrix with positive diagonals representing the nugget variances for each of the $p$ variables
+
+
+
+- Seperable model: If the latent processes $f_i$ are $iid$ GPs with mean zero, variance 1 and correlation $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta})$, then the covariance is
+
+\begin{align*}
+Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
+& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s})\right) \mathbf{A}'\\
+& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s})) & 0 & \cdots & 0 \\
+0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s})) & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s})) \end{pmatrix}
+ \mathbf{A}' \\
+& \mathbf{A} \mathbf{A}' C(\|\mathbf{s} - \mathbf{s}'\|),
+\end{align*}
+
+where $\mathbf{A} \mathbf{A}'$ is the cross-covariance and $C(\|\mathbf{s} - \mathbf{s}'\|)$ is the spatial covariance
+
+```{r, message = FALSE}
+## Make some data
+set.seed(1)
+n <- 30^2
+p <- 4
+L <- 3 ## three latent factors
+coords <- expand.grid(
+    seq(0, 1, length.out = sqrt(n)),
+    seq(0, 1, length.out = sqrt(n))
+)
+X <- cbind(1, rnorm(n, 0, 0.5))
+
+beta <- list(p)
+for (j in 1:p) {
+    beta[[j]] <- as.matrix(c(1, rnorm(1, 0, 0.5)))
+}
+
+Xbeta <- rep(0, n * p)
+for (j in 1:p) {
+    Xbeta[1:n + (j-1)*n] <- X %*% beta[[j]]
+}
+sigma2 <- c(1, 2, 0.5, 1)
+phi <- 3 / 0.5
+
+D <- as.matrix(rdist(coords))
+## constant spatial correlation function
+R_n <- exp(-phi * D)
+R_n_chol <- chol(R_n)
+
+f <- matrix(0, L, n)
+for (l in 1:L) {
+    f[l, ] <- mvnfast::rmvn(1, rep(0, n), R_n_chol, isChol = TRUE)
+}
+
+dat <- data.frame(
+    lon    = rep(coords[, 1], each = 3),
+    lat    = rep(coords[, 2], each = 3),
+    f      = c(f),
+    factor = rep(1:3, times = n)
+)
+
+ggplot(data = dat, aes(x = lon, y = lat, fill = f)) +
+    geom_raster() +
+    facet_grid(~ factor) +
+    ggtitle("spatial random effects") +
+    scale_fill_viridis_c()
+```
+
+- generate the correlation matrix $\mathbf{A}$
+
+```{r}
+A <- matrix(0, p, L)
+for (i in 1:p) {
+    for (l in 1:L) {
+        if (i == l){
+            A[i, l] <- exp(rnorm(1))
+        } else if (i > l) {
+            A[i, l] <- rnorm(1)
+        }
+    }
+}
+
+A
+## simulate a 4 by 4 covariance matrix for the 
+ggcorr(data = NULL, cor_matrix = cov2cor(A %*% t(A)), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+```
+
+
+```{r, cache = TRUE, dependson = -2}
+y <- rep(0, n*p)
+for (j in 1:p) {
+    idx <- 1:n + (j-1) * n
+    y[idx] <- rnorm(n, Xbeta[idx] + (A %*% f)[j, ], sqrt(sigma2[j]))
+}
+```
+
+```{r}
+dat <- data.frame(
+    lon   = coords[, 1],
+    lat   = coords[, 2],
+    mu    = Xbeta,
+    Af    = c(t(A %*% f)),
+    y     = y,
+    var   = rep(1:p, each = n)
+)
+
+p1 <- ggplot(data = dat, aes(x = lon, y = lat, fill = Af)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("spatial random effects") + 
+    scale_fill_viridis_c()
+p2 <- ggplot(data = dat, aes(x = lon, y = lat, fill = mu)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("fixed effects") + 
+    scale_fill_viridis_c()
+p3 <- ggplot(data = dat, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("observed data") + 
+    scale_fill_viridis_c()
+## plot using patchwork package
+p1 / p2 / p3
+```
+
+
+- Non-seperable model: If the latent processes $f_i$ are $iid$ GPs with mean zero, variance 1 but the latent process $j$ has correlation function $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_j)$, then the covariance is
+
+\begin{align*}
+Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
+& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s})\right) \mathbf{A}'\\
+& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s})) & 0 & \cdots & 0 \\
+0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s})) & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s})) \end{pmatrix}
+ \mathbf{A}' 
+ \end{align*}
+
+is non-seperable
+
+- Non-stationarity: to account for spatially varying response, one can model the $A_{ij}$s as spatially varying by $A_{ij}(\mathbf{s})$. Therefore, the cross-covariance matrix $\mathbf{A}(\mathbf{s}) \mathbf{A}(\mathbf{s}')$ is spatially varying
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{align*}
+a
+\end{align*}
