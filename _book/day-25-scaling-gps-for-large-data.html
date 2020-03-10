@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>25 Day 25 – Scaling GPs for large data | Notes for STAT 5413 - Spatial Statistics</title>
+  <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="25 Day 25 – Scaling GPs for large data | Notes for STAT 5413 - Spatial Statistics" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="25 Day 25 – Scaling GPs for large data | Notes for STAT 5413 - Spatial Statistics" />
+  
+  <meta name="twitter:description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
+  
+
+<meta name="author" content="John Tipton" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day-24-scaling-gps-for-large-data.html"/>
+<link rel="next" href="day-26.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.10/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">STAT 5413 Spatial Statistics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="day-1.html"><a href="day-1.html#notation"><i class="fa fa-check"></i><b>1.1</b> Notation</a></li>
+<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="day-1.html"><a href="day-1.html#example-linear-regression"><i class="fa fa-check"></i><b>1.2.1</b> Example: linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="day-1.html"><a href="day-1.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>1.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="day-1.html"><a href="day-1.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>1.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
+<li class="chapter" data-level="1.3.3" data-path="day-1.html"><a href="day-1.html#data-model"><i class="fa fa-check"></i><b>1.3.3</b> Data Model</a></li>
+<li class="chapter" data-level="1.3.4" data-path="day-1.html"><a href="day-1.html#process-model"><i class="fa fa-check"></i><b>1.3.4</b> Process Model</a></li>
+<li class="chapter" data-level="1.3.5" data-path="day-1.html"><a href="day-1.html#parameter-prior-model-bmhs-only"><i class="fa fa-check"></i><b>1.3.5</b> Parameter (Prior) Model (BMHs only)</a></li>
+<li class="chapter" data-level="1.3.6" data-path="day-1.html"><a href="day-1.html#posterior-distribution"><i class="fa fa-check"></i><b>1.3.6</b> Posterior Distribution</a></li>
+<li class="chapter" data-level="1.3.7" data-path="day-1.html"><a href="day-1.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>1.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="day-2.html"><a href="day-2.html#spatial-data"><i class="fa fa-check"></i><b>2.1</b> Spatial Data</a></li>
+<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="day-2.html"><a href="day-2.html#geostatistical-data"><i class="fa fa-check"></i><b>2.2.1</b> Geostatistical data</a></li>
+<li class="chapter" data-level="2.2.2" data-path="day-2.html"><a href="day-2.html#areal-data"><i class="fa fa-check"></i><b>2.2.2</b> Areal data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="day-2.html"><a href="day-2.html#point-process-data"><i class="fa fa-check"></i><b>2.2.3</b> Point process data</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#anouncements"><i class="fa fa-check"></i><b>3.1</b> Anouncements</a></li>
+<li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Files for spatial data</a></li>
+<li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a></li>
+<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.4.1</b> Spatial visualization using <em>fields</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="day-4.html"><a href="day-4.html#announcements"><i class="fa fa-check"></i><b>4.1</b> Announcements</a></li>
+<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="day-4.html"><a href="day-4.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>4.2.1</b> Spatial visualization using <em>fields</em></a></li>
+<li class="chapter" data-level="4.2.2" data-path="day-4.html"><a href="day-4.html#in-class-activity"><i class="fa fa-check"></i><b>4.2.2</b> In Class Activity:</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="day-4.html"><a href="day-4.html#interactive-display-of-data"><i class="fa fa-check"></i><b>4.3.1</b> Interactive display of data</a></li>
+<li class="chapter" data-level="4.3.2" data-path="day-4.html"><a href="day-4.html#animations"><i class="fa fa-check"></i><b>4.3.2</b> Animations</a></li>
+<li class="chapter" data-level="4.3.3" data-path="day-4.html"><a href="day-4.html#interactive-plotting-using-plotly"><i class="fa fa-check"></i><b>4.3.3</b> Interactive plotting using <em>plotly</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="day-5.html"><a href="day-5.html#announcements-1"><i class="fa fa-check"></i><b>5.1</b> Announcements</a></li>
+<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="day-5.html"><a href="day-5.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2.1</b> Gaussian processes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="day-6.html"><a href="day-6.html#announcements-2"><i class="fa fa-check"></i><b>6.1</b> Announcements</a></li>
+<li class="chapter" data-level="6.2" data-path="day-6.html"><a href="day-6.html#gaussian-process-assumptions"><i class="fa fa-check"></i><b>6.2</b> Gaussian process assumptions</a></li>
+<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="day-6.html"><a href="day-6.html#data-model-1"><i class="fa fa-check"></i><b>6.3.1</b> Data Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="day-7.html"><a href="day-7.html#common-isotropic-correlation-functions"><i class="fa fa-check"></i><b>7.1</b> Common isotropic correlation functions</a></li>
+<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="day-7.html"><a href="day-7.html#semivariograms-and-variograms"><i class="fa fa-check"></i><b>7.2.1</b> Semivariograms and variograms</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="day-8.html"><a href="day-8.html#announcements-3"><i class="fa fa-check"></i><b>8.1</b> Announcements</a></li>
+<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process-using-variograms"><i class="fa fa-check"></i><b>8.2.1</b> Estimation of the spatial process using variograms</a></li>
+<li class="chapter" data-level="8.2.2" data-path="day-8.html"><a href="day-8.html#maximum-likelihood"><i class="fa fa-check"></i><b>8.2.2</b> Maximum Likelihood</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="day-8.html"><a href="day-8.html#maximum-likelihood-1"><i class="fa fa-check"></i><b>8.3</b> Maximum likelihood</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="day-9.html"><a href="day-9.html#announcements-4"><i class="fa fa-check"></i><b>9.1</b> Announcements</a></li>
+<li class="chapter" data-level="9.2" data-path="day-9.html"><a href="day-9.html#asymptotic-properties-of-the-mle"><i class="fa fa-check"></i><b>9.2</b> Asymptotic properties of the MLE</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="day-10.html"><a href="day-10.html#announcements-5"><i class="fa fa-check"></i><b>10.1</b> Announcements</a></li>
+<li class="chapter" data-level="10.2" data-path="day-10.html"><a href="day-10.html#asymptotic-properties-of-the-mle-1"><i class="fa fa-check"></i><b>10.2</b> Asymptotic properties of the MLE</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
+<li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#example-spatial-analysis"><i class="fa fa-check"></i><b>11.2</b> Example spatial analysis</a></li>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="day-11.html"><a href="day-11.html#fit-the-maximum-likelihood-estimate-using-the-geor-package"><i class="fa fa-check"></i><b>11.3.1</b> Fit the maximum likelihood estimate using the <em>geoR</em> package</a></li>
+<li class="chapter" data-level="11.3.2" data-path="day-11.html"><a href="day-11.html#fitting-a-spatial-model-using-the-nlme-package"><i class="fa fa-check"></i><b>11.3.2</b> Fitting a spatial model using the <em>nlme</em> package</a></li>
+<li class="chapter" data-level="11.3.3" data-path="day-11.html"><a href="day-11.html#model-fitting-with-autokrige-function"><i class="fa fa-check"></i><b>11.3.3</b> model fitting with <em>autokrige</em> function</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-mean-mu-0"><i class="fa fa-check"></i><b>11.4.1</b> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></a></li>
+<li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-unknown-mean"><i class="fa fa-check"></i><b>11.4.2</b> Kriging Equations with unknown mean</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
+<li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>12.2</b> Introduction to MCMC</a></li>
+<li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>12.3</b> Example: Simple linear regression</a></li>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>12.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="12.4.2" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>12.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
+<li class="chapter" data-level="12.4.3" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>12.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="day-12.html"><a href="day-12.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>12.5.1</b> General recommendations for writing MCMC software</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
+<li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-proposal-distribution"><i class="fa fa-check"></i><b>13.3</b> The proposal distribution</a></li>
+<li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#the-metropolis-update"><i class="fa fa-check"></i><b>13.4</b> The Metropolis update</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="day-14.html"><a href="day-14.html#announcements-9"><i class="fa fa-check"></i><b>14.1</b> Announcements</a></li>
+<li class="chapter" data-level="14.2" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>14.2</b> The Metropolis-Hastings Algorithm</a></li>
+<li class="chapter" data-level="14.3" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>14.3</b> The Metropolis-Hastings algorithm</a></li>
+<li class="chapter" data-level="14.4" data-path="day-14.html"><a href="day-14.html#example-1"><i class="fa fa-check"></i><b>14.4</b> Example</a></li>
+<li class="chapter" data-level="14.5" data-path="day-14.html"><a href="day-14.html#posterior"><i class="fa fa-check"></i><b>14.5</b> Posterior</a></li>
+<li class="chapter" data-level="14.6" data-path="day-14.html"><a href="day-14.html#conditional-posterior-for-phi"><i class="fa fa-check"></i><b>14.6</b> Conditional posterior for <span class="math inline">\(\phi\)</span></a></li>
+<li class="chapter" data-level="14.7" data-path="day-14.html"><a href="day-14.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>14.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="14.8" data-path="day-14.html"><a href="day-14.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>14.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="day-15.html"><a href="day-15.html#announcements-10"><i class="fa fa-check"></i><b>15.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="day-16.html"><a href="day-16.html#announcements-11"><i class="fa fa-check"></i><b>16.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="day-17.html"><a href="day-17.html#announcements-12"><i class="fa fa-check"></i><b>17.1</b> Announcements</a></li>
+<li class="chapter" data-level="17.2" data-path="day-17.html"><a href="day-17.html#gaussian-process-representations"><i class="fa fa-check"></i><b>17.2</b> Gaussian process representations</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="day-18.html"><a href="day-18.html#announcements-13"><i class="fa fa-check"></i><b>18.1</b> Announcements</a></li>
+<li class="chapter" data-level="18.2" data-path="day-18.html"><a href="day-18.html#gaussian-process-representations-continued"><i class="fa fa-check"></i><b>18.2</b> Gaussian process representations continued</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="day-19.html"><a href="day-19.html#announcements-14"><i class="fa fa-check"></i><b>19.1</b> Announcements</a></li>
+<li class="chapter" data-level="19.2" data-path="day-19.html"><a href="day-19.html#stochastic-integration"><i class="fa fa-check"></i><b>19.2</b> Stochastic Integration</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="day-20.html"><a href="day-20.html#announcements-15"><i class="fa fa-check"></i><b>20.1</b> Announcements</a></li>
+<li class="chapter" data-level="20.2" data-path="day-20.html"><a href="day-20.html#spbayes-example"><i class="fa fa-check"></i><b>20.2</b> spBayes example</a></li>
+<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.-local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a>
+<ul>
+<li class="chapter" data-level="20.3.1" data-path="day-20.html"><a href="day-20.html#an-example-global-basis-fourier-basis"><i class="fa fa-check"></i><b>20.3.1</b> An example global basis: Fourier Basis</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="day-20.html"><a href="day-20.html#example-local-basis"><i class="fa fa-check"></i><b>20.4</b> example local basis</a></li>
+<li class="chapter" data-level="20.5" data-path="day-20.html"><a href="day-20.html#fitting-spatial-models-many-ways"><i class="fa fa-check"></i><b>20.5</b> Fitting spatial models many ways</a></li>
+<li class="chapter" data-level="20.6" data-path="day-20.html"><a href="day-20.html#empirical-orthogonal-functions"><i class="fa fa-check"></i><b>20.6</b> Empirical Orthogonal Functions</a></li>
+<li class="chapter" data-level="20.7" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-mgcv-package"><i class="fa fa-check"></i><b>20.7</b> Spatial modeling with <code>mgcv</code> package</a></li>
+<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a>
+<ul>
+<li class="chapter" data-level="20.8.1" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-ridge-penalty"><i class="fa fa-check"></i><b>20.8.1</b> Kernel regression with a ridge penalty</a></li>
+<li class="chapter" data-level="20.8.2" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-lasso-penalty"><i class="fa fa-check"></i><b>20.8.2</b> Kernel regression with a lasso penalty</a></li>
+<li class="chapter" data-level="20.8.3" data-path="day-20.html"><a href="day-20.html#truncated-kernels---local-support"><i class="fa fa-check"></i><b>20.8.3</b> Truncated Kernels - local support</a></li>
+</ul></li>
+<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.-dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="day-21.html"><a href="day-21.html#announcements-16"><i class="fa fa-check"></i><b>21.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="day-22.html"><a href="day-22.html#announcements-17"><i class="fa fa-check"></i><b>22.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="day-23.html"><a href="day-23.html#announcements-18"><i class="fa fa-check"></i><b>23.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="24" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>24</b> Day 24 – Scaling GPs for large data</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#announcements-19"><i class="fa fa-check"></i><b>24.1</b> Announcements</a></li>
+<li class="chapter" data-level="24.2" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#local-analysis"><i class="fa fa-check"></i><b>24.2</b> Local analysis</a></li>
+<li class="chapter" data-level="24.3" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#low-rank-approimxations"><i class="fa fa-check"></i><b>24.3</b> Low rank approimxations</a></li>
+<li class="chapter" data-level="24.4" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#spectral-basis-functions"><i class="fa fa-check"></i><b>24.4</b> Spectral basis functions</a></li>
+<li class="chapter" data-level="24.5" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#kernel-convolutions"><i class="fa fa-check"></i><b>24.5</b> Kernel convolutions</a></li>
+</ul></li>
+<li class="chapter" data-level="25" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>25</b> Day 25 – Scaling GPs for large data</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
+<li class="chapter" data-level="25.2" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>25.2</b> Gaussian Predictive Process (spBayes package)</a></li>
+<li class="chapter" data-level="25.3" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#sparse-matrix-routines"><i class="fa fa-check"></i><b>25.3</b> Sparse matrix routines</a></li>
+<li class="chapter" data-level="25.4" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#the-stochastic-pde-approach"><i class="fa fa-check"></i><b>25.4</b> The stochastic PDE approach</a></li>
+<li class="chapter" data-level="25.5" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#approximate-likelihood-methods"><i class="fa fa-check"></i><b>25.5</b> Approximate likelihood methods</a></li>
+<li class="chapter" data-level="25.6" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#vecchia-approximations"><i class="fa fa-check"></i><b>25.6</b> Vecchia Approximations</a></li>
+</ul></li>
+<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a>
+<ul>
+<li class="chapter" data-level="26.1" data-path="day-26.html"><a href="day-26.html#announcements-21"><i class="fa fa-check"></i><b>26.1</b> Announcements</a></li>
+<li class="chapter" data-level="26.2" data-path="day-26.html"><a href="day-26.html#multivariate-data"><i class="fa fa-check"></i><b>26.2</b> Multivariate Data</a></li>
+<li class="chapter" data-level="26.3" data-path="day-26.html"><a href="day-26.html#classical-multivariate-geostatistics"><i class="fa fa-check"></i><b>26.3</b> Classical Multivariate Geostatistics</a>
+<ul>
+<li class="chapter" data-level="26.3.1" data-path="day-26.html"><a href="day-26.html#cross-variograms-and-cross-covariance-functions"><i class="fa fa-check"></i><b>26.3.1</b> cross-variograms and cross-covariance functions</a></li>
+<li class="chapter" data-level="26.3.2" data-path="day-26.html"><a href="day-26.html#cokriging"><i class="fa fa-check"></i><b>26.3.2</b> Cokriging</a></li>
+<li class="chapter" data-level="26.3.3" data-path="day-26.html"><a href="day-26.html#linear-model-of-coregionalization"><i class="fa fa-check"></i><b>26.3.3</b> Linear Model of Coregionalization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a>
+<ul>
+<li class="chapter" data-level="27.1" data-path="day-27.html"><a href="day-27.html#announcements-22"><i class="fa fa-check"></i><b>27.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a>
+<ul>
+<li class="chapter" data-level="28.1" data-path="day-28.html"><a href="day-28.html#announcements-23"><i class="fa fa-check"></i><b>28.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a>
+<ul>
+<li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a>
+<ul>
+<li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a>
+<ul>
+<li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a>
+<ul>
+<li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a>
+<ul>
+<li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a>
+<ul>
+<li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a>
+<ul>
+<li class="chapter" data-level="35.1" data-path="day-35.html"><a href="day-35.html#announcements-30"><i class="fa fa-check"></i><b>35.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a>
+<ul>
+<li class="chapter" data-level="36.1" data-path="day-36.html"><a href="day-36.html#announcements-31"><i class="fa fa-check"></i><b>36.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="day-37.html"><a href="day-37.html#announcements-32"><i class="fa fa-check"></i><b>37.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a>
+<ul>
+<li class="chapter" data-level="38.1" data-path="day-38.html"><a href="day-38.html#announcements-33"><i class="fa fa-check"></i><b>38.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a>
+<ul>
+<li class="chapter" data-level="39.1" data-path="day-39.html"><a href="day-39.html#announcements-34"><i class="fa fa-check"></i><b>39.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a>
+<ul>
+<li class="chapter" data-level="40.1" data-path="day-40.html"><a href="day-40.html#announcements-35"><i class="fa fa-check"></i><b>40.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a>
+<ul>
+<li class="chapter" data-level="41.1" data-path="day-41.html"><a href="day-41.html#announcements-36"><i class="fa fa-check"></i><b>41.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a>
+<ul>
+<li class="chapter" data-level="42.1" data-path="day-42.html"><a href="day-42.html#announcements-37"><i class="fa fa-check"></i><b>42.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a>
+<ul>
+<li class="chapter" data-level="43.1" data-path="day-43.html"><a href="day-43.html#announcements-38"><i class="fa fa-check"></i><b>43.1</b> Announcements</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Notes for STAT 5413 - Spatial Statistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="day-25-scaling-gps-for-large-data" class="section level1" number="25">
+<h1 number="25"><span class="header-section-number">25</span> Day 25 – Scaling GPs for large data</h1>
+<div id="announcements-20" class="section level2" number="25.1">
+<h2 number="25.1"><span class="header-section-number">25.1</span> Announcements</h2>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="day-25-scaling-gps-for-large-data.html#cb356-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb356-2"><a href="day-25-scaling-gps-for-large-data.html#cb356-2"></a><span class="kw">library</span>(mvnfast)</span>
+<span id="cb356-3"><a href="day-25-scaling-gps-for-large-data.html#cb356-3"></a><span class="kw">library</span>(fields)</span>
+<span id="cb356-4"><a href="day-25-scaling-gps-for-large-data.html#cb356-4"></a><span class="kw">library</span>(spBayes)</span>
+<span id="cb356-5"><a href="day-25-scaling-gps-for-large-data.html#cb356-5"></a><span class="kw">library</span>(spNNGP)</span></code></pre></div>
+</div>
+<div id="gaussian-predictive-process-spbayes-package" class="section level2" number="25.2">
+<h2 number="25.2"><span class="header-section-number">25.2</span> Gaussian Predictive Process (spBayes package)</h2>
+<ul>
+<li><p>projection idea</p></li>
+<li><p>the predictive (child) process has the same covariance function <span class="math inline">\(C(\cdot | \boldsymbol{\theta})\)</span> as the desired parent process</p></li>
+<li><p>optimal predictor of dimension <span class="math inline">\(M &lt; &lt; n\)</span> given the covariance function <span class="math inline">\(C(\cdot | \boldsymbol{\theta})\)</span></p></li>
+<li><p>Define a set of knots <span class="math inline">\(\boldsymbol{\kappa} = (\kappa_1, \ldots, \kappa_M)&#39;\)</span></p></li>
+<li><p>The predictive process <span class="math inline">\(\boldsymbol{\eta}^{\star} \sim N(\mathbf{0}, \mathbf{C}^{\star})\)</span> where <span class="math inline">\(\mathbf{C}^{\star}\)</span> is the covariance matrix of the process over the <span class="math inline">\(M\)</span> knots given parameters <span class="math inline">\(\boldsymbol{\theta}\)</span></p></li>
+<li><p>The basis functions are the <span class="math inline">\(M\)</span>-vector <span class="math inline">\(\mathbf{c}^{\star}(\mathbf{s} | \boldsymbol{\theta}) {\mathbf{C}^{\star}}^{-1}\)</span> where <span class="math inline">\(\mathbf{c}^{\star}(\mathbf{s} | \boldsymbol{\theta}) = \left( Cov(\mathbf{s}, \mathbf{\kappa}_1), \ldots, Cov(\mathbf{s}, \mathbf{\kappa}_M) \right)\)</span> which is the cross-covariance between the observed locations <span class="math inline">\(\mathbf{s}\)</span> and the knot locations <span class="math inline">\(\boldsymbol{\kappa}\)</span></p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y(\mathbf{s}) &amp; = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \mathbf{c}^{\star} (\mathbf{s}) {\mathbf{C}^{\star}}^{-1} \boldsymbol{\eta}^{\star} + \varepsilon(\mathbf{s})
+\end{align*}\]</span></p>
+<ul>
+<li>Thus, the spatial process has covariance</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+Cov \left( \mathbf{c}^{\star} {\mathbf{C}^{\star}}^{-1} \boldsymbol{\eta}^{\star} \right) &amp; = \left( \mathbf{c}^{\star} {\mathbf{C}^{\star}}^{-1} \right)  Cov \left( \boldsymbol{\eta}^{\star} \right) \left( \mathbf{c}^{\star} {\mathbf{C}^{\star}}^{-1}  \right)&#39; \\
+&amp; = \mathbf{c}^{\star} (\mathbf{s}) {\mathbf{C}^{\star}}^{-1} \mathbf{C}^{\star} {\mathbf{C}^{\star}}^{-1} {\mathbf{c}^{\star}}&#39; \\
+&amp; = \mathbf{c}^{\star} (\mathbf{s}) {\mathbf{C}^{\star}}^{-1} {\mathbf{c}^{\star}}&#39;
+\end{align*}\]</span></p>
+<p>which is an <span class="math inline">\(n \times n\)</span> matrix that has rank <span class="math inline">\(M\)</span> (not full rank)</p>
+<ul>
+<li>The <a href="https://en.wikipedia.org/wiki/Woodbury_matrix_identity">Sherman-Morrison-Woodbury matrix inverse</a> formula for invertible matrices <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{D}\)</span> is</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\left( \mathbf{A} + \mathbf{U} \mathbf{D} \mathbf{V}&#39; \right)^{-1} &amp; = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} \left( \mathbf{D}^{-1} + \mathbf{V}&#39; \mathbf{A}^{-1} \mathbf{U} \right)^{-1} \mathbf{V}&#39; \mathbf{A}^{-1}
+\end{align*}\]</span></p>
+<p>and the matrix determinant formula is</p>
+<p><span class="math display">\[\begin{align*}
+\left| \mathbf{A} + \mathbf{U} \mathbf{D} \mathbf{V}&#39; \right| &amp; = \left|  \mathbf{D}^{-1} + \mathbf{V}&#39; \mathbf{A}^{-1} \mathbf{U} \right| 
+\left| \mathbf{D} \right|
+\left| \mathbf{A} \right| 
+\end{align*}\]</span></p>
+<ul>
+<li>thus, the model can be represented in the integrated representation</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} &amp; \sim N \left( \mathbf{X} \boldsymbol{\beta}, \mathbf{c}^{\star} (\mathbf{s}) {\mathbf{C}^{\star}}^{-1} {\mathbf{c}^{\star}}&#39; + \sigma^2 \mathbf{I} \right)
+\end{align*}\]</span></p>
+<ul>
+<li>the matrix inverse is</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\left( \mathbf{c}^{\star} (\mathbf{s}) {\mathbf{C}^{\star}}^{-1} {\mathbf{c}^{\star}}&#39; + \sigma^2 \mathbf{I} \right) &amp; = \left( \sigma^2 \mathbf{I} \right)^{-1} - \left( \sigma^2 \mathbf{I} \right)^{-1} {\mathbf{c}^{\star}} \left(\mathbf{C}^{\star} + {\mathbf{c}^{\star}}&#39; \left( \sigma^2 \mathbf{I} \right)^{-1} {\mathbf{c}^{\star}} \right)^{-1} {\mathbf{c}^{\star}}&#39; \left( \sigma^2 \mathbf{I} \right)^{-1}
+\end{align*}\]</span></p>
+<p>which requires inversion of a diagonal <span class="math inline">\(n \times n\)</span> matrix <span class="math inline">\(\sigma^2 \mathbf{I}\)</span> which is trivial and the inversion of the <span class="math inline">\(M \times M\)</span> matrix <span class="math inline">\(\mathbf{C}^{\star} + {\mathbf{c}^{\star}}&#39; \left( \sigma^2 \mathbf{I} \right)^{-1} {\mathbf{c}^{\star}}\)</span> where you have control over <span class="math inline">\(M\)</span> and hence the computational complexity as this is <span class="math inline">\(\approx O(M^3) &lt;&lt; O(n^3)\)</span></p>
+<ul>
+<li><p>advantages</p>
+<ul>
+<li><p>fast if <span class="math inline">\(M\)</span> is small</p></li>
+<li><p>easy to embed in traditional models - mixed models, hierarchical models</p></li>
+<li><p>easy to extend to non-stationarity (predictive process is nonstationary)</p></li>
+</ul></li>
+<li><p>disadvantages</p>
+<ul>
+<li>fits are overly smooth (unless <span class="math inline">\(M \approx n\)</span> or the process itself is very smooth)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="day-25-scaling-gps-for-large-data.html#cb357-1"></a><span class="co">## Make some data</span></span>
+<span id="cb357-2"><a href="day-25-scaling-gps-for-large-data.html#cb357-2"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb357-3"><a href="day-25-scaling-gps-for-large-data.html#cb357-3"></a>n &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb357-4"><a href="day-25-scaling-gps-for-large-data.html#cb357-4"></a>coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb357-5"><a href="day-25-scaling-gps-for-large-data.html#cb357-5"></a></span>
+<span id="cb357-6"><a href="day-25-scaling-gps-for-large-data.html#cb357-6"></a>X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</span>
+<span id="cb357-7"><a href="day-25-scaling-gps-for-large-data.html#cb357-7"></a></span>
+<span id="cb357-8"><a href="day-25-scaling-gps-for-large-data.html#cb357-8"></a>beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</span>
+<span id="cb357-9"><a href="day-25-scaling-gps-for-large-data.html#cb357-9"></a></span>
+<span id="cb357-10"><a href="day-25-scaling-gps-for-large-data.html#cb357-10"></a>sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb357-11"><a href="day-25-scaling-gps-for-large-data.html#cb357-11"></a>tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb357-12"><a href="day-25-scaling-gps-for-large-data.html#cb357-12"></a>phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb357-13"><a href="day-25-scaling-gps-for-large-data.html#cb357-13"></a></span>
+<span id="cb357-14"><a href="day-25-scaling-gps-for-large-data.html#cb357-14"></a>D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</span>
+<span id="cb357-15"><a href="day-25-scaling-gps-for-large-data.html#cb357-15"></a>R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</span>
+<span id="cb357-16"><a href="day-25-scaling-gps-for-large-data.html#cb357-16"></a>w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq <span class="op">*</span><span class="st"> </span>R))</span>
+<span id="cb357-17"><a href="day-25-scaling-gps-for-large-data.html#cb357-17"></a>y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</span>
+<span id="cb357-18"><a href="day-25-scaling-gps-for-large-data.html#cb357-18"></a></span>
+<span id="cb357-19"><a href="day-25-scaling-gps-for-large-data.html#cb357-19"></a><span class="co">## Fit Predictive Process</span></span>
+<span id="cb357-20"><a href="day-25-scaling-gps-for-large-data.html#cb357-20"></a>n.samples &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb357-21"><a href="day-25-scaling-gps-for-large-data.html#cb357-21"></a>batch.length &lt;-<span class="st"> </span><span class="dv">50</span></span>
+<span id="cb357-22"><a href="day-25-scaling-gps-for-large-data.html#cb357-22"></a>n.batch      &lt;-<span class="st"> </span>n.samples <span class="op">/</span><span class="st"> </span>batch.length</span>
+<span id="cb357-23"><a href="day-25-scaling-gps-for-large-data.html#cb357-23"></a></span>
+<span id="cb357-24"><a href="day-25-scaling-gps-for-large-data.html#cb357-24"></a></span>
+<span id="cb357-25"><a href="day-25-scaling-gps-for-large-data.html#cb357-25"></a>starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span> =<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>, <span class="st">&quot;sigma.sq&quot;</span> =<span class="st"> </span><span class="dv">5</span>, <span class="st">&quot;tau.sq&quot;</span> =<span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb357-26"><a href="day-25-scaling-gps-for-large-data.html#cb357-26"></a></span>
+<span id="cb357-27"><a href="day-25-scaling-gps-for-large-data.html#cb357-27"></a>tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span> =<span class="st"> </span><span class="fl">0.5</span>, <span class="st">&quot;sigma.sq&quot;</span> =<span class="st"> </span><span class="fl">0.5</span>, <span class="st">&quot;tau.sq&quot;</span> =<span class="st"> </span><span class="fl">0.5</span>)</span>
+<span id="cb357-28"><a href="day-25-scaling-gps-for-large-data.html#cb357-28"></a></span>
+<span id="cb357-29"><a href="day-25-scaling-gps-for-large-data.html#cb357-29"></a>priors &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi.Unif&quot;</span>    =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span><span class="op">/</span><span class="dv">10</span>, <span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.001</span>), </span>
+<span id="cb357-30"><a href="day-25-scaling-gps-for-large-data.html#cb357-30"></a>               <span class="st">&quot;sigma.sq.IG&quot;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>),</span>
+<span id="cb357-31"><a href="day-25-scaling-gps-for-large-data.html#cb357-31"></a>               <span class="st">&quot;tau.sq.IG&quot;</span>   =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb357-32"><a href="day-25-scaling-gps-for-large-data.html#cb357-32"></a>)</span>
+<span id="cb357-33"><a href="day-25-scaling-gps-for-large-data.html#cb357-33"></a></span>
+<span id="cb357-34"><a href="day-25-scaling-gps-for-large-data.html#cb357-34"></a>cov.model &lt;-<span class="st"> &quot;exponential&quot;</span></span>
+<span id="cb357-35"><a href="day-25-scaling-gps-for-large-data.html#cb357-35"></a></span>
+<span id="cb357-36"><a href="day-25-scaling-gps-for-large-data.html#cb357-36"></a><span class="co">## specify the number and location of knots</span></span>
+<span id="cb357-37"><a href="day-25-scaling-gps-for-large-data.html#cb357-37"></a></span>
+<span id="cb357-38"><a href="day-25-scaling-gps-for-large-data.html#cb357-38"></a>n_knots &lt;-<span class="st"> </span><span class="dv">8</span><span class="op">^</span><span class="dv">2</span>     <span class="co">## this works best as a squre</span></span>
+<span id="cb357-39"><a href="day-25-scaling-gps-for-large-data.html#cb357-39"></a>knots &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</span>
+<span id="cb357-40"><a href="day-25-scaling-gps-for-large-data.html#cb357-40"></a>  <span class="kw">expand.grid</span>(</span>
+<span id="cb357-41"><a href="day-25-scaling-gps-for-large-data.html#cb357-41"></a>    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots)),</span>
+<span id="cb357-42"><a href="day-25-scaling-gps-for-large-data.html#cb357-42"></a>    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots))</span>
+<span id="cb357-43"><a href="day-25-scaling-gps-for-large-data.html#cb357-43"></a>  )</span>
+<span id="cb357-44"><a href="day-25-scaling-gps-for-large-data.html#cb357-44"></a>)</span>
+<span id="cb357-45"><a href="day-25-scaling-gps-for-large-data.html#cb357-45"></a></span>
+<span id="cb357-46"><a href="day-25-scaling-gps-for-large-data.html#cb357-46"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;PP.RData&quot;</span>))) {</span>
+<span id="cb357-47"><a href="day-25-scaling-gps-for-large-data.html#cb357-47"></a>  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;PP.RData&quot;</span>))</span>
+<span id="cb357-48"><a href="day-25-scaling-gps-for-large-data.html#cb357-48"></a>} <span class="cf">else</span> {</span>
+<span id="cb357-49"><a href="day-25-scaling-gps-for-large-data.html#cb357-49"></a>  fit &lt;-<span class="st"> </span><span class="kw">spLM</span>(</span>
+<span id="cb357-50"><a href="day-25-scaling-gps-for-large-data.html#cb357-50"></a>    y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb357-51"><a href="day-25-scaling-gps-for-large-data.html#cb357-51"></a>    <span class="dt">coords    =</span> coords,</span>
+<span id="cb357-52"><a href="day-25-scaling-gps-for-large-data.html#cb357-52"></a>    <span class="dt">knots     =</span> knots,</span>
+<span id="cb357-53"><a href="day-25-scaling-gps-for-large-data.html#cb357-53"></a>    <span class="dt">starting  =</span> starting,</span>
+<span id="cb357-54"><a href="day-25-scaling-gps-for-large-data.html#cb357-54"></a>    <span class="dt">tuning    =</span> tuning, </span>
+<span id="cb357-55"><a href="day-25-scaling-gps-for-large-data.html#cb357-55"></a>    <span class="dt">priors    =</span> priors, </span>
+<span id="cb357-56"><a href="day-25-scaling-gps-for-large-data.html#cb357-56"></a>    <span class="dt">cov.model =</span> cov.model, </span>
+<span id="cb357-57"><a href="day-25-scaling-gps-for-large-data.html#cb357-57"></a>    <span class="dt">n.samples =</span> n.samples,</span>
+<span id="cb357-58"><a href="day-25-scaling-gps-for-large-data.html#cb357-58"></a>    <span class="dt">amcmc     =</span> <span class="kw">list</span>(</span>
+<span id="cb357-59"><a href="day-25-scaling-gps-for-large-data.html#cb357-59"></a>      <span class="dt">n.batch =</span> n.batch, </span>
+<span id="cb357-60"><a href="day-25-scaling-gps-for-large-data.html#cb357-60"></a>      <span class="dt">batch.length =</span> batch.length,</span>
+<span id="cb357-61"><a href="day-25-scaling-gps-for-large-data.html#cb357-61"></a>      <span class="dt">accept.rate =</span> <span class="fl">0.44</span></span>
+<span id="cb357-62"><a href="day-25-scaling-gps-for-large-data.html#cb357-62"></a>    ),</span>
+<span id="cb357-63"><a href="day-25-scaling-gps-for-large-data.html#cb357-63"></a>    <span class="dt">n.report  =</span> <span class="dv">10</span> <span class="co">## report every 10 adaptive batches</span></span>
+<span id="cb357-64"><a href="day-25-scaling-gps-for-large-data.html#cb357-64"></a>  )</span>
+<span id="cb357-65"><a href="day-25-scaling-gps-for-large-data.html#cb357-65"></a>  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;PP.RData&quot;</span>))</span>
+<span id="cb357-66"><a href="day-25-scaling-gps-for-large-data.html#cb357-66"></a>}</span></code></pre></div>
+<p>To get the fitted parameters, we can recover these with composition sampling.</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="day-25-scaling-gps-for-large-data.html#cb358-1"></a><span class="co">## discard the first half of the samples as burn-in</span></span>
+<span id="cb358-2"><a href="day-25-scaling-gps-for-large-data.html#cb358-2"></a>burn.in &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>n.samples</span>
+<span id="cb358-3"><a href="day-25-scaling-gps-for-large-data.html#cb358-3"></a><span class="co">## trace plots for the exponential model</span></span>
+<span id="cb358-4"><a href="day-25-scaling-gps-for-large-data.html#cb358-4"></a>recovered_params &lt;-<span class="st"> </span><span class="kw">spRecover</span>(fit, <span class="dt">start =</span> burn.in, <span class="dt">thin =</span> <span class="dv">2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb358-5"><a href="day-25-scaling-gps-for-large-data.html#cb358-5"></a></span>
+<span id="cb358-6"><a href="day-25-scaling-gps-for-large-data.html#cb358-6"></a>theta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.theta.samples)</span>
+<span id="cb358-7"><a href="day-25-scaling-gps-for-large-data.html#cb358-7"></a><span class="kw">plot</span>(theta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb358-8"><a href="day-25-scaling-gps-for-large-data.html#cb358-8"></a><span class="kw">round</span>(<span class="kw">summary</span>(theta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</span>
+<span id="cb358-9"><a href="day-25-scaling-gps-for-large-data.html#cb358-9"></a></span>
+<span id="cb358-10"><a href="day-25-scaling-gps-for-large-data.html#cb358-10"></a>beta_post &lt;-<span class="st"> </span><span class="kw">mcmc.list</span>(recovered_params<span class="op">$</span>p.beta.recover.samples)  </span>
+<span id="cb358-11"><a href="day-25-scaling-gps-for-large-data.html#cb358-11"></a><span class="kw">plot</span>(beta_post, <span class="dt">density =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb358-12"><a href="day-25-scaling-gps-for-large-data.html#cb358-12"></a><span class="kw">round</span>(<span class="kw">summary</span>(beta_post)<span class="op">$</span>quantiles, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##           2.5%   25%   50%   75%  97.5%
+## sigma.sq 4.367 6.283 7.073 8.686 13.703
+## tau.sq   0.607 0.832 0.943 1.033  1.269
+## phi      1.495 2.592 3.344 3.766  5.114
+##      2.5%    25%    50%  75% 97.5%
+## X1 -3.315 -0.865 -0.078 0.98 3.056
+## X2  4.882  4.929  4.960 4.99 5.048</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-205-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-205-2.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="day-25-scaling-gps-for-large-data.html#cb360-1"></a><span class="co">## recover the spatial random effects</span></span>
+<span id="cb360-2"><a href="day-25-scaling-gps-for-large-data.html#cb360-2"></a>estimated_w &lt;-<span class="st"> </span>recovered_params<span class="op">$</span>p.w.recover.samples</span>
+<span id="cb360-3"><a href="day-25-scaling-gps-for-large-data.html#cb360-3"></a></span>
+<span id="cb360-4"><a href="day-25-scaling-gps-for-large-data.html#cb360-4"></a><span class="kw">plot</span>(<span class="kw">apply</span>(estimated_w, <span class="dv">1</span>, mean), w)</span>
+<span id="cb360-5"><a href="day-25-scaling-gps-for-large-data.html#cb360-5"></a><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-206-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sparse-matrix-routines" class="section level2" number="25.3">
+<h2 number="25.3"><span class="header-section-number">25.3</span> Sparse matrix routines</h2>
+<ul>
+<li><p>If most of the elements are 0, sparse matrix routines can speed up computation</p></li>
+<li><p>Most analytic covariance functions are not sparse</p></li>
+<li><p>However, most covariance functions are <span class="math inline">\(\approx\)</span> 0 at large spatial distances</p>
+<ul>
+<li>truncate these values to be exactly 0</li>
+</ul></li>
+<li><p>introduce a tapering function <span class="math inline">\(C_t(d | \gamma) = (1 - \frac{d}{\gamma})(4 \frac{d}{\gamma} + 1) I\{d &lt; \gamma\}\)</span></p></li>
+</ul>
+<p>then, the tapered covariance is</p>
+<p><span class="math display">\[\begin{align*}
+C(d) = C_t(d | \gamma) C(d | \boldsymbol{\theta})
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(C(d | \boldsymbol{\theta})\)</span> is a Matern covariance function</p>
+</div>
+<div id="the-stochastic-pde-approach" class="section level2" number="25.4">
+<h2 number="25.4"><span class="header-section-number">25.4</span> The stochastic PDE approach</h2>
+<ul>
+<li><p>The Matern covariance was originally derived using SPDEs</p></li>
+<li><p><a href="https://rss.onlinelibrary.wiley.com/doi/full/10.1111/j.1467-9868.2011.00777.x">Lindgren et. al. (2011)</a> showed the computational benefits of solving the SPDE</p></li>
+<li><p>Defintion: the Laplace operator is</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathop{}\!\mathbin\bigtriangleup y(\mathbf{s}) &amp; = \frac{{ \partial^2 y(\mathbf{s})} }{ { \partial s_1}^2 } + \frac{{ \partial^2 y(\mathbf{s})} }{ { \partial s_2}^2 }
+\end{align*}\]</span></p>
+<p>for a positive integer <span class="math inline">\(n\)</span>, <span class="math inline">\(\mathop{}\!\mathbin\bigtriangleup^n y(\mathbf{s}) = \mathop{}\!\mathbin\bigtriangleup\stackrel{\times n}{\cdots} \mathop{}\!\mathbin\bigtriangleup y(\mathbf{s})\)</span></p>
+<ul>
+<li>Thus, a GP with mean <span class="math inline">\(\mathbf{0}\)</span>, variance <span class="math inline">\(\tau^2\)</span> and Matern covariance with range parameter <span class="math inline">\(\phi\)</span> and smoothness parameter <span class="math inline">\(\nu\)</span> can be shown to solve the SPDE</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+(\phi^2 - \mathop{}\!\mathbin\bigtriangleup)^{\frac{\nu + 1}{2}} \sqrt{\frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)}} y(\mathbf{s}) &amp; = z(\mathbf{s})
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(z \sim\)</span> WNGP</p>
+<ul>
+<li><p>The Laplacian is a decorrelating operator</p></li>
+<li><p>The Matern smoothness parameter determines the number of derivatives until you get to white noise</p></li>
+<li><p>Consider the spatial case where <span class="math inline">\(\nu = 1\)</span></p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\sqrt{\frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)}} (\frac{1}{\phi^2} - \mathop{}\!\mathbin\bigtriangleup) y(\mathbf{s}) &amp; = z (\mathbf{s})  \\
+\Rightarrow \\
+\frac{y(\mathbf{s})}{\phi^2} - \frac{{ \partial^2 y(\mathbf{s})} }{ { \partial s_1}^2 } - \frac{{ \partial^2 y(\mathbf{s})} }{ { \partial s_2}^2 } &amp; = \frac{1}{\sqrt{\frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)}}} z(\mathbf{s})
+\end{align*}\]</span></p>
+<ul>
+<li><p>represent the process as a SPDE gives a sparse precision matrix (the precision matrix is the inverse of the covariance)</p></li>
+<li><p>If the data are on a regular gird, the SPDE approximation to a Matern covariance with smoothness parameter <span class="math inline">\(\nu = 1\)</span> is derived as</p>
+<ul>
+<li><p>Say <span class="math inline">\(\mathcal{D} = \{ , \ldots, -2, -1, 0, 1, 2, \ldots \}^2\)</span> is a regular rectangular grid.</p></li>
+<li><p>Then, we can approximate the partial derivatives as</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+  \frac{ {\partial^2 y(s_1, s_2)}}{ {\partial s_1}^2 } &amp; = y(s_1 + 1, s_2) - 2 y(s_1, s_2) + y(s_1 - 1,s_2)
+  \end{align*}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{ {\partial^2 y(s_1, s_2)}}{ {\partial s_2}^2 } &amp; = y(s_1, s_2 + 1) - 2 y(s_1, s_2) + y(s_1, s_2 - 1).
+  \end{align*}\]</span></p>
+<p>Then, the SPDE is approximated by</p>
+<p><span class="math display">\[\begin{align*}
+  \left( 4 + \frac{1}{\phi^2} \right) y(\mathbf{s}_1, \mathbf{s}_2) - 4 \bar{y}(\mathbf{s}_1, \mathbf{s}_2) = \frac{1}{\sqrt{\frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)}}} z(\mathbf{s})
+  \end{align*}\]</span></p>
+<p>where <span class="math inline">\(\bar{y}(\mathbf{s}_1, \mathbf{s}_2)\)</span> is the mean of the 4 neighbors of the location (s_1, s_2).</p>
+<p>In matrix notation, this is</p>
+<p><span class="math display">\[\begin{align*}
+  \left( 4 + \frac{1}{\phi^2} \right) \mathbf{y}- \mathbf{A} \mathbf{y} = \frac{1}{\sqrt{\frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)}}} \mathbf{z}
+  \end{align*}\]</span></p>
+<p>so that</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{y} &amp; \sim N(\mathbf{0}, \boldsymbol{\Sigma})
+  \end{align*}\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\Sigma}^{-1} = \frac{1}{\tau^2} \mathbf{Q}\mathbf{Q}&#39;\)</span> with <span class="math inline">\(\tau^2 = \frac{1}{\left( \frac{\phi^{2 \nu} \Gamma(\nu)}{4 \pi \tau^2 \Gamma(\nu + 1)} \right)}\)</span> (notice that this is another reason why the estimates of <span class="math inline">\(\phi\)</span> is spatial models is inconsistent) where</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{Q} &amp; = (4 + \frac{1}{\phi^2})\mathbf{I} - \mathbf{A}
+  \end{align*}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{A}\)</span> is an adjacency matrix with <span class="math inline">\(ij\)</span>th element <span class="math inline">\(a_{ij} = 1\)</span> if locations <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are neighbors and 0 otherwise</p>
+<ul>
+<li>because this model is sparse in the precision (and the precision is needed to evaluate the likelihood) this representation are fast</li>
+</ul></li>
+<li><p>What if the data aren’t on a regular grid?</p>
+<ul>
+<li>construct a triangular mesh and use linear interpolation along the grid</li>
+</ul></li>
+</ul>
+</div>
+<div id="approximate-likelihood-methods" class="section level2" number="25.5">
+<h2 number="25.5"><span class="header-section-number">25.5</span> Approximate likelihood methods</h2>
+<ul>
+<li>twice the negative log likelihood is</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+- 2 log [\mathbf{y} | \boldsymbol{\beta}, \boldsymbol{\theta}] &amp; = log |\boldsymbol{\Sigma}(\boldsymbol{\theta}) | + \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right) \boldsymbol{\Sigma}(\boldsymbol{\theta})^{-1} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right)&#39;
+\end{align*}\]</span></p>
+<ul>
+<li><p>Many approximations have been proposed</p></li>
+<li><p>Parameters that maximize the approximate likelihood are approximates for the ful likelihood MLE</p></li>
+<li><p>examples:</p>
+<ul>
+<li><a href="https://reader.elsevier.com/reader/sd/pii/S0167947304002403?token=2766064964287FF0EB1F7EF9EFDFBABA0BF986EBB0A427787146391D56D4F54362BA9868884C5F3BDBD27D6A56784F77">pairwise likelihood</a>: define <span class="math inline">\(\boldsymbol{\delta}_{ij} = \begin{pmatrix} y_i - X_i \boldsymbol{\beta} \\ y_j - X_j \boldsymbol{\beta} \end{pmatrix}\)</span></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+  [\mathbf{y} | \boldsymbol{\beta}, \boldsymbol{\theta}] \approx \prod_{i &lt; j} | \boldsymbol{\Sigma}_{ij} | \exp\{ - \frac{1}{2} \boldsymbol{\delta}_{ij}&#39; \boldsymbol{\Sigma}_{ij}^{-1} \boldsymbol{\delta}_{ij} \} \\
+  &amp; = \prod_{i &lt; j} [y_i, j_y | \boldsymbol{\beta}, \boldsymbol{\theta}]
+  \end{align*}\]</span></p>
+<ul>
+<li>independent blocks</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+  [\mathbf{y} | \boldsymbol{\beta}, \boldsymbol{\theta}] \approx \prod_{b = 1}^B [\mathbf{y}_b | \boldsymbol{\beta}, \boldsymbol{\theta}]
+  \end{align*}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{y}_b\)</span> are the data in block <span class="math inline">\(b = 1, \ldots, B\)</span></p>
+<p><strong>draw picture</strong></p></li>
+<li><p>each of these are unbiased estimating equations and standard errors can be derived using a sandwich formula</p></li>
+</ul>
+</div>
+<div id="vecchia-approximations" class="section level2" number="25.6">
+<h2 number="25.6"><span class="header-section-number">25.6</span> Vecchia Approximations</h2>
+<ul>
+<li>Any joint PDF can be written as:</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+[y_1, \ldots, y_n] &amp; = [y_1] [y_2 | y_1] [y_3 | y1, y2] \cdots [y_n | y_{n-1}, \ldots, y_1] \\
+&amp; = \prod_{i=1}^n [y_i | y_j \hspace{0.25cm} \forall j &lt; i]
+\end{align*}\]</span></p>
+<ul>
+<li><strong>Note: The converse is not true!</strong> A set of conditional PDFs when multiplied together does not always guarantee a valid joint probability distribution - a theorem called the <a href="https://en.wikipedia.org/wiki/Hammersley%E2%80%93Clifford_theorem">Hammersly Clifford Theorem</a> defines under what conditions a joint distribution defines a valid joint PDF.</li>
+</ul>
+<!-- **It states that a probability distribution that has a strictly positive mass or density satisfies one of the Markov properties with respect to an undirected graph G if and only if it is a Gibbs random field, that is, its density can be factorized over the cliques (or complete subgraphs) of the graph.** -->
+<!-- The necessary and sufficient conditions are the sequence of probability distributions must be a Markov Chain -->
+<ul>
+<li><p>The Vecchia approximation decomposes an <span class="math inline">\(n\)</span>-dimensional PDF into <span class="math inline">\(n\)</span> one-dimensional PDFs</p></li>
+<li><p>However, the last term requires an <span class="math inline">\(n-1 \times n-1\)</span> matrix inverse must be calculated (in this formulation)</p></li>
+<li><p>Outlines a formula for more useful approximations:</p>
+<ul>
+<li><p>Pick a conditioning sequence of sets that defines a Markov Chain (independent samples, nearest neighbor groupings, etc.)</p>
+<ul>
+<li><p>How to pick the conditioning set?</p>
+<ul>
+<li>order of conditioning matters, but is not super important</li>
+</ul></li>
+</ul></li>
+<li><p>how to compute standard errors: sandwhich estimator</p></li>
+</ul></li>
+<li><p>Used in <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5927603/">nearest neighbor Gaussian Processes</a></p></li>
+</ul>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="day-25-scaling-gps-for-large-data.html#cb361-1"></a><span class="co">## Make some data</span></span>
+<span id="cb361-2"><a href="day-25-scaling-gps-for-large-data.html#cb361-2"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb361-3"><a href="day-25-scaling-gps-for-large-data.html#cb361-3"></a>n &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb361-4"><a href="day-25-scaling-gps-for-large-data.html#cb361-4"></a>coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>), <span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb361-5"><a href="day-25-scaling-gps-for-large-data.html#cb361-5"></a></span>
+<span id="cb361-6"><a href="day-25-scaling-gps-for-large-data.html#cb361-6"></a>x &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</span>
+<span id="cb361-7"><a href="day-25-scaling-gps-for-large-data.html#cb361-7"></a></span>
+<span id="cb361-8"><a href="day-25-scaling-gps-for-large-data.html#cb361-8"></a>B &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>))</span>
+<span id="cb361-9"><a href="day-25-scaling-gps-for-large-data.html#cb361-9"></a></span>
+<span id="cb361-10"><a href="day-25-scaling-gps-for-large-data.html#cb361-10"></a>sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb361-11"><a href="day-25-scaling-gps-for-large-data.html#cb361-11"></a>tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb361-12"><a href="day-25-scaling-gps-for-large-data.html#cb361-12"></a>phi &lt;-<span class="st"> </span><span class="dv">3</span><span class="op">/</span><span class="fl">0.5</span></span>
+<span id="cb361-13"><a href="day-25-scaling-gps-for-large-data.html#cb361-13"></a></span>
+<span id="cb361-14"><a href="day-25-scaling-gps-for-large-data.html#cb361-14"></a>D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</span>
+<span id="cb361-15"><a href="day-25-scaling-gps-for-large-data.html#cb361-15"></a>R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</span>
+<span id="cb361-16"><a href="day-25-scaling-gps-for-large-data.html#cb361-16"></a>w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq<span class="op">*</span>R))</span>
+<span id="cb361-17"><a href="day-25-scaling-gps-for-large-data.html#cb361-17"></a>y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, x<span class="op">%*%</span>B <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</span>
+<span id="cb361-18"><a href="day-25-scaling-gps-for-large-data.html#cb361-18"></a></span>
+<span id="cb361-19"><a href="day-25-scaling-gps-for-large-data.html#cb361-19"></a><span class="co">##Fit a Response and Latent NNGP model</span></span>
+<span id="cb361-20"><a href="day-25-scaling-gps-for-large-data.html#cb361-20"></a>n.samples &lt;-<span class="st"> </span><span class="dv">500</span></span>
+<span id="cb361-21"><a href="day-25-scaling-gps-for-large-data.html#cb361-21"></a></span>
+<span id="cb361-22"><a href="day-25-scaling-gps-for-large-data.html#cb361-22"></a>starting &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=phi, <span class="st">&quot;sigma.sq&quot;</span>=<span class="dv">5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="dv">1</span>)</span>
+<span id="cb361-23"><a href="day-25-scaling-gps-for-large-data.html#cb361-23"></a></span>
+<span id="cb361-24"><a href="day-25-scaling-gps-for-large-data.html#cb361-24"></a>tuning &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;sigma.sq&quot;</span>=<span class="fl">0.5</span>, <span class="st">&quot;tau.sq&quot;</span>=<span class="fl">0.5</span>)</span>
+<span id="cb361-25"><a href="day-25-scaling-gps-for-large-data.html#cb361-25"></a></span>
+<span id="cb361-26"><a href="day-25-scaling-gps-for-large-data.html#cb361-26"></a>priors &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;phi.Unif&quot;</span>=<span class="kw">c</span>(<span class="dv">3</span><span class="op">/</span><span class="dv">1</span>, <span class="dv">3</span><span class="op">/</span><span class="fl">0.01</span>), <span class="st">&quot;sigma.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>), <span class="st">&quot;tau.sq.IG&quot;</span>=<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb361-27"><a href="day-25-scaling-gps-for-large-data.html#cb361-27"></a></span>
+<span id="cb361-28"><a href="day-25-scaling-gps-for-large-data.html#cb361-28"></a>cov.model &lt;-<span class="st"> &quot;exponential&quot;</span></span>
+<span id="cb361-29"><a href="day-25-scaling-gps-for-large-data.html#cb361-29"></a></span>
+<span id="cb361-30"><a href="day-25-scaling-gps-for-large-data.html#cb361-30"></a><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))) {</span>
+<span id="cb361-31"><a href="day-25-scaling-gps-for-large-data.html#cb361-31"></a>    <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</span>
+<span id="cb361-32"><a href="day-25-scaling-gps-for-large-data.html#cb361-32"></a>} <span class="cf">else</span> {</span>
+<span id="cb361-33"><a href="day-25-scaling-gps-for-large-data.html#cb361-33"></a>  fit &lt;-<span class="st"> </span><span class="kw">spNNGP</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, </span>
+<span id="cb361-34"><a href="day-25-scaling-gps-for-large-data.html#cb361-34"></a>                <span class="dt">coords        =</span> coords,</span>
+<span id="cb361-35"><a href="day-25-scaling-gps-for-large-data.html#cb361-35"></a>                <span class="dt">starting      =</span> starting,</span>
+<span id="cb361-36"><a href="day-25-scaling-gps-for-large-data.html#cb361-36"></a>                <span class="dt">method        =</span> <span class="st">&quot;latent&quot;</span>,</span>
+<span id="cb361-37"><a href="day-25-scaling-gps-for-large-data.html#cb361-37"></a>                <span class="co"># method        = &quot;response&quot;,    ## use for large n</span></span>
+<span id="cb361-38"><a href="day-25-scaling-gps-for-large-data.html#cb361-38"></a>                <span class="dt">n.neighbors   =</span> <span class="dv">10</span>,</span>
+<span id="cb361-39"><a href="day-25-scaling-gps-for-large-data.html#cb361-39"></a>                <span class="dt">tuning        =</span> tuning,</span>
+<span id="cb361-40"><a href="day-25-scaling-gps-for-large-data.html#cb361-40"></a>                <span class="dt">priors        =</span> priors, </span>
+<span id="cb361-41"><a href="day-25-scaling-gps-for-large-data.html#cb361-41"></a>                <span class="dt">cov.model     =</span> cov.model,</span>
+<span id="cb361-42"><a href="day-25-scaling-gps-for-large-data.html#cb361-42"></a>                <span class="dt">n.samples     =</span> n.samples,</span>
+<span id="cb361-43"><a href="day-25-scaling-gps-for-large-data.html#cb361-43"></a>                <span class="dt">n.omp.threads =</span> <span class="dv">1</span></span>
+<span id="cb361-44"><a href="day-25-scaling-gps-for-large-data.html#cb361-44"></a>  )</span>
+<span id="cb361-45"><a href="day-25-scaling-gps-for-large-data.html#cb361-45"></a>  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;NNGP.RData&quot;</span>))</span>
+<span id="cb361-46"><a href="day-25-scaling-gps-for-large-data.html#cb361-46"></a>}</span>
+<span id="cb361-47"><a href="day-25-scaling-gps-for-large-data.html#cb361-47"></a></span>
+<span id="cb361-48"><a href="day-25-scaling-gps-for-large-data.html#cb361-48"></a><span class="kw">summary</span>(fit)</span>
+<span id="cb361-49"><a href="day-25-scaling-gps-for-large-data.html#cb361-49"></a><span class="kw">plot</span>(<span class="kw">apply</span>(fit<span class="op">$</span>p.w.samples, <span class="dv">1</span>, median), w)</span>
+<span id="cb361-50"><a href="day-25-scaling-gps-for-large-data.html#cb361-50"></a><span class="kw">abline</span>(<span class="dt">a =</span> <span class="dv">0</span>, <span class="dt">b =</span> <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## spNNGP(formula = y ~ x - 1, coords = coords, method = &quot;latent&quot;, 
+##     n.neighbors = 10, starting = starting, tuning = tuning, 
+##     priors = priors, cov.model = cov.model, n.samples = n.samples, 
+##     n.omp.threads = 1)
+## 
+## Model class is NNGP latent gaussian family.
+## 
+## Model object contains 500 MCMC samples.
+## 
+## Chain sub.sample:
+## start = 250
+## end = 500
+## thin = 1
+## samples size = 251
+##          2.5%  25%   50%   75%   97.5%
+## x1       0.276 0.399 0.514 0.624 0.853
+## x2       4.957 5.009 5.037 5.067 5.113
+## sigma.sq 3.613 4.116 4.424 4.822 6.550
+## tau.sq   0.988 1.111 1.163 1.220 1.325
+## phi      5.445 6.255 6.676 6.907 7.612</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-207-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>Used in <a href="https://arxiv.org/abs/1507.04789">mutliresolution predictive process approximation</a></p></li>
+<li><p>Advantages:</p>
+<ul>
+<li>very good approximation</li>
+<li>GPUs available</li>
+</ul></li>
+<li><p>Disadvantages:</p>
+<ul>
+<li>hard for non-Gaussian data</li>
+</ul></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day-24-scaling-gps-for-large-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day-26.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["STAT-5413.pdf", "STAT-5413.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

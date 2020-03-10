@@ -391,7 +391,7 @@ if (file.exists(here::here("results", "NNGP.RData"))) {
                 coords        = coords,
                 starting      = starting,
                 method        = "latent",
-                # method        = "response",    ## use for large n
+                # method        = "response",    ## use for large n, doesn't save spatial random effects
                 n.neighbors   = 10,
                 tuning        = tuning,
                 priors        = priors, 

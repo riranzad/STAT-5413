@@ -33,6 +33,7 @@
 <link rel="prev" href="day-18.html"/>
 <link rel="next" href="day-20.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -64,25 +65,26 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -91,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -143,12 +145,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a><ul>
+<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="day-1.html"><a href="day-1.html#notation"><i class="fa fa-check"></i><b>1.1</b> Notation</a></li>
-<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a>
+<ul>
 <li class="chapter" data-level="1.2.1" data-path="day-1.html"><a href="day-1.html#example-linear-regression"><i class="fa fa-check"></i><b>1.2.1</b> Example: linear regression</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a><ul>
+<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="day-1.html"><a href="day-1.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>1.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
 <li class="chapter" data-level="1.3.2" data-path="day-1.html"><a href="day-1.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>1.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
 <li class="chapter" data-level="1.3.3" data-path="day-1.html"><a href="day-1.html#data-model"><i class="fa fa-check"></i><b>1.3.3</b> Data Model</a></li>
@@ -158,102 +163,127 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3.7" data-path="day-1.html"><a href="day-1.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>1.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a><ul>
+<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="day-2.html"><a href="day-2.html#spatial-data"><i class="fa fa-check"></i><b>2.1</b> Spatial Data</a></li>
-<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a><ul>
+<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="day-2.html"><a href="day-2.html#geostatistical-data"><i class="fa fa-check"></i><b>2.2.1</b> Geostatistical data</a></li>
 <li class="chapter" data-level="2.2.2" data-path="day-2.html"><a href="day-2.html#areal-data"><i class="fa fa-check"></i><b>2.2.2</b> Areal data</a></li>
 <li class="chapter" data-level="2.2.3" data-path="day-2.html"><a href="day-2.html#point-process-data"><i class="fa fa-check"></i><b>2.2.3</b> Point process data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a><ul>
+<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#anouncements"><i class="fa fa-check"></i><b>3.1</b> Anouncements</a></li>
 <li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Files for spatial data</a></li>
 <li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a></li>
-<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a><ul>
+<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a>
+<ul>
 <li class="chapter" data-level="3.4.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.4.1</b> Spatial visualization using <em>fields</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a><ul>
+<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="day-4.html"><a href="day-4.html#announcements"><i class="fa fa-check"></i><b>4.1</b> Announcements</a></li>
-<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a><ul>
+<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="day-4.html"><a href="day-4.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>4.2.1</b> Spatial visualization using <em>fields</em></a></li>
 <li class="chapter" data-level="4.2.2" data-path="day-4.html"><a href="day-4.html#in-class-activity"><i class="fa fa-check"></i><b>4.2.2</b> In Class Activity:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a><ul>
+<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a>
+<ul>
 <li class="chapter" data-level="4.3.1" data-path="day-4.html"><a href="day-4.html#interactive-display-of-data"><i class="fa fa-check"></i><b>4.3.1</b> Interactive display of data</a></li>
 <li class="chapter" data-level="4.3.2" data-path="day-4.html"><a href="day-4.html#animations"><i class="fa fa-check"></i><b>4.3.2</b> Animations</a></li>
 <li class="chapter" data-level="4.3.3" data-path="day-4.html"><a href="day-4.html#interactive-plotting-using-plotly"><i class="fa fa-check"></i><b>4.3.3</b> Interactive plotting using <em>plotly</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a><ul>
+<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="day-5.html"><a href="day-5.html#announcements-1"><i class="fa fa-check"></i><b>5.1</b> Announcements</a></li>
-<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a><ul>
+<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="day-5.html"><a href="day-5.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2.1</b> Gaussian processes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a><ul>
+<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="day-6.html"><a href="day-6.html#announcements-2"><i class="fa fa-check"></i><b>6.1</b> Announcements</a></li>
 <li class="chapter" data-level="6.2" data-path="day-6.html"><a href="day-6.html#gaussian-process-assumptions"><i class="fa fa-check"></i><b>6.2</b> Gaussian process assumptions</a></li>
-<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a><ul>
+<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a>
+<ul>
 <li class="chapter" data-level="6.3.1" data-path="day-6.html"><a href="day-6.html#data-model-1"><i class="fa fa-check"></i><b>6.3.1</b> Data Model</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a><ul>
+<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="day-7.html"><a href="day-7.html#common-isotropic-correlation-functions"><i class="fa fa-check"></i><b>7.1</b> Common isotropic correlation functions</a></li>
-<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a><ul>
+<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a>
+<ul>
 <li class="chapter" data-level="7.2.1" data-path="day-7.html"><a href="day-7.html#semivariograms-and-variograms"><i class="fa fa-check"></i><b>7.2.1</b> Semivariograms and variograms</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a><ul>
+<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a>
+<ul>
 <li class="chapter" data-level="8.1" data-path="day-8.html"><a href="day-8.html#announcements-3"><i class="fa fa-check"></i><b>8.1</b> Announcements</a></li>
-<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a><ul>
+<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process-using-variograms"><i class="fa fa-check"></i><b>8.2.1</b> Estimation of the spatial process using variograms</a></li>
 <li class="chapter" data-level="8.2.2" data-path="day-8.html"><a href="day-8.html#maximum-likelihood"><i class="fa fa-check"></i><b>8.2.2</b> Maximum Likelihood</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="day-8.html"><a href="day-8.html#maximum-likelihood-1"><i class="fa fa-check"></i><b>8.3</b> Maximum likelihood</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a><ul>
+<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="day-9.html"><a href="day-9.html#announcements-4"><i class="fa fa-check"></i><b>9.1</b> Announcements</a></li>
 <li class="chapter" data-level="9.2" data-path="day-9.html"><a href="day-9.html#asymptotic-properties-of-the-mle"><i class="fa fa-check"></i><b>9.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a><ul>
+<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a>
+<ul>
 <li class="chapter" data-level="10.1" data-path="day-10.html"><a href="day-10.html#announcements-5"><i class="fa fa-check"></i><b>10.1</b> Announcements</a></li>
 <li class="chapter" data-level="10.2" data-path="day-10.html"><a href="day-10.html#asymptotic-properties-of-the-mle-1"><i class="fa fa-check"></i><b>10.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a><ul>
+<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
+<ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
 <li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#example-spatial-analysis"><i class="fa fa-check"></i><b>11.2</b> Example spatial analysis</a></li>
-<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a><ul>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a>
+<ul>
 <li class="chapter" data-level="11.3.1" data-path="day-11.html"><a href="day-11.html#fit-the-maximum-likelihood-estimate-using-the-geor-package"><i class="fa fa-check"></i><b>11.3.1</b> Fit the maximum likelihood estimate using the <em>geoR</em> package</a></li>
 <li class="chapter" data-level="11.3.2" data-path="day-11.html"><a href="day-11.html#fitting-a-spatial-model-using-the-nlme-package"><i class="fa fa-check"></i><b>11.3.2</b> Fitting a spatial model using the <em>nlme</em> package</a></li>
 <li class="chapter" data-level="11.3.3" data-path="day-11.html"><a href="day-11.html#model-fitting-with-autokrige-function"><i class="fa fa-check"></i><b>11.3.3</b> model fitting with <em>autokrige</em> function</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a><ul>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a>
+<ul>
 <li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-mean-mu-0"><i class="fa fa-check"></i><b>11.4.1</b> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></a></li>
 <li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-unknown-mean"><i class="fa fa-check"></i><b>11.4.2</b> Kriging Equations with unknown mean</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a><ul>
+<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
 <li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>12.2</b> Introduction to MCMC</a></li>
 <li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>12.3</b> Example: Simple linear regression</a></li>
-<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a><ul>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a>
+<ul>
 <li class="chapter" data-level="12.4.1" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>12.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
 <li class="chapter" data-level="12.4.2" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>12.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
 <li class="chapter" data-level="12.4.3" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>12.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a><ul>
+<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a>
+<ul>
 <li class="chapter" data-level="12.5.1" data-path="day-12.html"><a href="day-12.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>12.5.1</b> General recommendations for writing MCMC software</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a><ul>
+<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
+<ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
 <li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis Algorithm</a></li>
 <li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-proposal-distribution"><i class="fa fa-check"></i><b>13.3</b> The proposal distribution</a></li>
 <li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#the-metropolis-update"><i class="fa fa-check"></i><b>13.4</b> The Metropolis update</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a><ul>
+<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
+<ul>
 <li class="chapter" data-level="14.1" data-path="day-14.html"><a href="day-14.html#announcements-9"><i class="fa fa-check"></i><b>14.1</b> Announcements</a></li>
 <li class="chapter" data-level="14.2" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>14.2</b> The Metropolis-Hastings Algorithm</a></li>
 <li class="chapter" data-level="14.3" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>14.3</b> The Metropolis-Hastings algorithm</a></li>
@@ -263,119 +293,155 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14.7" data-path="day-14.html"><a href="day-14.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>14.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
 <li class="chapter" data-level="14.8" data-path="day-14.html"><a href="day-14.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>14.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a><ul>
+<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="day-15.html"><a href="day-15.html#announcements-10"><i class="fa fa-check"></i><b>15.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a><ul>
+<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a>
+<ul>
 <li class="chapter" data-level="16.1" data-path="day-16.html"><a href="day-16.html#announcements-11"><i class="fa fa-check"></i><b>16.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a><ul>
+<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a>
+<ul>
 <li class="chapter" data-level="17.1" data-path="day-17.html"><a href="day-17.html#announcements-12"><i class="fa fa-check"></i><b>17.1</b> Announcements</a></li>
 <li class="chapter" data-level="17.2" data-path="day-17.html"><a href="day-17.html#gaussian-process-representations"><i class="fa fa-check"></i><b>17.2</b> Gaussian process representations</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a><ul>
+<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a>
+<ul>
 <li class="chapter" data-level="18.1" data-path="day-18.html"><a href="day-18.html#announcements-13"><i class="fa fa-check"></i><b>18.1</b> Announcements</a></li>
 <li class="chapter" data-level="18.2" data-path="day-18.html"><a href="day-18.html#gaussian-process-representations-continued"><i class="fa fa-check"></i><b>18.2</b> Gaussian process representations continued</a></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a><ul>
+<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a>
+<ul>
 <li class="chapter" data-level="19.1" data-path="day-19.html"><a href="day-19.html#announcements-14"><i class="fa fa-check"></i><b>19.1</b> Announcements</a></li>
-<li class="chapter" data-level="19.2" data-path="day-19.html"><a href="day-19.html#gaussian-process-representations-continued-1"><i class="fa fa-check"></i><b>19.2</b> Gaussian process representations continued</a></li>
+<li class="chapter" data-level="19.2" data-path="day-19.html"><a href="day-19.html#stochastic-integration"><i class="fa fa-check"></i><b>19.2</b> Stochastic Integration</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a><ul>
+<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="day-20.html"><a href="day-20.html#announcements-15"><i class="fa fa-check"></i><b>20.1</b> Announcements</a></li>
 <li class="chapter" data-level="20.2" data-path="day-20.html"><a href="day-20.html#spbayes-example"><i class="fa fa-check"></i><b>20.2</b> spBayes example</a></li>
-<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a><ul>
+<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.-local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a>
+<ul>
 <li class="chapter" data-level="20.3.1" data-path="day-20.html"><a href="day-20.html#an-example-global-basis-fourier-basis"><i class="fa fa-check"></i><b>20.3.1</b> An example global basis: Fourier Basis</a></li>
 </ul></li>
 <li class="chapter" data-level="20.4" data-path="day-20.html"><a href="day-20.html#example-local-basis"><i class="fa fa-check"></i><b>20.4</b> example local basis</a></li>
 <li class="chapter" data-level="20.5" data-path="day-20.html"><a href="day-20.html#fitting-spatial-models-many-ways"><i class="fa fa-check"></i><b>20.5</b> Fitting spatial models many ways</a></li>
 <li class="chapter" data-level="20.6" data-path="day-20.html"><a href="day-20.html#empirical-orthogonal-functions"><i class="fa fa-check"></i><b>20.6</b> Empirical Orthogonal Functions</a></li>
 <li class="chapter" data-level="20.7" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-mgcv-package"><i class="fa fa-check"></i><b>20.7</b> Spatial modeling with <code>mgcv</code> package</a></li>
-<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a><ul>
+<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a>
+<ul>
 <li class="chapter" data-level="20.8.1" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-ridge-penalty"><i class="fa fa-check"></i><b>20.8.1</b> Kernel regression with a ridge penalty</a></li>
 <li class="chapter" data-level="20.8.2" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-lasso-penalty"><i class="fa fa-check"></i><b>20.8.2</b> Kernel regression with a lasso penalty</a></li>
 <li class="chapter" data-level="20.8.3" data-path="day-20.html"><a href="day-20.html#truncated-kernels---local-support"><i class="fa fa-check"></i><b>20.8.3</b> Truncated Kernels - local support</a></li>
 </ul></li>
-<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
+<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.-dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a><ul>
+<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a>
+<ul>
 <li class="chapter" data-level="21.1" data-path="day-21.html"><a href="day-21.html#announcements-16"><i class="fa fa-check"></i><b>21.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a><ul>
+<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a>
+<ul>
 <li class="chapter" data-level="22.1" data-path="day-22.html"><a href="day-22.html#announcements-17"><i class="fa fa-check"></i><b>22.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a><ul>
+<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="day-23.html"><a href="day-23.html#announcements-18"><i class="fa fa-check"></i><b>23.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="day-24.html"><a href="day-24.html"><i class="fa fa-check"></i><b>24</b> Day 24</a><ul>
-<li class="chapter" data-level="24.1" data-path="day-24.html"><a href="day-24.html#announcements-19"><i class="fa fa-check"></i><b>24.1</b> Announcements</a></li>
-<li class="chapter" data-level="24.2" data-path="day-24.html"><a href="day-24.html#scaling-gps-for-large-data"><i class="fa fa-check"></i><b>24.2</b> Scaling GPs for large data</a><ul>
-<li class="chapter" data-level="24.2.1" data-path="day-24.html"><a href="day-24.html#local-analysis"><i class="fa fa-check"></i><b>24.2.1</b> Local analysis</a></li>
-<li class="chapter" data-level="24.2.2" data-path="day-24.html"><a href="day-24.html#low-rank-approimxations"><i class="fa fa-check"></i><b>24.2.2</b> Low rank approimxations</a></li>
-<li class="chapter" data-level="24.2.3" data-path="day-24.html"><a href="day-24.html#spectral-basis-functions"><i class="fa fa-check"></i><b>24.2.3</b> Spectral basis functions</a></li>
-<li class="chapter" data-level="24.2.4" data-path="day-24.html"><a href="day-24.html#kernel-convolutions"><i class="fa fa-check"></i><b>24.2.4</b> Kernel convolutions</a></li>
-<li class="chapter" data-level="24.2.5" data-path="day-24.html"><a href="day-24.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>24.2.5</b> Gaussian Predictive Process (spBayes package)</a></li>
-<li class="chapter" data-level="24.2.6" data-path="day-24.html"><a href="day-24.html#sparse-matrix-routines"><i class="fa fa-check"></i><b>24.2.6</b> Sparse matrix routines</a></li>
-<li class="chapter" data-level="24.2.7" data-path="day-24.html"><a href="day-24.html#the-stochastic-pde-approach"><i class="fa fa-check"></i><b>24.2.7</b> The stochastic PDE approach</a></li>
-<li class="chapter" data-level="24.2.8" data-path="day-24.html"><a href="day-24.html#approximate-likelihood-methods"><i class="fa fa-check"></i><b>24.2.8</b> Approximate likelihood methods</a></li>
-<li class="chapter" data-level="24.2.9" data-path="day-24.html"><a href="day-24.html#vecchia-approximations"><i class="fa fa-check"></i><b>24.2.9</b> Vecchia Approximations</a></li>
+<li class="chapter" data-level="24" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>24</b> Day 24 – Scaling GPs for large data</a>
+<ul>
+<li class="chapter" data-level="24.1" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#announcements-19"><i class="fa fa-check"></i><b>24.1</b> Announcements</a></li>
+<li class="chapter" data-level="24.2" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#local-analysis"><i class="fa fa-check"></i><b>24.2</b> Local analysis</a></li>
+<li class="chapter" data-level="24.3" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#low-rank-approimxations"><i class="fa fa-check"></i><b>24.3</b> Low rank approimxations</a></li>
+<li class="chapter" data-level="24.4" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#spectral-basis-functions"><i class="fa fa-check"></i><b>24.4</b> Spectral basis functions</a></li>
+<li class="chapter" data-level="24.5" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#kernel-convolutions"><i class="fa fa-check"></i><b>24.5</b> Kernel convolutions</a></li>
 </ul></li>
+<li class="chapter" data-level="25" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>25</b> Day 25 – Scaling GPs for large data</a>
+<ul>
+<li class="chapter" data-level="25.1" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
+<li class="chapter" data-level="25.2" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>25.2</b> Gaussian Predictive Process (spBayes package)</a></li>
+<li class="chapter" data-level="25.3" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#sparse-matrix-routines"><i class="fa fa-check"></i><b>25.3</b> Sparse matrix routines</a></li>
+<li class="chapter" data-level="25.4" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#the-stochastic-pde-approach"><i class="fa fa-check"></i><b>25.4</b> The stochastic PDE approach</a></li>
+<li class="chapter" data-level="25.5" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#approximate-likelihood-methods"><i class="fa fa-check"></i><b>25.5</b> Approximate likelihood methods</a></li>
+<li class="chapter" data-level="25.6" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#vecchia-approximations"><i class="fa fa-check"></i><b>25.6</b> Vecchia Approximations</a></li>
 </ul></li>
-<li class="chapter" data-level="25" data-path="day-25.html"><a href="day-25.html"><i class="fa fa-check"></i><b>25</b> Day 25</a><ul>
-<li class="chapter" data-level="25.1" data-path="day-25.html"><a href="day-25.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
-</ul></li>
-<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a><ul>
+<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a>
+<ul>
 <li class="chapter" data-level="26.1" data-path="day-26.html"><a href="day-26.html#announcements-21"><i class="fa fa-check"></i><b>26.1</b> Announcements</a></li>
+<li class="chapter" data-level="26.2" data-path="day-26.html"><a href="day-26.html#multivariate-data"><i class="fa fa-check"></i><b>26.2</b> Multivariate Data</a></li>
+<li class="chapter" data-level="26.3" data-path="day-26.html"><a href="day-26.html#classical-multivariate-geostatistics"><i class="fa fa-check"></i><b>26.3</b> Classical Multivariate Geostatistics</a>
+<ul>
+<li class="chapter" data-level="26.3.1" data-path="day-26.html"><a href="day-26.html#cross-variograms-and-cross-covariance-functions"><i class="fa fa-check"></i><b>26.3.1</b> cross-variograms and cross-covariance functions</a></li>
+<li class="chapter" data-level="26.3.2" data-path="day-26.html"><a href="day-26.html#cokriging"><i class="fa fa-check"></i><b>26.3.2</b> Cokriging</a></li>
+<li class="chapter" data-level="26.3.3" data-path="day-26.html"><a href="day-26.html#linear-model-of-coregionalization"><i class="fa fa-check"></i><b>26.3.3</b> Linear Model of Coregionalization</a></li>
 </ul></li>
-<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a><ul>
+</ul></li>
+<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a>
+<ul>
 <li class="chapter" data-level="27.1" data-path="day-27.html"><a href="day-27.html#announcements-22"><i class="fa fa-check"></i><b>27.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a><ul>
+<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a>
+<ul>
 <li class="chapter" data-level="28.1" data-path="day-28.html"><a href="day-28.html#announcements-23"><i class="fa fa-check"></i><b>28.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
+<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a>
+<ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
+<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a>
+<ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
+<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a>
+<ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
+<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a>
+<ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
+<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a>
+<ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
+<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a>
+<ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a><ul>
+<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a>
+<ul>
 <li class="chapter" data-level="35.1" data-path="day-35.html"><a href="day-35.html#announcements-30"><i class="fa fa-check"></i><b>35.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a><ul>
+<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a>
+<ul>
 <li class="chapter" data-level="36.1" data-path="day-36.html"><a href="day-36.html#announcements-31"><i class="fa fa-check"></i><b>36.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a><ul>
+<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a>
+<ul>
 <li class="chapter" data-level="37.1" data-path="day-37.html"><a href="day-37.html#announcements-32"><i class="fa fa-check"></i><b>37.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a><ul>
+<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a>
+<ul>
 <li class="chapter" data-level="38.1" data-path="day-38.html"><a href="day-38.html#announcements-33"><i class="fa fa-check"></i><b>38.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a><ul>
+<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="day-39.html"><a href="day-39.html#announcements-34"><i class="fa fa-check"></i><b>39.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a><ul>
+<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a>
+<ul>
 <li class="chapter" data-level="40.1" data-path="day-40.html"><a href="day-40.html#announcements-35"><i class="fa fa-check"></i><b>40.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a><ul>
+<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a>
+<ul>
 <li class="chapter" data-level="41.1" data-path="day-41.html"><a href="day-41.html#announcements-36"><i class="fa fa-check"></i><b>41.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a><ul>
+<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a>
+<ul>
 <li class="chapter" data-level="42.1" data-path="day-42.html"><a href="day-42.html#announcements-37"><i class="fa fa-check"></i><b>42.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a><ul>
+<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a>
+<ul>
 <li class="chapter" data-level="43.1" data-path="day-43.html"><a href="day-43.html#announcements-38"><i class="fa fa-check"></i><b>43.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -399,13 +465,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="day-19" class="section level1">
-<h1><span class="header-section-number">19</span> Day 19</h1>
-<div id="announcements-14" class="section level2">
-<h2><span class="header-section-number">19.1</span> Announcements</h2>
+<div id="day-19" class="section level1" number="19">
+<h1 number="19"><span class="header-section-number">19</span> Day 19</h1>
+<div id="announcements-14" class="section level2" number="19.1">
+<h2 number="19.1"><span class="header-section-number">19.1</span> Announcements</h2>
 </div>
-<div id="gaussian-process-representations-continued-1" class="section level2">
-<h2><span class="header-section-number">19.2</span> Gaussian process representations continued</h2>
+<div id="stochastic-integration" class="section level2" number="19.2">
+<h2 number="19.2"><span class="header-section-number">19.2</span> Stochastic Integration</h2>
+<p><a href="https://en.wikipedia.org/wiki/It%C3%B4_calculus">https://en.wikipedia.org/wiki/It%C3%B4_calculus</a></p>
 
 </div>
 </div>
