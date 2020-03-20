@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>28 Day 28 | Notes for STAT 5413 - Spatial Statistics</title>
   <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="28 Day 28 | Notes for STAT 5413 - Spatial Statistics" />
   <meta property="og:type" content="book" />
@@ -33,7 +33,6 @@
 <link rel="prev" href="day-27.html"/>
 <link rel="next" href="day-29.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<script src="libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -52,39 +51,38 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.10/datatables.js"></script>
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
+<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -93,9 +91,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -145,15 +143,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
-<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a>
-<ul>
+<li class="chapter" data-level="1" data-path="day-1.html"><a href="day-1.html"><i class="fa fa-check"></i><b>1</b> Day 1</a><ul>
 <li class="chapter" data-level="1.1" data-path="day-1.html"><a href="day-1.html#notation"><i class="fa fa-check"></i><b>1.1</b> Notation</a></li>
-<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a>
-<ul>
+<li class="chapter" data-level="1.2" data-path="day-1.html"><a href="day-1.html#probability-distributions"><i class="fa fa-check"></i><b>1.2</b> Probability Distributions</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="day-1.html"><a href="day-1.html#example-linear-regression"><i class="fa fa-check"></i><b>1.2.1</b> Example: linear regression</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a>
-<ul>
+<li class="chapter" data-level="1.3" data-path="day-1.html"><a href="day-1.html#hierarchical-modeling"><i class="fa fa-check"></i><b>1.3</b> Hierarchical modeling</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="day-1.html"><a href="day-1.html#bayesian-hierarchical-models-bhms"><i class="fa fa-check"></i><b>1.3.1</b> Bayesian Hierarchical models (BHMs)</a></li>
 <li class="chapter" data-level="1.3.2" data-path="day-1.html"><a href="day-1.html#empirical-hierarchical-models-ehms"><i class="fa fa-check"></i><b>1.3.2</b> Empirical Hierarchical models (EHMs)</a></li>
 <li class="chapter" data-level="1.3.3" data-path="day-1.html"><a href="day-1.html#data-model"><i class="fa fa-check"></i><b>1.3.3</b> Data Model</a></li>
@@ -163,127 +158,102 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.3.7" data-path="day-1.html"><a href="day-1.html#scientifically-motivated-statistical-modeling"><i class="fa fa-check"></i><b>1.3.7</b> Scientifically Motivated Statistical Modeling</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a>
-<ul>
+<li class="chapter" data-level="2" data-path="day-2.html"><a href="day-2.html"><i class="fa fa-check"></i><b>2</b> Day 2</a><ul>
 <li class="chapter" data-level="2.1" data-path="day-2.html"><a href="day-2.html#spatial-data"><i class="fa fa-check"></i><b>2.1</b> Spatial Data</a></li>
-<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a>
-<ul>
+<li class="chapter" data-level="2.2" data-path="day-2.html"><a href="day-2.html#types-of-spatial-data"><i class="fa fa-check"></i><b>2.2</b> Types of spatial data</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="day-2.html"><a href="day-2.html#geostatistical-data"><i class="fa fa-check"></i><b>2.2.1</b> Geostatistical data</a></li>
 <li class="chapter" data-level="2.2.2" data-path="day-2.html"><a href="day-2.html#areal-data"><i class="fa fa-check"></i><b>2.2.2</b> Areal data</a></li>
 <li class="chapter" data-level="2.2.3" data-path="day-2.html"><a href="day-2.html#point-process-data"><i class="fa fa-check"></i><b>2.2.3</b> Point process data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a>
-<ul>
+<li class="chapter" data-level="3" data-path="day-3.html"><a href="day-3.html"><i class="fa fa-check"></i><b>3</b> Day 3</a><ul>
 <li class="chapter" data-level="3.1" data-path="day-3.html"><a href="day-3.html#anouncements"><i class="fa fa-check"></i><b>3.1</b> Anouncements</a></li>
 <li class="chapter" data-level="3.2" data-path="day-3.html"><a href="day-3.html#files-for-spatial-data"><i class="fa fa-check"></i><b>3.2</b> Files for spatial data</a></li>
 <li class="chapter" data-level="3.3" data-path="day-3.html"><a href="day-3.html#textbook-package"><i class="fa fa-check"></i><b>3.3</b> Textbook package</a></li>
-<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a>
-<ul>
+<li class="chapter" data-level="3.4" data-path="day-3.html"><a href="day-3.html#spatial-visualization"><i class="fa fa-check"></i><b>3.4</b> Spatial Visualization</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="day-3.html"><a href="day-3.html#spatial-visualization-using-fields"><i class="fa fa-check"></i><b>3.4.1</b> Spatial visualization using <em>fields</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a>
-<ul>
+<li class="chapter" data-level="4" data-path="day-4.html"><a href="day-4.html"><i class="fa fa-check"></i><b>4</b> Day 4</a><ul>
 <li class="chapter" data-level="4.1" data-path="day-4.html"><a href="day-4.html#announcements"><i class="fa fa-check"></i><b>4.1</b> Announcements</a></li>
-<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a>
-<ul>
+<li class="chapter" data-level="4.2" data-path="day-4.html"><a href="day-4.html#visualization-continued"><i class="fa fa-check"></i><b>4.2</b> Visualization (continued)</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="day-4.html"><a href="day-4.html#spatial-visualization-using-fields-1"><i class="fa fa-check"></i><b>4.2.1</b> Spatial visualization using <em>fields</em></a></li>
 <li class="chapter" data-level="4.2.2" data-path="day-4.html"><a href="day-4.html#in-class-activity"><i class="fa fa-check"></i><b>4.2.2</b> In Class Activity:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a>
-<ul>
+<li class="chapter" data-level="4.3" data-path="day-4.html"><a href="day-4.html#interactive-visualization-interactive-with-html-format-only"><i class="fa fa-check"></i><b>4.3</b> Interactive visualization (Interactive with HTML format only)</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="day-4.html"><a href="day-4.html#interactive-display-of-data"><i class="fa fa-check"></i><b>4.3.1</b> Interactive display of data</a></li>
 <li class="chapter" data-level="4.3.2" data-path="day-4.html"><a href="day-4.html#animations"><i class="fa fa-check"></i><b>4.3.2</b> Animations</a></li>
 <li class="chapter" data-level="4.3.3" data-path="day-4.html"><a href="day-4.html#interactive-plotting-using-plotly"><i class="fa fa-check"></i><b>4.3.3</b> Interactive plotting using <em>plotly</em></a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a>
-<ul>
+<li class="chapter" data-level="5" data-path="day-5.html"><a href="day-5.html"><i class="fa fa-check"></i><b>5</b> Day 5</a><ul>
 <li class="chapter" data-level="5.1" data-path="day-5.html"><a href="day-5.html#announcements-1"><i class="fa fa-check"></i><b>5.1</b> Announcements</a></li>
-<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a>
-<ul>
+<li class="chapter" data-level="5.2" data-path="day-5.html"><a href="day-5.html#spatial-means-and-covariances"><i class="fa fa-check"></i><b>5.2</b> Spatial means and covariances</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="day-5.html"><a href="day-5.html#gaussian-processes"><i class="fa fa-check"></i><b>5.2.1</b> Gaussian processes</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a>
-<ul>
+<li class="chapter" data-level="6" data-path="day-6.html"><a href="day-6.html"><i class="fa fa-check"></i><b>6</b> Day 6</a><ul>
 <li class="chapter" data-level="6.1" data-path="day-6.html"><a href="day-6.html#announcements-2"><i class="fa fa-check"></i><b>6.1</b> Announcements</a></li>
 <li class="chapter" data-level="6.2" data-path="day-6.html"><a href="day-6.html#gaussian-process-assumptions"><i class="fa fa-check"></i><b>6.2</b> Gaussian process assumptions</a></li>
-<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a>
-<ul>
+<li class="chapter" data-level="6.3" data-path="day-6.html"><a href="day-6.html#recall-hierachical-modeling"><i class="fa fa-check"></i><b>6.3</b> Recall Hierachical modeling</a><ul>
 <li class="chapter" data-level="6.3.1" data-path="day-6.html"><a href="day-6.html#data-model-1"><i class="fa fa-check"></i><b>6.3.1</b> Data Model</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a>
-<ul>
+<li class="chapter" data-level="7" data-path="day-7.html"><a href="day-7.html"><i class="fa fa-check"></i><b>7</b> Day 7</a><ul>
 <li class="chapter" data-level="7.1" data-path="day-7.html"><a href="day-7.html#common-isotropic-correlation-functions"><i class="fa fa-check"></i><b>7.1</b> Common isotropic correlation functions</a></li>
-<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a>
-<ul>
+<li class="chapter" data-level="7.2" data-path="day-7.html"><a href="day-7.html#covariograms-and-semivariograms"><i class="fa fa-check"></i><b>7.2</b> Covariograms and semivariograms</a><ul>
 <li class="chapter" data-level="7.2.1" data-path="day-7.html"><a href="day-7.html#semivariograms-and-variograms"><i class="fa fa-check"></i><b>7.2.1</b> Semivariograms and variograms</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a>
-<ul>
+<li class="chapter" data-level="8" data-path="day-8.html"><a href="day-8.html"><i class="fa fa-check"></i><b>8</b> Day 8</a><ul>
 <li class="chapter" data-level="8.1" data-path="day-8.html"><a href="day-8.html#announcements-3"><i class="fa fa-check"></i><b>8.1</b> Announcements</a></li>
-<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a>
-<ul>
+<li class="chapter" data-level="8.2" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process"><i class="fa fa-check"></i><b>8.2</b> Estimation of the spatial process</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="day-8.html"><a href="day-8.html#estimation-of-the-spatial-process-using-variograms"><i class="fa fa-check"></i><b>8.2.1</b> Estimation of the spatial process using variograms</a></li>
 <li class="chapter" data-level="8.2.2" data-path="day-8.html"><a href="day-8.html#maximum-likelihood"><i class="fa fa-check"></i><b>8.2.2</b> Maximum Likelihood</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="day-8.html"><a href="day-8.html#maximum-likelihood-1"><i class="fa fa-check"></i><b>8.3</b> Maximum likelihood</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a>
-<ul>
+<li class="chapter" data-level="9" data-path="day-9.html"><a href="day-9.html"><i class="fa fa-check"></i><b>9</b> Day 9</a><ul>
 <li class="chapter" data-level="9.1" data-path="day-9.html"><a href="day-9.html#announcements-4"><i class="fa fa-check"></i><b>9.1</b> Announcements</a></li>
 <li class="chapter" data-level="9.2" data-path="day-9.html"><a href="day-9.html#asymptotic-properties-of-the-mle"><i class="fa fa-check"></i><b>9.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a>
-<ul>
+<li class="chapter" data-level="10" data-path="day-10.html"><a href="day-10.html"><i class="fa fa-check"></i><b>10</b> Day 10</a><ul>
 <li class="chapter" data-level="10.1" data-path="day-10.html"><a href="day-10.html#announcements-5"><i class="fa fa-check"></i><b>10.1</b> Announcements</a></li>
 <li class="chapter" data-level="10.2" data-path="day-10.html"><a href="day-10.html#asymptotic-properties-of-the-mle-1"><i class="fa fa-check"></i><b>10.2</b> Asymptotic properties of the MLE</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a>
-<ul>
+<li class="chapter" data-level="11" data-path="day-11.html"><a href="day-11.html"><i class="fa fa-check"></i><b>11</b> Day 11</a><ul>
 <li class="chapter" data-level="11.1" data-path="day-11.html"><a href="day-11.html#announcements-6"><i class="fa fa-check"></i><b>11.1</b> Announcements</a></li>
 <li class="chapter" data-level="11.2" data-path="day-11.html"><a href="day-11.html#example-spatial-analysis"><i class="fa fa-check"></i><b>11.2</b> Example spatial analysis</a></li>
-<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a>
-<ul>
+<li class="chapter" data-level="11.3" data-path="day-11.html"><a href="day-11.html#spatial-model-fitting"><i class="fa fa-check"></i><b>11.3</b> Spatial model fitting</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="day-11.html"><a href="day-11.html#fit-the-maximum-likelihood-estimate-using-the-geor-package"><i class="fa fa-check"></i><b>11.3.1</b> Fit the maximum likelihood estimate using the <em>geoR</em> package</a></li>
 <li class="chapter" data-level="11.3.2" data-path="day-11.html"><a href="day-11.html#fitting-a-spatial-model-using-the-nlme-package"><i class="fa fa-check"></i><b>11.3.2</b> Fitting a spatial model using the <em>nlme</em> package</a></li>
 <li class="chapter" data-level="11.3.3" data-path="day-11.html"><a href="day-11.html#model-fitting-with-autokrige-function"><i class="fa fa-check"></i><b>11.3.3</b> model fitting with <em>autokrige</em> function</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a>
-<ul>
+<li class="chapter" data-level="11.4" data-path="day-11.html"><a href="day-11.html#kriging"><i class="fa fa-check"></i><b>11.4</b> Kriging</a><ul>
 <li class="chapter" data-level="11.4.1" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-mean-mu-0"><i class="fa fa-check"></i><b>11.4.1</b> Kriging Equations with mean <span class="math inline">\(\mu = 0\)</span></a></li>
 <li class="chapter" data-level="11.4.2" data-path="day-11.html"><a href="day-11.html#kriging-equations-with-unknown-mean"><i class="fa fa-check"></i><b>11.4.2</b> Kriging Equations with unknown mean</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a>
-<ul>
+<li class="chapter" data-level="12" data-path="day-12.html"><a href="day-12.html"><i class="fa fa-check"></i><b>12</b> Day 12</a><ul>
 <li class="chapter" data-level="12.1" data-path="day-12.html"><a href="day-12.html#announcements-7"><i class="fa fa-check"></i><b>12.1</b> Announcements</a></li>
 <li class="chapter" data-level="12.2" data-path="day-12.html"><a href="day-12.html#introduction-to-mcmc"><i class="fa fa-check"></i><b>12.2</b> Introduction to MCMC</a></li>
 <li class="chapter" data-level="12.3" data-path="day-12.html"><a href="day-12.html#example-simple-linear-regression"><i class="fa fa-check"></i><b>12.3</b> Example: Simple linear regression</a></li>
-<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a>
-<ul>
+<li class="chapter" data-level="12.4" data-path="day-12.html"><a href="day-12.html#the-posterior-distribution"><i class="fa fa-check"></i><b>12.4</b> The posterior distribution</a><ul>
 <li class="chapter" data-level="12.4.1" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-of-mu"><i class="fa fa-check"></i><b>12.4.1</b> Full conditional distribution of <span class="math inline">\(\mu\)</span></a></li>
 <li class="chapter" data-level="12.4.2" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-beta"><i class="fa fa-check"></i><b>12.4.2</b> Full conditional distribution for <span class="math inline">\(\beta\)</span></a></li>
 <li class="chapter" data-level="12.4.3" data-path="day-12.html"><a href="day-12.html#full-conditional-distribution-for-sigma2"><i class="fa fa-check"></i><b>12.4.3</b> Full conditional distribution for <span class="math inline">\(\sigma^2\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a>
-<ul>
+<li class="chapter" data-level="12.5" data-path="day-12.html"><a href="day-12.html#fitting-the-model"><i class="fa fa-check"></i><b>12.5</b> Fitting the model</a><ul>
 <li class="chapter" data-level="12.5.1" data-path="day-12.html"><a href="day-12.html#general-recommendations-for-writing-mcmc-software"><i class="fa fa-check"></i><b>12.5.1</b> General recommendations for writing MCMC software</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a>
-<ul>
+<li class="chapter" data-level="13" data-path="day-13.html"><a href="day-13.html"><i class="fa fa-check"></i><b>13</b> Day 13</a><ul>
 <li class="chapter" data-level="13.1" data-path="day-13.html"><a href="day-13.html#announcements-8"><i class="fa fa-check"></i><b>13.1</b> Announcements</a></li>
 <li class="chapter" data-level="13.2" data-path="day-13.html"><a href="day-13.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>13.2</b> The Metropolis Algorithm</a></li>
 <li class="chapter" data-level="13.3" data-path="day-13.html"><a href="day-13.html#the-proposal-distribution"><i class="fa fa-check"></i><b>13.3</b> The proposal distribution</a></li>
 <li class="chapter" data-level="13.4" data-path="day-13.html"><a href="day-13.html#the-metropolis-update"><i class="fa fa-check"></i><b>13.4</b> The Metropolis update</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a>
-<ul>
+<li class="chapter" data-level="14" data-path="day-14.html"><a href="day-14.html"><i class="fa fa-check"></i><b>14</b> Day 14</a><ul>
 <li class="chapter" data-level="14.1" data-path="day-14.html"><a href="day-14.html#announcements-9"><i class="fa fa-check"></i><b>14.1</b> Announcements</a></li>
 <li class="chapter" data-level="14.2" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm"><i class="fa fa-check"></i><b>14.2</b> The Metropolis-Hastings Algorithm</a></li>
 <li class="chapter" data-level="14.3" data-path="day-14.html"><a href="day-14.html#the-metropolis-hastings-algorithm-1"><i class="fa fa-check"></i><b>14.3</b> The Metropolis-Hastings algorithm</a></li>
@@ -293,71 +263,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14.7" data-path="day-14.html"><a href="day-14.html#conditional-posterior-for-sigma2"><i class="fa fa-check"></i><b>14.7</b> Conditional posterior for <span class="math inline">\(\sigma^2\)</span></a></li>
 <li class="chapter" data-level="14.8" data-path="day-14.html"><a href="day-14.html#mcmc-using-a-symmetric-proposal-metropolis"><i class="fa fa-check"></i><b>14.8</b> MCMC using a symmetric proposal (Metropolis)</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a>
-<ul>
+<li class="chapter" data-level="15" data-path="day-15.html"><a href="day-15.html"><i class="fa fa-check"></i><b>15</b> Day 15</a><ul>
 <li class="chapter" data-level="15.1" data-path="day-15.html"><a href="day-15.html#announcements-10"><i class="fa fa-check"></i><b>15.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a>
-<ul>
+<li class="chapter" data-level="16" data-path="day-16.html"><a href="day-16.html"><i class="fa fa-check"></i><b>16</b> Day 16</a><ul>
 <li class="chapter" data-level="16.1" data-path="day-16.html"><a href="day-16.html#announcements-11"><i class="fa fa-check"></i><b>16.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a>
-<ul>
+<li class="chapter" data-level="17" data-path="day-17.html"><a href="day-17.html"><i class="fa fa-check"></i><b>17</b> Day 17</a><ul>
 <li class="chapter" data-level="17.1" data-path="day-17.html"><a href="day-17.html#announcements-12"><i class="fa fa-check"></i><b>17.1</b> Announcements</a></li>
 <li class="chapter" data-level="17.2" data-path="day-17.html"><a href="day-17.html#gaussian-process-representations"><i class="fa fa-check"></i><b>17.2</b> Gaussian process representations</a></li>
 </ul></li>
-<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a>
-<ul>
+<li class="chapter" data-level="18" data-path="day-18.html"><a href="day-18.html"><i class="fa fa-check"></i><b>18</b> Day 18</a><ul>
 <li class="chapter" data-level="18.1" data-path="day-18.html"><a href="day-18.html#announcements-13"><i class="fa fa-check"></i><b>18.1</b> Announcements</a></li>
 <li class="chapter" data-level="18.2" data-path="day-18.html"><a href="day-18.html#gaussian-process-representations-continued"><i class="fa fa-check"></i><b>18.2</b> Gaussian process representations continued</a></li>
 </ul></li>
-<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a>
-<ul>
+<li class="chapter" data-level="19" data-path="day-19.html"><a href="day-19.html"><i class="fa fa-check"></i><b>19</b> Day 19</a><ul>
 <li class="chapter" data-level="19.1" data-path="day-19.html"><a href="day-19.html#announcements-14"><i class="fa fa-check"></i><b>19.1</b> Announcements</a></li>
 <li class="chapter" data-level="19.2" data-path="day-19.html"><a href="day-19.html#stochastic-integration"><i class="fa fa-check"></i><b>19.2</b> Stochastic Integration</a></li>
 </ul></li>
-<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a>
-<ul>
+<li class="chapter" data-level="20" data-path="day-20.html"><a href="day-20.html"><i class="fa fa-check"></i><b>20</b> Day 20</a><ul>
 <li class="chapter" data-level="20.1" data-path="day-20.html"><a href="day-20.html#announcements-15"><i class="fa fa-check"></i><b>20.1</b> Announcements</a></li>
 <li class="chapter" data-level="20.2" data-path="day-20.html"><a href="day-20.html#spbayes-example"><i class="fa fa-check"></i><b>20.2</b> spBayes example</a></li>
-<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.-local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a>
-<ul>
+<li class="chapter" data-level="20.3" data-path="day-20.html"><a href="day-20.html#global-vs.local-basis-function"><i class="fa fa-check"></i><b>20.3</b> Global vs. Local Basis function</a><ul>
 <li class="chapter" data-level="20.3.1" data-path="day-20.html"><a href="day-20.html#an-example-global-basis-fourier-basis"><i class="fa fa-check"></i><b>20.3.1</b> An example global basis: Fourier Basis</a></li>
 </ul></li>
 <li class="chapter" data-level="20.4" data-path="day-20.html"><a href="day-20.html#example-local-basis"><i class="fa fa-check"></i><b>20.4</b> example local basis</a></li>
 <li class="chapter" data-level="20.5" data-path="day-20.html"><a href="day-20.html#fitting-spatial-models-many-ways"><i class="fa fa-check"></i><b>20.5</b> Fitting spatial models many ways</a></li>
 <li class="chapter" data-level="20.6" data-path="day-20.html"><a href="day-20.html#empirical-orthogonal-functions"><i class="fa fa-check"></i><b>20.6</b> Empirical Orthogonal Functions</a></li>
 <li class="chapter" data-level="20.7" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-mgcv-package"><i class="fa fa-check"></i><b>20.7</b> Spatial modeling with <code>mgcv</code> package</a></li>
-<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a>
-<ul>
+<li class="chapter" data-level="20.8" data-path="day-20.html"><a href="day-20.html#spatial-modeling-with-kernels"><i class="fa fa-check"></i><b>20.8</b> Spatial modeling with Kernels</a><ul>
 <li class="chapter" data-level="20.8.1" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-ridge-penalty"><i class="fa fa-check"></i><b>20.8.1</b> Kernel regression with a ridge penalty</a></li>
 <li class="chapter" data-level="20.8.2" data-path="day-20.html"><a href="day-20.html#kernel-regression-with-a-lasso-penalty"><i class="fa fa-check"></i><b>20.8.2</b> Kernel regression with a lasso penalty</a></li>
 <li class="chapter" data-level="20.8.3" data-path="day-20.html"><a href="day-20.html#truncated-kernels---local-support"><i class="fa fa-check"></i><b>20.8.3</b> Truncated Kernels - local support</a></li>
 </ul></li>
-<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.-dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
+<li class="chapter" data-level="20.9" data-path="day-20.html"><a href="day-20.html#sparse-vs.dense-matrix-computation"><i class="fa fa-check"></i><b>20.9</b> Sparse vs. Dense matrix computation</a></li>
 </ul></li>
-<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a>
-<ul>
+<li class="chapter" data-level="21" data-path="day-21.html"><a href="day-21.html"><i class="fa fa-check"></i><b>21</b> Day 21</a><ul>
 <li class="chapter" data-level="21.1" data-path="day-21.html"><a href="day-21.html#announcements-16"><i class="fa fa-check"></i><b>21.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a>
-<ul>
+<li class="chapter" data-level="22" data-path="day-22.html"><a href="day-22.html"><i class="fa fa-check"></i><b>22</b> Day 22</a><ul>
 <li class="chapter" data-level="22.1" data-path="day-22.html"><a href="day-22.html#announcements-17"><i class="fa fa-check"></i><b>22.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a>
-<ul>
+<li class="chapter" data-level="23" data-path="day-23.html"><a href="day-23.html"><i class="fa fa-check"></i><b>23</b> Day 23</a><ul>
 <li class="chapter" data-level="23.1" data-path="day-23.html"><a href="day-23.html#announcements-18"><i class="fa fa-check"></i><b>23.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="24" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>24</b> Day 24 – Scaling GPs for large data</a>
-<ul>
+<li class="chapter" data-level="24" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>24</b> Day 24 – Scaling GPs for large data</a><ul>
 <li class="chapter" data-level="24.1" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#announcements-19"><i class="fa fa-check"></i><b>24.1</b> Announcements</a></li>
 <li class="chapter" data-level="24.2" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#local-analysis"><i class="fa fa-check"></i><b>24.2</b> Local analysis</a></li>
 <li class="chapter" data-level="24.3" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#low-rank-approimxations"><i class="fa fa-check"></i><b>24.3</b> Low rank approimxations</a></li>
 <li class="chapter" data-level="24.4" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#spectral-basis-functions"><i class="fa fa-check"></i><b>24.4</b> Spectral basis functions</a></li>
 <li class="chapter" data-level="24.5" data-path="day-24-scaling-gps-for-large-data.html"><a href="day-24-scaling-gps-for-large-data.html#kernel-convolutions"><i class="fa fa-check"></i><b>24.5</b> Kernel convolutions</a></li>
 </ul></li>
-<li class="chapter" data-level="25" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>25</b> Day 25 – Scaling GPs for large data</a>
-<ul>
+<li class="chapter" data-level="25" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>25</b> Day 25 – Scaling GPs for large data</a><ul>
 <li class="chapter" data-level="25.1" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
 <li class="chapter" data-level="25.2" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>25.2</b> Gaussian Predictive Process (spBayes package)</a></li>
 <li class="chapter" data-level="25.3" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#sparse-matrix-routines"><i class="fa fa-check"></i><b>25.3</b> Sparse matrix routines</a></li>
@@ -365,83 +322,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.5" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#approximate-likelihood-methods"><i class="fa fa-check"></i><b>25.5</b> Approximate likelihood methods</a></li>
 <li class="chapter" data-level="25.6" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#vecchia-approximations"><i class="fa fa-check"></i><b>25.6</b> Vecchia Approximations</a></li>
 </ul></li>
-<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a>
-<ul>
+<li class="chapter" data-level="26" data-path="day-26.html"><a href="day-26.html"><i class="fa fa-check"></i><b>26</b> Day 26</a><ul>
 <li class="chapter" data-level="26.1" data-path="day-26.html"><a href="day-26.html#announcements-21"><i class="fa fa-check"></i><b>26.1</b> Announcements</a></li>
 <li class="chapter" data-level="26.2" data-path="day-26.html"><a href="day-26.html#multivariate-data"><i class="fa fa-check"></i><b>26.2</b> Multivariate Data</a></li>
-<li class="chapter" data-level="26.3" data-path="day-26.html"><a href="day-26.html#classical-multivariate-geostatistics"><i class="fa fa-check"></i><b>26.3</b> Classical Multivariate Geostatistics</a>
-<ul>
+<li class="chapter" data-level="26.3" data-path="day-26.html"><a href="day-26.html#classical-multivariate-geostatistics"><i class="fa fa-check"></i><b>26.3</b> Classical Multivariate Geostatistics</a><ul>
 <li class="chapter" data-level="26.3.1" data-path="day-26.html"><a href="day-26.html#cross-variograms-and-cross-covariance-functions"><i class="fa fa-check"></i><b>26.3.1</b> cross-variograms and cross-covariance functions</a></li>
 <li class="chapter" data-level="26.3.2" data-path="day-26.html"><a href="day-26.html#cokriging"><i class="fa fa-check"></i><b>26.3.2</b> Cokriging</a></li>
 <li class="chapter" data-level="26.3.3" data-path="day-26.html"><a href="day-26.html#linear-model-of-coregionalization"><i class="fa fa-check"></i><b>26.3.3</b> Linear Model of Coregionalization</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a>
-<ul>
+<li class="chapter" data-level="27" data-path="day-27.html"><a href="day-27.html"><i class="fa fa-check"></i><b>27</b> Day 27</a><ul>
 <li class="chapter" data-level="27.1" data-path="day-27.html"><a href="day-27.html#announcements-22"><i class="fa fa-check"></i><b>27.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a>
-<ul>
+<li class="chapter" data-level="28" data-path="day-28.html"><a href="day-28.html"><i class="fa fa-check"></i><b>28</b> Day 28</a><ul>
 <li class="chapter" data-level="28.1" data-path="day-28.html"><a href="day-28.html#announcements-23"><i class="fa fa-check"></i><b>28.1</b> Announcements</a></li>
+<li class="chapter" data-level="28.2" data-path="day-28.html"><a href="day-28.html#intro-to-stan"><i class="fa fa-check"></i><b>28.2</b> Intro to stan</a><ul>
+<li class="chapter" data-level="28.2.1" data-path="day-28.html"><a href="day-28.html#example-linear-regression-1"><i class="fa fa-check"></i><b>28.2.1</b> Example: Linear regression</a></li>
+<li class="chapter" data-level="28.2.2" data-path="day-28.html"><a href="day-28.html#example-spatial-model-in-stan"><i class="fa fa-check"></i><b>28.2.2</b> Example: Spatial model in stan</a></li>
+<li class="chapter" data-level="28.2.3" data-path="day-28.html"><a href="day-28.html#example-predictive-process-model-in-stan"><i class="fa fa-check"></i><b>28.2.3</b> Example: Predictive process model in stan</a></li>
 </ul></li>
-<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a>
-<ul>
+<li class="chapter" data-level="28.3" data-path="day-28.html"><a href="day-28.html#stan-hints-and-tips"><i class="fa fa-check"></i><b>28.3</b> stan Hints and tips</a></li>
+</ul></li>
+<li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a>
-<ul>
+<li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a>
-<ul>
+<li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a>
-<ul>
+<li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a>
-<ul>
+<li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a>
-<ul>
+<li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a>
-<ul>
+<li class="chapter" data-level="35" data-path="day-35.html"><a href="day-35.html"><i class="fa fa-check"></i><b>35</b> Day 35</a><ul>
 <li class="chapter" data-level="35.1" data-path="day-35.html"><a href="day-35.html#announcements-30"><i class="fa fa-check"></i><b>35.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a>
-<ul>
+<li class="chapter" data-level="36" data-path="day-36.html"><a href="day-36.html"><i class="fa fa-check"></i><b>36</b> Day 36</a><ul>
 <li class="chapter" data-level="36.1" data-path="day-36.html"><a href="day-36.html#announcements-31"><i class="fa fa-check"></i><b>36.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a>
-<ul>
+<li class="chapter" data-level="37" data-path="day-37.html"><a href="day-37.html"><i class="fa fa-check"></i><b>37</b> Day 37</a><ul>
 <li class="chapter" data-level="37.1" data-path="day-37.html"><a href="day-37.html#announcements-32"><i class="fa fa-check"></i><b>37.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a>
-<ul>
+<li class="chapter" data-level="38" data-path="day-38.html"><a href="day-38.html"><i class="fa fa-check"></i><b>38</b> Day 38</a><ul>
 <li class="chapter" data-level="38.1" data-path="day-38.html"><a href="day-38.html#announcements-33"><i class="fa fa-check"></i><b>38.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a>
-<ul>
+<li class="chapter" data-level="39" data-path="day-39.html"><a href="day-39.html"><i class="fa fa-check"></i><b>39</b> Day 39</a><ul>
 <li class="chapter" data-level="39.1" data-path="day-39.html"><a href="day-39.html#announcements-34"><i class="fa fa-check"></i><b>39.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a>
-<ul>
+<li class="chapter" data-level="40" data-path="day-40.html"><a href="day-40.html"><i class="fa fa-check"></i><b>40</b> Day 40</a><ul>
 <li class="chapter" data-level="40.1" data-path="day-40.html"><a href="day-40.html#announcements-35"><i class="fa fa-check"></i><b>40.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a>
-<ul>
+<li class="chapter" data-level="41" data-path="day-41.html"><a href="day-41.html"><i class="fa fa-check"></i><b>41</b> Day 41</a><ul>
 <li class="chapter" data-level="41.1" data-path="day-41.html"><a href="day-41.html#announcements-36"><i class="fa fa-check"></i><b>41.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a>
-<ul>
+<li class="chapter" data-level="42" data-path="day-42.html"><a href="day-42.html"><i class="fa fa-check"></i><b>42</b> Day 42</a><ul>
 <li class="chapter" data-level="42.1" data-path="day-42.html"><a href="day-42.html#announcements-37"><i class="fa fa-check"></i><b>42.1</b> Announcements</a></li>
 </ul></li>
-<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a>
-<ul>
+<li class="chapter" data-level="43" data-path="day-43.html"><a href="day-43.html"><i class="fa fa-check"></i><b>43</b> Day 43</a><ul>
 <li class="chapter" data-level="43.1" data-path="day-43.html"><a href="day-43.html#announcements-38"><i class="fa fa-check"></i><b>43.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -465,10 +409,377 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="day-28" class="section level1" number="28">
-<h1 number="28"><span class="header-section-number">28</span> Day 28</h1>
-<div id="announcements-23" class="section level2" number="28.1">
-<h2 number="28.1"><span class="header-section-number">28.1</span> Announcements</h2>
+<div id="day-28" class="section level1">
+<h1><span class="header-section-number">28</span> Day 28</h1>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb378-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb378-3" data-line-number="3"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb378-4" data-line-number="4"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb378-5" data-line-number="5"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb378-6" data-line-number="6"><span class="co">## use recommended rstan settings</span></a>
+<a class="sourceLine" id="cb378-7" data-line-number="7"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
+<a class="sourceLine" id="cb378-8" data-line-number="8"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb378-9" data-line-number="9"><span class="kw">library</span>(bayesplot)</a></code></pre></div>
+<div id="announcements-23" class="section level2">
+<h2><span class="header-section-number">28.1</span> Announcements</h2>
+</div>
+<div id="intro-to-stan" class="section level2">
+<h2><span class="header-section-number">28.2</span> Intro to stan</h2>
+<ul>
+<li>Needs a c++ compiler toolchain. <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">See here</a> for instructions on how to install the <code>rstan</code> library
+<ul>
+<li>instructions for your OS (Windows, MacOC, Linux, and support for different languages, etc. on the bar to the right)</li>
+</ul></li>
+<li><p>probabilistic programming</p></li>
+<li><p>allows you to focus on modelling rather than algorithms for fitting</p></li>
+<li><p>Many alternatives (<a href="https://r-nimble.org/">NIMBLE</a>, <a href="http://mcmc-jags.sourceforge.net/">JAGS</a>, <a href="https://pypi.org/project/pymc3/">PyMC3</a>, <a href="https://pypi.org/project/pymc4/">PyMC4 - experimental</a>)</p></li>
+</ul>
+<div id="example-linear-regression-1" class="section level3">
+<h3><span class="header-section-number">28.2.1</span> Example: Linear regression</h3>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb379-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">444</span>)</a>
+<a class="sourceLine" id="cb379-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb379-3" data-line-number="3">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">runif</span>(n))</a>
+<a class="sourceLine" id="cb379-4" data-line-number="4">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb379-5" data-line-number="5">sigma &lt;-<span class="st"> </span><span class="fl">0.25</span></a>
+<a class="sourceLine" id="cb379-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, sigma))</a>
+<a class="sourceLine" id="cb379-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb379-8" data-line-number="8"><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">mu =</span> X <span class="op">%*%</span><span class="st"> </span>beta) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb379-9" data-line-number="9"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb379-10" data-line-number="10"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb379-11" data-line-number="11"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> mu), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-219-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>we need to define a stan model</p></li>
+<li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
+<li><p>print the output of the model <code>linear-regression.stan</code></p></li>
+</ul>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb380-1" data-line-number="1"><span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression.stan&quot;</span>))</a></code></pre></div>
+<pre><code>##  [1] &quot;//&quot;                                                                
+##  [2] &quot;// This Stan program defines a simple model, with a&quot;               
+##  [3] &quot;// vector of values &#39;y&#39; modeled as normally distributed&quot;           
+##  [4] &quot;// with mean &#39;mu&#39; = &#39;X beta` and standard deviation &#39;sigma&#39;.&quot;      
+##  [5] &quot;//&quot;                                                                
+##  [6] &quot;// Learn more about model development with Stan at:&quot;               
+##  [7] &quot;//&quot;                                                                
+##  [8] &quot;//    http://mc-stan.org/users/interfaces/rstan.html&quot;              
+##  [9] &quot;//    https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started&quot;
+## [10] &quot;//&quot;                                                                
+## [11] &quot;&quot;                                                                  
+## [12] &quot;// The input data is a vector &#39;y&#39; of length &#39;n&#39; and an &quot;           
+## [13] &quot;// &#39;n&#39; times &#39;p&#39; matrix of covariates (including the intercept)&quot;   
+## [14] &quot;data {&quot;                                                            
+## [15] &quot;  int&lt;lower=0&gt; n;&quot;                                                 
+## [16] &quot;  int&lt;lower=0&gt; p;&quot;                                                 
+## [17] &quot;  vector[n] y;&quot;                                                    
+## [18] &quot;  matrix[n, p] X;&quot;                                                 
+## [19] &quot;  &quot;                                                                
+## [20] &quot;}&quot;                                                                 
+## [21] &quot;&quot;                                                                  
+## [22] &quot;// The parameters accepted by the model. Our model&quot;                
+## [23] &quot;// accepts two parameters &#39;beta&#39; and &#39;sigma&#39;.&quot;                     
+## [24] &quot;parameters {&quot;                                                      
+## [25] &quot;  vector[p] beta;&quot;                                                 
+## [26] &quot;  real&lt;lower=0&gt; sigma;&quot;                                            
+## [27] &quot;  vector[n] y_rep;&quot;                                                
+## [28] &quot;}&quot;                                                                 
+## [29] &quot;&quot;                                                                  
+## [30] &quot;// The transformed parameters X %*% beta for the model. &quot;          
+## [31] &quot;transformed parameters {&quot;                                          
+## [32] &quot;  vector[n] mu;&quot;                                                   
+## [33] &quot;  mu = X * beta;&quot;                                                  
+## [34] &quot;}&quot;                                                                 
+## [35] &quot;// The model to be estimated. We model the output&quot;                 
+## [36] &quot;// &#39;y&#39; to be normally distributed with mean &#39;mu&#39;&quot;                  
+## [37] &quot;// and standard deviation &#39;sigma&#39;.&quot;                                
+## [38] &quot;&quot;                                                                  
+## [39] &quot;model {&quot;                                                           
+## [40] &quot;  y ~ normal(mu, sigma);&quot;                                          
+## [41] &quot;  // Note that this is vectorized and equivalent to&quot;               
+## [42] &quot;  // for (i in 1:n) {&quot;                                             
+## [43] &quot;  //   y[i] ~ normal(mu[i], sigma);&quot;                               
+## [44] &quot;  // }&quot;                                                            
+## [45] &quot;  &quot;                                                                
+## [46] &quot;  // posterior predictive distribution&quot;                            
+## [47] &quot;  y_rep ~ normal(mu, sigma);&quot;                                      
+## [48] &quot;}&quot;                                                                 
+## [49] &quot;// Note: the stan file must end in a blank (new) line&quot;</code></pre>
+<ul>
+<li><p>What are the priors implied by this model on <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma\)</span>?</p></li>
+<li><p>Fitting the model</p></li>
+</ul>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb382-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb382-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb382-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb382-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">500</span></a>
+<a class="sourceLine" id="cb382-5" data-line-number="5">)</a></code></pre></div>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<ul>
+<li>examine the output from the MCMC fit</li>
+</ul>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb385-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb385-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a>
+<a class="sourceLine" id="cb385-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb385-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb385-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a>
+<a class="sourceLine" id="cb385-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb385-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb385-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
+<pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
+## instead.</code></pre>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb387-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb387-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a>
+<a class="sourceLine" id="cb387-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb387-4" data-line-number="4"><span class="co">## violin plots of posterior</span></a>
+<a class="sourceLine" id="cb387-5" data-line-number="5"><span class="kw">mcmc_violin</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: linear-regression.
+## 4 chains, each with iter=500; warmup=250; thin=1; 
+## post-warmup draws per chain=250, total post-warmup draws=1000.
+## 
+##         mean se_mean   sd  10%  90% n_eff Rhat
+## beta[1] 3.00       0 0.02 2.97 3.02   429 1.01
+## beta[2] 1.98       0 0.03 1.95 2.02   329 1.02
+## sigma   0.26       0 0.01 0.25 0.26   542 1.00
+## 
+## Samples were drawn using NUTS(diag_e) at Thu Mar 19 23:47:13 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-222-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-222-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-222-3.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-222-4.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>compare these estimates to the <code>lm</code> estimtes</li>
+</ul>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb389-1" data-line-number="1"><span class="kw">summary</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ X - 1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.6696 -0.1733  0.0016  0.1705  0.8912 
+## 
+## Coefficients:
+##    Estimate Std. Error t value Pr(&gt;|t|)    
+## X1   2.9962     0.0165   181.4   &lt;2e-16 ***
+## X2   1.9802     0.0285    69.4   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.256 on 998 degrees of freedom
+## Multiple R-squared:  0.996,  Adjusted R-squared:  0.996 
+## F-statistic: 1.24e+05 on 2 and 998 DF,  p-value: &lt;2e-16</code></pre>
+<div id="posterior-predictive-checks" class="section level4">
+<h4><span class="header-section-number">28.2.1.1</span> Posterior predictive checks</h4>
+<ul>
+<li><p>How do we know if the model is fitting the data well?</p></li>
+<li><p>posterior predictive checks examples <a href="https://mc-stan.org/bayesplot/reference/PPC-distributions.html">here</a> and <a href="https://cran.r-project.org/web/packages/bayesplot/vignettes/graphical-ppcs.html#defining-y-and-yrep">here</a></p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+[\tilde{\mathbf{y}} | \mathbf{y}] &amp; = \int [\tilde{\mathbf{y}} | \boldsymbol{\theta} ] [\boldsymbol{\theta} | \mathbf{y}] \,d\boldsymbol{\theta}
+\end{align*}\]</span></p>
+<p>where the integral over <span class="math inline">\(\boldsymbol{\theta}\)</span> is performed using MCMC sampling.</p>
+<ul>
+<li>Using the <code>bayesplot</code> package, we can explre the posterior predictive checks (ppcs) using a variety of functions</li>
+</ul>
+<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb391-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb391-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a>
+<a class="sourceLine" id="cb391-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb391-4" data-line-number="4"><span class="co">## only plot for 25 randomly selected samples</span></a>
+<a class="sourceLine" id="cb391-5" data-line-number="5">plot_idx &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb391-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb391-7" data-line-number="7"><span class="kw">ppc_data</span>(y, y_rep)</a></code></pre></div>
+<pre><code>## # A tibble: 1,001,000 x 6
+##     y_id rep_id rep_label          is_y  is_y_label    value
+##    &lt;int&gt;  &lt;int&gt; &lt;fct&gt;              &lt;lgl&gt; &lt;fct&gt;         &lt;dbl&gt;
+##  1     1      1 italic(y)[rep] ( … FALSE italic(y)[re…  3.18
+##  2     1      2 italic(y)[rep] ( … FALSE italic(y)[re…  3.65
+##  3     1      3 italic(y)[rep] ( … FALSE italic(y)[re…  3.21
+##  4     1      4 italic(y)[rep] ( … FALSE italic(y)[re…  3.71
+##  5     1      5 italic(y)[rep] ( … FALSE italic(y)[re…  3.12
+##  6     1      6 italic(y)[rep] ( … FALSE italic(y)[re…  3.21
+##  7     1      7 italic(y)[rep] ( … FALSE italic(y)[re…  3.38
+##  8     1      8 italic(y)[rep] ( … FALSE italic(y)[re…  3.14
+##  9     1      9 italic(y)[rep] ( … FALSE italic(y)[re…  3.76
+## 10     1     10 italic(y)[rep] ( … FALSE italic(y)[re…  2.84
+## # … with 1,000,990 more rows</code></pre>
+<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb393-1" data-line-number="1"><span class="kw">ppc_hist</span>(y[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], y_rep[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>])</a></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with
+## `binwidth`.</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-225-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb395-1" data-line-number="1"><span class="kw">ppc_intervals</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-226-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb396-1" data-line-number="1"><span class="kw">ppc_ribbon</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-227-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" data-line-number="1"><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-228-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb398-1" data-line-number="1"><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-229-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="optimization-in-stan" class="section level4">
+<h4><span class="header-section-number">28.2.1.2</span> Optimization in stan</h4>
+<ul>
+<li>We can also fit the model using optimization:
+<ul>
+<li>max posterior mode, also known as max a posteriori (<em>MAP</em>).</li>
+<li>max penalized likelihood (<em>MLE</em>).</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">stan_model</span>(</a>
+<a class="sourceLine" id="cb399-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression.stan&quot;</span>)</a>
+<a class="sourceLine" id="cb399-3" data-line-number="3">)</a>
+<a class="sourceLine" id="cb399-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb399-5" data-line-number="5">mle &lt;-<span class="st"> </span><span class="kw">optimizing</span>(model, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)))</a>
+<a class="sourceLine" id="cb399-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb399-7" data-line-number="7"><span class="kw">print</span>(mle<span class="op">$</span>par[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+<pre><code>## beta[1] beta[2]   sigma 
+##  2.9964  1.9799  0.1811</code></pre>
+</div>
+</div>
+<div id="example-spatial-model-in-stan" class="section level3">
+<h3><span class="header-section-number">28.2.2</span> Example: Spatial model in stan</h3>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1"><span class="co">## Make some data</span></a>
+<a class="sourceLine" id="cb401-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb401-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb401-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb401-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb401-6" data-line-number="6">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb401-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb401-8" data-line-number="8">beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb401-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb401-10" data-line-number="10">sigma2 &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb401-11" data-line-number="11">tau2 &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb401-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb401-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb401-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
+<a class="sourceLine" id="cb401-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>D)</a>
+<a class="sourceLine" id="cb401-16" data-line-number="16">eta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), tau2 <span class="op">*</span><span class="st"> </span>R))</a>
+<a class="sourceLine" id="cb401-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>eta, <span class="kw">sqrt</span>(sigma2))</a></code></pre></div>
+<ul>
+<li>Fit the stan model
+<ul>
+<li>this can be a little slow for fitting relatively small data</li>
+<li>however, stan uses Hamiltonian Monte Carlo (HMC) which is highly efficient</li>
+<li>often can get by with much shorter MCMC chains (500-1000 samples – monitor the effective sample size)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb402-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb402-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">coords =</span> coords),</a>
+<a class="sourceLine" id="cb402-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
+<a class="sourceLine" id="cb402-5" data-line-number="5">) </a></code></pre></div>
+<pre><code>## Warning: The largest R-hat is NA, indicating chains have not mixed.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<ul>
+<li>examine the output from the MCMC fit</li>
+</ul>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb406-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb406-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb406-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb406-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb406-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb406-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb406-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb406-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
+## instead.</code></pre>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb408-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb408-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: spatial-regression.
+## 4 chains, each with iter=1000; warmup=500; thin=1; 
+## post-warmup draws per chain=500, total post-warmup draws=2000.
+## 
+##         mean se_mean   sd  10%   90% n_eff Rhat
+## beta[1] 1.83    0.03 1.20 0.42  3.33  1228    1
+## beta[2] 4.82    0.00 0.17 4.60  5.02  1619    1
+## sigma2  1.06    0.01 0.48 0.48  1.68  1186    1
+## tau2    7.63    0.07 2.40 4.95 11.03  1084    1
+## phi     0.30    0.01 0.15 0.15  0.49   832    1
+## 
+## Samples were drawn using NUTS(diag_e) at Thu Mar 19 23:49:44 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-233-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-233-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-233-3.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="example-predictive-process-model-in-stan" class="section level3">
+<h3><span class="header-section-number">28.2.3</span> Example: Predictive process model in stan</h3>
+<ul>
+<li><p>use the same data from the previous example</p></li>
+<li>Fit the stan model
+<ul>
+<li>this can be a little slow for fitting relatively small data</li>
+<li>however, stan uses Hamiltonian Monte Carlo (HMC) which is highly efficient</li>
+<li>often can get by with much shorter MCMC chains (500-1000 samples – monitor the effective sample size)</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb410-1" data-line-number="1">n_knots &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb410-2" data-line-number="2">knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb410-3" data-line-number="3">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">1</span>]), <span class="kw">max</span>(coords[, <span class="dv">1</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots)),</a>
+<a class="sourceLine" id="cb410-4" data-line-number="4">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">2</span>]), <span class="kw">max</span>(coords[, <span class="dv">2</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots))</a>
+<a class="sourceLine" id="cb410-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb411-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb411-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;predictive-process-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb411-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), </a>
+<a class="sourceLine" id="cb411-4" data-line-number="4">                <span class="dt">coords =</span> coords, <span class="dt">n_knots =</span> n_knots, <span class="dt">knots =</span> knots),</a>
+<a class="sourceLine" id="cb411-5" data-line-number="5">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
+<a class="sourceLine" id="cb411-6" data-line-number="6">)</a></code></pre></div>
+<ul>
+<li>examine the output from the MCMC fit</li>
+</ul>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb412-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb412-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb412-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb412-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb412-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb412-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb412-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb412-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
+## instead.</code></pre>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb414-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb414-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: predictive-process-regression.
+## 4 chains, each with iter=1000; warmup=500; thin=1; 
+## post-warmup draws per chain=500, total post-warmup draws=2000.
+## 
+##         mean se_mean   sd  10%   90% n_eff Rhat
+## beta[1] 1.75    0.04 1.48 0.00  3.58  1379    1
+## beta[2] 4.80    0.00 0.20 4.55  5.06  2896    1
+## sigma2  3.54    0.02 0.60 2.83  4.33  1308    1
+## tau2    9.27    0.08 2.95 5.72 13.24  1355    1
+## phi     0.43    0.01 0.32 0.19  0.74  1001    1
+## 
+## Samples were drawn using NUTS(diag_e) at Thu Mar 19 23:52:49 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-236-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-236-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-236-3.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="stan-hints-and-tips" class="section level2">
+<h2><span class="header-section-number">28.3</span> stan Hints and tips</h2>
+<ul>
+<li>if there are issues, run one chain using <code>chains = 1</code> option in the <code>stan()</code> function</li>
+<li>pay careful attention to the error messages – once you learn to read these they can be very informative</li>
+<li>if you have multiple chains that have widely different run times, that suggests there are issues with your model
+<ul>
+<li>explore advanced stan diagnostics</li>
+<li>examples <a href="https://mc-stan.org/bayesplot/articles/visual-mcmc-diagnostics.html">here</a>, <a href="https://mc-stan.org/rstan/reference/stan_plot_diagnostics.html">here</a>, and <a href="https://betanalpha.github.io/assets/case_studies/rstan_workflow.html">here</a>.</li>
+</ul></li>
+<li><a href="https://github.com/stan-dev/stan/wiki/Stan-Best-Practices">General stan best pracitices</a></li>
+</ul>
 
 </div>
 </div>

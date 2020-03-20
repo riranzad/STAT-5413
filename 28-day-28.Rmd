@@ -1,4 +1,258 @@
 # Day 28
 
+```{r, message = FALSE}
+library(tidyverse)
+library(fields)
+library(mvnfast)
+library(patchwork)
+library(rstan)
+## use recommended rstan settings
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+library(bayesplot)
+```
+
 ## Announcements
 
+## Intro to stan
+
+- Needs a c++ compiler toolchain. [See here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started) for instructions on how to install the `rstan` library
+    - instructions for your OS (Windows, MacOC, Linux, and support for different languages, etc. on the bar to the right)
+    
+- probabilistic programming
+
+- allows you to focus on modelling rather than algorithms for fitting
+
+- Many alternatives ([NIMBLE](https://r-nimble.org/), [JAGS](http://mcmc-jags.sourceforge.net/), [PyMC3](https://pypi.org/project/pymc3/), [PyMC4 - experimental](https://pypi.org/project/pymc4/))
+
+### Example: Linear regression
+
+```{r}
+set.seed(444)
+n <- 1000
+X <- cbind(1, runif(n))
+beta <- c(3, 2)
+sigma <- 0.25
+y <- as.vector(X %*% beta + rnorm(n, 0, sigma))
+
+data.frame(y = y, x = X[, 2], mu = X %*% beta) %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_line(aes(x = x, y = mu), color = "red")
+```
+
+- we need to define a stan model
+
+- create a stan model in a folder named `stan_models` in the Rstudio project folder
+
+- print the output of the model `linear-regression.stan`
+
+```{r}
+read_lines(here::here("stan_models", "linear-regression.stan"))
+```
+
+- What are the priors implied by this model on $\boldsymbol{\beta}$ and $\sigma$?
+
+
+- Fitting the model
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+    file = here::here("stan_models", "linear-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X)),
+    iter = 500
+)
+```
+
+- examine the output from the MCMC fit
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "sigma"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "sigma"))
+
+## area plots of posterior
+mcmc_areas(fit, regex_pars = c("beta", "sigma"))
+
+## acf plots
+mcmc_acf(fit, regex_pars = c("beta", "sigma"))
+
+## violin plots of posterior
+mcmc_violin(fit, regex_pars = c("beta", "sigma"))
+```
+
+- compare these estimates to the `lm` estimtes
+
+```{r}
+summary(lm(y ~ X - 1))
+```
+
+#### Posterior predictive checks
+
+- How do we know if the model is fitting the data well?
+
+- posterior predictive checks examples [here](https://mc-stan.org/bayesplot/reference/PPC-distributions.html) and [here](https://cran.r-project.org/web/packages/bayesplot/vignettes/graphical-ppcs.html#defining-y-and-yrep)
+
+\begin{align*}
+[\tilde{\mathbf{y}} | \mathbf{y}] & = \int [\tilde{\mathbf{y}} | \boldsymbol{\theta} ] [\boldsymbol{\theta} | \mathbf{y}] \,d\boldsymbol{\theta}
+\end{align*}
+
+where the integral over $\boldsymbol{\theta}$ is performed using MCMC sampling.
+
+- Using the `bayesplot` package, we can explre the posterior predictive checks (ppcs) using a variety of functions
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+
+## only plot for 25 randomly selected samples
+plot_idx <- sample(1:n, 25)
+
+ppc_data(y, y_rep)
+```
+
+```{r, cache = TRUE}
+ppc_hist(y[1:5], y_rep[, 1:5])
+```
+
+```{r, cache = TRUE}
+ppc_intervals(y[plot_idx], y_rep[, plot_idx], x = X[, 2][plot_idx])
+```
+
+```{r, cache = TRUE}
+ppc_ribbon(y[plot_idx], y_rep[, plot_idx], x = X[, 2][plot_idx])
+```
+
+```{r, cache = TRUE}
+ppc_dens_overlay(y, y_rep)
+```
+
+```{r, cache = TRUE}
+ppc_ecdf_overlay(y, y_rep)
+```
+
+#### Optimization in stan
+
+- We can also fit the model using optimization:
+    - max posterior mode, also known as max a posteriori (*MAP*).
+    - max penalized likelihood (*MLE*).
+
+```{r}
+model <- stan_model(
+    file = here::here("stan_models", "linear-regression.stan")
+)
+
+mle <- optimizing(model, data = list(y = y, n = n, X = X, p = ncol(X)))
+
+print(mle$par[1:3], digits = 4)
+```
+
+### Example: Spatial model in stan
+
+```{r}
+## Make some data
+set.seed(1)
+n <- 100
+coords <- cbind(runif(n, 0, 1), runif(n, 0, 1))
+
+X <- cbind(1, rnorm(n))
+
+beta <- as.matrix(c(1, 5))
+
+sigma2 <- 1
+tau2 <- 5
+phi <- 3 / 0.5
+
+D <- as.matrix(rdist(coords))
+R <- exp(- phi * D)
+eta <- c(rmvn(1, rep(0,n), tau2 * R))
+y <- rnorm(n, X %*% beta + eta, sqrt(sigma2))
+```
+
+- Fit the stan model
+    - this can be a little slow for fitting relatively small data
+    - however, stan uses Hamiltonian Monte Carlo (HMC) which is highly efficient
+    - often can get by with much shorter MCMC chains (500-1000 samples -- monitor the effective sample size)
+    
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+    file = here::here("stan_models", "spatial-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X), coords = coords),
+    iter = 1000
+) 
+```
+
+- examine the output from the MCMC fit
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "sigma2", "tau2", "phi"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+
+## area plots of posterior
+mcmc_areas(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+
+## acf plots
+mcmc_acf(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+```
+
+
+### Example: Predictive process model in stan
+
+- use the same data from the previous example
+
+- Fit the stan model
+    - this can be a little slow for fitting relatively small data
+    - however, stan uses Hamiltonian Monte Carlo (HMC) which is highly efficient
+    - often can get by with much shorter MCMC chains (500-1000 samples -- monitor the effective sample size)
+    
+```{r}
+n_knots <- 5^2
+knots <- expand.grid(
+    seq(min(coords[, 1]), max(coords[, 1]), length.out = sqrt(n_knots)),
+    seq(min(coords[, 2]), max(coords[, 2]), length.out = sqrt(n_knots))
+)
+```
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+    file = here::here("stan_models", "predictive-process-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X), 
+                coords = coords, n_knots = n_knots, knots = knots),
+    iter = 1000
+)
+```
+
+- examine the output from the MCMC fit
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "sigma2", "tau2", "phi"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+
+## area plots of posterior
+mcmc_areas(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+
+## acf plots
+mcmc_acf(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
+```
+
+
+
+
+## stan Hints and tips
+
+- if there are issues, run one chain using `chains = 1` option in the `stan()` function
+- pay careful attention to the error messages -- once you learn to read these they can be very informative
+- if you have multiple chains that have widely different run times, that suggests there are issues with your model
+    - explore advanced stan diagnostics
+    - examples [here](https://mc-stan.org/bayesplot/articles/visual-mcmc-diagnostics.html), [here](https://mc-stan.org/rstan/reference/stan_plot_diagnostics.html), and [here](https://betanalpha.github.io/assets/case_studies/rstan_workflow.html). 
+    
+- [General stan best pracitices](https://github.com/stan-dev/stan/wiki/Stan-Best-Practices)

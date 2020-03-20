@@ -372,14 +372,3 @@ is non-seperable
 
 
 
-
-
-
-
-
-
-
-
-\begin{align*}
-a
-\end{align*}
