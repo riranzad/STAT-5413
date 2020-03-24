@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12 Day 12 | Notes for STAT 5413 - Spatial Statistics</title>
   <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12 Day 12 | Notes for STAT 5413 - Spatial Statistics" />
   <meta property="og:type" content="book" />
@@ -51,16 +51,16 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.12/datatables.js"></script>
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/datatables-binding-0.10/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -316,7 +316,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="25" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html"><i class="fa fa-check"></i><b>25</b> Day 25 – Scaling GPs for large data</a><ul>
 <li class="chapter" data-level="25.1" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#announcements-20"><i class="fa fa-check"></i><b>25.1</b> Announcements</a></li>
-<li class="chapter" data-level="25.2" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>25.2</b> Gaussian Predictive Process (spBayes package)</a></li>
+<li class="chapter" data-level="25.2" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#gaussian-predictive-process-spbayes-package"><i class="fa fa-check"></i><b>25.2</b> <span>Gaussian Predictive Process</span> (spBayes package)</a></li>
 <li class="chapter" data-level="25.3" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#sparse-matrix-routines"><i class="fa fa-check"></i><b>25.3</b> Sparse matrix routines</a></li>
 <li class="chapter" data-level="25.4" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#the-stochastic-pde-approach"><i class="fa fa-check"></i><b>25.4</b> The stochastic PDE approach</a></li>
 <li class="chapter" data-level="25.5" data-path="day-25-scaling-gps-for-large-data.html"><a href="day-25-scaling-gps-for-large-data.html#approximate-likelihood-methods"><i class="fa fa-check"></i><b>25.5</b> Approximate likelihood methods</a></li>
@@ -491,28 +491,27 @@ b_\beta &amp; = \frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \
 <div id="fitting-the-model" class="section level2">
 <h2><span class="header-section-number">12.5</span> Fitting the model</h2>
 <p>To estimate parameters from the regression model, we will consider the <em>iris</em> dataset and let <span class="math inline">\(y\)</span> be the <em>Petal.Width</em> variable and <span class="math inline">\(x\)</span> be the <em>Petal.Length</em> variable in <em>R</em>. The data with the fitted regression line using the <em>lm</em> function is shown below.</p>
-<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" data-line-number="1"><span class="kw">data</span>(iris)</a>
-<a class="sourceLine" id="cb229-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb229-3" data-line-number="3"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x=</span>Petal.Length, <span class="dt">y=</span>Petal.Width)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb229-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" data-line-number="1"><span class="kw">data</span>(iris)</a>
+<a class="sourceLine" id="cb228-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb228-3" data-line-number="3"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x=</span>Petal.Length, <span class="dt">y=</span>Petal.Width)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb228-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-113-1.png" width="1536" style="display: block; margin: auto;" /></p>
 <p>To start, we setup the variables and define default values for the prior constants.</p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" data-line-number="1">y &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Width</a>
-<a class="sourceLine" id="cb231-2" data-line-number="2">x &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Length</a>
-<a class="sourceLine" id="cb231-3" data-line-number="3"><span class="co">## these are the prior choices. </span></a>
-<a class="sourceLine" id="cb231-4" data-line-number="4"><span class="co">## We will talk later about how to choose prior distributions and values later</span></a>
-<a class="sourceLine" id="cb231-5" data-line-number="5">mu_mu &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb231-6" data-line-number="6">sigma2_mu &lt;-<span class="st"> </span><span class="dv">10000</span></a>
-<a class="sourceLine" id="cb231-7" data-line-number="7">mu_beta &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb231-8" data-line-number="8">sigma2_beta &lt;-<span class="st"> </span><span class="dv">10000</span></a>
-<a class="sourceLine" id="cb231-9" data-line-number="9">alpha_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="fl">0.01</span></a>
-<a class="sourceLine" id="cb231-10" data-line-number="10">beta_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="fl">0.01</span></a></code></pre></div>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" data-line-number="1">y &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Width</a>
+<a class="sourceLine" id="cb229-2" data-line-number="2">x &lt;-<span class="st"> </span>iris<span class="op">$</span>Petal.Length</a>
+<a class="sourceLine" id="cb229-3" data-line-number="3"><span class="co">## these are the prior choices. </span></a>
+<a class="sourceLine" id="cb229-4" data-line-number="4"><span class="co">## We will talk later about how to choose prior distributions and values later</span></a>
+<a class="sourceLine" id="cb229-5" data-line-number="5">mu_mu &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb229-6" data-line-number="6">sigma2_mu &lt;-<span class="st"> </span><span class="dv">10000</span></a>
+<a class="sourceLine" id="cb229-7" data-line-number="7">mu_beta &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb229-8" data-line-number="8">sigma2_beta &lt;-<span class="st"> </span><span class="dv">10000</span></a>
+<a class="sourceLine" id="cb229-9" data-line-number="9">alpha_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="fl">0.01</span></a>
+<a class="sourceLine" id="cb229-10" data-line-number="10">beta_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="fl">0.01</span></a></code></pre></div>
 <p>Next, we define empty vectors to store the MCMC output. We will run the MCMC sampler for <span class="math inline">\(K=5000\)</span> iterations.</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" data-line-number="1">K &lt;-<span class="st"> </span><span class="dv">5000</span></a>
-<a class="sourceLine" id="cb232-2" data-line-number="2">mu &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a>
-<a class="sourceLine" id="cb232-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a>
-<a class="sourceLine" id="cb232-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" data-line-number="1">K &lt;-<span class="st"> </span><span class="dv">5000</span></a>
+<a class="sourceLine" id="cb230-2" data-line-number="2">mu &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a>
+<a class="sourceLine" id="cb230-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a>
+<a class="sourceLine" id="cb230-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</a></code></pre></div>
 <p>The MCMC algorithm works by cycling through the marginal posterior distributions. The algorithm is called a Gibbs Sampler and we sample from</p>
 <p><span class="math display">\[\begin{align}
 \mu | \cdot &amp; \sim N(a_\mu^{-1}b_\mu, a_\mu^{-1}) \\
@@ -522,85 +521,85 @@ b_\beta &amp; = \frac{ \sum_{i=1}^N x_i \left( y_i - \mu \right) }{\sigma^2} + \
 in sequential order.</p>
 
 <p>In <em>R</em>, the Gibbs sampler is</p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a>
-<a class="sourceLine" id="cb233-2" data-line-number="2"><span class="co">## initialize </span></a>
-<a class="sourceLine" id="cb233-3" data-line-number="3">mu[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_mu, <span class="kw">sqrt</span>(sigma2_mu))</a>
-<a class="sourceLine" id="cb233-4" data-line-number="4">beta[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_beta, <span class="kw">sqrt</span>(sigma2_beta))</a>
-<a class="sourceLine" id="cb233-5" data-line-number="5"><span class="co">## note that sampling from an inverse gamma is the same as </span></a>
-<a class="sourceLine" id="cb233-6" data-line-number="6"><span class="co">## the inverse of a random gamma variable</span></a>
-<a class="sourceLine" id="cb233-7" data-line-number="7">sigma2[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">1</span>, alpha_<span class="dv">0</span>, beta_<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb233-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb233-9" data-line-number="9"><span class="co">## calculate the sample size</span></a>
-<a class="sourceLine" id="cb233-10" data-line-number="10">N &lt;-<span class="st"> </span><span class="kw">length</span>(y)</a>
-<a class="sourceLine" id="cb233-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb233-12" data-line-number="12"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</a>
-<a class="sourceLine" id="cb233-13" data-line-number="13">  </a>
-<a class="sourceLine" id="cb233-14" data-line-number="14">  <span class="co">## sample mu</span></a>
-<a class="sourceLine" id="cb233-15" data-line-number="15">  a_mu &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma2_mu</a>
-<a class="sourceLine" id="cb233-16" data-line-number="16">  b_mu &lt;-<span class="st"> </span><span class="kw">sum</span>(y <span class="op">-</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>beta[k<span class="dv">-1</span>]) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>mu_mu <span class="op">/</span><span class="st"> </span>sigma2_mu</a>
-<a class="sourceLine" id="cb233-17" data-line-number="17">  mu[k] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, b_mu <span class="op">/</span><span class="st"> </span>a_mu, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>a_mu))</a>
-<a class="sourceLine" id="cb233-18" data-line-number="18">  </a>
-<a class="sourceLine" id="cb233-19" data-line-number="19">  <span class="co">## sample beta</span></a>
-<a class="sourceLine" id="cb233-20" data-line-number="20">  a_beta &lt;-<span class="st"> </span><span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma2_beta</a>
-<a class="sourceLine" id="cb233-21" data-line-number="21">  b_beta &lt;-<span class="st"> </span><span class="kw">sum</span>(x<span class="op">*</span>(y <span class="op">-</span><span class="st"> </span>mu[k])) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>mu_beta <span class="op">/</span><span class="st"> </span>sigma2_beta</a>
-<a class="sourceLine" id="cb233-22" data-line-number="22">  beta[k] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, b_beta <span class="op">/</span><span class="st"> </span>a_beta, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>a_beta))</a>
-<a class="sourceLine" id="cb233-23" data-line-number="23">  </a>
-<a class="sourceLine" id="cb233-24" data-line-number="24">  <span class="co">## sample sigma2</span></a>
-<a class="sourceLine" id="cb233-25" data-line-number="25">  sigma2[k] &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">1</span>, alpha_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>N<span class="op">/</span><span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb233-26" data-line-number="26">                          beta_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((y <span class="op">-</span><span class="st"> </span>(mu[k] <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>beta[k]))<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb233-27" data-line-number="27">}</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a>
+<a class="sourceLine" id="cb231-2" data-line-number="2"><span class="co">## initialize </span></a>
+<a class="sourceLine" id="cb231-3" data-line-number="3">mu[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_mu, <span class="kw">sqrt</span>(sigma2_mu))</a>
+<a class="sourceLine" id="cb231-4" data-line-number="4">beta[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_beta, <span class="kw">sqrt</span>(sigma2_beta))</a>
+<a class="sourceLine" id="cb231-5" data-line-number="5"><span class="co">## note that sampling from an inverse gamma is the same as </span></a>
+<a class="sourceLine" id="cb231-6" data-line-number="6"><span class="co">## the inverse of a random gamma variable</span></a>
+<a class="sourceLine" id="cb231-7" data-line-number="7">sigma2[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">1</span>, alpha_<span class="dv">0</span>, beta_<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb231-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb231-9" data-line-number="9"><span class="co">## calculate the sample size</span></a>
+<a class="sourceLine" id="cb231-10" data-line-number="10">N &lt;-<span class="st"> </span><span class="kw">length</span>(y)</a>
+<a class="sourceLine" id="cb231-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb231-12" data-line-number="12"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>K) {</a>
+<a class="sourceLine" id="cb231-13" data-line-number="13">  </a>
+<a class="sourceLine" id="cb231-14" data-line-number="14">  <span class="co">## sample mu</span></a>
+<a class="sourceLine" id="cb231-15" data-line-number="15">  a_mu &lt;-<span class="st"> </span>N <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma2_mu</a>
+<a class="sourceLine" id="cb231-16" data-line-number="16">  b_mu &lt;-<span class="st"> </span><span class="kw">sum</span>(y <span class="op">-</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>beta[k<span class="dv">-1</span>]) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>mu_mu <span class="op">/</span><span class="st"> </span>sigma2_mu</a>
+<a class="sourceLine" id="cb231-17" data-line-number="17">  mu[k] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, b_mu <span class="op">/</span><span class="st"> </span>a_mu, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>a_mu))</a>
+<a class="sourceLine" id="cb231-18" data-line-number="18">  </a>
+<a class="sourceLine" id="cb231-19" data-line-number="19">  <span class="co">## sample beta</span></a>
+<a class="sourceLine" id="cb231-20" data-line-number="20">  a_beta &lt;-<span class="st"> </span><span class="kw">sum</span>(x<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>sigma2_beta</a>
+<a class="sourceLine" id="cb231-21" data-line-number="21">  b_beta &lt;-<span class="st"> </span><span class="kw">sum</span>(x<span class="op">*</span>(y <span class="op">-</span><span class="st"> </span>mu[k])) <span class="op">/</span><span class="st"> </span>sigma2[k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>mu_beta <span class="op">/</span><span class="st"> </span>sigma2_beta</a>
+<a class="sourceLine" id="cb231-22" data-line-number="22">  beta[k] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, b_beta <span class="op">/</span><span class="st"> </span>a_beta, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>a_beta))</a>
+<a class="sourceLine" id="cb231-23" data-line-number="23">  </a>
+<a class="sourceLine" id="cb231-24" data-line-number="24">  <span class="co">## sample sigma2</span></a>
+<a class="sourceLine" id="cb231-25" data-line-number="25">  sigma2[k] &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">1</span>, alpha_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>N<span class="op">/</span><span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb231-26" data-line-number="26">                          beta_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>((y <span class="op">-</span><span class="st"> </span>(mu[k] <span class="op">+</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>beta[k]))<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb231-27" data-line-number="27">}</a></code></pre></div>
 <p>To visualize the MCMC samples, we can plot what are called trace plots</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" data-line-number="1">samples &lt;-<span class="st"> </span><span class="kw">c</span>(mu, beta, sigma2)</a>
-<a class="sourceLine" id="cb234-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb234-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb234-4" data-line-number="4">  <span class="dt">sample =</span> <span class="dv">1</span><span class="op">:</span>K,</a>
-<a class="sourceLine" id="cb234-5" data-line-number="5">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;mu&quot;</span>, K), <span class="kw">rep</span>(<span class="st">&quot;beta&quot;</span>, K), <span class="kw">rep</span>(<span class="st">&quot;sigma2&quot;</span>, K))),</a>
-<a class="sourceLine" id="cb234-6" data-line-number="6">  <span class="dt">values =</span> samples)</a>
-<a class="sourceLine" id="cb234-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb234-8" data-line-number="8"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>sample, <span class="dt">y=</span>values, <span class="dt">group=</span>params)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb234-9" data-line-number="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>params, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" data-line-number="1">samples &lt;-<span class="st"> </span><span class="kw">c</span>(mu, beta, sigma2)</a>
+<a class="sourceLine" id="cb232-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb232-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb232-4" data-line-number="4">  <span class="dt">sample =</span> <span class="dv">1</span><span class="op">:</span>K,</a>
+<a class="sourceLine" id="cb232-5" data-line-number="5">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;mu&quot;</span>, K), <span class="kw">rep</span>(<span class="st">&quot;beta&quot;</span>, K), <span class="kw">rep</span>(<span class="st">&quot;sigma2&quot;</span>, K))),</a>
+<a class="sourceLine" id="cb232-6" data-line-number="6">  <span class="dt">values =</span> samples)</a>
+<a class="sourceLine" id="cb232-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb232-8" data-line-number="8"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>sample, <span class="dt">y=</span>values, <span class="dt">group=</span>params)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb232-9" data-line-number="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>params, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-117-1.png" width="1536" style="display: block; margin: auto;" /></p>
 <p>The plotting window is strongly influenced by the initial condition. Instead, we can throw away the first 1000 samples (called burn-in) and examine the remaining 4000 samples for each parameter.</p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" data-line-number="1">burnin &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb235-2" data-line-number="2"><span class="co">## subset the samples to only post-burnin</span></a>
-<a class="sourceLine" id="cb235-3" data-line-number="3">samples &lt;-<span class="st"> </span><span class="kw">cbind</span>(mu[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], beta[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], sigma2[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)])</a>
-<a class="sourceLine" id="cb235-4" data-line-number="4"><span class="kw">colnames</span>(samples) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)</a>
-<a class="sourceLine" id="cb235-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb235-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb235-7" data-line-number="7">  <span class="dt">sample =</span> (burnin<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>K,</a>
-<a class="sourceLine" id="cb235-8" data-line-number="8">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;mu&quot;</span>, K<span class="op">-</span>burnin), <span class="kw">rep</span>(<span class="st">&quot;beta&quot;</span>, K<span class="op">-</span>burnin),</a>
-<a class="sourceLine" id="cb235-9" data-line-number="9">                    <span class="kw">rep</span>(<span class="st">&quot;sigma2&quot;</span>, K<span class="op">-</span>burnin))),</a>
-<a class="sourceLine" id="cb235-10" data-line-number="10">  <span class="dt">values =</span> <span class="kw">c</span>(samples))</a>
-<a class="sourceLine" id="cb235-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb235-12" data-line-number="12"><span class="co">## fit the linear model using the MLE</span></a>
-<a class="sourceLine" id="cb235-13" data-line-number="13">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~</span>x)</a>
-<a class="sourceLine" id="cb235-14" data-line-number="14">df_lm &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb235-15" data-line-number="15">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)),</a>
-<a class="sourceLine" id="cb235-16" data-line-number="16">  <span class="dt">values =</span> <span class="kw">c</span>(fit<span class="op">$</span>coefficients[<span class="dv">1</span>], fit<span class="op">$</span>coefficients[<span class="dv">2</span>], <span class="kw">summary</span>(fit)<span class="op">$</span>sigma<span class="op">^</span><span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb235-17" data-line-number="17">  <span class="dt">row.names =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb235-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb235-19" data-line-number="19"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>sample, <span class="dt">y=</span>values, <span class="dt">group=</span>params)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb235-20" data-line-number="20"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>params, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb235-21" data-line-number="21"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data=</span>df_lm, <span class="kw">aes</span>(<span class="dt">yintercept=</span>values, <span class="dt">group=</span>params), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" data-line-number="1">burnin &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb233-2" data-line-number="2"><span class="co">## subset the samples to only post-burnin</span></a>
+<a class="sourceLine" id="cb233-3" data-line-number="3">samples &lt;-<span class="st"> </span><span class="kw">cbind</span>(mu[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], beta[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)], sigma2[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>burnin)])</a>
+<a class="sourceLine" id="cb233-4" data-line-number="4"><span class="kw">colnames</span>(samples) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)</a>
+<a class="sourceLine" id="cb233-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb233-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb233-7" data-line-number="7">  <span class="dt">sample =</span> (burnin<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>K,</a>
+<a class="sourceLine" id="cb233-8" data-line-number="8">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;mu&quot;</span>, K<span class="op">-</span>burnin), <span class="kw">rep</span>(<span class="st">&quot;beta&quot;</span>, K<span class="op">-</span>burnin),</a>
+<a class="sourceLine" id="cb233-9" data-line-number="9">                    <span class="kw">rep</span>(<span class="st">&quot;sigma2&quot;</span>, K<span class="op">-</span>burnin))),</a>
+<a class="sourceLine" id="cb233-10" data-line-number="10">  <span class="dt">values =</span> <span class="kw">c</span>(samples))</a>
+<a class="sourceLine" id="cb233-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb233-12" data-line-number="12"><span class="co">## fit the linear model using the MLE</span></a>
+<a class="sourceLine" id="cb233-13" data-line-number="13">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~</span>x)</a>
+<a class="sourceLine" id="cb233-14" data-line-number="14">df_lm &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb233-15" data-line-number="15">  <span class="dt">params =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>)),</a>
+<a class="sourceLine" id="cb233-16" data-line-number="16">  <span class="dt">values =</span> <span class="kw">c</span>(fit<span class="op">$</span>coefficients[<span class="dv">1</span>], fit<span class="op">$</span>coefficients[<span class="dv">2</span>], <span class="kw">summary</span>(fit)<span class="op">$</span>sigma<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb233-17" data-line-number="17">  <span class="dt">row.names =</span> <span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb233-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb233-19" data-line-number="19"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>sample, <span class="dt">y=</span>values, <span class="dt">group=</span>params)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb233-20" data-line-number="20"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>params, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb233-21" data-line-number="21"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data=</span>df_lm, <span class="kw">aes</span>(<span class="dt">yintercept=</span>values, <span class="dt">group=</span>params), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-118-1.png" width="1536" style="display: block; margin: auto;" /></p>
 <p>We can think of each of the <span class="math inline">\(k\)</span> iterations as a time step and can use methods from time series to examine the estimates. For example, the ACF for each parameter is</p>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb236-2" data-line-number="2"><span class="kw">acf</span>(samples[,<span class="st">&quot;mu&quot;</span>])</a>
-<a class="sourceLine" id="cb236-3" data-line-number="3"><span class="kw">pacf</span>(samples[, <span class="st">&quot;mu&quot;</span>])</a>
-<a class="sourceLine" id="cb236-4" data-line-number="4"><span class="kw">acf</span>(samples[,<span class="st">&quot;beta&quot;</span>])</a>
-<a class="sourceLine" id="cb236-5" data-line-number="5"><span class="kw">pacf</span>(samples[, <span class="st">&quot;beta&quot;</span>])</a>
-<a class="sourceLine" id="cb236-6" data-line-number="6"><span class="kw">acf</span>(samples[,<span class="st">&quot;sigma2&quot;</span>])</a>
-<a class="sourceLine" id="cb236-7" data-line-number="7"><span class="kw">pacf</span>(samples[, <span class="st">&quot;sigma2&quot;</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb234-2" data-line-number="2"><span class="kw">acf</span>(samples[,<span class="st">&quot;mu&quot;</span>])</a>
+<a class="sourceLine" id="cb234-3" data-line-number="3"><span class="kw">pacf</span>(samples[, <span class="st">&quot;mu&quot;</span>])</a>
+<a class="sourceLine" id="cb234-4" data-line-number="4"><span class="kw">acf</span>(samples[,<span class="st">&quot;beta&quot;</span>])</a>
+<a class="sourceLine" id="cb234-5" data-line-number="5"><span class="kw">pacf</span>(samples[, <span class="st">&quot;beta&quot;</span>])</a>
+<a class="sourceLine" id="cb234-6" data-line-number="6"><span class="kw">acf</span>(samples[,<span class="st">&quot;sigma2&quot;</span>])</a>
+<a class="sourceLine" id="cb234-7" data-line-number="7"><span class="kw">pacf</span>(samples[, <span class="st">&quot;sigma2&quot;</span>])</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-119-1.png" width="1536" style="display: block; margin: auto;" /></p>
 <p>We can also ask what is the effective sample size from our estimates (the equivalent sample size of uncorrelated samples)</p>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" data-line-number="1"><span class="kw">library</span>(coda)</a>
-<a class="sourceLine" id="cb237-2" data-line-number="2"><span class="kw">effectiveSize</span>(samples)</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" data-line-number="1"><span class="kw">library</span>(coda)</a>
+<a class="sourceLine" id="cb235-2" data-line-number="2"><span class="kw">effectiveSize</span>(samples)</a></code></pre></div>
 <pre><code>##     mu   beta sigma2 
 ##  449.7  427.7 4000.0</code></pre>
 <p>Because the samples of <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\sigma^2\)</span> obtained from the Gibbs sampler are from probability distributions, we can calculate any quantity of interest directly. For example, the estimate for the mean of the parameters is simply the mean of the MCMC samples</p>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" data-line-number="1"><span class="kw">colMeans</span>(samples)</a>
-<a class="sourceLine" id="cb239-2" data-line-number="2"><span class="kw">apply</span>(samples, <span class="dv">2</span>, sd)</a>
-<a class="sourceLine" id="cb239-3" data-line-number="3"><span class="kw">apply</span>(samples, <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" data-line-number="1"><span class="kw">colMeans</span>(samples)</a>
+<a class="sourceLine" id="cb237-2" data-line-number="2"><span class="kw">apply</span>(samples, <span class="dv">2</span>, sd)</a>
+<a class="sourceLine" id="cb237-3" data-line-number="3"><span class="kw">apply</span>(samples, <span class="dv">2</span>, quantile, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
 <pre><code>##       mu     beta   sigma2 
 ## -0.36411  0.41601  0.04331 
 ##       mu     beta   sigma2 
@@ -609,7 +608,7 @@ in sequential order.</p>
 ## 2.5%  -0.4438 0.3972 0.03459
 ## 97.5% -0.2859 0.4357 0.05456</code></pre>
 <p>and we can compare these estimates to those from the MLE</p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" data-line-number="1"><span class="kw">summary</span>(fit)</a></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" data-line-number="1"><span class="kw">summary</span>(fit)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ x)
@@ -630,59 +629,59 @@ in sequential order.</p>
 ## Multiple R-squared:  0.927,  Adjusted R-squared:  0.927 
 ## F-statistic: 1.88e+03 on 1 and 148 DF,  p-value: &lt;2e-16</code></pre>
 <p>and the 95% credible interval for each parameter is simply the 2.5% and 97.5% quantiles of the samples.</p>
-<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" data-line-number="1"><span class="kw">apply</span>(samples, <span class="dv">2</span>, quantile, <span class="dt">prob=</span> <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" data-line-number="1"><span class="kw">apply</span>(samples, <span class="dv">2</span>, quantile, <span class="dt">prob=</span> <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</a></code></pre></div>
 <pre><code>##            mu   beta  sigma2
 ## 2.5%  -0.4438 0.3972 0.03459
 ## 97.5% -0.2859 0.4357 0.05456</code></pre>
 <p>We can compare these to the esimates from the MLE</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" data-line-number="1"><span class="kw">confint</span>(fit)</a></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" data-line-number="1"><span class="kw">confint</span>(fit)</a></code></pre></div>
 <pre><code>##               2.5 %  97.5 %
 ## (Intercept) -0.4417 -0.2845
 ## x            0.3968  0.4347</code></pre>
 <p>We can also plot the posterior distribution</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" data-line-number="1">n_pred &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb247-2" data-line-number="2">x_pred &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(iris<span class="op">$</span>Petal.Length), <span class="kw">max</span>(iris<span class="op">$</span>Petal.Length), <span class="dt">length.out =</span> n_pred)</a>
-<a class="sourceLine" id="cb247-3" data-line-number="3">y_hat &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>n_pred, <span class="cf">function</span>(i) { samples[, <span class="st">&quot;mu&quot;</span>] <span class="op">+</span><span class="st"> </span>x_pred[i] <span class="op">*</span><span class="st"> </span>samples[, <span class="st">&quot;beta&quot;</span>] }))</a>
-<a class="sourceLine" id="cb247-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb247-5" data-line-number="5">df_mcmc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb247-6" data-line-number="6">  <span class="dt">x         =</span> x_pred,</a>
-<a class="sourceLine" id="cb247-7" data-line-number="7">  <span class="dt">y_hat     =</span> <span class="kw">c</span>(y_hat),</a>
-<a class="sourceLine" id="cb247-8" data-line-number="8">  <span class="dt">iteration =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(y_hat), <span class="dt">each =</span> <span class="kw">nrow</span>(y_hat))</a>
-<a class="sourceLine" id="cb247-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb247-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb247-11" data-line-number="11"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>))) {</a>
-<a class="sourceLine" id="cb247-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb247-13" data-line-number="13">    <span class="kw">png</span>(<span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>), </a>
-<a class="sourceLine" id="cb247-14" data-line-number="14">        <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">height =</span> <span class="dv">9</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>, <span class="dt">res =</span> <span class="dv">400</span>)</a>
-<a class="sourceLine" id="cb247-15" data-line-number="15">    <span class="kw">print</span>(</a>
-<a class="sourceLine" id="cb247-16" data-line-number="16">        <span class="kw">ggplot</span>(<span class="dt">data =</span> iris, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Width)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb247-17" data-line-number="17"><span class="st">            </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb247-18" data-line-number="18"><span class="st">            </span><span class="kw">geom_line</span>(<span class="dt">data =</span> df_mcmc,</a>
-<a class="sourceLine" id="cb247-19" data-line-number="19">                      <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y_hat, <span class="dt">group =</span> iteration), </a>
-<a class="sourceLine" id="cb247-20" data-line-number="20">                      <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb247-21" data-line-number="21"><span class="st">            </span><span class="kw">ggtitle</span>(<span class="st">&quot;Posterior Distribution of mean response&quot;</span>)</a>
-<a class="sourceLine" id="cb247-22" data-line-number="22">    )</a>
-<a class="sourceLine" id="cb247-23" data-line-number="23">    <span class="kw">dev.off</span>()</a>
-<a class="sourceLine" id="cb247-24" data-line-number="24">} </a></code></pre></div>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb248-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" data-line-number="1">n_pred &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb245-2" data-line-number="2">x_pred &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(iris<span class="op">$</span>Petal.Length), <span class="kw">max</span>(iris<span class="op">$</span>Petal.Length), <span class="dt">length.out =</span> n_pred)</a>
+<a class="sourceLine" id="cb245-3" data-line-number="3">y_hat &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>n_pred, <span class="cf">function</span>(i) { samples[, <span class="st">&quot;mu&quot;</span>] <span class="op">+</span><span class="st"> </span>x_pred[i] <span class="op">*</span><span class="st"> </span>samples[, <span class="st">&quot;beta&quot;</span>] }))</a>
+<a class="sourceLine" id="cb245-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb245-5" data-line-number="5">df_mcmc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb245-6" data-line-number="6">  <span class="dt">x         =</span> x_pred,</a>
+<a class="sourceLine" id="cb245-7" data-line-number="7">  <span class="dt">y_hat     =</span> <span class="kw">c</span>(y_hat),</a>
+<a class="sourceLine" id="cb245-8" data-line-number="8">  <span class="dt">iteration =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(y_hat), <span class="dt">each =</span> <span class="kw">nrow</span>(y_hat))</a>
+<a class="sourceLine" id="cb245-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb245-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb245-11" data-line-number="11"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>))) {</a>
+<a class="sourceLine" id="cb245-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb245-13" data-line-number="13">    <span class="kw">png</span>(<span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>), </a>
+<a class="sourceLine" id="cb245-14" data-line-number="14">        <span class="dt">width =</span> <span class="dv">16</span>, <span class="dt">height =</span> <span class="dv">9</span>, <span class="dt">units =</span> <span class="st">&quot;in&quot;</span>, <span class="dt">res =</span> <span class="dv">400</span>)</a>
+<a class="sourceLine" id="cb245-15" data-line-number="15">    <span class="kw">print</span>(</a>
+<a class="sourceLine" id="cb245-16" data-line-number="16">        <span class="kw">ggplot</span>(<span class="dt">data =</span> iris, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Width)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb245-17" data-line-number="17"><span class="st">            </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb245-18" data-line-number="18"><span class="st">            </span><span class="kw">geom_line</span>(<span class="dt">data =</span> df_mcmc,</a>
+<a class="sourceLine" id="cb245-19" data-line-number="19">                      <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y_hat, <span class="dt">group =</span> iteration), </a>
+<a class="sourceLine" id="cb245-20" data-line-number="20">                      <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb245-21" data-line-number="21"><span class="st">            </span><span class="kw">ggtitle</span>(<span class="st">&quot;Posterior Distribution of mean response&quot;</span>)</a>
+<a class="sourceLine" id="cb245-22" data-line-number="22">    )</a>
+<a class="sourceLine" id="cb245-23" data-line-number="23">    <span class="kw">dev.off</span>()</a>
+<a class="sourceLine" id="cb245-24" data-line-number="24">} </a></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb246-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;posterior-linear-regression.png&quot;</span>))</a></code></pre></div>
 <p><img src="images/posterior-linear-regression.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive distribution</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" data-line-number="1">n_pred &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb249-2" data-line-number="2">x_pred &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(iris<span class="op">$</span>Petal.Length), <span class="kw">max</span>(iris<span class="op">$</span>Petal.Length), <span class="dt">length.out =</span> n_pred)</a>
-<a class="sourceLine" id="cb249-3" data-line-number="3">y_tilde &lt;-<span class="st"> </span><span class="kw">t</span>(samples[, <span class="st">&quot;mu&quot;</span>] <span class="op">+</span><span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>n_pred, <span class="cf">function</span>(i) { x_pred[i] <span class="op">*</span><span class="st"> </span>samples[, <span class="st">&quot;beta&quot;</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(samples[, <span class="st">&quot;sigma2&quot;</span>]), <span class="dv">0</span>, <span class="kw">sqrt</span>(samples[, <span class="st">&quot;sigma2&quot;</span>]))}))</a>
-<a class="sourceLine" id="cb249-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb249-5" data-line-number="5">df_mcmc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb249-6" data-line-number="6">  <span class="dt">x        =</span> x_pred,</a>
-<a class="sourceLine" id="cb249-7" data-line-number="7">  <span class="dt">y_tilde  =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, mean),</a>
-<a class="sourceLine" id="cb249-8" data-line-number="8">  <span class="dt">lower_95 =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, quantile, <span class="dt">prob =</span> <span class="fl">0.025</span>),</a>
-<a class="sourceLine" id="cb249-9" data-line-number="9">  <span class="dt">upper_95 =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, quantile, <span class="dt">prob =</span> <span class="fl">0.975</span>)</a>
-<a class="sourceLine" id="cb249-10" data-line-number="10">)</a>
-<a class="sourceLine" id="cb249-11" data-line-number="11"><span class="kw">ggplot</span>(<span class="dt">data =</span> iris, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Width)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb249-12" data-line-number="12"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb249-13" data-line-number="13"><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">data =</span> df_mcmc, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y_tilde), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb249-14" data-line-number="14"><span class="st">    </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> df_mcmc, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">ymin =</span> lower_<span class="dv">95</span>, <span class="dt">ymax =</span> upper_<span class="dv">95</span>),</a>
-<a class="sourceLine" id="cb249-15" data-line-number="15">                <span class="dt">fill =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb249-16" data-line-number="16"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Posterior predictive distribution&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" data-line-number="1">n_pred &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb247-2" data-line-number="2">x_pred &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(iris<span class="op">$</span>Petal.Length), <span class="kw">max</span>(iris<span class="op">$</span>Petal.Length), <span class="dt">length.out =</span> n_pred)</a>
+<a class="sourceLine" id="cb247-3" data-line-number="3">y_tilde &lt;-<span class="st"> </span><span class="kw">t</span>(samples[, <span class="st">&quot;mu&quot;</span>] <span class="op">+</span><span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>n_pred, <span class="cf">function</span>(i) { x_pred[i] <span class="op">*</span><span class="st"> </span>samples[, <span class="st">&quot;beta&quot;</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(samples[, <span class="st">&quot;sigma2&quot;</span>]), <span class="dv">0</span>, <span class="kw">sqrt</span>(samples[, <span class="st">&quot;sigma2&quot;</span>]))}))</a>
+<a class="sourceLine" id="cb247-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb247-5" data-line-number="5">df_mcmc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb247-6" data-line-number="6">  <span class="dt">x        =</span> x_pred,</a>
+<a class="sourceLine" id="cb247-7" data-line-number="7">  <span class="dt">y_tilde  =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, mean),</a>
+<a class="sourceLine" id="cb247-8" data-line-number="8">  <span class="dt">lower_95 =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, quantile, <span class="dt">prob =</span> <span class="fl">0.025</span>),</a>
+<a class="sourceLine" id="cb247-9" data-line-number="9">  <span class="dt">upper_95 =</span> <span class="kw">apply</span>(y_tilde, <span class="dv">1</span>, quantile, <span class="dt">prob =</span> <span class="fl">0.975</span>)</a>
+<a class="sourceLine" id="cb247-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb247-11" data-line-number="11"><span class="kw">ggplot</span>(<span class="dt">data =</span> iris, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Width)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb247-12" data-line-number="12"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb247-13" data-line-number="13"><span class="st">    </span><span class="kw">geom_line</span>(<span class="dt">data =</span> df_mcmc, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y_tilde), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb247-14" data-line-number="14"><span class="st">    </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> df_mcmc, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">ymin =</span> lower_<span class="dv">95</span>, <span class="dt">ymax =</span> upper_<span class="dv">95</span>),</a>
+<a class="sourceLine" id="cb247-15" data-line-number="15">                <span class="dt">fill =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb247-16" data-line-number="16"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Posterior predictive distribution&quot;</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-127-1.png" width="1536" style="display: block; margin: auto;" /></p>
 <div id="general-recommendations-for-writing-mcmc-software" class="section level3">
 <h3><span class="header-section-number">12.5.1</span> General recommendations for writing MCMC software</h3>

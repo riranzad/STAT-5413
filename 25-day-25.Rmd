@@ -14,13 +14,13 @@ library(spNNGP)
 
 
 
-## Gaussian Predictive Process (spBayes package)
+## [Gaussian Predictive Process](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2741335/pdf/nihms127612.pdf) (spBayes package)
 
 - projection idea
     
 - the predictive (child) process has the same covariance function $C(\cdot | \boldsymbol{\theta})$ as the desired parent process
     
-- optimal predictor of dimension $M < < n$ given the covariance function $C(\cdot | \boldsymbol{\theta})$
+- [optimal predictor of dimension $M < < n$](https://www.researchgate.net/profile/Lehel_Csato/publication/40498273_Gaussian_Processes_-_Iterative_Sparse_Approximations/links/0c960523af9bf61526000000/Gaussian-Processes-Iterative-Sparse-Approximations.pdf) given the covariance function $C(\cdot | \boldsymbol{\theta})$ 
     
 - Define a set of knots $\boldsymbol{\kappa} = (\kappa_1, \ldots, \kappa_M)'$
 
@@ -81,6 +81,8 @@ which requires inversion of a diagonal $n \times n$ matrix $\sigma^2 \mathbf{I}$
 - disadvantages
 
     - fits are overly smooth (unless $M \approx n$ or the process itself is very smooth)
+    
+    - variance estimates are too small [modified predictive process]([https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2743161/pdf/nihms128321.pdf)
     
 ```{r}
 ## Make some data

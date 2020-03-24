@@ -130,9 +130,18 @@ ggcorr(data = NULL, cor_matrix = cov2cor(Sigma_p), label = TRUE) +
 - Note: we need to evaluate the Cholesky of $\boldsymbol{\Sigma}_p \otimes \mathbf{R}_n$ for both simulation and estimation of the process. However, this is enabled computationally by noticing that
 
 \begin{align*}
-\boldsymbol{\Sigma}_p \otimes \mathbf{R}_n & \mathbf{L}\mathbf{L}' \\
-& = \mathbf{L}_n \otimes \mathbf{L}_p
+\boldsymbol{\Sigma} & = \boldsymbol{\Sigma}_p \otimes \mathbf{R}_n \\
+& = \mathbf{L} \mathbf{L}' \\
 \end{align*}
+
+is the Cholesky decomposition which is $O(n^3 p^3)$. If we take the Cholesky decomposition of the individual component matrices $\boldsymbol{\Sigma}_p = \mathbf{L}_p \mathbf{L}_p'$ and $\mathbf{R}_n = \mathbf{L}_n \mathbf{L}_p '$ which are $O(p^3)$ and $O(n^3)$, respectively. Then, we can use the fact that Kronecker product of the Cholesky decomposition of the matrices is the Cholesky of the Kronecker product
+
+\begin{align*}
+\mathbf{L}_p \otimes \mathbf{L}_n & = \mathbf{L} 
+\end{align*}
+
+to greatly reduce computation time.
+
 
 - This is commonly called "tensor products" or "tensor multiplication" -- Google's Tensorflow
 
@@ -215,14 +224,14 @@ where $\varepsilon(\mathbf{s}) \stackrel{iid}{\sim} N(0, \sigma^2)$
 - The joint model is 
 
 \begin{align*}
-\mathbf{y}(\mathbf{s}) = \begin{pmatrix} y_1(\mathbf{s}) \\ \vdots \\ y_p(\mathbf{s}) \sim N(\mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{D}) \end{pmatrix},
+\mathbf{y}(\mathbf{s}) = \begin{pmatrix} y_1(\mathbf{s}) \\ \vdots \\ y_p(\mathbf{s}) \end{pmatrix} & \sim N(\mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{D}) ,
 \end{align*}
 
-where $\mathbf{A} = \begin{pmatrix} \mathcal{R}^+ & 0 & \cdots & 0\\ \mathcal{R} & \mathcal{R}^+ & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ \mathcal{R} & \cdots & \mathcal{R} & \mathcal{R} \end{pmatrix}$ is a $p \times L$ lower triangular matrix with positive diagonal elements ($\mathcal{R}^+$) and unconstrained values in the lower triangle ($\mathcal{R}$). These requirements are to ensure the model is identifiable. The $\mathbf{f}(\mathbf{s}) = (f_1(\mathbf{s}), \ldots, f_p(\mathbf{s}))'$ is a $p$-vector of spatially correlated latent factors, and $\mathbf{D} = \begin{pmatrix} \sigma^2_{11} & 0 & \cdots & 0\\ 0 & \sigma^2_{22} & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots  & \sigma^2_{pp} \end{pmatrix}$ is a diagonal matrix with positive diagonals representing the nugget variances for each of the $p$ variables
+where $\mathbf{A} = \begin{pmatrix} \mathcal{R}^+ & 0 & \cdots & 0\\ \mathcal{R} & \mathcal{R}^+ & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ \mathcal{R} & \cdots & \mathcal{R} & \mathcal{R}^+  \\ \vdots & \cdots & \vdots & \vdots \\ \mathcal{R} & \cdots & \mathcal{R} & \mathcal{R} \end{pmatrix}$ is a $p \times L$ lower triangular matrix with positive diagonal elements ($\mathcal{R}^+$) and unconstrained values in the lower triangle ($\mathcal{R}$). These requirements are to ensure the model is identifiable. The $\mathbf{f}(\mathbf{s}) = (f_1(\mathbf{s}), \ldots, f_L(\mathbf{s}))'$ is a $L$-vector of spatially correlated latent factors, and $\mathbf{D} = \begin{pmatrix} \sigma^2_{11} & 0 & \cdots & 0\\ 0 & \sigma^2_{22} & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots  & \sigma^2_{pp} \end{pmatrix}$ is a diagonal matrix with positive diagonals representing the nugget variances for each of the $p$ variables
 
 
 
-- Seperable model: If the latent processes $f_i$ are $iid$ GPs with mean zero, variance 1 and correlation $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta})$, then the covariance is
+- Seperable model: If the latent processes $f_\ell$ are $iid$ GPs with mean zero, variance 1 and correlation $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta})$, then the covariance is
 
 \begin{align*}
 Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
@@ -345,7 +354,7 @@ p1 / p2 / p3
 ```
 
 
-- Non-seperable model: If the latent processes $f_i$ are $iid$ GPs with mean zero, variance 1 but the latent process $j$ has correlation function $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_j)$, then the covariance is
+- Non-seperable model: If the latent processes $f_\ell$ are $iid$ GPs with mean zero, variance 1 but the latent process $j$ has correlation function $C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_\ell)$, then the covariance is
 
 \begin{align*}
 Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
