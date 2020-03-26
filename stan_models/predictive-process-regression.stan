@@ -65,12 +65,6 @@ transformed parameters {
   mu = X * beta;
   
   // latent GP covariance matrix at the knots
-  // for (i in 1:n_knots) {
-  //   for (j in 1:(i-1)) {
-  //     Sigma_star[i, j] = tau2 * exp(- D_star[i, j] / phi);
-  //     Sigma_star[j, i] = Sigma_star[i, j];
-  //   }
-  // }
   Sigma_star = tau2 * exp(-D_star / phi);
   Sigma_star_inv = inverse(Sigma_star);
 
