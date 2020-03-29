@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 _bookdown_files/STAT-5413_cache/
+results/*
+stan_models/*.rds

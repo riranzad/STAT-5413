@@ -2,3 +2,32 @@
 
 ## Announcements
 
+## Change of Spatial Support
+
+- Also called the ecological fallcy
+
+- Often data occur in continuous space, but are summarized in higher order summaries
+
+    - example: lightning strikes over a landscape occur in continuous space, could summarize these to strikes per county.
+    
+    - example: temperature occurs at every point, global climate models operate on gridcells (spatial averages)
+    
+**draw picture**
+
+- sometimes data occur over different scales
+
+    - socio-economic and other data are collected by the US Census on the block, block-group, and tract scale
+    
+    - infection data (coronavirus, flu) is often reported at the county level
+    
+    - need to reconcile data that occur over different scales (census tract vs. county) and may be potentially mis-aligned
+
+- Example: Gerrymandering
+
+    - [Interactive Gerrymandering map](https://projects.fivethirtyeight.com/redistricting-maps/#Compact)
+
+        - [details on the mapping](https://fivethirtyeight.com/features/hating-gerrymandering-is-easy-fixing-it-is-harder/)
+    
+    
+    
+    

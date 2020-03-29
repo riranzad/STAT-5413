@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>24 Day 24 – Scaling GPs for large data | Notes for STAT 5413 - Spatial Statistics</title>
   <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="24 Day 24 – Scaling GPs for large data | Notes for STAT 5413 - Spatial Statistics" />
   <meta property="og:type" content="book" />
@@ -51,16 +51,16 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.10/datatables.js"></script>
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
+<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -345,18 +345,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
+<li class="chapter" data-level="29.2" data-path="day-29.html"><a href="day-29.html#areal-data-1"><i class="fa fa-check"></i><b>29.2</b> Areal Data</a></li>
+<li class="chapter" data-level="29.3" data-path="day-29.html"><a href="day-29.html#gaussian-markov-random-fields-gmrfs"><i class="fa fa-check"></i><b>29.3</b> Gaussian Markov random fields (GMRFs)</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="day-29.html"><a href="day-29.html#example-2"><i class="fa fa-check"></i><b>29.3.1</b> Example:</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="day-29.html"><a href="day-29.html#conditional-autoregressive-models-car-models"><i class="fa fa-check"></i><b>29.4</b> Conditional Autoregressive models (CAR models)</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="day-29.html"><a href="day-29.html#models-built-based-on-conditional-distributions-y_i-mathbfy_-i"><i class="fa fa-check"></i><b>29.4.1</b> Models built based on conditional distributions: <span class="math inline">\(y_i | \mathbf{y}_{-i}\)</span></a></li>
+<li class="chapter" data-level="29.4.2" data-path="day-29.html"><a href="day-29.html#simultaneous-autoregressive-sar-model"><i class="fa fa-check"></i><b>29.4.2</b> Simultaneous autoregressive (SAR) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
+<li class="chapter" data-level="30.2" data-path="day-30.html"><a href="day-30.html#change-of-spatial-support"><i class="fa fa-check"></i><b>30.2</b> Change of Spatial Support</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
+<li class="chapter" data-level="31.2" data-path="day-31.html"><a href="day-31.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>31.2</b> Generalized (non-Gaussian) spatial models</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -411,18 +422,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-24-scaling-gps-for-large-data" class="section level1">
 <h1><span class="header-section-number">24</span> Day 24 – Scaling GPs for large data</h1>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb353-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb353-2" data-line-number="2"><span class="kw">library</span>(mvnfast)</a>
-<a class="sourceLine" id="cb353-3" data-line-number="3"><span class="kw">library</span>(fields)</a>
-<a class="sourceLine" id="cb353-4" data-line-number="4"><span class="kw">library</span>(spBayes)</a>
-<a class="sourceLine" id="cb353-5" data-line-number="5"><span class="kw">library</span>(spNNGP)</a></code></pre></div>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb350-2" data-line-number="2"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb350-3" data-line-number="3"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb350-4" data-line-number="4"><span class="kw">library</span>(spBayes)</a>
+<a class="sourceLine" id="cb350-5" data-line-number="5"><span class="kw">library</span>(spNNGP)</a></code></pre></div>
+<pre><code>## Loading required package: Formula</code></pre>
 <pre><code>## Loading required package: RANN</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;spNNGP&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:spBayes&#39;:
 ## 
 ##     spDiag, spPredict</code></pre>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb357-1" data-line-number="1"><span class="kw">library</span>(LatticeKrig)</a></code></pre></div>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" data-line-number="1"><span class="kw">library</span>(LatticeKrig)</a></code></pre></div>
 <div id="announcements-19" class="section level2">
 <h2><span class="header-section-number">24.1</span> Announcements</h2>
 <ul>
@@ -492,31 +504,31 @@ y(\mathbf{s}) &amp; = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \sum_{\ell=1}^
 <ul>
 <li><a href="https://www.tandfonline.com/doi/pdf/10.1080/10618600.2014.914946">Multiresolution Gaussian Process Model for the Analysis of Large Spatial Datasets</a></li>
 </ul>
-<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb358-1" data-line-number="1"><span class="co">## Make some data</span></a>
-<a class="sourceLine" id="cb358-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb358-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb358-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb358-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb358-6" data-line-number="6">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb358-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb358-8" data-line-number="8">beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb358-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb358-10" data-line-number="10">sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb358-11" data-line-number="11">tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb358-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb358-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb358-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
-<a class="sourceLine" id="cb358-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</a>
-<a class="sourceLine" id="cb358-16" data-line-number="16">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq <span class="op">*</span><span class="st"> </span>R))</a>
-<a class="sourceLine" id="cb358-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</a>
-<a class="sourceLine" id="cb358-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb358-19" data-line-number="19"><span class="co">## x are the spatial locations, y is the response variable, Z are the fixed effects</span></a>
-<a class="sourceLine" id="cb358-20" data-line-number="20"><span class="co">## note that X has an intercept term that needs to be removed</span></a>
-<a class="sourceLine" id="cb358-21" data-line-number="21">fit &lt;-<span class="st"> </span><span class="kw">LatticeKrig</span>(<span class="dt">x =</span> coords, <span class="dt">y =</span> y, <span class="dt">Z =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb358-22" data-line-number="22"><span class="kw">summary</span>(fit)</a>
-<a class="sourceLine" id="cb358-23" data-line-number="23">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit)</a>
-<a class="sourceLine" id="cb358-24" data-line-number="24"><span class="kw">plot</span>(y, preds)</a>
-<a class="sourceLine" id="cb358-25" data-line-number="25"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb356-1" data-line-number="1"><span class="co">## Make some data</span></a>
+<a class="sourceLine" id="cb356-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb356-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">1000</span></a>
+<a class="sourceLine" id="cb356-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb356-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb356-6" data-line-number="6">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb356-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb356-8" data-line-number="8">beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb356-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb356-10" data-line-number="10">sigma.sq &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb356-11" data-line-number="11">tau.sq &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb356-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb356-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb356-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
+<a class="sourceLine" id="cb356-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>phi <span class="op">*</span><span class="st"> </span>D)</a>
+<a class="sourceLine" id="cb356-16" data-line-number="16">w &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), sigma.sq <span class="op">*</span><span class="st"> </span>R))</a>
+<a class="sourceLine" id="cb356-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>w, <span class="kw">sqrt</span>(tau.sq))</a>
+<a class="sourceLine" id="cb356-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb356-19" data-line-number="19"><span class="co">## x are the spatial locations, y is the response variable, Z are the fixed effects</span></a>
+<a class="sourceLine" id="cb356-20" data-line-number="20"><span class="co">## note that X has an intercept term that needs to be removed</span></a>
+<a class="sourceLine" id="cb356-21" data-line-number="21">fit &lt;-<span class="st"> </span><span class="kw">LatticeKrig</span>(<span class="dt">x =</span> coords, <span class="dt">y =</span> y, <span class="dt">Z =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb356-22" data-line-number="22"><span class="kw">summary</span>(fit)</a>
+<a class="sourceLine" id="cb356-23" data-line-number="23">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(fit)</a>
+<a class="sourceLine" id="cb356-24" data-line-number="24"><span class="kw">plot</span>(y, preds)</a>
+<a class="sourceLine" id="cb356-25" data-line-number="25"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <pre><code>## $call
 ## LatticeKrig(x = coords, y = y, Z = X[, 2])
 ## 
@@ -541,14 +553,14 @@ y(\mathbf{s}) &amp; = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \sum_{\ell=1}^
 ## 
 ## $timingLKrig
 ##          user.self sys.self elapsed
-## timewX       2.629    0.018   2.654
-## timeQ        0.011    0.001   0.012
-## timeM        0.059    0.004   0.063
-## timeChol     0.063    0.009   0.071
-## timeCoef     0.029    0.002   0.034
-## timeLike     0.007    0.001   0.008
-## timeTrA      0.077    0.004   0.084
-##              2.875    0.039   2.926
+## timewX       1.924    0.011   1.968
+## timeQ        0.009    0.001   0.009
+## timeM        0.040    0.000   0.042
+## timeChol     0.042    0.001   0.043
+## timeCoef     0.013    0.001   0.013
+## timeLike     0.003    0.000   0.004
+## timeTrA      0.050    0.001   0.051
+##              2.081    0.015   2.130
 ## 
 ## $LKinfo
 ## Classes for this object are:  LKinfo LKRectangle

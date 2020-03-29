@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Day 2 | Notes for STAT 5413 - Spatial Statistics</title>
   <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Day 2 | Notes for STAT 5413 - Spatial Statistics" />
   <meta property="og:type" content="book" />
@@ -51,16 +51,16 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.10/datatables.js"></script>
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
-<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.1/plotly.js"></script>
+<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-1.49.4/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-1.49.4/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -345,18 +345,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
+<li class="chapter" data-level="29.2" data-path="day-29.html"><a href="day-29.html#areal-data-1"><i class="fa fa-check"></i><b>29.2</b> Areal Data</a></li>
+<li class="chapter" data-level="29.3" data-path="day-29.html"><a href="day-29.html#gaussian-markov-random-fields-gmrfs"><i class="fa fa-check"></i><b>29.3</b> Gaussian Markov random fields (GMRFs)</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="day-29.html"><a href="day-29.html#example-2"><i class="fa fa-check"></i><b>29.3.1</b> Example:</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="day-29.html"><a href="day-29.html#conditional-autoregressive-models-car-models"><i class="fa fa-check"></i><b>29.4</b> Conditional Autoregressive models (CAR models)</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="day-29.html"><a href="day-29.html#models-built-based-on-conditional-distributions-y_i-mathbfy_-i"><i class="fa fa-check"></i><b>29.4.1</b> Models built based on conditional distributions: <span class="math inline">\(y_i | \mathbf{y}_{-i}\)</span></a></li>
+<li class="chapter" data-level="29.4.2" data-path="day-29.html"><a href="day-29.html#simultaneous-autoregressive-sar-model"><i class="fa fa-check"></i><b>29.4.2</b> Simultaneous autoregressive (SAR) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
+<li class="chapter" data-level="30.2" data-path="day-30.html"><a href="day-30.html#change-of-spatial-support"><i class="fa fa-check"></i><b>30.2</b> Change of Spatial Support</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
+<li class="chapter" data-level="31.2" data-path="day-31.html"><a href="day-31.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>31.2</b> Generalized (non-Gaussian) spatial models</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -411,14 +422,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-2" class="section level1">
 <h1><span class="header-section-number">2</span> Day 2</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(here)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">library</span>(spatstat)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">library</span>(here)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">library</span>(sp)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">library</span>(spatstat)</a></code></pre></div>
 <div id="spatial-data" class="section level2">
 <h2><span class="header-section-number">2.1</span> Spatial Data</h2>
 <p>All data occur at some location is space and time. For know we focus on spatial analyses and will later extend this to spatio-temporal analyses. Let <span class="math inline">\(\mathcal{D}\)</span> represent the spatial domain and let <span class="math inline">\(\mathbf{s}\)</span> be a spatial location. In general, we will let <span class="math inline">\(\mathcal{A} \subset \mathcal{D}\)</span> be a subdomain of the spatial region of <span class="math inline">\(\mathbf{D}\)</span>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatial-domain.jpg&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatial-domain.jpg&quot;</span>))</a></code></pre></div>
 <p><img src="images/spatial-domain.jpg" width="1134" /></p>
 </div>
 <div id="types-of-spatial-data" class="section level2">
@@ -431,8 +442,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>continuous support</li>
 <li>examples: temperature, precipitation</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;NOAA_df_1990&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">glimpse</span>(NOAA_df_<span class="dv">1990</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;NOAA_df_1990&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">glimpse</span>(NOAA_df_<span class="dv">1990</span>)</a></code></pre></div>
 <pre><code>## Observations: 730,486
 ## Variables: 10
 ## $ julian &lt;int&gt; 726834, 726835, 726836, 726837, 726838, 726839, 726840, 726841…
@@ -445,25 +456,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## $ lat    &lt;dbl&gt; 39.35, 39.35, 39.35, 39.35, 39.35, 39.35, 39.35, 39.35, 39.35,…
 ## $ lon    &lt;dbl&gt; -81.43333, -81.43333, -81.43333, -81.43333, -81.43333, -81.433…
 ## $ date   &lt;date&gt; 1990-01-01, 1990-01-02, 1990-01-03, 1990-01-04, 1990-01-05, 1…</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Only plot the states with data</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>) </a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">states &lt;-<span class="st"> </span>states <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">    </span><span class="kw">subset</span>(<span class="op">!</span>(region <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">        <span class="st">&quot;washington&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="st">&quot;california&quot;</span>, <span class="st">&quot;nevada&quot;</span>, <span class="st">&quot;idaho&quot;</span>, <span class="st">&quot;utah&quot;</span>, </a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">        <span class="st">&quot;arizona&quot;</span>,<span class="st">&quot;montana&quot;</span>, <span class="st">&quot;wyoming&quot;</span>, <span class="st">&quot;colorado&quot;</span>, <span class="st">&quot;new mexico&quot;</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">    )</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">    )) </a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">## generate map</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11">NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>day <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">color =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>month, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">nrow =</span> <span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </a>
-<a class="sourceLine" id="cb7-17" data-line-number="17">                 <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="st">    </span><span class="kw">scale_color_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;inferno&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Tmax for the first day of each month in 1990&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">## Only plot the states with data</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>) </a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">states &lt;-<span class="st"> </span>states <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="st">    </span><span class="kw">subset</span>(<span class="op">!</span>(region <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">        <span class="st">&quot;washington&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="st">&quot;california&quot;</span>, <span class="st">&quot;nevada&quot;</span>, <span class="st">&quot;idaho&quot;</span>, <span class="st">&quot;utah&quot;</span>, </a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">        <span class="st">&quot;arizona&quot;</span>,<span class="st">&quot;montana&quot;</span>, <span class="st">&quot;wyoming&quot;</span>, <span class="st">&quot;colorado&quot;</span>, <span class="st">&quot;new mexico&quot;</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    )</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">    )) </a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">## generate map</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">NOAA_df_<span class="dv">1990</span> <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">    </span><span class="kw">subset</span>(year <span class="op">==</span><span class="st"> </span><span class="dv">1990</span> <span class="op">&amp;</span><span class="st"> </span>day <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">&amp;</span><span class="st"> </span>proc <span class="op">==</span><span class="st"> &quot;Tmax&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">color =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>month, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">nrow =</span> <span class="dv">4</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> states, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), </a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">                 <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="st">    </span><span class="kw">scale_color_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;inferno&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Tmax for the first day of each month in 1990&quot;</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-6-1.png" width="1536" /></p>
 </div>
 <div id="areal-data" class="section level3">
@@ -473,8 +484,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>can be thought of as an integral of a continuous process over a subdomain <span class="math inline">\(\mathcal{A} \in \mathcal{D}\)</span></li>
 <li>examples: cases of a disease by counties, votes in an election by congressional district</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;BEA&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">glimpse</span>(BEA)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;BEA&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">glimpse</span>(BEA)</a></code></pre></div>
 <pre><code>## Observations: 116
 ## Variables: 5
 ## $ Description &lt;chr&gt; &quot;Per capita personal income (dollars)&quot;, &quot;Per capita perso…
@@ -482,8 +493,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## $ X1970       &lt;int&gt; 2723, 3577, 3770, 3678, 3021, 2832, 3263, 2508, 2147, 349…
 ## $ X1980       &lt;int&gt; 7399, 7937, 5743, 8356, 7210, 7445, 8596, 6125, 5431, 923…
 ## $ X1990       &lt;int&gt; 12755, 15059, 14748, 15198, 12873, 13530, 13195, 11854, 1…</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;MOcounties&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">glimpse</span>(MOcounties)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">data</span>(<span class="st">&quot;MOcounties&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;STRbook&quot;</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">glimpse</span>(MOcounties)</a></code></pre></div>
 <pre><code>## Observations: 214,279
 ## Variables: 53
 ## $ long       &lt;dbl&gt; 627911.9, 627921.4, 627923.0, 627947.8, 627956.5, 627994.8…
@@ -539,19 +550,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## $ OTHER10    &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5…
 ## $ MULTRA10   &lt;int&gt; 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72…
 ## $ HISP10     &lt;int&gt; 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42…</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">MOcounties &lt;-<span class="st"> </span><span class="kw">left_join</span>(MOcounties, BEA, <span class="dt">by =</span> <span class="st">&quot;NAME10&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">ggplot</span>(MOcounties) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long,</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">                     <span class="dt">y =</span> lat, <span class="co"># county boundary</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">                     <span class="dt">group =</span> NAME10, <span class="co"># county group</span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">                     <span class="dt">fill =</span> <span class="kw">log</span>(X1970))) <span class="op">+</span><span class="st"> </span><span class="co"># log of income</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> NAME10)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="fl">7.5</span>, <span class="fl">10.2</span>), <span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;log($)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="st">    </span><span class="kw">coord_fixed</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;1970&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;x (m)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;y (m)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="st">    </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">MOcounties &lt;-<span class="st"> </span><span class="kw">left_join</span>(MOcounties, BEA, <span class="dt">by =</span> <span class="st">&quot;NAME10&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">ggplot</span>(MOcounties) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">    </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long,</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                     <span class="dt">y =</span> lat, <span class="co"># county boundary</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                     <span class="dt">group =</span> NAME10, <span class="co"># county group</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                     <span class="dt">fill =</span> <span class="kw">log</span>(X1970))) <span class="op">+</span><span class="st"> </span><span class="co"># log of income</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="st">    </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> NAME10)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="st">    </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="fl">7.5</span>, <span class="fl">10.2</span>), <span class="dt">option =</span> <span class="st">&quot;plasma&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;log($)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="st">    </span><span class="kw">coord_fixed</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;1970&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;x (m)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;y (m)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="st">    </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 <div id="point-process-data" class="section level3">
@@ -560,11 +571,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>The count and location of the data are random</li>
 <li>examples: tornados, lightning strikes</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># uncomment out this line to download the data</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co"># load(url(&quot;http://github.com/mgimond/Spatial/raw/master/Data/ppa.RData&quot;))</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co"># save(starbucks, ma, pop, file = here::here(&quot;data&quot;, &quot;ppa-starbucks.RData&quot;))</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;ppa-starbucks.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw">glimpse</span>(starbucks)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># uncomment out this line to download the data</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co"># load(url(&quot;http://github.com/mgimond/Spatial/raw/master/Data/ppa.RData&quot;))</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co"># save(starbucks, ma, pop, file = here::here(&quot;data&quot;, &quot;ppa-starbucks.RData&quot;))</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;ppa-starbucks.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">glimpse</span>(starbucks)</a></code></pre></div>
 <pre><code>## List of 5
 ##  $ window    :List of 4
 ##   ..$ type  : chr &quot;rectangle&quot;
@@ -581,12 +592,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ y         : num [1:171] 4637151 4628510 4628982 4616741 4616719 ...
 ##  $ markformat: chr &quot;none&quot;
 ##  - attr(*, &quot;class&quot;)= chr &quot;ppp&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">## uses spatstat library</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">## add the massachusetts polygon</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">Window</span>(starbucks) &lt;-<span class="st"> </span>ma</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw">marks</span>(starbucks) &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">## plot using the plot function from spatstat</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">plot</span>(starbucks)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co">## uses spatstat library</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">## add the massachusetts polygon</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">Window</span>(starbucks) &lt;-<span class="st"> </span>ma</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="kw">marks</span>(starbucks) &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">## plot using the plot function from spatstat</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw">plot</span>(starbucks)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 
 </div>

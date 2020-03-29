@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>29 Day 29 | Notes for STAT 5413 - Spatial Statistics</title>
   <meta name="description" content="These are the lecture notes for STAT 5413 Spatial Statistics" />
-  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="29 Day 29 | Notes for STAT 5413 - Spatial Statistics" />
   <meta property="og:type" content="book" />
@@ -49,8 +49,82 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -271,19 +345,29 @@
 </ul></li>
 <li class="chapter" data-level="29" data-path="day-29.html"><a href="day-29.html"><i class="fa fa-check"></i><b>29</b> Day 29</a><ul>
 <li class="chapter" data-level="29.1" data-path="day-29.html"><a href="day-29.html#announcements-24"><i class="fa fa-check"></i><b>29.1</b> Announcements</a></li>
-<li class="chapter" data-level="29.2" data-path="day-29.html"><a href="day-29.html#spatio-temporal-data"><i class="fa fa-check"></i><b>29.2</b> Spatio-temporal data</a></li>
+<li class="chapter" data-level="29.2" data-path="day-29.html"><a href="day-29.html#areal-data-1"><i class="fa fa-check"></i><b>29.2</b> Areal Data</a></li>
+<li class="chapter" data-level="29.3" data-path="day-29.html"><a href="day-29.html#gaussian-markov-random-fields-gmrfs"><i class="fa fa-check"></i><b>29.3</b> Gaussian Markov random fields (GMRFs)</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="day-29.html"><a href="day-29.html#example-2"><i class="fa fa-check"></i><b>29.3.1</b> Example:</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="day-29.html"><a href="day-29.html#conditional-autoregressive-models-car-models"><i class="fa fa-check"></i><b>29.4</b> Conditional Autoregressive models (CAR models)</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="day-29.html"><a href="day-29.html#models-built-based-on-conditional-distributions-y_i-mathbfy_-i"><i class="fa fa-check"></i><b>29.4.1</b> Models built based on conditional distributions: <span class="math inline">\(y_i | \mathbf{y}_{-i}\)</span></a></li>
+<li class="chapter" data-level="29.4.2" data-path="day-29.html"><a href="day-29.html#simultaneous-autoregressive-sar-model"><i class="fa fa-check"></i><b>29.4.2</b> Simultaneous autoregressive (SAR) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="30" data-path="day-30.html"><a href="day-30.html"><i class="fa fa-check"></i><b>30</b> Day 30</a><ul>
 <li class="chapter" data-level="30.1" data-path="day-30.html"><a href="day-30.html#announcements-25"><i class="fa fa-check"></i><b>30.1</b> Announcements</a></li>
+<li class="chapter" data-level="30.2" data-path="day-30.html"><a href="day-30.html#change-of-spatial-support"><i class="fa fa-check"></i><b>30.2</b> Change of Spatial Support</a></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
+<li class="chapter" data-level="31.2" data-path="day-31.html"><a href="day-31.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>31.2</b> Generalized (non-Gaussian) spatial models</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -338,16 +422,745 @@
             <section class="normal" id="section-">
 <div id="day-29" class="section level1">
 <h1><span class="header-section-number">29</span> Day 29</h1>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb432-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb432-2" data-line-number="2"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb432-3" data-line-number="3"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb432-4" data-line-number="4"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb432-5" data-line-number="5"><span class="kw">library</span>(Matrix)</a>
+<a class="sourceLine" id="cb432-6" data-line-number="6"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb432-7" data-line-number="7"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb432-8" data-line-number="8"><span class="co">## use recommended rstan settings</span></a>
+<a class="sourceLine" id="cb432-9" data-line-number="9"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
+<a class="sourceLine" id="cb432-10" data-line-number="10"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb432-11" data-line-number="11"><span class="kw">library</span>(bayesplot)</a>
+<a class="sourceLine" id="cb432-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb432-13" data-line-number="13"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
 <div id="announcements-24" class="section level2">
 <h2><span class="header-section-number">29.1</span> Announcements</h2>
 </div>
-<div id="spatio-temporal-data" class="section level2">
-<h2><span class="header-section-number">29.2</span> Spatio-temporal data</h2>
-<p>Let <span class="math inline">\(y(\mathbf{s}, t)\)</span> be an observation at location <span class="math inline">\(\mathbf{s} \in \mathcal{D}\)</span> for time <span class="math inline">\(t \in \mathcal{T}\)</span> the <span class="math inline">\(\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))&#39; \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})\)</span></p>
+<div id="areal-data-1" class="section level2">
+<h2><span class="header-section-number">29.2</span> Areal Data</h2>
 <ul>
-<li>In general, <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\mathcal{T}\)</span> could be either discrete or continuous.</li>
+<li>Areal data are data that are associated with a spatial region
+<ul>
+<li>the actual data might have occured at point locations but are aggregated across space</li>
+<li>example: disease spread
+<ul>
+<li>individuals either have a disease or don’t (point level data) but the data are reported at aggregate levels (number of infections in the county/state/country)</li>
+</ul></li>
+<li>some data are only meaninful at the area level: e.g., votes in a county/state</li>
+</ul></li>
+<li><p>areal data are models for discrete spatial domains (geostatistical models are for continuous spatial domains)</p></li>
+<li><p>partition the domain <span class="math inline">\(\mathcal{D}\)</span> into <span class="math inline">\(n\)</span> discrete units</p></li>
+<li><p>define <span class="math inline">\(\mathbf{y} = (y_1, \ldots, y_n)&#39;\)</span></p></li>
+<li>spatial models:
+<ul>
+<li>account for spatial autocorrelation between regions which improves the residual error model</li>
+<li>borrows strength across locations to improve inference</li>
+</ul></li>
+<li><p>Question: how to measure the “closeness” of irregulary spaced regions?</p>
+<p><strong>draw figure here</strong></p>
+<ul>
+<li>can use spatial centroid</li>
 </ul>
+<p><strong>draw figure here</strong></p>
+<ul>
+<li><p>can I just use the geostatistical methods introduced previously?</p>
+<ul>
+<li><p>geostatistical models produce a valid, positive definite covariance matrix</p></li>
+<li><p>using continuous (geostatistical) methods works if the regions are rectangular shaped and of the same general size</p></li>
+</ul></li>
+<li><p>can also model the covariance using adjacency matrices and graphical models</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="gaussian-markov-random-fields-gmrfs" class="section level2">
+<h2><span class="header-section-number">29.3</span> Gaussian Markov random fields (GMRFs)</h2>
+<ul>
+<li><p>A Markov random field is specified from a set of conditional probability distributions.</p></li>
+<li><p>Let <span class="math inline">\(\mathbf{y} = (y_1, \ldots, y_n)&#39;\)</span> be the <span class="math inline">\(n\)</span>-dimensional vector for each of the <span class="math inline">\(i\)</span> observations in the spatial doamin <span class="math inline">\(\mathcal{D}\)</span>. Let <span class="math inline">\(\mathcal{A} \in \mathcal{D}\)</span> be defined as a subset of regions in the domain, <span class="math inline">\(\mathbf{y}_{\mathcal{A}} = \{ y_i | i \in \mathcal{A}\}\)</span> be the set of observation in the subdomain <span class="math inline">\(\mathcal{A}\)</span>, and <span class="math inline">\(\mathbf{y}_{-\mathcal{A}} = \{ y_i | i \notin \mathcal{A}\}\)</span> be the set of observation not in the subdomain <span class="math inline">\(\mathcal{A}\)</span></p></li>
+<li><p>A GMRF is a Gaussian distributed random vector <span class="math inline">\(\mathbf{y}\)</span> which obeys some conditional independence properties. For some <span class="math inline">\(i \neq j\)</span>,</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_i \perp y_j | \mathbf{y}_{-\{i, j\}},
+\end{align*}\]</span></p>
+<p>where, conditioned on <span class="math inline">\(\mathbf{y}_{-\{i, j\}}\)</span>, <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span> are independent.</p>
+<ul>
+<li><p>Given a graph <span class="math inline">\(\mathcal{G} = (\mathcal{V}, \mathcal{E})\)</span> where <span class="math inline">\(\mathcal{V} = \{1, \ldots, n\}\)</span> is the set of vertices and <span class="math inline">\(\mathcal{E} = \{ \{i, j\} | i, j \in \mathcal{V}\}\)</span>, the set of edges of the graph, the goal is to sepcify a GMRF that has conditional independence properties that are consistent with an underlying graph structure (typically one implied by the adjacency structure of the spatial domain)</p></li>
+<li><p>This turns out to be quite easy by using the precision matrix <span class="math inline">\(\mathbf{Q} = \boldsymbol{\Sigma}^{-1}\)</span> of the random variable <span class="math inline">\(\mathbf{y}\)</span></p></li>
+<li><p><strong>Definition:</strong> A random vector <span class="math inline">\(\mathbf{y}\)</span> is a GMRF with respect to the labeled graph <span class="math inline">\(\mathcal{G} = (\mathcal{V}, \mathcal{E})\)</span> with mean <span class="math inline">\(\boldsymbol{\mu}\)</span> and symmetric, positive definite precision matrix <span class="math inline">\(\mathbf{Q}\)</span> <span class="math inline">\(\Leftrightarrow\)</span> its density is</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+[\mathbf{y} | \boldsymbol{\mu}, \mathbf{Q}] &amp; = (2 \pi)^{-n / 2} |\mathbf{Q}|^{1/2} \exp\left( -1 / 2 \left( \mathbf{y} - \boldsymbol{\mu} \right) \mathbf{Q} \left(\mathbf{y} - \boldsymbol{\mu} \right) \right)
+\end{align*}\]</span>
+and
+<span class="math display">\[\begin{align*}
+Q_{i, j} \neq 0 \hspace{1em} \Leftrightarrow \hspace{1em} \{i, j\} \in \mathcal{E} \hspace{1em} \forall \hspace{1em} i \neq j
+\end{align*}\]</span></p>
+<p>Note: this implies that <span class="math inline">\(Q_{i, j} = 0 \hspace{1em} \forall \hspace{1em} i \neq j\)</span> where <span class="math inline">\(\{i, j\} \notin \mathcal{E}\)</span></p>
+<div id="example-2" class="section level3">
+<h3><span class="header-section-number">29.3.1</span> Example:</h3>
+<ul>
+<li>A stationary autoregressive time series of order 1</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_t = \phi y_{t-1} + \varepsilon_t
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(|\phi| &lt; 1\)</span>, <span class="math inline">\(\varepsilon_t \stackrel{iid}{\sim} N(0, 1)\)</span>, and <span class="math inline">\(y_1 \sim N(0, 1 / (1 - \phi^2))\)</span>.</p>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb433-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb433-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
+<a class="sourceLine" id="cb433-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb433-4" data-line-number="4"><span class="co">## autoregression model representation</span></a>
+<a class="sourceLine" id="cb433-5" data-line-number="5">y &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</a>
+<a class="sourceLine" id="cb433-6" data-line-number="6">y[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>)))</a>
+<a class="sourceLine" id="cb433-7" data-line-number="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb433-8" data-line-number="8">    y[t] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, phi <span class="op">*</span><span class="st"> </span>y[t<span class="dv">-1</span>], <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb433-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb433-10" data-line-number="10"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-243-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>The set of edges is <span class="math inline">\(\mathcal{E} = \{ \{ 1, 2\}, \{2, 3\}, \ldots, \{n-1, n\} \}\)</span> and the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> has nonzero elements <span class="math inline">\(Q_{i,j} = -\phi\)</span> for <span class="math inline">\(|i-j| = 1\)</span>, <span class="math inline">\(Q_{1,1} = Q_{n,n} = 1\)</span> and <span class="math inline">\(Q_{i,i} = 1 + \phi^2\)</span> for <span class="math inline">\(i = 2, \ldots, n-1\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" data-line-number="1"><span class="co">## GMRF representation</span></a>
+<a class="sourceLine" id="cb434-2" data-line-number="2">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</a>
+<a class="sourceLine" id="cb434-3" data-line-number="3">Q &lt;-<span class="st"> </span><span class="kw">toeplitz</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>phi, <span class="kw">rep</span>(<span class="dv">0</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)))</a>
+<a class="sourceLine" id="cb434-4" data-line-number="4"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb434-5" data-line-number="5">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb434-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb434-7" data-line-number="7">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">solve</span>(Q)))</a>
+<a class="sourceLine" id="cb434-8" data-line-number="8"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
+<pre><code>##      [,1]  [,2]  [,3]  [,4]  [,5]
+## [1,]  1.0 -0.90  0.00  0.00  0.00
+## [2,] -0.9  1.81 -0.90  0.00  0.00
+## [3,]  0.0 -0.90  1.81 -0.90  0.00
+## [4,]  0.0  0.00 -0.90  1.81 -0.90
+## [5,]  0.0  0.00  0.00 -0.90  1.81</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-244-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>notice how sparse the matrix <span class="math inline">\(\mathbf{Q}\)</span> is</li>
+</ul>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" data-line-number="1"><span class="kw">mean</span>(Q <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<pre><code>## [1] 0.994</code></pre>
+<ul>
+<li>Recall the autocorrelation function of an AR(1) timeseries at lag <span class="math inline">\(h\)</span>:
+<ul>
+<li><span class="math inline">\(\gamma(h) = \phi^h\)</span></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb438-1" data-line-number="1">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb438-2" data-line-number="2"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb438-3" data-line-number="3">    Sigma[<span class="dv">1</span>, ] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">1</span>, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb438-4" data-line-number="4">    <span class="dt">type =</span> <span class="st">&#39;p&#39;</span>, </a>
+<a class="sourceLine" id="cb438-5" data-line-number="5">    <span class="dt">main =</span> <span class="st">&quot;GMRF ACF in points, theoretical ACF in red&quot;</span></a>
+<a class="sourceLine" id="cb438-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb438-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">c</span>(<span class="dv">1</span>, phi<span class="op">^</span>(<span class="dv">1</span><span class="op">:</span>(n<span class="dv">-1</span>))), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-246-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is a dense matrix</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb439-1" data-line-number="1"><span class="kw">mean</span>(Sigma <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<p>therefore, the GMRF formulation can be evaluated using <span class="math inline">\(\mathcal{O}(n)\)</span> algorithms</p>
+</div>
+</div>
+<div id="conditional-autoregressive-models-car-models" class="section level2">
+<h2><span class="header-section-number">29.4</span> Conditional Autoregressive models (CAR models)</h2>
+<ul>
+<li><p>spatial data have no inherent ordering, but we can still define a set of edges <span class="math inline">\(\mathcal{E}\)</span> based on spatial adjacency</p></li>
+<li><p>Many ways to define adjacency – typically if two regions share a border, they are adjacent</p></li>
+<li><p><span class="math inline">\(i \sim j\)</span> implies that site <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are adjacent (equivalent to <span class="math inline">\(\{i, j\} \in \mathcal{E}\)</span>)</p></li>
+<li><p><span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(n \times n\)</span> adjacency matrix</p></li>
+<li><p><span class="math inline">\(A_{ij} = I\{i \sim j\}\)</span> is an indicator of adjacency</p></li>
+<li><p><span class="math inline">\(N_i = \{j | A_{ij} = 1\}\)</span> is the set of neighbors of region <span class="math inline">\(i\)</span></p></li>
+<li><p><span class="math inline">\(d_i = \sum_{j=1}^n A_{ij}\)</span> is the number of neighbors of region <span class="math inline">\(i\)</span></p>
+<ul>
+<li><span class="math inline">\(\mathbf{D} = \operatorname{diag}(d_1, \ldots, d_n)\)</span></li>
+</ul></li>
+<li><p><span class="math inline">\(\bar{y}_i = \frac{1}{d_i} \sum_{j=1}^n A_{ij} y_i\)</span> is the mean of region <span class="math inline">\(i\)</span>’s neighbors (note the similarity to a nearest neighbors type algorithm)</p></li>
+</ul>
+<div id="models-built-based-on-conditional-distributions-y_i-mathbfy_-i" class="section level3">
+<h3><span class="header-section-number">29.4.1</span> Models built based on conditional distributions: <span class="math inline">\(y_i | \mathbf{y}_{-i}\)</span></h3>
+<ul>
+<li>CAR model is a GMRF given by</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_i | \mathbf{y}_{-i} &amp; \sim N \left( \phi \bar{y}_i, \frac{\sigma^2}{d_i} \right)
+\end{align*}\]</span></p>
+<p>where each region <span class="math inline">\(i\)</span> is conditionally independent from all other regions given its neighbors</p>
+<ul>
+<li><p>If there is a valid joint distribution that has these full conditional distributions, the conditional distributions are said to be compatible</p>
+<ul>
+<li>how do we know if these conditional distributions are compatible?</li>
+</ul></li>
+</ul>
+<p>Consider the joint distribution</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} \sim N \left(0, \sigma^2 \left(\mathbf{D} - \phi \mathbf{A} \right)^{-1} \right)
+\end{align*}\]</span></p>
+<ul>
+<li><p>the covariance is positive definite if <span class="math inline">\(\frac{1}{\lambda_n} &lt; \phi &lt; \frac{1}{\lambda_1}\)</span> where <span class="math inline">\(\lambda_n\)</span> is the smallest eigenvalue and <span class="math inline">\(\lambda_1\)</span> is the largest eigenvalue of <span class="math inline">\(\mathbf{D}^{-1/2}\mathbf{A}\mathbf{D}^{-1/2}\)</span></p>
+<ul>
+<li>First, let <span class="math inline">\(\boldsymbol{\Gamma} \boldsymbol{\Lambda} \boldsymbol{\Gamma}&#39;\)</span> be the eigen-decomposition of <span class="math inline">\(\mathbf{D}^{-1/2}\mathbf{A}\mathbf{D}^{-1/2}\)</span> where <span class="math inline">\(\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)\)</span> with <span class="math inline">\(\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_n\)</span></li>
+</ul></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathbf{D} - \phi \mathbf{A} &amp; = \mathbf{D}^{1/2} (\mathbf{I} - \phi \mathbf{D}^{-1/2}\mathbf{A}\mathbf{D}^{-1/2}) \mathbf{D}^{1/2} \\
+&amp; = \mathbf{D}^{1/2} (\mathbf{I} - \phi \boldsymbol{\Gamma} \boldsymbol{\Lambda} \boldsymbol{\Gamma}&#39;) \mathbf{D}^{1/2} \\
+&amp; = \mathbf{D}^{1/2} (\boldsymbol{\Gamma} \boldsymbol{\Gamma}&#39; - \phi \boldsymbol{\Gamma} \boldsymbol{\Lambda} \boldsymbol{\Gamma}&#39;) \mathbf{D}^{1/2} \\
+&amp; = \mathbf{D}^{1/2} \boldsymbol{\Gamma} (\mathbf{I} - \phi \boldsymbol{\Lambda}) \boldsymbol{\Gamma}&#39; \mathbf{D}^{1/2} \\
+\end{align*}\]</span></p>
+<p>which has positive eigenvlaues <span class="math inline">\(\Leftrightarrow\)</span> <span class="math inline">\(\frac{1}{\lambda_n} &lt; \phi &lt; \frac{1}{\lambda_1}\)</span> (if <span class="math inline">\(\phi\)</span> was outside this range, the <span class="math inline">\(\mathbf{I} - \phi \boldsymbol{\Lambda}\)</span> would contain negative values which would violate the positive definite condition)</p>
+<ul>
+<li>To show the above model gives the desired conditional probability distributions</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} &amp; \sim N \left(0, \sigma^2 \left(\mathbf{D} - \phi \mathbf{A} \right)^{-1} \right) \\
+&amp; \propto \exp \left( -\frac{1}{2 \sigma^2} \mathbf{y}&#39; \left(\mathbf{D} - \phi \mathbf{A} \right) \mathbf{y} \right) \\
+&amp; \propto \exp \left( -\frac{1}{2 \sigma^2} \left( \sum_{i=1}^n m_i y_i^2 - 2 \phi \sum_{i \sim j} y_{ij} \right) \right)
+\end{align*}\]</span></p>
+<p>where the conditional probability distribution <span class="math inline">\([y_i | \mathbf{y}_{-i}]\)</span> is</p>
+<p><span class="math display">\[\begin{align*}
+[y_i | \mathbf{y}_{-i}] &amp; \propto \exp \left( -\frac{1}{2 \sigma^2} \left( m_i y_i^2 - 2 \phi m_i \bar{y}_i \right) \right) \\
+&amp; \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {m_i}} \left( y_i^2 - 2 \phi \bar{y}_i \right) \right) \\
+&amp; \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {m_i}} \left( y_i - \phi \bar{y}_i \right)^2 \right) \\
+\end{align*}\]</span></p>
+<p>which is the kernel of the conditional probability distribution we started with</p>
+<p><span class="math display">\[\begin{align*}
+y_i | \mathbf{y}_{-i} &amp; \sim N \left( \phi \bar{y}_i, \frac{\sigma^2}{d_i} \right)
+\end{align*}\]</span></p>
+<ul>
+<li><p>The multivariate normal likelihood for the CAR model is:</p>
+<p><span class="math display">\[\begin{align*}
+  [\mathbf{y} | \boldsymbol{\mu}, \mathbf{Q}] &amp; = (2 \pi)^{-n / 2} |\mathbf{D} - \phi \mathbf{A}|^{1/2} \exp\left( -1 / 2 \left( \mathbf{y} - \boldsymbol{\mu} \right) \left(\mathbf{D} - \phi \mathbf{A} \right) \left(\mathbf{y} - \boldsymbol{\mu} \right) \right)
+  \end{align*}\]</span></p>
+<ul>
+<li><p>The kernel of the likelihood is trivially fast due to sparse matrix operations and due to the precision construction (no matrix inverses!)</p></li>
+<li><p>The determinant <span class="math inline">\(|\mathbf{D} - \phi \mathbf{A}|\)</span> is easy to calculate as</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+  |\mathbf{D} - \phi \mathbf{A}| &amp; = |\mathbf{D}^{1/2} \left( \mathbf{I} - \phi \mathbf{A} \right) \mathbf{D}^{1/2}| \\
+  &amp; = |\mathbf{D}^{1/2} \boldsymbol{\Gamma} \left( \mathbf{I} - \phi \boldsymbol{\Lambda} \right) \boldsymbol{\Gamma}&#39; \mathbf{D}^{1/2}| \\
+  &amp; = |\mathbf{D}^{1/2} \boldsymbol{\Gamma}| | \mathbf{I} - \phi \boldsymbol{\Lambda}| |\boldsymbol{\Gamma}&#39; \mathbf{D}^{1/2}| \\
+  &amp; =  | \mathbf{I} - \phi \boldsymbol{\Lambda}| \\
+  &amp; =  \prod_{i=1}^n| (1 - \phi \lambda_i)
+  \end{align*}\]</span></p>
+<ul>
+<li>sparse routines can be used to calculate these eigenvalues</li>
+</ul></li>
+<li><p>if <span class="math inline">\(\phi \in [0, 1)\)</span>, this model is called the conditional autoregressive (CAR) model and the covariance is positive definite so that the joint distribution of <span class="math inline">\(\mathbf{y}\)</span> is proper (integrates to 1)</p></li>
+<li><p>if <span class="math inline">\(\phi = 1\)</span>, this is called an intrinsic CAR (ICAR) model and the covariance is singular so this model is only useful as a prior</p>
+<ul>
+<li><p>very efficient model for Bayesian inference and MCMC</p></li>
+<li><p>needs an additional assumption that <span class="math inline">\(\sum_{i=1}^n y_i = 0\)</span></p></li>
+</ul>
+<p><!-- - arose from Physics/statistical mechanics from the [Ising model](https://en.wikipedia.org/wiki/Ising_model) and gave [rise to the Gibbs sampling algorithm](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=4767596) --></p></li>
+<li><p>Note: <span class="math inline">\(\phi\)</span> is not a correlation! However, correlation increases as <span class="math inline">\(\phi\)</span> increases</p>
+<ul>
+<li>typicallly, we assume <span class="math inline">\(\phi\)</span> will be large <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378375803001113">A close look at the spatial structure implied by
+the CAR and SAR models</a></li>
+</ul></li>
+<li><p>if <span class="math inline">\(\phi = 0\)</span>, then the observations are spatially independent</p></li>
+</ul>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb441-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb441-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
+<a class="sourceLine" id="cb441-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
+<a class="sourceLine" id="cb441-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb441-5" data-line-number="5">A[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb441-6" data-line-number="6">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb441-7" data-line-number="7">D[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb441-8" data-line-number="8">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb441-9" data-line-number="9">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb441-10" data-line-number="10">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb441-11" data-line-number="11"><span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb441-12" data-line-number="12">Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb441-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb441-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb441-15" data-line-number="15">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb441-16" data-line-number="16">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
+<a class="sourceLine" id="cb441-17" data-line-number="17">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb441-18" data-line-number="18"><span class="co">## do this as a loop</span></a>
+<a class="sourceLine" id="cb441-19" data-line-number="19"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
+<a class="sourceLine" id="cb441-20" data-line-number="20">    A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb441-21" data-line-number="21">    D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb441-22" data-line-number="22">    Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb441-23" data-line-number="23">    Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb441-24" data-line-number="24">    <span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb441-25" data-line-number="25">    rho[i] &lt;-<span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb441-26" data-line-number="26">}</a>
+<a class="sourceLine" id="cb441-27" data-line-number="27"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb441-28" data-line-number="28"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb441-29" data-line-number="29"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb441-30" data-line-number="30"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb441-31" data-line-number="31"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb441-32" data-line-number="32"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;CAR correlation (lag-1) vs phi parameter&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb441-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) </a></code></pre></div>
+<pre><code>## 5 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
+##               
+## [1,] . 1 . . .
+## [2,] 1 . 1 . .
+## [3,] . 1 . 1 .
+## [4,] . . 1 . 1
+## [5,] . . . 1 .
+## 5 x 5 diagonal matrix of class &quot;ddiMatrix&quot;
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    2    .    .    .    .
+## [2,]    .    3    .    .    .
+## [3,]    .    .    3    .    .
+## [4,]    .    .    .    3    .
+## [5,]    .    .    .    .    3
+## 5 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
+##                              
+## [1,]  2.0 -0.4  .    .    .  
+## [2,] -0.4  3.0 -0.4  .    .  
+## [3,]  .   -0.4  3.0 -0.4  .  
+## [4,]  .    .   -0.4  3.0 -0.4
+## [5,]  .    .    .   -0.4  3.0
+## [1] 0.1393</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-248-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Plot how the <span class="math inline">\(\phi\)</span> parameter determines the correlation</li>
+</ul>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb443-1" data-line-number="1"><span class="co">## simulate some data</span></a>
+<a class="sourceLine" id="cb443-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb443-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
+<a class="sourceLine" id="cb443-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb443-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb443-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb443-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb443-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb443-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb443-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb443-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb443-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb443-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb443-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb443-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb443-16" data-line-number="16">  Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb443-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb443-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb443-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb443-20" data-line-number="20">  </a>
+<a class="sourceLine" id="cb443-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
+<a class="sourceLine" id="cb443-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb443-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb443-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb443-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb443-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi))</a>
+<a class="sourceLine" id="cb443-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb443-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
+<a class="sourceLine" id="cb443-29" data-line-number="29">}  </a>
+<a class="sourceLine" id="cb443-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb443-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb443-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
+<a class="sourceLine" id="cb443-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb443-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb443-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
+<a class="sourceLine" id="cb443-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb443-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb443-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-249-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="fitting-a-car-model-in-stan" class="section level4">
+<h4><span class="header-section-number">29.4.1.1</span> Fitting a CAR model in <code>stan</code></h4>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb444-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
+<a class="sourceLine" id="cb444-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb444-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.999</span></a>
+<a class="sourceLine" id="cb444-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb444-5" data-line-number="5">locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb444-6" data-line-number="6"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb444-7" data-line-number="7">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb444-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb444-9" data-line-number="9">  )</a>
+<a class="sourceLine" id="cb444-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb444-11" data-line-number="11"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb444-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb444-13" data-line-number="13">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb444-14" data-line-number="14"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb444-15" data-line-number="15">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb444-16" data-line-number="16">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb444-17" data-line-number="17"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb444-18" data-line-number="18">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb444-19" data-line-number="19">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb444-20" data-line-number="20">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
+<a class="sourceLine" id="cb444-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb444-22" data-line-number="22">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb444-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
+<a class="sourceLine" id="cb444-27" data-line-number="27">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb444-28" data-line-number="28"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-29" data-line-number="29"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-30" data-line-number="30"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb444-31" data-line-number="31"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb444-32" data-line-number="32">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-250-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>we need to define a stan model</p></li>
+<li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
+<li><p>print the output of the model <code>spatial-car.stan</code></p></li>
+</ul>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb445-1" data-line-number="1"><span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>))</a></code></pre></div>
+<pre><code>##  [1] &quot;data {&quot;                                                              
+##  [2] &quot;    int&lt;lower=0&gt; N;    // the number of observations&quot;                
+##  [3] &quot;    vector[N] y;       // the obersved values&quot;                       
+##  [4] &quot;    matrix[N, N] A;    // the N times N adjacency matrix &quot;           
+##  [5] &quot;    matrix[N, N] D;    // the N times N diagonal matrix of neighbors&quot;
+##  [6] &quot;}&quot;                                                                   
+##  [7] &quot;parameters {&quot;                                                        
+##  [8] &quot;    vector[N] eta;    //&quot;                                            
+##  [9] &quot;    real mu;&quot;                                                        
+## [10] &quot;    real&lt;lower=0&gt; sigma2;&quot;                                           
+## [11] &quot;    real&lt;lower=0&gt; tau2;&quot;                                             
+## [12] &quot;    real&lt;lower=0, upper=1&gt; phi;&quot;                                     
+## [13] &quot;}&quot;                                                                   
+## [14] &quot;// transformed parameters {&quot;                                         
+## [15] &quot;//     vector[N] y_pred = mu + w_s;&quot;                                 
+## [16] &quot;// }&quot;                                                                
+## [17] &quot;model {&quot;                                                             
+## [18] &quot;    matrix[N, N] Sigma_inv = (D - phi * A) / tau2;&quot;                  
+## [19] &quot;    eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);&quot;           
+## [20] &quot;    mu ~ normal(0, 1);&quot;                                              
+## [21] &quot;    sigma2 ~ cauchy(0, 5);&quot;                                          
+## [22] &quot;    tau2 ~ cauchy(0, 5);&quot;                                            
+## [23] &quot;    y ~ normal(mu + eta, sigma2);&quot;                                   
+## [24] &quot;}&quot;</code></pre>
+<ul>
+<li><p>Fitting the model</p>
+<ul>
+<li>note: this is very slow for even moderate sized data</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb447-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb447-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb447-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
+<a class="sourceLine" id="cb447-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
+<a class="sourceLine" id="cb447-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
+<a class="sourceLine" id="cb447-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
+<a class="sourceLine" id="cb447-7" data-line-number="7">)  </a></code></pre></div>
+<pre><code>## Warning: There were 111 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
+<pre><code>## Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
+## http://mc-stan.org/misc/warnings.html#bfmi-low</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Warning: The largest R-hat is 1.12, indicating chains have not mixed.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<ul>
+<li>Note: this is giving warinings – it’s best to pay attention to these in stan</li>
+</ul>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb454-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb454-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb454-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb454-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
+## instead.</code></pre>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: spatial-car.
+## 4 chains, each with iter=5000; warmup=2500; thin=1; 
+## post-warmup draws per chain=2500, total post-warmup draws=10000.
+## 
+##         mean se_mean    sd    10%    90% n_eff Rhat
+## mu     -0.34    0.01  0.15  -0.52  -0.16   350 1.00
+## tau2    2.14    0.07  0.76   1.06   3.07   104 1.05
+## sigma2  0.42    0.03  0.22   0.13   0.72    59 1.10
+## phi     0.58    0.01  0.22   0.27   0.85   919 1.01
+## lp__   30.36    8.78 54.35 -18.03 114.13    38 1.16
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Mar 29 16:03:21 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-253-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-253-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-253-3.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>plot fitted vs. simulated spatial random effect</li>
+</ul>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb458-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
+<a class="sourceLine" id="cb458-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb458-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-254-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>looks like there might be a mean shift (non-identifiability)</li>
+</ul>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb459-1" data-line-number="1">mu_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>mu</a>
+<a class="sourceLine" id="cb459-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">mean</span>(mu_post) <span class="op">+</span><span class="st"> </span><span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb459-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-255-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" data-line-number="1"><span class="kw">mean</span>(eta)</a></code></pre></div>
+<pre><code>## [1] -0.4367</code></pre>
+<ul>
+<li><p>Note: the above model is inefficient as it doesn’t leverage sparse matrix operations. More complicated (and efficient) code is <a href="https://mc-stan.org/users/documentation/case-studies/mbjoseph-CARStan.html">available here</a></p></li>
+<li><p>Example where the CAR parameter <span class="math inline">\(\phi = 1\)</span> is <a href="https://mc-stan.org/users/documentation/case-studies/icar_stan.html">available here</a></p></li>
+</ul>
+</div>
+</div>
+<div id="simultaneous-autoregressive-sar-model" class="section level3">
+<h3><span class="header-section-number">29.4.2</span> Simultaneous autoregressive (SAR) model</h3>
+<p><span class="math display">\[\begin{align*}
+y_i &amp; = \phi \frac{1}{d_i} \sum_{j \in N_i} y_j + \varepsilon_i
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(\varepsilon_i \stackrel{iid}{\sim} N(0, \sigma^2)\)</span></p>
+<ul>
+<li><p><strong>Note: this is not a conditional distribution like the CAR model – this gives the definition of a joint distribution</strong></p></li>
+<li><p>Some algebra gives</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+&amp; \mathbf{y} = \rho \mathbf{A} \mathbf{D}^{-1} \mathbf{y} + \boldsymbol{\varepsilon} \\
+\Rightarrow &amp; \left(\mathbf{I} - \rho \mathbf{A} \mathbf{D}^{-1} \right) \mathbf{y}  = \boldsymbol{\varepsilon} \\
+\Rightarrow &amp; \mathbf{y} = \left(\mathbf{I} - \rho \mathbf{A} \mathbf{D}^{-1} \right)^{-1} \boldsymbol{\varepsilon} \\
+\end{align*}\]</span></p>
+<p>which implies the joint distribution</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} &amp; \sim \operatorname{N} \left(\mathbf{0}, \left(\mathbf{I} - \rho \mathbf{A} \mathbf{D}^{-1} \right)^{-1}\left(\mathbf{I} - \rho \mathbf{A} \mathbf{D}^{-1} \right)^{-1} \right)
+\end{align*}\]</span></p>
+<p>which has a similar form to the SPDE models</p>
+<ul>
+<li><p>Note: <span class="math inline">\(\phi\)</span> is not a correlation! However, correlation increases as <span class="math inline">\(\phi\)</span> increases</p>
+<ul>
+<li>typicallly, we assume <span class="math inline">\(\phi\)</span> will be large <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378375803001113">A close look at the spatial structure implied by
+the CAR and SAR models</a></li>
+</ul></li>
+<li><p>if <span class="math inline">\(\phi = 0\)</span>, then the observations are spatially independent</p></li>
+</ul>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb462-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
+<a class="sourceLine" id="cb462-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
+<a class="sourceLine" id="cb462-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb462-5" data-line-number="5">D  &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
+<a class="sourceLine" id="cb462-6" data-line-number="6">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
+<a class="sourceLine" id="cb462-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb462-8" data-line-number="8"><span class="co">## calculate the correlation from a first order SAR</span></a>
+<a class="sourceLine" id="cb462-9" data-line-number="9"><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>]</a>
+<a class="sourceLine" id="cb462-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb462-11" data-line-number="11"><span class="co">## do this as a loop</span></a>
+<a class="sourceLine" id="cb462-12" data-line-number="12">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb462-13" data-line-number="13">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
+<a class="sourceLine" id="cb462-14" data-line-number="14">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb462-15" data-line-number="15">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb462-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
+<a class="sourceLine" id="cb462-17" data-line-number="17"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
+<a class="sourceLine" id="cb462-18" data-line-number="18">  Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
+<a class="sourceLine" id="cb462-19" data-line-number="19">  <span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb462-20" data-line-number="20">  rho[i] &lt;-<span class="st"> </span><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>] </a>
+<a class="sourceLine" id="cb462-21" data-line-number="21">}</a>
+<a class="sourceLine" id="cb462-22" data-line-number="22"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb462-23" data-line-number="23"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb462-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb462-25" data-line-number="25"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb462-26" data-line-number="26"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb462-27" data-line-number="27"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;SAR correlation (lag-1) vs. phi parameter&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb462-28" data-line-number="28"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<pre><code>## [1] 0.2755</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-257-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Plot how the <span class="math inline">\(\phi\)</span> parameter determines the correlation</li>
+</ul>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" data-line-number="1"><span class="co">## simulate some data</span></a>
+<a class="sourceLine" id="cb464-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb464-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
+<a class="sourceLine" id="cb464-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb464-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb464-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb464-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb464-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb464-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb464-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb464-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb464-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb464-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb464-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb464-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb464-16" data-line-number="16">  Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D))</a>
+<a class="sourceLine" id="cb464-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb464-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb464-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb464-20" data-line-number="20">  </a>
+<a class="sourceLine" id="cb464-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
+<a class="sourceLine" id="cb464-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb464-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb464-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb464-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb464-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi)) </a>
+<a class="sourceLine" id="cb464-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb464-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
+<a class="sourceLine" id="cb464-29" data-line-number="29">}  </a>
+<a class="sourceLine" id="cb464-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb464-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb464-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
+<a class="sourceLine" id="cb464-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb464-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb464-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
+<a class="sourceLine" id="cb464-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb464-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb464-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-258-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="fitting-a-sar-model-in-stan" class="section level4">
+<h4><span class="header-section-number">29.4.2.1</span> Fitting a SAR model in <code>stan</code></h4>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb465-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
+<a class="sourceLine" id="cb465-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb465-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
+<a class="sourceLine" id="cb465-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb465-5" data-line-number="5">tau2 &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb465-6" data-line-number="6">locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb465-7" data-line-number="7"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb465-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb465-9" data-line-number="9">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb465-10" data-line-number="10">  )</a>
+<a class="sourceLine" id="cb465-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb465-12" data-line-number="12"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb465-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb465-14" data-line-number="14">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb465-15" data-line-number="15"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb465-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb465-17" data-line-number="17">Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">/</span><span class="st"> </span>tau2</a>
+<a class="sourceLine" id="cb465-18" data-line-number="18"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb465-19" data-line-number="19">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb465-20" data-line-number="20">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb465-21" data-line-number="21">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
+<a class="sourceLine" id="cb465-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb465-23" data-line-number="23">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb465-24" data-line-number="24"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-25" data-line-number="25"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-26" data-line-number="26"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-27" data-line-number="27"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
+<a class="sourceLine" id="cb465-28" data-line-number="28">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb465-29" data-line-number="29"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-30" data-line-number="30"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-31" data-line-number="31"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb465-32" data-line-number="32"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb465-33" data-line-number="33">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-259-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>we need to define a stan model</p></li>
+<li><p>print the output of the model <code>spatial-sar.stan</code></p></li>
+</ul>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb466-1" data-line-number="1"><span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>))</a></code></pre></div>
+<pre><code>##  [1] &quot;data {&quot;                                                 
+##  [2] &quot;  int&lt;lower=0&gt; N;&quot;                                      
+##  [3] &quot;  vector[N] y;&quot;                                         
+##  [4] &quot;  matrix[N, N] A;&quot;                                      
+##  [5] &quot;  matrix[N, N] D;&quot;                                      
+##  [6] &quot;}&quot;                                                      
+##  [7] &quot;transformed data {&quot;                                     
+##  [8] &quot;  matrix[N, N] I = diag_matrix(rep_vector(1, N));&quot;      
+##  [9] &quot;  matrix[N, N] A_D_inv;&quot;                                
+## [10] &quot;  A_D_inv = A * inverse(D);&quot;                            
+## [11] &quot;}&quot;                                                      
+## [12] &quot;parameters {&quot;                                           
+## [13] &quot;  vector[N] eta;&quot;                                       
+## [14] &quot;  real mu;&quot;                                             
+## [15] &quot;  real&lt;lower=0&gt; sigma2;&quot;                                
+## [16] &quot;  real&lt;lower=0&gt; tau2;&quot;                                  
+## [17] &quot;  real&lt;lower=0,upper=1&gt; phi;&quot;                           
+## [18] &quot;}&quot;                                                      
+## [19] &quot;transformed parameters {&quot;                               
+## [20] &quot;  vector[N] y_pred = mu + eta;&quot;                         
+## [21] &quot;}&quot;                                                      
+## [22] &quot;model {&quot;                                                
+## [23] &quot;  matrix[N,N] C = I - phi * A_D_inv;&quot;                   
+## [24] &quot;  matrix[N,N] Sigma_inv = C * C&#39; / tau2;&quot;               
+## [25] &quot;  eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);&quot;
+## [26] &quot;  mu ~ normal(0, 1);&quot;                                   
+## [27] &quot;  sigma2 ~ cauchy(0, 5);&quot;                               
+## [28] &quot;  tau2 ~ cauchy(0, 5);&quot;                                 
+## [29] &quot;  y ~ normal(mu + eta, sigma2);&quot;                        
+## [30] &quot;}&quot;                                                      
+## [31] &quot;&quot;</code></pre>
+<ul>
+<li><p>Fitting the model</p>
+<ul>
+<li>note: this is very slow for even moderate sized data</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb468-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb468-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb468-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
+<a class="sourceLine" id="cb468-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
+<a class="sourceLine" id="cb468-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
+<a class="sourceLine" id="cb468-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
+<a class="sourceLine" id="cb468-7" data-line-number="7">)  </a></code></pre></div>
+<pre><code>## Warning: There were 12 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
+<pre><code>## Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
+## http://mc-stan.org/misc/warnings.html#bfmi-low</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>## Warning: The largest R-hat is 1.13, indicating chains have not mixed.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<ul>
+<li>Note: this is giving warinings – it’s best to pay attention to these in stan</li>
+</ul>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb475-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb475-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb475-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb475-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
+## instead.</code></pre>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: spatial-sar.
+## 4 chains, each with iter=5000; warmup=2500; thin=1; 
+## post-warmup draws per chain=2500, total post-warmup draws=10000.
+## 
+##          mean se_mean    sd     10%  90% n_eff Rhat
+## mu       0.07    0.01  0.20   -0.16 0.32   829 1.00
+## tau2     1.72    0.15  0.99    0.25 2.92    46 1.09
+## sigma2   0.95    0.09  0.51    0.23 1.61    35 1.13
+## phi      0.21    0.01  0.15    0.04 0.42   517 1.01
+## lp__   -84.45    8.55 57.41 -139.39 5.26    45 1.09
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Mar 29 16:07:53 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-262-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-262-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-262-3.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>plot fitted vs. simulated spatial random effect</li>
+</ul>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
+<a class="sourceLine" id="cb479-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb479-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-263-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>More on CAR and SAR models is <a href="https://www.stat.colostate.edu/~hooten/papers/pdf/VerHoef_etal_SpatStat_2018.pdf">available here</a>
+### Theoretical Results for more general model classes</p></li>
+<li><p>In general, the <a href="https://en.wikipedia.org/wiki/Hammersley%E2%80%93Clifford_theorem">Hammersley-Clifford Theorem</a> can be used to show that a set of conditional probability distributions specifies a compatible joint probability distribution</p></li>
+<li><p>If you start with compatible conditional probability distributions, <strong>Brooks’ Lemma</strong> is a formula for computing the joint distribution</p></li>
+</ul>
+<!-- - **Brooks' Lemma**:     -->
+<!-- For sets of observations $\mathbf{x}$ and $\mathbf{y}$ where $[x] > 0~~\forall ~ x\in\mathbf{x}$ and $[y] > 0~~\forall ~ y\in\mathbf{y}$ then -->
+<!-- \begin{align*} -->
+<!-- \frac{p(\mathbf{y})}{p(\mathbf{x})}  -->
+<!--   &= \prod_{i=1}^n \frac{p(y_i ~|~ y_1,\ldots,y_{i-1},x_{i+1},\ldots,x_n)}{p(x_i ~|~ x_1,\ldots,x_{i-1},y_{i+1},\ldots,y_n)} \\ -->
+<!--   &= \prod_{i=1}^n \frac{p(y_i ~|~ x_1,\ldots,x_{i-1},y_{i+1},\ldots,y_n)}{p(x_i ~|~ y_1,\ldots,y_{i-1},x_{i+1},\ldots,x_n)} \\ -->
+<!-- \end{align*} -->
+<!-- - A simplified example -->
+<!-- Let $\mathbf{y} = (y_1,y_2)$ and $\mathbf{x} = (x_1,x_2)$ then we can derive Brook's Lemma for this case, -->
+<!-- \begin{align*} -->
+<!-- [y_1,y_2]  -->
+<!--   &= [y_1 | y_2] [y_2] \\ -->
+<!--   &= [y_1 | y_2] \frac{[y_2|x_1] \, [x_1]}{[x_1|y_2]} = \frac{[y_1 | y_2]}{[x_1 | y_2]} [y_2|x_1] \, [x_1] \\ -->
+<!--   & = \frac{[y_1 | y_2]}{[x_1 | y_2]} [y_2|x_1] \, [x_1] \left(\frac{[x_2|x_1]}{[x_2|x_1]}\right) \\ -->
+<!--   & = \frac{[y_1 | y_2]}{[x_1 | y_2]} \frac{[y_2|x_1]}{[x_2|x_1]} \, [x_1,x_2] \\ -->
+<!-- \\ -->
+<!-- \frac{[y_1,y_2] }{[x_1,x_2]}  -->
+<!--   & = \frac{[y_1 | y_2]}{[x_1 | y_2]} \frac{[y_2|x_1]}{[x_2|x_1]} -->
+<!-- \end{align*}  -->
+<p>random variables <span class="math inline">\(\mathcal{X} = \{ X_v \}_{v \in \mathcal{V}}\)</span> form a Markov random field with respect to <span class="math inline">\(\mathcal{G}\)</span> if they satisfy
+- <strong>Pairwise Markov property:</strong></p>
 
+</div>
+</div>
 </div>
 </div>
             </section>

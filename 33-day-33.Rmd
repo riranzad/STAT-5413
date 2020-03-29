@@ -1,3 +1,12 @@
 # Day 33
 
 ## Announcements
+
+
+## Spatio-temporal data
+
+Let $y(\mathbf{s}, t)$ be an observation at location $\mathbf{s} \in \mathcal{D}$ for time $t \in \mathcal{T}$ the $\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))' \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})$
+
+- In general, $\mathcal{D}$ and $\mathcal{T}$ could be either discrete or continuous.
+
+- The same old story -- It's really hard to specify a positive-definite covariance function in space-time without making some assumptions

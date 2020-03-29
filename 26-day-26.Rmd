@@ -370,8 +370,128 @@ is non-seperable
 
 - Non-stationarity: to account for spatially varying response, one can model the $A_{ij}$s as spatially varying by $A_{ij}(\mathbf{s})$. Therefore, the cross-covariance matrix $\mathbf{A}(\mathbf{s}) \mathbf{A}(\mathbf{s}')$ is spatially varying
 
-```{r}
+```{r, message = FALSE}
+## Make some data
+set.seed(1)
+n <- 30^2
+p <- 4
+L <- 3 ## three latent factors
+coords <- expand.grid(
+    seq(0, 1, length.out = sqrt(n)),
+    seq(0, 1, length.out = sqrt(n))
+)
+X <- cbind(1, rnorm(n, 0, 0.5))
 
+beta <- list(p)
+for (j in 1:p) {
+    beta[[j]] <- as.matrix(c(1, rnorm(1, 0, 0.5)))
+}
+
+Xbeta <- rep(0, n * p)
+for (j in 1:p) {
+    Xbeta[1:n + (j-1)*n] <- X %*% beta[[j]]
+}
+sigma2 <- c(1, 2, 0.5, 1)
+phi <- 3 / 0.5
+
+D <- as.matrix(rdist(coords))
+## constant spatial correlation function
+R_n <- exp(-phi * D)
+R_n_chol <- chol(R_n)
+
+f <- matrix(0, L, n)
+for (l in 1:L) {
+    f[l, ] <- mvnfast::rmvn(1, rep(0, n), R_n_chol, isChol = TRUE)
+}
+
+dat <- data.frame(
+    lon    = rep(coords[, 1], each = 3),
+    lat    = rep(coords[, 2], each = 3),
+    f      = c(f),
+    factor = rep(1:3, times = n)
+)
+
+ggplot(data = dat, aes(x = lon, y = lat, fill = f)) +
+    geom_raster() +
+    facet_grid(~ factor) +
+    ggtitle("spatial random effects") +
+    scale_fill_viridis_c()
+```
+
+- generate the spatially-varying correlation matrix $\mathbf{A}(\mathbf{s})$ where each of the parameters of the matrix are assigned the same spatial exponential covariace function $\exp \left(-\mathbf{D} / \phi \right)$ with respect to the required support.
+
+```{r}
+A <- array(0, dim = c(p, L, n))
+for (i in 1:p) {
+    for (l in 1:L) {
+        if (i == l){
+            A[i, l, ] <- exp(mvnfast::rmvn(1, rep(0, n), exp(-D)))
+        } else if (i > l) {
+            A[i, l, ] <- mvnfast::rmvn(1, rep(0, n), exp(-D))
+        }
+    }
+}
+
+str(A)
+## simulate a 4 by 4 covariance matrix for the 
+g1 <- ggcorr(data = NULL, cor_matrix = cov2cor(A[, , 1] %*% t(A[, , 1])), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+g10 <- ggcorr(data = NULL, cor_matrix = cov2cor(A[, , 10] %*% t(A[, , 10])), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+g100 <- ggcorr(data = NULL, cor_matrix = cov2cor(A[, , 100] %*% t(A[, , 100])), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+g500 <- ggcorr(data = NULL, cor_matrix = cov2cor(A[, , 500] %*% t(A[, , 500])), label = TRUE) +
+    scale_fill_viridis_c() +
+    ggtitle("Correlation among processes") 
+
+(g1 | g10) / (g100 | g500)
+```
+
+
+```{r, cache = TRUE, dependson = -2}
+y <- rep(0, n*p)
+for (j in 1:p) {
+    idx <- (j-1) * n
+    for (i in 1:n) {
+        y[idx + i] <- rnorm(1, Xbeta[i + idx] + (A[, , i] %*% f[, i])[j, ], sqrt(sigma2[j]))
+    }
+}
+```
+
+```{r}
+Af <- matrix(0, n, p)
+for (i in 1:n) {
+    Af[i, ] <- (A[, , i] %*% f[, i])
+}
+dat <- data.frame(
+    lon   = coords[, 1],
+    lat   = coords[, 2],
+    mu    = Xbeta,
+    Af    = c(Af),
+    y     = y,
+    var   = rep(1:p, each = n)
+)
+
+p1 <- ggplot(data = dat, aes(x = lon, y = lat, fill = Af)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("non-stationary spatial random effects") + 
+    scale_fill_viridis_c()
+p2 <- ggplot(data = dat, aes(x = lon, y = lat, fill = mu)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("fixed effects") + 
+    scale_fill_viridis_c()
+p3 <- ggplot(data = dat, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    facet_grid(~ var) +
+    ggtitle("non-stationary observed data") + 
+    scale_fill_viridis_c()
+## plot using patchwork package
+p1 / p2 / p3
 ```
 
 
