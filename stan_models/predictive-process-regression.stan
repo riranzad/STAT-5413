@@ -70,13 +70,13 @@ transformed parameters {
 
   // predictive process interpolation matrix
   c = tau2 * exp(- D / phi);
+  // eta_centered is N(0, 1)
+  // eta_star = L * eta_centered ~ N(0, LL')
   eta_star = cholesky_decompose(Sigma_star) * eta_centered;
+  // predictive process interpolator
   eta = c * Sigma_star_inv * eta_star;
 }
 
-// The model to be estimated. We model the output
-// 'y' to be normally distributed with mean 'mu'
-// and standard deviation 'sigma'.
 
 model {
     // priors
@@ -88,7 +88,7 @@ model {
   y ~ normal(mu + eta, sqrt(sigma2));
   // Note that this is vectorized and equivalent to
   // for (i in 1:n) {
-  //   y[i] ~ normal(mu[i], sigma);
+  //   y[i] ~ normal(mu[i] + eta[i], sqrt(sigma2));
   // }
 }
 // Note: the stan file must end in a blank (new) line

@@ -235,16 +235,22 @@ where $\mathbf{A} = \begin{pmatrix} \mathcal{R}^+ & 0 & \cdots & 0\\ \mathcal{R}
 
 \begin{align*}
 Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
-& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s})\right) \mathbf{A}'\\
-& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s})) & 0 & \cdots & 0 \\
-0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s})) & \cdots & 0 \\
+& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s}')\right) \mathbf{A}'\\
+& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s}')) & 0 & \cdots & 0 \\
+0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s}')) & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s})) \end{pmatrix}
+0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s}')) \end{pmatrix}
  \mathbf{A}' \\
-& \mathbf{A} \mathbf{A}' C(\|\mathbf{s} - \mathbf{s}'\|),
+& = \mathbf{A} \begin{pmatrix} Cov(C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}) & 0 & \cdots & 0 \\
+0 & C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}) & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta})) \end{pmatrix}
+ \mathbf{A}' \\
+& \mathbf{A} \left( C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}) \mathbf{I} \right) \mathbf{A}' ,
+& \mathbf{A} \mathbf{A}' C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}),
 \end{align*}
 
-where $\mathbf{A} \mathbf{A}'$ is the cross-covariance and $C(\|\mathbf{s} - \mathbf{s}'\|)$ is the spatial covariance
+where $\mathbf{A} \mathbf{A}'$ is the cross-covariance and $C(\|\mathbf{s} - \mathbf{s}'\|)$ is the spatial correlation function.
 
 ```{r, message = FALSE}
 ## Make some data
@@ -358,15 +364,20 @@ p1 / p2 / p3
 
 \begin{align*}
 Cov \left( y(\mathbf{s}), y(\mathbf{s}') \right) & = Cov \left( \mathbf{A} \mathbf{f}(\mathbf{s}), \mathbf{A} \mathbf{f}(\mathbf{s}') \right) \\
-& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s})\right) \mathbf{A}'\\
-& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s})) & 0 & \cdots & 0 \\
-0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s})) & \cdots & 0 \\
+& = \mathbf{A} Cov \left( \mathbf{f}(\mathbf{s}), \mathbf{f}(\mathbf{s}')\right) \mathbf{A}'\\
+& = \mathbf{A} \begin{pmatrix} Cov(f_1(\mathbf{s}), f_1(\mathbf{s}')) & 0 & \cdots & 0 \\
+0 & Cov(f_2(\mathbf{s}), f_2(\mathbf{s}')) & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s})) \end{pmatrix}
+0 & 0 & \cdots & Cov(f_L(\mathbf{s}), f_L(\mathbf{s}')) \end{pmatrix}
+ \mathbf{A}' //
+ & = \mathbf{A} \begin{pmatrix} C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_\1) & 0 & \cdots & 0 \\
+0 & C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_\2) & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & C(\|\mathbf{s} - \mathbf{s}'\| | \boldsymbol{\theta}_L) \end{pmatrix}
  \mathbf{A}' 
  \end{align*}
 
-is non-seperable
+is non-seperable because we can't write the covariance function as a product of "cross-covariance" times "spatial correlation"
 
 - Non-stationarity: to account for spatially varying response, one can model the $A_{ij}$s as spatially varying by $A_{ij}(\mathbf{s})$. Therefore, the cross-covariance matrix $\mathbf{A}(\mathbf{s}) \mathbf{A}(\mathbf{s}')$ is spatially varying
 
@@ -420,7 +431,7 @@ ggplot(data = dat, aes(x = lon, y = lat, fill = f)) +
 
 - generate the spatially-varying correlation matrix $\mathbf{A}(\mathbf{s})$ where each of the parameters of the matrix are assigned the same spatial exponential covariace function $\exp \left(-\mathbf{D} / \phi \right)$ with respect to the required support.
 
-```{r}
+```{r, message = FALSE}
 A <- array(0, dim = c(p, L, n))
 for (i in 1:p) {
     for (l in 1:L) {

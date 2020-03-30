@@ -56,6 +56,8 @@ transformed parameters {
       Sigma[j, i] = Sigma[i, j];
     }
   }
+  // equivalent to
+  // Sigma = exp( - D / phi)
   for (i in 1:n) {
     Sigma[i, i] = sigma2 + tau2;
   }
@@ -73,9 +75,5 @@ model {
   beta ~ normal(0, 5);
   // likelihood
   y ~ multi_normal_cholesky(mu, L_Sigma);
-  // Note that this is vectorized and equivalent to
-  // for (i in 1:n) {
-  //   y[i] ~ normal(mu[i], sigma);
-  // }
 }
 // Note: the stan file must end in a blank (new) line

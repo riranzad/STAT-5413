@@ -47,8 +47,8 @@ data.frame(y = y, x = X[, 2], mu = X %*% beta) %>%
 
 - print the output of the model `linear-regression.stan`
 
-```{r}
-read_lines(here::here("stan_models", "linear-regression.stan"))
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "linear-regression.stan")), sep = "\n")
 ```
 
 - What are the priors implied by this model on $\boldsymbol{\beta}$ and $\sigma$?
@@ -60,7 +60,22 @@ read_lines(here::here("stan_models", "linear-regression.stan"))
 fit <- stan(
     file = here::here("stan_models", "linear-regression.stan"),
     data = list(y = y, n = n, X = X, p = ncol(X)),
-    iter = 500
+    iter = 1000
+)
+```
+
+- with priors 
+
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "linear-regression-priors.stan")), sep = "\n")
+```
+
+
+```{r, cache = TRUE, message = FALSE}
+fit_prior <- stan(
+    file = here::here("stan_models", "linear-regression-priors.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X)),
+    iter = 1000
 )
 ```
 
@@ -68,10 +83,10 @@ fit <- stan(
 
 ```{r}
 ## only plot the regression parameters
-print(fit, probs = c(0.1, 0.9), pars = c("beta", "sigma"))
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "sigma", "lp__"))
 
 ## trace plots
-mcmc_trace(fit, regex_pars = c("beta", "sigma"))
+mcmc_trace(fit, regex_pars = c("beta", "sigma", "lp__"))
 
 ## area plots of posterior
 mcmc_areas(fit, regex_pars = c("beta", "sigma"))
@@ -114,7 +129,7 @@ ppc_data(y, y_rep)
 ```
 
 ```{r, cache = TRUE}
-ppc_hist(y[1:5], y_rep[, 1:5])
+ppc_hist(y, y_rep[1:5, ]) ## only use a subset of rows
 ```
 
 ```{r, cache = TRUE}
@@ -151,8 +166,8 @@ print(mle$par[1:3], digits = 4)
 
 ### Example: Spatial model in stan
 
-```{r}
-read_lines(here::here("stan_models", "spatial-regression.stan"))
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "spatial-regression.stan")), sep = "\n")
 ```
 
 ```{r}
@@ -210,8 +225,8 @@ mcmc_acf(fit, regex_pars = c("beta", "sigma2", "tau2", "phi"))
 
 - use the same data from the previous example
 
-```{r}
-read_lines(here::here("stan_models", "predictive-process-regression.stan"))
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "predictive-process-regression.stan")), sep = "\n")
 ```
 
 - Fit the stan model

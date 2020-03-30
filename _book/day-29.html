@@ -422,19 +422,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-29" class="section level1">
 <h1><span class="header-section-number">29</span> Day 29</h1>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb432-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb432-2" data-line-number="2"><span class="kw">library</span>(viridis)</a>
-<a class="sourceLine" id="cb432-3" data-line-number="3"><span class="kw">library</span>(mvnfast)</a>
-<a class="sourceLine" id="cb432-4" data-line-number="4"><span class="kw">library</span>(igraph)</a>
-<a class="sourceLine" id="cb432-5" data-line-number="5"><span class="kw">library</span>(Matrix)</a>
-<a class="sourceLine" id="cb432-6" data-line-number="6"><span class="kw">library</span>(patchwork)</a>
-<a class="sourceLine" id="cb432-7" data-line-number="7"><span class="kw">library</span>(rstan)</a>
-<a class="sourceLine" id="cb432-8" data-line-number="8"><span class="co">## use recommended rstan settings</span></a>
-<a class="sourceLine" id="cb432-9" data-line-number="9"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
-<a class="sourceLine" id="cb432-10" data-line-number="10"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb432-11" data-line-number="11"><span class="kw">library</span>(bayesplot)</a>
-<a class="sourceLine" id="cb432-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb432-13" data-line-number="13"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb428-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb428-2" data-line-number="2"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb428-3" data-line-number="3"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb428-4" data-line-number="4"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb428-5" data-line-number="5"><span class="kw">library</span>(Matrix)</a>
+<a class="sourceLine" id="cb428-6" data-line-number="6"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb428-7" data-line-number="7"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb428-8" data-line-number="8"><span class="co">## use recommended rstan settings</span></a>
+<a class="sourceLine" id="cb428-9" data-line-number="9"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
+<a class="sourceLine" id="cb428-10" data-line-number="10"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb428-11" data-line-number="11"><span class="kw">library</span>(bayesplot)</a>
+<a class="sourceLine" id="cb428-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb428-13" data-line-number="13"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
 <div id="announcements-24" class="section level2">
 <h2><span class="header-section-number">29.1</span> Announcements</h2>
 </div>
@@ -507,39 +507,39 @@ Q_{i, j} \neq 0 \hspace{1em} \Leftrightarrow \hspace{1em} \{i, j\} \in \mathcal{
 y_t = \phi y_{t-1} + \varepsilon_t
 \end{align*}\]</span></p>
 <p>where <span class="math inline">\(|\phi| &lt; 1\)</span>, <span class="math inline">\(\varepsilon_t \stackrel{iid}{\sim} N(0, 1)\)</span>, and <span class="math inline">\(y_1 \sim N(0, 1 / (1 - \phi^2))\)</span>.</p>
-<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb433-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb433-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
-<a class="sourceLine" id="cb433-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb433-4" data-line-number="4"><span class="co">## autoregression model representation</span></a>
-<a class="sourceLine" id="cb433-5" data-line-number="5">y &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</a>
-<a class="sourceLine" id="cb433-6" data-line-number="6">y[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>)))</a>
-<a class="sourceLine" id="cb433-7" data-line-number="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n) {</a>
-<a class="sourceLine" id="cb433-8" data-line-number="8">    y[t] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, phi <span class="op">*</span><span class="st"> </span>y[t<span class="dv">-1</span>], <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb433-9" data-line-number="9">}</a>
-<a class="sourceLine" id="cb433-10" data-line-number="10"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-243-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb429-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb429-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
+<a class="sourceLine" id="cb429-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb429-4" data-line-number="4"><span class="co">## autoregression model representation</span></a>
+<a class="sourceLine" id="cb429-5" data-line-number="5">y &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)</a>
+<a class="sourceLine" id="cb429-6" data-line-number="6">y[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="kw">sqrt</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>)))</a>
+<a class="sourceLine" id="cb429-7" data-line-number="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb429-8" data-line-number="8">    y[t] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, phi <span class="op">*</span><span class="st"> </span>y[t<span class="dv">-1</span>], <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb429-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb429-10" data-line-number="10"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-245-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>The set of edges is <span class="math inline">\(\mathcal{E} = \{ \{ 1, 2\}, \{2, 3\}, \ldots, \{n-1, n\} \}\)</span> and the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> has nonzero elements <span class="math inline">\(Q_{i,j} = -\phi\)</span> for <span class="math inline">\(|i-j| = 1\)</span>, <span class="math inline">\(Q_{1,1} = Q_{n,n} = 1\)</span> and <span class="math inline">\(Q_{i,i} = 1 + \phi^2\)</span> for <span class="math inline">\(i = 2, \ldots, n-1\)</span>.</li>
 </ul>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" data-line-number="1"><span class="co">## GMRF representation</span></a>
-<a class="sourceLine" id="cb434-2" data-line-number="2">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</a>
-<a class="sourceLine" id="cb434-3" data-line-number="3">Q &lt;-<span class="st"> </span><span class="kw">toeplitz</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>phi, <span class="kw">rep</span>(<span class="dv">0</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)))</a>
-<a class="sourceLine" id="cb434-4" data-line-number="4"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>), <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb434-5" data-line-number="5">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb434-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb434-7" data-line-number="7">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">solve</span>(Q)))</a>
-<a class="sourceLine" id="cb434-8" data-line-number="8"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb430-1" data-line-number="1"><span class="co">## GMRF representation</span></a>
+<a class="sourceLine" id="cb430-2" data-line-number="2">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, n)</a>
+<a class="sourceLine" id="cb430-3" data-line-number="3">Q &lt;-<span class="st"> </span><span class="kw">toeplitz</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="op">-</span>phi, <span class="kw">rep</span>(<span class="dv">0</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)))</a>
+<a class="sourceLine" id="cb430-4" data-line-number="4"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>phi<span class="op">^</span><span class="dv">2</span>, n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb430-5" data-line-number="5">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb430-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb430-7" data-line-number="7">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">solve</span>(Q)))</a>
+<a class="sourceLine" id="cb430-8" data-line-number="8"><span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a></code></pre></div>
 <pre><code>##      [,1]  [,2]  [,3]  [,4]  [,5]
 ## [1,]  1.0 -0.90  0.00  0.00  0.00
 ## [2,] -0.9  1.81 -0.90  0.00  0.00
 ## [3,]  0.0 -0.90  1.81 -0.90  0.00
 ## [4,]  0.0  0.00 -0.90  1.81 -0.90
 ## [5,]  0.0  0.00  0.00 -0.90  1.81</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-244-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-246-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>notice how sparse the matrix <span class="math inline">\(\mathbf{Q}\)</span> is</li>
 </ul>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" data-line-number="1"><span class="kw">mean</span>(Q <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb432-1" data-line-number="1"><span class="kw">mean</span>(Q <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## [1] 0.994</code></pre>
 <ul>
 <li>Recall the autocorrelation function of an AR(1) timeseries at lag <span class="math inline">\(h\)</span>:
@@ -547,16 +547,16 @@ y_t = \phi y_{t-1} + \varepsilon_t
 <li><span class="math inline">\(\gamma(h) = \phi^h\)</span></li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb438-1" data-line-number="1">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
-<a class="sourceLine" id="cb438-2" data-line-number="2"><span class="kw">plot</span>(</a>
-<a class="sourceLine" id="cb438-3" data-line-number="3">    Sigma[<span class="dv">1</span>, ] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">1</span>, <span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb438-4" data-line-number="4">    <span class="dt">type =</span> <span class="st">&#39;p&#39;</span>, </a>
-<a class="sourceLine" id="cb438-5" data-line-number="5">    <span class="dt">main =</span> <span class="st">&quot;GMRF ACF in points, theoretical ACF in red&quot;</span></a>
-<a class="sourceLine" id="cb438-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb438-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">c</span>(<span class="dv">1</span>, phi<span class="op">^</span>(<span class="dv">1</span><span class="op">:</span>(n<span class="dv">-1</span>))), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-246-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" data-line-number="1">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb434-2" data-line-number="2"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb434-3" data-line-number="3">    Sigma[<span class="dv">1</span>, ] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">1</span>, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb434-4" data-line-number="4">    <span class="dt">type =</span> <span class="st">&#39;p&#39;</span>, </a>
+<a class="sourceLine" id="cb434-5" data-line-number="5">    <span class="dt">main =</span> <span class="st">&quot;GMRF ACF in points, theoretical ACF in red&quot;</span></a>
+<a class="sourceLine" id="cb434-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb434-7" data-line-number="7"><span class="kw">lines</span>(<span class="kw">c</span>(<span class="dv">1</span>, phi<span class="op">^</span>(<span class="dv">1</span><span class="op">:</span>(n<span class="dv">-1</span>))), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-248-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is a dense matrix</p>
-<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb439-1" data-line-number="1"><span class="kw">mean</span>(Sigma <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" data-line-number="1"><span class="kw">mean</span>(Sigma <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>therefore, the GMRF formulation can be evaluated using <span class="math inline">\(\mathcal{O}(n)\)</span> algorithms</p>
 </div>
@@ -659,39 +659,39 @@ the CAR and SAR models</a></li>
 </ul></li>
 <li><p>if <span class="math inline">\(\phi = 0\)</span>, then the observations are spatially independent</p></li>
 </ul>
-<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb441-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb441-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
-<a class="sourceLine" id="cb441-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
-<a class="sourceLine" id="cb441-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb441-5" data-line-number="5">A[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb441-6" data-line-number="6">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb441-7" data-line-number="7">D[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb441-8" data-line-number="8">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
-<a class="sourceLine" id="cb441-9" data-line-number="9">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb441-10" data-line-number="10">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
-<a class="sourceLine" id="cb441-11" data-line-number="11"><span class="co">## calculate the correlation from a first order CAR</span></a>
-<a class="sourceLine" id="cb441-12" data-line-number="12">Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb441-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb441-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb441-15" data-line-number="15">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb441-16" data-line-number="16">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
-<a class="sourceLine" id="cb441-17" data-line-number="17">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb441-18" data-line-number="18"><span class="co">## do this as a loop</span></a>
-<a class="sourceLine" id="cb441-19" data-line-number="19"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
-<a class="sourceLine" id="cb441-20" data-line-number="20">    A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb441-21" data-line-number="21">    D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb441-22" data-line-number="22">    Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A</a>
-<a class="sourceLine" id="cb441-23" data-line-number="23">    Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
-<a class="sourceLine" id="cb441-24" data-line-number="24">    <span class="co">## calculate the correlation from a first order CAR</span></a>
-<a class="sourceLine" id="cb441-25" data-line-number="25">    rho[i] &lt;-<span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
-<a class="sourceLine" id="cb441-26" data-line-number="26">}</a>
-<a class="sourceLine" id="cb441-27" data-line-number="27"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb441-28" data-line-number="28"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb441-29" data-line-number="29"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb441-30" data-line-number="30"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb441-31" data-line-number="31"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb441-32" data-line-number="32"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;CAR correlation (lag-1) vs phi parameter&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb441-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb437-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
+<a class="sourceLine" id="cb437-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
+<a class="sourceLine" id="cb437-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb437-5" data-line-number="5">A[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb437-6" data-line-number="6">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb437-7" data-line-number="7">D[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb437-8" data-line-number="8">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb437-9" data-line-number="9">Q[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb437-10" data-line-number="10">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb437-11" data-line-number="11"><span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb437-12" data-line-number="12">Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb437-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb437-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb437-15" data-line-number="15">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb437-16" data-line-number="16">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
+<a class="sourceLine" id="cb437-17" data-line-number="17">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb437-18" data-line-number="18"><span class="co">## do this as a loop</span></a>
+<a class="sourceLine" id="cb437-19" data-line-number="19"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
+<a class="sourceLine" id="cb437-20" data-line-number="20">    A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb437-21" data-line-number="21">    D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb437-22" data-line-number="22">    Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb437-23" data-line-number="23">    Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(Q)</a>
+<a class="sourceLine" id="cb437-24" data-line-number="24">    <span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb437-25" data-line-number="25">    rho[i] &lt;-<span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">6</span>] <span class="op">/</span><span class="st"> </span>Sigma[<span class="dv">5</span>, <span class="dv">5</span>]</a>
+<a class="sourceLine" id="cb437-26" data-line-number="26">}</a>
+<a class="sourceLine" id="cb437-27" data-line-number="27"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb437-28" data-line-number="28"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-29" data-line-number="29"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-30" data-line-number="30"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-31" data-line-number="31"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-32" data-line-number="32"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;CAR correlation (lag-1) vs phi parameter&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) </a></code></pre></div>
 <pre><code>## 5 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
 ##               
 ## [1,] . 1 . . .
@@ -714,127 +714,127 @@ the CAR and SAR models</a></li>
 ## [4,]  .    .   -0.4  3.0 -0.4
 ## [5,]  .    .    .   -0.4  3.0
 ## [1] 0.1393</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-248-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-250-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>Plot how the <span class="math inline">\(\phi\)</span> parameter determines the correlation</li>
 </ul>
-<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb443-1" data-line-number="1"><span class="co">## simulate some data</span></a>
-<a class="sourceLine" id="cb443-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb443-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
-<a class="sourceLine" id="cb443-4" data-line-number="4">  </a>
-<a class="sourceLine" id="cb443-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb443-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb443-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
-<a class="sourceLine" id="cb443-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
-<a class="sourceLine" id="cb443-9" data-line-number="9">    )</a>
-<a class="sourceLine" id="cb443-10" data-line-number="10">  </a>
-<a class="sourceLine" id="cb443-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
-<a class="sourceLine" id="cb443-12" data-line-number="12">  </a>
-<a class="sourceLine" id="cb443-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb443-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb443-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb443-16" data-line-number="16">  Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
-<a class="sourceLine" id="cb443-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
-<a class="sourceLine" id="cb443-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
-<a class="sourceLine" id="cb443-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb443-20" data-line-number="20">  </a>
-<a class="sourceLine" id="cb443-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
-<a class="sourceLine" id="cb443-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb443-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb443-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb443-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb443-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi))</a>
-<a class="sourceLine" id="cb443-27" data-line-number="27">  </a>
-<a class="sourceLine" id="cb443-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
-<a class="sourceLine" id="cb443-29" data-line-number="29">}  </a>
-<a class="sourceLine" id="cb443-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb443-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
-<a class="sourceLine" id="cb443-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
-<a class="sourceLine" id="cb443-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb443-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb443-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
-<a class="sourceLine" id="cb443-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
-<a class="sourceLine" id="cb443-37" data-line-number="37"></a>
-<a class="sourceLine" id="cb443-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-249-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb439-1" data-line-number="1"><span class="co">## simulate some data</span></a>
+<a class="sourceLine" id="cb439-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb439-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
+<a class="sourceLine" id="cb439-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb439-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb439-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb439-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb439-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb439-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb439-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb439-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb439-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb439-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb439-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb439-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb439-16" data-line-number="16">  Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb439-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb439-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb439-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb439-20" data-line-number="20">  </a>
+<a class="sourceLine" id="cb439-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
+<a class="sourceLine" id="cb439-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb439-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb439-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb439-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb439-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi))</a>
+<a class="sourceLine" id="cb439-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb439-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
+<a class="sourceLine" id="cb439-29" data-line-number="29">}  </a>
+<a class="sourceLine" id="cb439-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb439-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb439-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
+<a class="sourceLine" id="cb439-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb439-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb439-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
+<a class="sourceLine" id="cb439-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb439-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb439-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-251-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div id="fitting-a-car-model-in-stan" class="section level4">
 <h4><span class="header-section-number">29.4.1.1</span> Fitting a CAR model in <code>stan</code></h4>
-<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb444-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
-<a class="sourceLine" id="cb444-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb444-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.999</span></a>
-<a class="sourceLine" id="cb444-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb444-5" data-line-number="5">locs &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb444-6" data-line-number="6"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb444-7" data-line-number="7">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
-<a class="sourceLine" id="cb444-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
-<a class="sourceLine" id="cb444-9" data-line-number="9">  )</a>
-<a class="sourceLine" id="cb444-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb444-11" data-line-number="11"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
-<a class="sourceLine" id="cb444-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb444-13" data-line-number="13">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb444-14" data-line-number="14"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb444-15" data-line-number="15">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb444-16" data-line-number="16">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
-<a class="sourceLine" id="cb444-17" data-line-number="17"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
-<a class="sourceLine" id="cb444-18" data-line-number="18">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
-<a class="sourceLine" id="cb444-19" data-line-number="19">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb444-20" data-line-number="20">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
-<a class="sourceLine" id="cb444-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb444-22" data-line-number="22">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb444-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
-<a class="sourceLine" id="cb444-27" data-line-number="27">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb444-28" data-line-number="28"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-29" data-line-number="29"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-30" data-line-number="30"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb444-31" data-line-number="31"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
-<a class="sourceLine" id="cb444-32" data-line-number="32">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-250-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb440-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
+<a class="sourceLine" id="cb440-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb440-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.999</span></a>
+<a class="sourceLine" id="cb440-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb440-5" data-line-number="5">locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb440-6" data-line-number="6"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb440-7" data-line-number="7">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb440-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb440-9" data-line-number="9">  )</a>
+<a class="sourceLine" id="cb440-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb440-11" data-line-number="11"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb440-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb440-13" data-line-number="13">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb440-14" data-line-number="14"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb440-15" data-line-number="15">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb440-16" data-line-number="16">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb440-17" data-line-number="17"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb440-18" data-line-number="18">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb440-19" data-line-number="19">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb440-20" data-line-number="20">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
+<a class="sourceLine" id="cb440-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb440-22" data-line-number="22">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb440-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
+<a class="sourceLine" id="cb440-27" data-line-number="27">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb440-28" data-line-number="28"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-29" data-line-number="29"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-30" data-line-number="30"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb440-31" data-line-number="31"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb440-32" data-line-number="32">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-252-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li><p>we need to define a stan model</p></li>
 <li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
 <li><p>print the output of the model <code>spatial-car.stan</code></p></li>
 </ul>
-<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb445-1" data-line-number="1"><span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>))</a></code></pre></div>
-<pre><code>##  [1] &quot;data {&quot;                                                              
-##  [2] &quot;    int&lt;lower=0&gt; N;    // the number of observations&quot;                
-##  [3] &quot;    vector[N] y;       // the obersved values&quot;                       
-##  [4] &quot;    matrix[N, N] A;    // the N times N adjacency matrix &quot;           
-##  [5] &quot;    matrix[N, N] D;    // the N times N diagonal matrix of neighbors&quot;
-##  [6] &quot;}&quot;                                                                   
-##  [7] &quot;parameters {&quot;                                                        
-##  [8] &quot;    vector[N] eta;    //&quot;                                            
-##  [9] &quot;    real mu;&quot;                                                        
-## [10] &quot;    real&lt;lower=0&gt; sigma2;&quot;                                           
-## [11] &quot;    real&lt;lower=0&gt; tau2;&quot;                                             
-## [12] &quot;    real&lt;lower=0, upper=1&gt; phi;&quot;                                     
-## [13] &quot;}&quot;                                                                   
-## [14] &quot;// transformed parameters {&quot;                                         
-## [15] &quot;//     vector[N] y_pred = mu + w_s;&quot;                                 
-## [16] &quot;// }&quot;                                                                
-## [17] &quot;model {&quot;                                                             
-## [18] &quot;    matrix[N, N] Sigma_inv = (D - phi * A) / tau2;&quot;                  
-## [19] &quot;    eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);&quot;           
-## [20] &quot;    mu ~ normal(0, 1);&quot;                                              
-## [21] &quot;    sigma2 ~ cauchy(0, 5);&quot;                                          
-## [22] &quot;    tau2 ~ cauchy(0, 5);&quot;                                            
-## [23] &quot;    y ~ normal(mu + eta, sigma2);&quot;                                   
-## [24] &quot;}&quot;</code></pre>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb441-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+    int&lt;lower=0&gt; N;    // the number of observations
+    vector[N] y;       // the obersved values
+    matrix[N, N] A;    // the N times N adjacency matrix 
+    matrix[N, N] D;    // the N times N diagonal matrix of neighbors
+}
+parameters {
+    vector[N] eta;    //
+    real mu;
+    real&lt;lower=0&gt; sigma2;
+    real&lt;lower=0&gt; tau2;
+    real&lt;lower=0, upper=1&gt; phi;
+}
+// transformed parameters {
+//     vector[N] y_pred = mu + w_s;
+// }
+model {
+    matrix[N, N] Sigma_inv = (D - phi * A) / tau2;
+    eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);
+    mu ~ normal(0, 1);
+    sigma2 ~ cauchy(0, 5);
+    tau2 ~ cauchy(0, 5);
+    y ~ normal(mu + eta, sigma2);
+}</code></pre>
 <ul>
 <li><p>Fitting the model</p>
 <ul>
 <li>note: this is very slow for even moderate sized data</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb447-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb447-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb447-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
-<a class="sourceLine" id="cb447-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
-<a class="sourceLine" id="cb447-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
-<a class="sourceLine" id="cb447-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
-<a class="sourceLine" id="cb447-7" data-line-number="7">)  </a></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb443-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb443-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-car.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb443-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
+<a class="sourceLine" id="cb443-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
+<a class="sourceLine" id="cb443-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
+<a class="sourceLine" id="cb443-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
+<a class="sourceLine" id="cb443-7" data-line-number="7">)  </a></code></pre></div>
 <pre><code>## Warning: There were 111 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 ## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
 <pre><code>## Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
@@ -852,14 +852,14 @@ the CAR and SAR models</a></li>
 <ul>
 <li>Note: this is giving warinings – it’s best to pay attention to these in stan</li>
 </ul>
-<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb454-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb454-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb454-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb454-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb450-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb450-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb450-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb450-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb450-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
 ## instead.</code></pre>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb452-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: spatial-car.
 ## 4 chains, each with iter=5000; warmup=2500; thin=1; 
 ## post-warmup draws per chain=2500, total post-warmup draws=10000.
@@ -871,26 +871,26 @@ the CAR and SAR models</a></li>
 ## phi     0.58    0.01  0.22   0.27   0.85   919 1.01
 ## lp__   30.36    8.78 54.35 -18.03 114.13    38 1.16
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Mar 29 16:03:21 2020.
+## Samples were drawn using NUTS(diag_e) at Mon Mar 30 11:23:51 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-253-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-253-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-253-3.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-255-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-255-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-255-3.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>plot fitted vs. simulated spatial random effect</li>
 </ul>
-<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb458-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
-<a class="sourceLine" id="cb458-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
-<a class="sourceLine" id="cb458-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-254-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
+<a class="sourceLine" id="cb454-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb454-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-256-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>looks like there might be a mean shift (non-identifiability)</li>
 </ul>
-<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb459-1" data-line-number="1">mu_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>mu</a>
-<a class="sourceLine" id="cb459-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">mean</span>(mu_post) <span class="op">+</span><span class="st"> </span><span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
-<a class="sourceLine" id="cb459-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-255-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" data-line-number="1"><span class="kw">mean</span>(eta)</a></code></pre></div>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb455-1" data-line-number="1">mu_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>mu</a>
+<a class="sourceLine" id="cb455-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">mean</span>(mu_post) <span class="op">+</span><span class="st"> </span><span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb455-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-257-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" data-line-number="1"><span class="kw">mean</span>(eta)</a></code></pre></div>
 <pre><code>## [1] -0.4367</code></pre>
 <ul>
 <li><p>Note: the above model is inefficient as it doesn’t leverage sparse matrix operations. More complicated (and efficient) code is <a href="https://mc-stan.org/users/documentation/case-studies/mbjoseph-CARStan.html">available here</a></p></li>
@@ -926,163 +926,162 @@ the CAR and SAR models</a></li>
 </ul></li>
 <li><p>if <span class="math inline">\(\phi = 0\)</span>, then the observations are spatially independent</p></li>
 </ul>
-<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb462-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
-<a class="sourceLine" id="cb462-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
-<a class="sourceLine" id="cb462-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb462-5" data-line-number="5">D  &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
-<a class="sourceLine" id="cb462-6" data-line-number="6">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
-<a class="sourceLine" id="cb462-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb462-8" data-line-number="8"><span class="co">## calculate the correlation from a first order SAR</span></a>
-<a class="sourceLine" id="cb462-9" data-line-number="9"><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>]</a>
-<a class="sourceLine" id="cb462-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb462-11" data-line-number="11"><span class="co">## do this as a loop</span></a>
-<a class="sourceLine" id="cb462-12" data-line-number="12">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb462-13" data-line-number="13">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
-<a class="sourceLine" id="cb462-14" data-line-number="14">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb462-15" data-line-number="15">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb462-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
-<a class="sourceLine" id="cb462-17" data-line-number="17"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
-<a class="sourceLine" id="cb462-18" data-line-number="18">  Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
-<a class="sourceLine" id="cb462-19" data-line-number="19">  <span class="co">## calculate the correlation from a first order CAR</span></a>
-<a class="sourceLine" id="cb462-20" data-line-number="20">  rho[i] &lt;-<span class="st"> </span><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>] </a>
-<a class="sourceLine" id="cb462-21" data-line-number="21">}</a>
-<a class="sourceLine" id="cb462-22" data-line-number="22"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb462-23" data-line-number="23"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb462-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb462-25" data-line-number="25"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb462-26" data-line-number="26"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb462-27" data-line-number="27"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;SAR correlation (lag-1) vs. phi parameter&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb462-28" data-line-number="28"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb458-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb458-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
+<a class="sourceLine" id="cb458-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
+<a class="sourceLine" id="cb458-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb458-5" data-line-number="5">D  &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
+<a class="sourceLine" id="cb458-6" data-line-number="6">Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
+<a class="sourceLine" id="cb458-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb458-8" data-line-number="8"><span class="co">## calculate the correlation from a first order SAR</span></a>
+<a class="sourceLine" id="cb458-9" data-line-number="9"><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>]</a>
+<a class="sourceLine" id="cb458-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb458-11" data-line-number="11"><span class="co">## do this as a loop</span></a>
+<a class="sourceLine" id="cb458-12" data-line-number="12">n_phi &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb458-13" data-line-number="13">phi &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> n_phi)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>, n_phi)]</a>
+<a class="sourceLine" id="cb458-14" data-line-number="14">rho &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n_phi <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb458-15" data-line-number="15">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb458-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rowSums</span>(A))</a>
+<a class="sourceLine" id="cb458-17" data-line-number="17"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n_phi<span class="dv">-2</span>)) {</a>
+<a class="sourceLine" id="cb458-18" data-line-number="18">  Sigma &lt;-<span class="st"> </span><span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">solve</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi[i] <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)))</a>
+<a class="sourceLine" id="cb458-19" data-line-number="19">  <span class="co">## calculate the correlation from a first order CAR</span></a>
+<a class="sourceLine" id="cb458-20" data-line-number="20">  rho[i] &lt;-<span class="st"> </span><span class="kw">cov2cor</span>(Sigma)[<span class="dv">5</span>, <span class="dv">6</span>] </a>
+<a class="sourceLine" id="cb458-21" data-line-number="21">}</a>
+<a class="sourceLine" id="cb458-22" data-line-number="22"><span class="kw">data.frame</span>(<span class="dt">phi =</span> phi, <span class="dt">rho =</span> rho) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb458-23" data-line-number="23"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> phi, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb458-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb458-25" data-line-number="25"><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb458-26" data-line-number="26"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;correlation&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb458-27" data-line-number="27"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;SAR correlation (lag-1) vs. phi parameter&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb458-28" data-line-number="28"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <pre><code>## [1] 0.2755</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-257-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-259-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>Plot how the <span class="math inline">\(\phi\)</span> parameter determines the correlation</li>
 </ul>
-<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" data-line-number="1"><span class="co">## simulate some data</span></a>
-<a class="sourceLine" id="cb464-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb464-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
-<a class="sourceLine" id="cb464-4" data-line-number="4">  </a>
-<a class="sourceLine" id="cb464-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb464-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb464-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
-<a class="sourceLine" id="cb464-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
-<a class="sourceLine" id="cb464-9" data-line-number="9">    )</a>
-<a class="sourceLine" id="cb464-10" data-line-number="10">  </a>
-<a class="sourceLine" id="cb464-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
-<a class="sourceLine" id="cb464-12" data-line-number="12">  </a>
-<a class="sourceLine" id="cb464-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb464-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb464-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb464-16" data-line-number="16">  Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D))</a>
-<a class="sourceLine" id="cb464-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
-<a class="sourceLine" id="cb464-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
-<a class="sourceLine" id="cb464-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb464-20" data-line-number="20">  </a>
-<a class="sourceLine" id="cb464-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
-<a class="sourceLine" id="cb464-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb464-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb464-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb464-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb464-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi)) </a>
-<a class="sourceLine" id="cb464-27" data-line-number="27">  </a>
-<a class="sourceLine" id="cb464-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
-<a class="sourceLine" id="cb464-29" data-line-number="29">}  </a>
-<a class="sourceLine" id="cb464-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb464-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
-<a class="sourceLine" id="cb464-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
-<a class="sourceLine" id="cb464-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb464-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb464-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
-<a class="sourceLine" id="cb464-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
-<a class="sourceLine" id="cb464-37" data-line-number="37"></a>
-<a class="sourceLine" id="cb464-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-258-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" data-line-number="1"><span class="co">## simulate some data</span></a>
+<a class="sourceLine" id="cb460-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb460-3" data-line-number="3">simulate_data &lt;-<span class="st"> </span><span class="cf">function</span>(n, phi) {</a>
+<a class="sourceLine" id="cb460-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb460-5" data-line-number="5">  locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb460-6" data-line-number="6"><span class="st">    </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb460-7" data-line-number="7">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb460-8" data-line-number="8">      <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb460-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb460-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb460-11" data-line-number="11">  <span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb460-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb460-13" data-line-number="13">  A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb460-14" data-line-number="14"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb460-15" data-line-number="15">  D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb460-16" data-line-number="16">  Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D)) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(D))</a>
+<a class="sourceLine" id="cb460-17" data-line-number="17">  <span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb460-18" data-line-number="18">  R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb460-19" data-line-number="19">  y &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb460-20" data-line-number="20">  </a>
+<a class="sourceLine" id="cb460-21" data-line-number="21">  <span class="co">## generate the plot</span></a>
+<a class="sourceLine" id="cb460-22" data-line-number="22">  output &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb460-23" data-line-number="23"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb460-24" data-line-number="24"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb460-25" data-line-number="25"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb460-26" data-line-number="26"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Phi = &quot;</span>, phi)) </a>
+<a class="sourceLine" id="cb460-27" data-line-number="27">  </a>
+<a class="sourceLine" id="cb460-28" data-line-number="28">  <span class="kw">return</span>(output)</a>
+<a class="sourceLine" id="cb460-29" data-line-number="29">}  </a>
+<a class="sourceLine" id="cb460-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb460-31" data-line-number="31">p1 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb460-32" data-line-number="32">p2 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.9</span>)</a>
+<a class="sourceLine" id="cb460-33" data-line-number="33">p3 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb460-34" data-line-number="34">p4 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb460-35" data-line-number="35">p5 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="fl">-0.9</span>)</a>
+<a class="sourceLine" id="cb460-36" data-line-number="36">p6 &lt;-<span class="st"> </span><span class="kw">simulate_data</span>(<span class="dt">n =</span> <span class="dv">50</span><span class="op">^</span><span class="dv">2</span>, <span class="dt">phi =</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.999</span>)</a>
+<a class="sourceLine" id="cb460-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb460-38" data-line-number="38">(p1 <span class="op">|</span><span class="st"> </span>p2 <span class="op">|</span><span class="st"> </span>p3) <span class="op">/</span><span class="st"> </span>(p4 <span class="op">|</span><span class="st"> </span>p5 <span class="op">|</span><span class="st"> </span>p6)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-260-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div id="fitting-a-sar-model-in-stan" class="section level4">
 <h4><span class="header-section-number">29.4.2.1</span> Fitting a SAR model in <code>stan</code></h4>
-<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb465-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
-<a class="sourceLine" id="cb465-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb465-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
-<a class="sourceLine" id="cb465-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb465-5" data-line-number="5">tau2 &lt;-<span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb465-6" data-line-number="6">locs &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb465-7" data-line-number="7"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb465-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
-<a class="sourceLine" id="cb465-9" data-line-number="9">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
-<a class="sourceLine" id="cb465-10" data-line-number="10">  )</a>
-<a class="sourceLine" id="cb465-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb465-12" data-line-number="12"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
-<a class="sourceLine" id="cb465-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb465-14" data-line-number="14">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb465-15" data-line-number="15"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb465-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
-<a class="sourceLine" id="cb465-17" data-line-number="17">Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">/</span><span class="st"> </span>tau2</a>
-<a class="sourceLine" id="cb465-18" data-line-number="18"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
-<a class="sourceLine" id="cb465-19" data-line-number="19">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
-<a class="sourceLine" id="cb465-20" data-line-number="20">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb465-21" data-line-number="21">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
-<a class="sourceLine" id="cb465-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb465-23" data-line-number="23">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb465-24" data-line-number="24"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-25" data-line-number="25"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-26" data-line-number="26"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-27" data-line-number="27"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
-<a class="sourceLine" id="cb465-28" data-line-number="28">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb465-29" data-line-number="29"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-30" data-line-number="30"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-31" data-line-number="31"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb465-32" data-line-number="32"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
-<a class="sourceLine" id="cb465-33" data-line-number="33">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-259-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb461-1" data-line-number="1"><span class="co">## simulate data for fitting the model</span></a>
+<a class="sourceLine" id="cb461-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb461-3" data-line-number="3">phi &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
+<a class="sourceLine" id="cb461-4" data-line-number="4">sigma2 &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb461-5" data-line-number="5">tau2 &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb461-6" data-line-number="6">locs &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb461-7" data-line-number="7"><span class="st">  </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb461-8" data-line-number="8">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb461-9" data-line-number="9">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb461-10" data-line-number="10">  )</a>
+<a class="sourceLine" id="cb461-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb461-12" data-line-number="12"><span class="co"># plot(make_lattice(length = sqrt(n), dim = 2))</span></a>
+<a class="sourceLine" id="cb461-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb461-14" data-line-number="14">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb461-15" data-line-number="15"><span class="st">  </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb461-16" data-line-number="16">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb461-17" data-line-number="17">Q &lt;-<span class="st"> </span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">diag</span>(n) <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A <span class="op">%*%</span><span class="st"> </span>D) <span class="op">/</span><span class="st"> </span>tau2</a>
+<a class="sourceLine" id="cb461-18" data-line-number="18"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb461-19" data-line-number="19">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb461-20" data-line-number="20">eta &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb461-21" data-line-number="21">y &lt;-<span class="st"> </span>eta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(sigma2))</a>
+<a class="sourceLine" id="cb461-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb461-23" data-line-number="23">p1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> eta) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb461-24" data-line-number="24"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-25" data-line-number="25"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-26" data-line-number="26"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-27" data-line-number="27"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Spatial random effect&quot;</span>)</a>
+<a class="sourceLine" id="cb461-28" data-line-number="28">p2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> locs[, <span class="dv">1</span>], <span class="dt">y =</span> locs[, <span class="dv">2</span>], <span class="dt">z =</span> y) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb461-29" data-line-number="29"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-30" data-line-number="30"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-31" data-line-number="31"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb461-32" data-line-number="32"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb461-33" data-line-number="33">p1 <span class="op">+</span><span class="st"> </span>p2</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-261-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li><p>we need to define a stan model</p></li>
 <li><p>print the output of the model <code>spatial-sar.stan</code></p></li>
 </ul>
-<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb466-1" data-line-number="1"><span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>))</a></code></pre></div>
-<pre><code>##  [1] &quot;data {&quot;                                                 
-##  [2] &quot;  int&lt;lower=0&gt; N;&quot;                                      
-##  [3] &quot;  vector[N] y;&quot;                                         
-##  [4] &quot;  matrix[N, N] A;&quot;                                      
-##  [5] &quot;  matrix[N, N] D;&quot;                                      
-##  [6] &quot;}&quot;                                                      
-##  [7] &quot;transformed data {&quot;                                     
-##  [8] &quot;  matrix[N, N] I = diag_matrix(rep_vector(1, N));&quot;      
-##  [9] &quot;  matrix[N, N] A_D_inv;&quot;                                
-## [10] &quot;  A_D_inv = A * inverse(D);&quot;                            
-## [11] &quot;}&quot;                                                      
-## [12] &quot;parameters {&quot;                                           
-## [13] &quot;  vector[N] eta;&quot;                                       
-## [14] &quot;  real mu;&quot;                                             
-## [15] &quot;  real&lt;lower=0&gt; sigma2;&quot;                                
-## [16] &quot;  real&lt;lower=0&gt; tau2;&quot;                                  
-## [17] &quot;  real&lt;lower=0,upper=1&gt; phi;&quot;                           
-## [18] &quot;}&quot;                                                      
-## [19] &quot;transformed parameters {&quot;                               
-## [20] &quot;  vector[N] y_pred = mu + eta;&quot;                         
-## [21] &quot;}&quot;                                                      
-## [22] &quot;model {&quot;                                                
-## [23] &quot;  matrix[N,N] C = I - phi * A_D_inv;&quot;                   
-## [24] &quot;  matrix[N,N] Sigma_inv = C * C&#39; / tau2;&quot;               
-## [25] &quot;  eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);&quot;
-## [26] &quot;  mu ~ normal(0, 1);&quot;                                   
-## [27] &quot;  sigma2 ~ cauchy(0, 5);&quot;                               
-## [28] &quot;  tau2 ~ cauchy(0, 5);&quot;                                 
-## [29] &quot;  y ~ normal(mu + eta, sigma2);&quot;                        
-## [30] &quot;}&quot;                                                      
-## [31] &quot;&quot;</code></pre>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb462-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; N;
+  vector[N] y;
+  matrix[N, N] A;
+  matrix[N, N] D;
+}
+transformed data {
+  matrix[N, N] I = diag_matrix(rep_vector(1, N));
+  matrix[N, N] A_D_inv;
+  A_D_inv = A * inverse(D);
+}
+parameters {
+  vector[N] eta;
+  real mu;
+  real&lt;lower=0&gt; sigma2;
+  real&lt;lower=0&gt; tau2;
+  real&lt;lower=0,upper=1&gt; phi;
+}
+transformed parameters {
+  vector[N] y_pred = mu + eta;
+}
+model {
+  matrix[N,N] C = I - phi * A_D_inv;
+  matrix[N,N] Sigma_inv = C * C&#39; / tau2;
+  eta ~ multi_normal_prec(rep_vector(0, N), Sigma_inv);
+  mu ~ normal(0, 1);
+  sigma2 ~ cauchy(0, 5);
+  tau2 ~ cauchy(0, 5);
+  y ~ normal(mu + eta, sigma2);
+}</code></pre>
 <ul>
 <li><p>Fitting the model</p>
 <ul>
 <li>note: this is very slow for even moderate sized data</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb468-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb468-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb468-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
-<a class="sourceLine" id="cb468-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
-<a class="sourceLine" id="cb468-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
-<a class="sourceLine" id="cb468-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
-<a class="sourceLine" id="cb468-7" data-line-number="7">)  </a></code></pre></div>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb464-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-sar.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb464-3" data-line-number="3">    <span class="co">## note: convert from a sparse matrix format to regular matrix</span></a>
+<a class="sourceLine" id="cb464-4" data-line-number="4">    <span class="co">## for fitting in stan</span></a>
+<a class="sourceLine" id="cb464-5" data-line-number="5">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">N =</span> n, <span class="dt">D =</span> <span class="kw">as.matrix</span>(D), <span class="dt">A =</span> <span class="kw">as.matrix</span>(A)),</a>
+<a class="sourceLine" id="cb464-6" data-line-number="6">    <span class="dt">iter =</span> <span class="dv">5000</span></a>
+<a class="sourceLine" id="cb464-7" data-line-number="7">)  </a></code></pre></div>
 <pre><code>## Warning: There were 12 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 ## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
 <pre><code>## Warning: There were 4 chains where the estimated Bayesian Fraction of Missing Information was low. See
@@ -1100,14 +1099,14 @@ the CAR and SAR models</a></li>
 <ul>
 <li>Note: this is giving warinings – it’s best to pay attention to these in stan</li>
 </ul>
-<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb475-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb475-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb475-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb475-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb471-1" data-line-number="1"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb471-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb471-3" data-line-number="3"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb471-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb471-5" data-line-number="5"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
 ## instead.</code></pre>
-<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb473-1" data-line-number="1"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: spatial-sar.
 ## 4 chains, each with iter=5000; warmup=2500; thin=1; 
 ## post-warmup draws per chain=2500, total post-warmup draws=10000.
@@ -1119,18 +1118,18 @@ the CAR and SAR models</a></li>
 ## phi      0.21    0.01  0.15    0.04 0.42   517 1.01
 ## lp__   -84.45    8.55 57.41 -139.39 5.26    45 1.09
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Mar 29 16:07:53 2020.
+## Samples were drawn using NUTS(diag_e) at Mon Mar 30 11:28:18 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-262-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-262-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-262-3.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-264-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-264-2.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-264-3.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>plot fitted vs. simulated spatial random effect</li>
 </ul>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
-<a class="sourceLine" id="cb479-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
-<a class="sourceLine" id="cb479-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-263-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1">eta_post &lt;-<span class="st"> </span><span class="kw">extract</span>(fit)<span class="op">$</span>eta</a>
+<a class="sourceLine" id="cb475-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">apply</span>(eta_post, <span class="dv">2</span>, mean), eta)</a>
+<a class="sourceLine" id="cb475-3" data-line-number="3"><span class="kw">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-265-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li><p>More on CAR and SAR models is <a href="https://www.stat.colostate.edu/~hooten/papers/pdf/VerHoef_etal_SpatStat_2018.pdf">available here</a>
 ### Theoretical Results for more general model classes</p></li>
