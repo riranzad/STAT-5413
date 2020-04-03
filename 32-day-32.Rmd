@@ -2,3 +2,5 @@
 
 ## Announcements
 
+
+## Generalized (non-Gaussian) spatial models
