@@ -51,13 +51,13 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<script src="libs/datatables-binding-0.13/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
@@ -523,13 +523,10 @@ model {
 <a class="sourceLine" id="cb386-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
 <a class="sourceLine" id="cb386-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
 <a class="sourceLine" id="cb386-5" data-line-number="5">)</a></code></pre></div>
-<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-## Running the chains for more iterations may help. See
-## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
 <ul>
 <li>with priors</li>
 </ul>
-<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb388-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression-priors.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb387-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression-priors.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>//
 // This Stan program defines a simple model, with a
 // vector of values &#39;y&#39; modeled as normally distributed
@@ -581,40 +578,40 @@ model {
   y_rep ~ normal(mu, sigma);
 }
 // Note: the stan file must end in a blank (new) line</code></pre>
-<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb390-1" data-line-number="1">fit_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb390-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression-priors.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb390-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
-<a class="sourceLine" id="cb390-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
-<a class="sourceLine" id="cb390-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb389-1" data-line-number="1">fit_prior &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb389-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression-priors.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb389-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb389-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
+<a class="sourceLine" id="cb389-5" data-line-number="5">)</a></code></pre></div>
 <ul>
 <li>examine the output from the MCMC fit</li>
 </ul>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb391-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb391-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb391-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb391-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb391-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb391-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb391-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
-<a class="sourceLine" id="cb391-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb390-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb390-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb390-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb390-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb390-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb390-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb390-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb390-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
 <pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
 ## instead.</code></pre>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb393-1" data-line-number="1"><span class="co">## acf plots</span></a>
-<a class="sourceLine" id="cb393-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a>
-<a class="sourceLine" id="cb393-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb393-4" data-line-number="4"><span class="co">## violin plots of posterior</span></a>
-<a class="sourceLine" id="cb393-5" data-line-number="5"><span class="kw">mcmc_violin</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb392-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb392-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a>
+<a class="sourceLine" id="cb392-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb392-4" data-line-number="4"><span class="co">## violin plots of posterior</span></a>
+<a class="sourceLine" id="cb392-5" data-line-number="5"><span class="kw">mcmc_violin</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: linear-regression.
 ## 4 chains, each with iter=1000; warmup=500; thin=1; 
 ## post-warmup draws per chain=500, total post-warmup draws=2000.
 ## 
 ##            mean se_mean    sd     10%     90% n_eff Rhat
-## beta[1]    3.00    0.00  0.02    2.97    3.02   759 1.00
-## beta[2]    1.98    0.00  0.03    1.94    2.02   801 1.00
-## sigma      0.26    0.00  0.01    0.25    0.26   592 1.01
-## lp__    1719.40    1.73 31.67 1678.34 1759.88   335 1.02
+## beta[1]    3.00    0.00  0.02    2.98    3.02  1141 1.00
+## beta[2]    1.98    0.00  0.03    1.94    2.02  1165 1.00
+## sigma      0.26    0.00  0.01    0.25    0.26   901 1.00
+## lp__    1717.79    1.44 30.48 1679.23 1756.59   447 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Mar 30 11:14:25 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Apr  7 20:44:57 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -622,7 +619,7 @@ model {
 <ul>
 <li>compare these estimates to the <code>lm</code> estimtes</li>
 </ul>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb395-1" data-line-number="1"><span class="kw">summary</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb394-1" data-line-number="1"><span class="kw">summary</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>))</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ X - 1)
@@ -655,38 +652,38 @@ model {
 <ul>
 <li>Using the <code>bayesplot</code> package, we can explre the posterior predictive checks (ppcs) using a variety of functions</li>
 </ul>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb397-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a>
-<a class="sourceLine" id="cb397-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb397-4" data-line-number="4"><span class="co">## only plot for 25 randomly selected samples</span></a>
-<a class="sourceLine" id="cb397-5" data-line-number="5">plot_idx &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb397-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb397-7" data-line-number="7"><span class="kw">ppc_data</span>(y, y_rep)</a></code></pre></div>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb396-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb396-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a>
+<a class="sourceLine" id="cb396-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb396-4" data-line-number="4"><span class="co">## only plot for 25 randomly selected samples</span></a>
+<a class="sourceLine" id="cb396-5" data-line-number="5">plot_idx &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb396-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb396-7" data-line-number="7"><span class="kw">ppc_data</span>(y, y_rep)</a></code></pre></div>
 <pre><code>## # A tibble: 2,001,000 x 6
 ##     y_id rep_id rep_label          is_y  is_y_label    value
 ##    &lt;int&gt;  &lt;int&gt; &lt;fct&gt;              &lt;lgl&gt; &lt;fct&gt;         &lt;dbl&gt;
-##  1     1      1 italic(y)[rep] ( … FALSE italic(y)[re…  3.55
-##  2     1      2 italic(y)[rep] ( … FALSE italic(y)[re…  3.28
-##  3     1      3 italic(y)[rep] ( … FALSE italic(y)[re…  3.02
-##  4     1      4 italic(y)[rep] ( … FALSE italic(y)[re…  3.37
-##  5     1      5 italic(y)[rep] ( … FALSE italic(y)[re…  3.22
-##  6     1      6 italic(y)[rep] ( … FALSE italic(y)[re…  3.01
-##  7     1      7 italic(y)[rep] ( … FALSE italic(y)[re…  3.23
-##  8     1      8 italic(y)[rep] ( … FALSE italic(y)[re…  3.23
-##  9     1      9 italic(y)[rep] ( … FALSE italic(y)[re…  3.42
-## 10     1     10 italic(y)[rep] ( … FALSE italic(y)[re…  3.04
+##  1     1      1 italic(y)[rep] ( … FALSE italic(y)[re…  3.31
+##  2     1      2 italic(y)[rep] ( … FALSE italic(y)[re…  3.25
+##  3     1      3 italic(y)[rep] ( … FALSE italic(y)[re…  3.36
+##  4     1      4 italic(y)[rep] ( … FALSE italic(y)[re…  3.17
+##  5     1      5 italic(y)[rep] ( … FALSE italic(y)[re…  3.72
+##  6     1      6 italic(y)[rep] ( … FALSE italic(y)[re…  2.80
+##  7     1      7 italic(y)[rep] ( … FALSE italic(y)[re…  3.22
+##  8     1      8 italic(y)[rep] ( … FALSE italic(y)[re…  2.95
+##  9     1      9 italic(y)[rep] ( … FALSE italic(y)[re…  3.43
+## 10     1     10 italic(y)[rep] ( … FALSE italic(y)[re…  3.32
 ## # … with 2,000,990 more rows</code></pre>
-<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" data-line-number="1"><span class="kw">ppc_hist</span>(y, y_rep[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]) <span class="co">## only use a subset of rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb398-1" data-line-number="1"><span class="kw">ppc_hist</span>(y, y_rep[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]) <span class="co">## only use a subset of rows</span></a></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with
 ## `binwidth`.</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-230-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1"><span class="kw">ppc_intervals</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb400-1" data-line-number="1"><span class="kw">ppc_intervals</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-231-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" data-line-number="1"><span class="kw">ppc_ribbon</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" data-line-number="1"><span class="kw">ppc_ribbon</span>(y[plot_idx], y_rep[, plot_idx], <span class="dt">x =</span> X[, <span class="dv">2</span>][plot_idx])</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-232-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb403-1" data-line-number="1"><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a></code></pre></div>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" data-line-number="1"><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-233-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb404-1" data-line-number="1"><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a></code></pre></div>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb403-1" data-line-number="1"><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-234-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="optimization-in-stan" class="section level4">
@@ -698,20 +695,20 @@ model {
 <li>max penalized likelihood (<em>MLE</em>).</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb405-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">stan_model</span>(</a>
-<a class="sourceLine" id="cb405-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression.stan&quot;</span>)</a>
-<a class="sourceLine" id="cb405-3" data-line-number="3">)</a>
-<a class="sourceLine" id="cb405-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb405-5" data-line-number="5">mle &lt;-<span class="st"> </span><span class="kw">optimizing</span>(model, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)))</a>
-<a class="sourceLine" id="cb405-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb405-7" data-line-number="7"><span class="kw">print</span>(mle<span class="op">$</span>par[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb404-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">stan_model</span>(</a>
+<a class="sourceLine" id="cb404-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;linear-regression.stan&quot;</span>)</a>
+<a class="sourceLine" id="cb404-3" data-line-number="3">)</a>
+<a class="sourceLine" id="cb404-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb404-5" data-line-number="5">mle &lt;-<span class="st"> </span><span class="kw">optimizing</span>(model, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)))</a>
+<a class="sourceLine" id="cb404-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb404-7" data-line-number="7"><span class="kw">print</span>(mle<span class="op">$</span>par[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
 <pre><code>## beta[1] beta[2]   sigma 
-##  2.9963  1.9801  0.1811</code></pre>
+##  2.9964  1.9799  0.1811</code></pre>
 </div>
 </div>
 <div id="example-spatial-model-in-stan" class="section level3">
 <h3><span class="header-section-number">28.2.2</span> Example: Spatial model in stan</h3>
-<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb407-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb406-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>//
 // This Stan program defines a simple model, with a
 // vector of values &#39;y&#39; modeled as normally distributed
@@ -791,23 +788,23 @@ model {
   y ~ multi_normal_cholesky(mu, L_Sigma);
 }
 // Note: the stan file must end in a blank (new) line</code></pre>
-<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb409-1" data-line-number="1"><span class="co">## Make some data</span></a>
-<a class="sourceLine" id="cb409-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb409-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb409-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb409-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb409-6" data-line-number="6">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb409-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb409-8" data-line-number="8">beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb409-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb409-10" data-line-number="10">sigma2 &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb409-11" data-line-number="11">tau2 &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb409-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb409-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb409-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
-<a class="sourceLine" id="cb409-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>D)</a>
-<a class="sourceLine" id="cb409-16" data-line-number="16">eta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), tau2 <span class="op">*</span><span class="st"> </span>R))</a>
-<a class="sourceLine" id="cb409-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>eta, <span class="kw">sqrt</span>(sigma2))</a></code></pre></div>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb408-1" data-line-number="1"><span class="co">## Make some data</span></a>
+<a class="sourceLine" id="cb408-2" data-line-number="2"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb408-3" data-line-number="3">n &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb408-4" data-line-number="4">coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">runif</span>(n, <span class="dv">0</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb408-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb408-6" data-line-number="6">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb408-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb408-8" data-line-number="8">beta &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb408-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb408-10" data-line-number="10">sigma2 &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb408-11" data-line-number="11">tau2 &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb408-12" data-line-number="12">phi &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb408-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb408-14" data-line-number="14">D &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rdist</span>(coords))</a>
+<a class="sourceLine" id="cb408-15" data-line-number="15">R &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>D)</a>
+<a class="sourceLine" id="cb408-16" data-line-number="16">eta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>,n), tau2 <span class="op">*</span><span class="st"> </span>R))</a>
+<a class="sourceLine" id="cb408-17" data-line-number="17">y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, X <span class="op">%*%</span><span class="st"> </span>beta <span class="op">+</span><span class="st"> </span>eta, <span class="kw">sqrt</span>(sigma2))</a></code></pre></div>
 <ul>
 <li>Fit the stan model
 <ul>
@@ -816,11 +813,11 @@ model {
 <li>often can get by with much shorter MCMC chains (500-1000 samples – monitor the effective sample size)</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb410-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb410-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb410-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">coords =</span> coords),</a>
-<a class="sourceLine" id="cb410-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
-<a class="sourceLine" id="cb410-5" data-line-number="5">) </a></code></pre></div>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb409-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb409-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb409-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">coords =</span> coords),</a>
+<a class="sourceLine" id="cb409-4" data-line-number="4">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
+<a class="sourceLine" id="cb409-5" data-line-number="5">) </a></code></pre></div>
 <pre><code>## Warning: The largest R-hat is NA, indicating chains have not mixed.
 ## Running the chains for more iterations may help. See
 ## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
@@ -830,55 +827,33 @@ model {
 <pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 ## Running the chains for more iterations may help. See
 ## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
-<pre><code>## Running /Library/Frameworks/R.framework/Resources/bin/R \
-##   CMD SHLIB foo.c
-## clang -I&quot;/Library/Frameworks/R.framework/Resources/include&quot; -DNDEBUG   -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/Rcpp/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/unsupported&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/BH/include&quot; -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/src/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rstan/include&quot; -DEIGEN_NO_DEBUG  -D_REENTRANT  -DBOOST_DISABLE_ASSERTS -DBOOST_PENDING_INTEGER_LOG2_HPP -include stan/math/prim/mat/fun/Eigen.hpp   &quot;-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include&quot;  -fPIC  -Wall -g -O2  -c foo.c -o foo.o
-## In file included from &lt;built-in&gt;:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Dense:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Core:88:
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:1: error: unknown type name &#39;namespace&#39;
-## namespace Eigen {
-## ^
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:16: error: expected &#39;;&#39; after top level declarator
-## namespace Eigen {
-##                ^
-##                ;
-## In file included from &lt;built-in&gt;:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Dense:1:
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Core:96:10: fatal error: &#39;complex&#39; file not found
-## #include &lt;complex&gt;
-##          ^~~~~~~~~
-## 3 errors generated.
-## make: *** [foo.o] Error 1</code></pre>
 <ul>
 <li>examine the output from the MCMC fit</li>
 </ul>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb415-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb415-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb415-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb415-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb415-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb415-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb415-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
-<a class="sourceLine" id="cb415-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb413-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb413-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb413-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb413-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb413-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb413-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb413-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb413-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
 ## instead.</code></pre>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" data-line-number="1"><span class="co">## acf plots</span></a>
-<a class="sourceLine" id="cb417-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb415-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb415-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: spatial-regression.
 ## 4 chains, each with iter=1000; warmup=500; thin=1; 
 ## post-warmup draws per chain=500, total post-warmup draws=2000.
 ## 
 ##         mean se_mean   sd  10%   90% n_eff Rhat
-## beta[1] 1.82    0.04 1.29 0.32  3.44  1344 1.00
-## beta[2] 4.82    0.00 0.17 4.59  5.04  1546 1.00
-## sigma2  1.06    0.02 0.51 0.47  1.69   964 1.00
-## tau2    7.73    0.08 2.45 4.96 11.05   973 1.01
-## phi     0.30    0.01 0.15 0.15  0.50   766 1.00
+## beta[1] 1.83    0.03 1.20 0.42  3.33  1228    1
+## beta[2] 4.82    0.00 0.17 4.60  5.02  1619    1
+## sigma2  1.06    0.01 0.48 0.48  1.68  1186    1
+## tau2    7.63    0.07 2.40 4.95 11.03  1084    1
+## phi     0.30    0.01 0.15 0.15  0.49   832    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Mar 30 11:16:44 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Apr  7 20:48:05 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -889,7 +864,7 @@ model {
 <ul>
 <li>use the same data from the previous example</li>
 </ul>
-<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb419-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;predictive-process-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;predictive-process-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>//
 // This Stan program defines a simple model, with a
 // vector of values &#39;y&#39; modeled as normally distributed
@@ -992,66 +967,44 @@ model {
 <li>often can get by with much shorter MCMC chains (500-1000 samples – monitor the effective sample size)</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" data-line-number="1">n_knots &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb421-2" data-line-number="2">knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb421-3" data-line-number="3">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">1</span>]), <span class="kw">max</span>(coords[, <span class="dv">1</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots)),</a>
-<a class="sourceLine" id="cb421-4" data-line-number="4">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">2</span>]), <span class="kw">max</span>(coords[, <span class="dv">2</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots))</a>
-<a class="sourceLine" id="cb421-5" data-line-number="5">)</a></code></pre></div>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb422-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb422-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;predictive-process-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb422-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), </a>
-<a class="sourceLine" id="cb422-4" data-line-number="4">                <span class="dt">coords =</span> coords, <span class="dt">n_knots =</span> n_knots, <span class="dt">knots =</span> knots),</a>
-<a class="sourceLine" id="cb422-5" data-line-number="5">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
-<a class="sourceLine" id="cb422-6" data-line-number="6">)</a></code></pre></div>
-<pre><code>## Running /Library/Frameworks/R.framework/Resources/bin/R \
-##   CMD SHLIB foo.c
-## clang -I&quot;/Library/Frameworks/R.framework/Resources/include&quot; -DNDEBUG   -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/Rcpp/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/unsupported&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/BH/include&quot; -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/src/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/&quot;  -I&quot;/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rstan/include&quot; -DEIGEN_NO_DEBUG  -D_REENTRANT  -DBOOST_DISABLE_ASSERTS -DBOOST_PENDING_INTEGER_LOG2_HPP -include stan/math/prim/mat/fun/Eigen.hpp   &quot;-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include&quot;  -fPIC  -Wall -g -O2  -c foo.c -o foo.o
-## In file included from &lt;built-in&gt;:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Dense:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Core:88:
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:1: error: unknown type name &#39;namespace&#39;
-## namespace Eigen {
-## ^
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/src/Core/util/Macros.h:613:16: error: expected &#39;;&#39; after top level declarator
-## namespace Eigen {
-##                ^
-##                ;
-## In file included from &lt;built-in&gt;:1:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13:
-## In file included from /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Dense:1:
-## /Library/Frameworks/R.framework/Versions/3.6/Resources/library/RcppEigen/include/Eigen/Core:96:10: fatal error: &#39;complex&#39; file not found
-## #include &lt;complex&gt;
-##          ^~~~~~~~~
-## 3 errors generated.
-## make: *** [foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb419-1" data-line-number="1">n_knots &lt;-<span class="st"> </span><span class="dv">5</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb419-2" data-line-number="2">knots &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb419-3" data-line-number="3">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">1</span>]), <span class="kw">max</span>(coords[, <span class="dv">1</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots)),</a>
+<a class="sourceLine" id="cb419-4" data-line-number="4">    <span class="kw">seq</span>(<span class="kw">min</span>(coords[, <span class="dv">2</span>]), <span class="kw">max</span>(coords[, <span class="dv">2</span>]), <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_knots))</a>
+<a class="sourceLine" id="cb419-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb420-2" data-line-number="2">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;predictive-process-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb420-3" data-line-number="3">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), </a>
+<a class="sourceLine" id="cb420-4" data-line-number="4">                <span class="dt">coords =</span> coords, <span class="dt">n_knots =</span> n_knots, <span class="dt">knots =</span> knots),</a>
+<a class="sourceLine" id="cb420-5" data-line-number="5">    <span class="dt">iter =</span> <span class="dv">1000</span></a>
+<a class="sourceLine" id="cb420-6" data-line-number="6">)</a></code></pre></div>
 <ul>
 <li>examine the output from the MCMC fit</li>
 </ul>
-<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb424-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb424-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb424-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb424-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb424-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
-<a class="sourceLine" id="cb424-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb424-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
-<a class="sourceLine" id="cb424-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb421-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb421-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb421-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb421-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a>
+<a class="sourceLine" id="cb421-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb421-7" data-line-number="7"><span class="co">## area plots of posterior</span></a>
+<a class="sourceLine" id="cb421-8" data-line-number="8"><span class="kw">mcmc_areas</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Warning: `expand_scale()` is deprecated; use `expansion()`
 ## instead.</code></pre>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb426-1" data-line-number="1"><span class="co">## acf plots</span></a>
-<a class="sourceLine" id="cb426-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" data-line-number="1"><span class="co">## acf plots</span></a>
+<a class="sourceLine" id="cb423-2" data-line-number="2"><span class="kw">mcmc_acf</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;sigma2&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: predictive-process-regression.
 ## 4 chains, each with iter=1000; warmup=500; thin=1; 
 ## post-warmup draws per chain=500, total post-warmup draws=2000.
 ## 
-##         mean se_mean   sd   10%   90% n_eff Rhat
-## beta[1] 1.85    0.04 1.55 -0.07  3.69  1382    1
-## beta[2] 4.81    0.00 0.20  4.56  5.07  3128    1
-## sigma2  3.51    0.02 0.62  2.77  4.30  1431    1
-## tau2    9.41    0.08 2.84  5.96 13.08  1382    1
-## phi     0.41    0.01 0.24  0.20  0.69  1128    1
+##         mean se_mean   sd  10%   90% n_eff Rhat
+## beta[1] 1.75    0.04 1.48 0.00  3.58  1379    1
+## beta[2] 4.80    0.00 0.20 4.55  5.06  2896    1
+## sigma2  3.54    0.02 0.60 2.83  4.33  1308    1
+## tau2    9.27    0.08 2.95 5.72 13.24  1355    1
+## phi     0.43    0.01 0.32 0.19  0.74  1001    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Mon Mar 30 11:20:16 2020.
+## Samples were drawn using NUTS(diag_e) at Tue Apr  7 20:51:27 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>

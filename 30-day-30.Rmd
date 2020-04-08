@@ -1,5 +1,21 @@
 # Day 30
 
+```{r, message = FALSE}
+library(tidyverse)
+library(viridis)
+library(mvnfast)
+library(igraph)
+library(Matrix)
+library(patchwork)
+library(rstan)
+## use recommended rstan settings
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+library(bayesplot)
+
+set.seed(101)
+```
+
 ## Announcements
 
 - s(x) + s(y) vs. s(x, y) in MGCV
@@ -162,15 +178,15 @@ which has positive eigenvlaues $\Leftrightarrow$ $\frac{1}{\lambda_n} < \phi < \
 \begin{align*}
 \mathbf{y} & \sim N \left(0, \sigma^2 \left(\mathbf{D} - \phi \mathbf{A} \right)^{-1} \right) \\
 & \propto \exp \left( -\frac{1}{2 \sigma^2} \mathbf{y}' \left(\mathbf{D} - \phi \mathbf{A} \right) \mathbf{y} \right) \\
-& \propto \exp \left( -\frac{1}{2 \sigma^2} \left( \sum_{i=1}^n m_i y_i^2 - 2 \phi \sum_{i \sim j} y_{ij} \right) \right)
+& \propto \exp \left( -\frac{1}{2 \sigma^2} \left( \sum_{i=1}^n d_i y_i^2 - 2 \phi \sum_{i \sim j} y_{ij} \right) \right)
 \end{align*}
 
 where the conditional probability distribution $[y_i | \mathbf{y}_{-i}]$ is
 
 \begin{align*}
-[y_i | \mathbf{y}_{-i}] & \propto \exp \left( -\frac{1}{2 \sigma^2} \left( m_i y_i^2 - 2 \phi m_i \bar{y}_i \right) \right) \\
-& \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {m_i}} \left( y_i^2 - 2 \phi \bar{y}_i \right) \right) \\
-& \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {m_i}} \left( y_i - \phi \bar{y}_i \right)^2 \right) \\
+[y_i | \mathbf{y}_{-i}] & \propto \exp \left( -\frac{1}{2 \sigma^2} \left( d_i y_i^2 - 2 \phi d_i \bar{y}_i \right) \right) \\
+& \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {d_i}} \left( y_i^2 - 2 \phi \bar{y}_i \right) \right) \\
+& \propto \exp \left( -\frac{1}{2 \frac{\sigma^2} {d_i}} \left( y_i - \phi \bar{y}_i \right)^2 \right) \\
 \end{align*}
 
 which is the kernel of the conditional probability distribution we started with

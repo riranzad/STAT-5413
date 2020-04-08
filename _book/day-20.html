@@ -51,13 +51,13 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<script src="libs/datatables-binding-0.13/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
@@ -1054,8 +1054,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb315-2" data-line-number="2"><span class="kw">colnames</span>(V) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;EOF&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(SSTdata))</a>
 <a class="sourceLine" id="cb315-3" data-line-number="3">EOFs &lt;-<span class="st"> </span><span class="kw">cbind</span>(SSTlonlat[ <span class="op">-</span><span class="st"> </span>delete_rows, ], V)</a>
 <a class="sourceLine" id="cb315-4" data-line-number="4"><span class="kw">glimpse</span>(EOFs[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, ])</a></code></pre></div>
-<pre><code>## Observations: 2,261
-## Variables: 6
+<pre><code>## Rows: 2,261
+## Columns: 6
 ## $ lon  &lt;dbl&gt; 154, 156, 158, 160, 162, 164, 166, 168, 170,…
 ## $ lat  &lt;dbl&gt; -29, -29, -29, -29, -29, -29, -29, -29, -29,…
 ## $ EOF1 &lt;dbl&gt; -0.0049151, -0.0014123, 0.0002459, 0.0014550…
@@ -1607,11 +1607,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [1] 0.7948
 ## Unit: milliseconds
 ##                                expr    min     lq   mean
-##         crossprod(X_dense, X_dense) 1021.0 1039.9 1058.4
-##  crossprod.spam(X_sparse, X_sparse)  143.6  145.1  151.2
+##         crossprod(X_dense, X_dense) 1029.7 1030.7 1034.5
+##  crossprod.spam(X_sparse, X_sparse)  139.1  139.6  140.3
 ##  median     uq    max neval
-##  1057.6 1067.6 1114.5    10
-##   149.2  154.5  170.1    10</code></pre>
+##  1032.1 1034.8 1055.2    10
+##   140.5  140.7  141.2    10</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-200-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>almost a 10-fold speedup in computation time by using sparse matrix operations</li>

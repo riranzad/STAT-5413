@@ -51,13 +51,13 @@
 
 <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.12/datatables.js"></script>
+<script src="libs/datatables-binding-0.13/datatables.js"></script>
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
 <link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
-<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
@@ -571,11 +571,11 @@ C_{ij}(\mathbf{h}) &amp; = \sigma_{ij} C(\mathbf{h})
 <pre><code>## [1] TRUE
 ## Unit: milliseconds
 ##                                 expr    min     lq   mean
-##  kronecker(chol(Sigma_p), chol(R_n))  25.06  38.63  40.29
-##        chol(kronecker(Sigma_p, R_n)) 689.40 709.32 720.01
-##  median     uq    max neval
-##   39.15  40.01  63.22    10
-##  716.52 732.18 754.00    10</code></pre>
+##  kronecker(chol(Sigma_p), chol(R_n))  27.62  40.36  45.43
+##        chol(kronecker(Sigma_p, R_n)) 712.43 736.55 770.63
+##  median    uq    max neval
+##   46.15  50.0  63.66    10
+##  755.13 799.5 861.41    10</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-210-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb369-1" data-line-number="1"><span class="co">## Note: this is slow</span></a>
 <a class="sourceLine" id="cb369-2" data-line-number="2"><span class="co"># w &lt;- c(mvnfast::rmvn(1, rep(0, n*p), kronecker(Sigma_p, R_n))) </span></a>
