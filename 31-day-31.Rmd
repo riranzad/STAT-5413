@@ -29,6 +29,56 @@
 
         - [details on the mapping](https://fivethirtyeight.com/features/hating-gerrymandering-is-easy-fixing-it-is-harder/)
     
-    
-    
-    
+
+## Modeling change of support -- continuous-discrete modeling
+
+- $y(\mathbf{s})$ is data measured at location $\mathbf{s} \in \mathcal{D}$
+- $z_i$ is the data measured for region $A_i \in \mathcal{A}$
+- The domains $\mathcal{D}$ and $\mathcal{A}$ are the same -- the difference is whether the underlying spatial process is continuous or discrete
+
+**draw picture**
+
+- Example: 
+    - $y(\mathbf{s})$ is tree density measured at location $\mathbf{s}$
+    - $z_i$ is satellite data at the grid cell $A_i$
+
+Model: Assume a continuous latent process $\eta(\mathbf{s}) \sim GP$ is a Gaussian process and iid error processes $\varepsilon(\mathbf{s}) \sim N(0, \sigma^2_y)$ and $\delta_i \sim N(0, \sigma^2_z)$ , then the joint model for $y$ and $z$ are
+
+\begin{align*}
+y(\mathbf{s}) & = \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) \\
+z_i & = a + b \int_{A_i} \eta(\mathbf{s}) \,d\mathbf{s} + \delta_i,
+\end{align*}
+
+where $a$ and $b$ are bias terms that account for the averaging over the region $A_i$. In practice, the integral $\int_{A_i} \eta(\mathbf{s}) \,d\mathbf{s}$ is difficult to evaluate and requires approximation.
+
+## Modeling change of support -- discrete-discrete modeling
+
+- $y_i$ is data measured for region $A_i \in \mathcal{A} = \{ A_1, \ldots, A_n \}$
+- $z_j$ is the data measured for region $B_j \in \mathcal{B} = \{ B_1, \ldots, B_m \}$
+- The domains $\mathcal{A}$ and $\mathcal{B}$ are the same -- the difference is partitioning of the overall domain
+
+**draw picture**
+
+- Example: 
+    - $y_i$ is tree density measured at location $\mathbf{s}$
+    - $z_i$ is satellite data at the grid cell $A_i$
+
+Model: Define a fine partition $\mathcal{D} = \{ D_1, \ldots, D_p \}$ and let $\boldsymbol{\eta} \sim \operatorname{N} \left(\mathbf{0}, \mathbf{Q}^{-1} \right)$ be a p-dimensional CAR process over the domain $\mathcal{D}$ and iid error processes $\varepsilon_i \sim N(0, \sigma^2_y)$ and $\delta_i \sim N(0, \sigma^2_z)$ , then the joint model for $y$ and $z$ are
+
+\begin{align*}
+y_i & = \sum_{k = 1}^p \eta_k |D_k \cap A_i| + \varepsilon_i \\
+z_j & = \sum_{k = 1}^p \eta_k |D_k \cap B_j|  + \delta_i,
+\end{align*}
+
+where $|D_k \cap A_i|$ is the area of the intersection of partition $D_k$ and $A_i$ and $|D_k \cap B_j|$ is the area of the intersection of partition $D_k$ and $B_j$. As long as the size of the fine partition isn't too large, this is pretty straightforward. In matrix notation, this simplifies to
+
+\begin{align*}
+\mathbf{y} = (y_1, \ldots, y_n)' & \sim \operatorname{N}\left( \mathbf{W}_y \boldsymbol{\eta}, \sigma^2_y \mathbf{I} \right) \\
+\mathbf{z} = (z_1, \ldots, z_m)' & \sim \operatorname{N}\left( \mathbf{W}_z \boldsymbol{\eta}, \sigma^2_z \mathbf{I} \right) \\
+\boldsymbol{\eta} \sim \operatorname{N}\left( \mathbf{0}, \tau^2 \mathbf{Q}^{-1} \right),
+\end{align*}
+
+where $\mathbf{W}_y$ is an $n \times p$ matrix where the $i$th row is proportional to the area of the domain $A_i$ in each of the fine partitions $\mathbf{D}$, $\mathbf{W}_z$ is an $m \times p$ matrix where the $j$th row is proportional to the area of the domain $B_j$ in each of the fine partitions $\mathbf{D}$, and $\mathbf{Q}$ is a precision matrix for a CAR process on the domain $\mathcal{D}$
+
+
+

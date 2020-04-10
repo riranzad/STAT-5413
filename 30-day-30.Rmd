@@ -237,7 +237,7 @@ the CAR and SAR models](https://www.sciencedirect.com/science/article/abs/pii/S0
 n <- 10^2
 phi <- 0.4
 ## construct a sparse matrix adjacency matrix for a 2-d lattice
-A  <- igraph::as_adjacency_matrix(make_lattice(length = sqrt(n), dim = 2), sparse = TRUE)
+A  <- igraph::as_adjacency_matrix(igraph::make_lattice(length = sqrt(n), dim = 2), sparse = TRUE)
 A[1:5, 1:5]
 D <- Diagonal(x = colSums(A))
 D[1:5, 1:5]

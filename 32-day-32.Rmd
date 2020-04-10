@@ -1,6 +1,187 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Day 32
+
+```{r, message = FALSE}
+library(tidyverse)
+library(viridis)
+library(mvnfast)
+library(igraph)
+library(Matrix)
+library(patchwork)
+library(mgcv)
+library(rstan)
+## use recommended rstan settings
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+library(bayesplot)
+
+set.seed(101)
+```
 
 ## Announcements
 
 
 ## Generalized (non-Gaussian) spatial models
+
+- Many interesting datasets are non-Gaussian
+
+- Examples:
+
+    - environmental monitoring through presence/absence data (binary data)
+
+        - a researcher visits a site $\mathbf{s}$ and records if the species of interest is present $y(\mathbf{s}) = 1$ or absent $y(\mathbf{s}) = 0$
+        
+    - crowd size estimation (count data)
+        
+        - a researcher wants to determine the total crowd size so she divides the spatial domain into regions $\mathcal{A} = \{ A_1, \ldots, A_n\}$, samples a few of the regions, and counts the number of people $\mathbf{y}_i = \{0, 1, 2, \ldots \}$ in each area. Then, she predicts the counts at unobserved locations to estimate total crowd size.
+        
+- For multivariate normal data, the spatial correlation is easy to incorporate
+
+- More challenging for non-Gaussian data
+
+- Recall the Gaussian model:
+
+\begin{align*}
+y(\mathbf{s}) | \eta(\mathbf{s}) & \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s} \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
+\boldsymbol{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))' & \sim N(\mathbf{0}, \boldsymbol{\Sigma}),
+\end{align*}
+
+where $\boldsymbol{\Sigma}$ is the covariance matrix for the covariance function $\tau^2 \mathbf{C}(\| \mathbf{s} - \mathbf{s}' \|)$. 
+
+- If we integrate out the random effect $\boldsymbol{\eta}$ we have:
+    
+    - $y(\mathbf{s})$ is a GP
+    - $E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}
+    - $Cov(y(\mathbf{s}), y(\mathbf{s}')) = \begin{cases} \sigma^2 + \tau^2 & h = 0 \\ \tau^2 C (h) & h > 0 \end{cases}$
+    
+- Therefore, given the random effects, the observations are independent, but marginally, the observations are dependent.    
+
+
+### Generalized linear models (GLMs) for non-spatial data
+
+- Primary idea: model
+
+\begin{align*}
+g \left( E \left( y_i \right) \right) & = \mathbf{X}_i \boldsymbol{\beta}
+\end{align*}
+
+for some link function $g(\cdot)$
+
+- Example: binary (logistic) regression
+
+    - $y_i = \{0, 1\}$
+    
+    - $E \left( y_i \right) = p_i$
+    
+    - the logit function is $logit(z) = \frac{e^z}{1 + e^z}$
+    
+    - the link function is $p_i = logit \left( E \left( y_i \right) \right) = logit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+
+    - sometimes a probit link function is used $p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$    
+    - the probit function is $probit(z) = \Phi(z)$ where $\Phi()$ is the standard normal CDF
+    
+```{r}
+n <- 500
+X <- cbind(1, rnorm(n))
+beta <- c(2, 4)
+logit <- function(x) exp(x) / (1 + exp(x))
+p <- logit(X %*% beta)
+y <- rbinom(n, 1, p)
+data.frame(x = X[, 2], y = y, p = p) %>%
+    ggplot(aes(x = x, y = y)) + 
+    geom_point() +
+    geom_line(aes(x = x, y = p), col = "red")
+```
+
+```{r}
+## fit logistic regression using mgcv
+mod <- gam(y ~ X - 1, family = binomial(link = "logit"))
+summary(mod)
+```
+
+We can fit the logistic regression in stan
+
+- we need to define a stan model
+
+- create a stan model in a folder named `stan_models` in the Rstudio project folder
+
+- print the output of the model `logistic-regression.stan`
+
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "logistic-regression.stan")), sep = "\n")
+```
+
+- Fitting the model
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+    file = here::here("stan_models", "logistic-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X)),
+    iter = 1000
+)
+```
+
+
+
+- Example: Poisson (count) regression
+
+    - $y_i = \{0, 1, 2, \ldots \}$
+    
+    - $E \left( y_i \right) = \lambda_i$
+    
+    - the link function is $\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+
+    
+```{r}
+n <- 500
+X <- cbind(1, rnorm(n))
+beta <- c(-2, 1.5)
+## log(lambda) <- X %*% beta
+lambda <- exp(X %*% beta)
+y <- rpois(n, lambda)
+data.frame(x = X[, 2], y = y, lambda = lambda) %>%
+    ggplot(aes(x = x, y = y, lambda = lambda)) + 
+    geom_point() +
+    geom_line(aes(x = x, y = lambda), col = "red")
+```
+
+```{r}
+## fit logistic regression using mgcv
+mod <- gam(y ~ X - 1, family = poisson(link = "log"))
+summary(mod)
+```
+
+We can fit the logistic regression in stan
+
+- we need to define a stan model
+
+- create a stan model in a folder named `stan_models` in the Rstudio project folder
+
+- print the output of the model `logistic-regression.stan`
+
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "poisson-regression.stan")), sep = "\n")
+```
+
+- Fitting the model
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+    file = here::here("stan_models", "poisson-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X)),
+    iter = 1000
+)
+```
+
+
+
+
+
+
+- Instead, we add latent Gaussian random effects to the generalized linear model
+
+
