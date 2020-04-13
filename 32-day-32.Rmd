@@ -7,6 +7,7 @@ editor_options:
 
 ```{r, message = FALSE}
 library(tidyverse)
+library(fields)
 library(viridis)
 library(mvnfast)
 library(igraph)
@@ -22,6 +23,11 @@ library(bayesplot)
 set.seed(101)
 ```
 
+```{r, echo = FALSE, eval = FALSE}
+# install.packages("INLA", repos = c(getOption("repos"), INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
+# library(INLA)
+```
+
 ## Announcements
 
 
@@ -31,14 +37,14 @@ set.seed(101)
 
 - Examples:
 
-    - environmental monitoring through presence/absence data (binary data)
+- environmental monitoring through presence/absence data (binary data)
 
-        - a researcher visits a site $\mathbf{s}$ and records if the species of interest is present $y(\mathbf{s}) = 1$ or absent $y(\mathbf{s}) = 0$
-        
-    - crowd size estimation (count data)
-        
-        - a researcher wants to determine the total crowd size so she divides the spatial domain into regions $\mathcal{A} = \{ A_1, \ldots, A_n\}$, samples a few of the regions, and counts the number of people $\mathbf{y}_i = \{0, 1, 2, \ldots \}$ in each area. Then, she predicts the counts at unobserved locations to estimate total crowd size.
-        
+- a researcher visits a site $\mathbf{s}$ and records if the species of interest is present $y(\mathbf{s}) = 1$ or absent $y(\mathbf{s}) = 0$
+
+- crowd size estimation (count data)
+
+- a researcher wants to determine the total crowd size so she divides the spatial domain into regions $\mathcal{A} = \{ A_1, \ldots, A_n\}$, samples a few of the regions, and counts the number of people $\mathbf{y}_i = \{0, 1, 2, \ldots \}$ in each area. Then, she predicts the counts at unobserved locations to estimate total crowd size.
+
 - For multivariate normal data, the spatial correlation is easy to incorporate
 
 - More challenging for non-Gaussian data
@@ -53,12 +59,15 @@ y(\mathbf{s}) | \eta(\mathbf{s}) & \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s} 
 where $\boldsymbol{\Sigma}$ is the covariance matrix for the covariance function $\tau^2 \mathbf{C}(\| \mathbf{s} - \mathbf{s}' \|)$. 
 
 - If we integrate out the random effect $\boldsymbol{\eta}$ we have:
-    
-    - $y(\mathbf{s})$ is a GP
-    - $E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}
-    - $Cov(y(\mathbf{s}), y(\mathbf{s}')) = \begin{cases} \sigma^2 + \tau^2 & h = 0 \\ \tau^2 C (h) & h > 0 \end{cases}$
-    
+
+- $y(\mathbf{s})$ is a GP
+- $E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}
+- $Cov(y(\mathbf{s}), y(\mathbf{s}')) = \begin{cases} \sigma^2 + \tau^2 & h = 0 \\ \tau^2 C (h) & h > 0 \end{cases}$
+
 - Therefore, given the random effects, the observations are independent, but marginally, the observations are dependent.    
+
+
+- Instead, for spatial GLMs we add latent Gaussian random effects to the generalized linear model
 
 
 ### Generalized linear models (GLMs) for non-spatial data
@@ -71,19 +80,36 @@ g \left( E \left( y_i \right) \right) & = \mathbf{X}_i \boldsymbol{\beta}
 
 for some link function $g(\cdot)$
 
-- Example: binary (logistic) regression
+- What about a nugget?
 
-    - $y_i = \{0, 1\}$
-    
-    - $E \left( y_i \right) = p_i$
-    
-    - the logit function is $logit(z) = \frac{e^z}{1 + e^z}$
-    
-    - the link function is $p_i = logit \left( E \left( y_i \right) \right) = logit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+- It is possible to include a nugget. If you include a nugget, you end up with an over-dispersed (higher variance) marginal model because there is already variance due to the distribution tied to the link function.
 
-    - sometimes a probit link function is used $p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$    
-    - the probit function is $probit(z) = \Phi(z)$ where $\Phi()$ is the standard normal CDF
-    
+
+
+
+
+
+
+### Example: binary (logistic) regression
+
+- $y_i = \{0, 1\}$
+
+- $E \left( y_i \right) = p_i$
+
+- the link function is $p_i = logit \left( E \left( y_i \right) \right) = logit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+
+- the logit function is $logit(z) = \frac{e^z}{1 + e^z}$
+
+- sometimes a probit link function is used $p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$    
+- the probit function is $probit(z) = \Phi(z)$ where $\Phi()$ is the standard normal CDF
+
+<!-- - Marginal distriubtion of $y(\mathbf{s})$ for binary data -->
+
+<!--     -For Poisson: $[y(\mathbf{s})] = \int \operatorname{Bernoulli}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}$ = ??? -->
+
+<!--     - $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)$ -->
+
+
 ```{r}
 n <- 500
 X <- cbind(1, rnorm(n))
@@ -92,9 +118,9 @@ logit <- function(x) exp(x) / (1 + exp(x))
 p <- logit(X %*% beta)
 y <- rbinom(n, 1, p)
 data.frame(x = X[, 2], y = y, p = p) %>%
-    ggplot(aes(x = x, y = y)) + 
-    geom_point() +
-    geom_line(aes(x = x, y = p), col = "red")
+  ggplot(aes(x = x, y = y)) + 
+  geom_point() +
+  geom_line(aes(x = x, y = p), col = "red")
 ```
 
 ```{r}
@@ -103,7 +129,7 @@ mod <- gam(y ~ X - 1, family = binomial(link = "logit"))
 summary(mod)
 ```
 
-We can fit the logistic regression in stan
+####  Binary logistic regression in stan
 
 - we need to define a stan model
 
@@ -119,23 +145,56 @@ cat(read_lines(here::here("stan_models", "logistic-regression.stan")), sep = "\n
 
 ```{r, cache = TRUE, message = FALSE}
 fit <- stan(
-    file = here::here("stan_models", "logistic-regression.stan"),
-    data = list(y = y, n = n, X = X, p = ncol(X)),
-    iter = 1000
+  file = here::here("stan_models", "logistic-regression.stan"),
+  data = list(y = y, n = n, X = X, p = ncol(X)),
+  iter = 2000
 )
 ```
 
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
 
 
-- Example: Poisson (count) regression
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```   
 
-    - $y_i = \{0, 1, 2, \ldots \}$
-    
-    - $E \left( y_i \right) = \lambda_i$
-    
-    - the link function is $\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
 
-    
+
+### Example: Poisson (count) regression
+
+- $y_i = \{0, 1, 2, \ldots \}$
+
+- $E \left( y_i \right) = \lambda_i$
+
+- the link function is $\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+
+- Marginal distriubtion of $y(\mathbf{s})$ for Poisson data
+
+- $[y(\mathbf{s})] = \int \operatorname{Poisson}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}$ = ???
+
+- $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)$
+
+- $Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \right) \middle| \boldsymbol{\eta} \right) = Var \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + E \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} \right) > e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} }$
+
+- overdispersed relative to the non-spatial Poisson
+
+- $Cov(y(\mathbf{s}), y(\mathbf{s}'))$ is more complicated
 ```{r}
 n <- 500
 X <- cbind(1, rnorm(n))
@@ -144,9 +203,9 @@ beta <- c(-2, 1.5)
 lambda <- exp(X %*% beta)
 y <- rpois(n, lambda)
 data.frame(x = X[, 2], y = y, lambda = lambda) %>%
-    ggplot(aes(x = x, y = y, lambda = lambda)) + 
-    geom_point() +
-    geom_line(aes(x = x, y = lambda), col = "red")
+  ggplot(aes(x = x, y = y, lambda = lambda)) + 
+  geom_point() +
+  geom_line(aes(x = x, y = lambda), col = "red")
 ```
 
 ```{r}
@@ -155,13 +214,13 @@ mod <- gam(y ~ X - 1, family = poisson(link = "log"))
 summary(mod)
 ```
 
-We can fit the logistic regression in stan
+#### Poisson regression in stan
 
 - we need to define a stan model
 
 - create a stan model in a folder named `stan_models` in the Rstudio project folder
 
-- print the output of the model `logistic-regression.stan`
+- print the output of the model `poisson-regression.stan`
 
 ```{r, comment = ""}
 cat(read_lines(here::here("stan_models", "poisson-regression.stan")), sep = "\n")
@@ -171,17 +230,654 @@ cat(read_lines(here::here("stan_models", "poisson-regression.stan")), sep = "\n"
 
 ```{r, cache = TRUE, message = FALSE}
 fit <- stan(
-    file = here::here("stan_models", "poisson-regression.stan"),
-    data = list(y = y, n = n, X = X, p = ncol(X)),
-    iter = 1000
+  file = here::here("stan_models", "poisson-regression.stan"),
+  data = list(y = y, n = n, X = X, p = ncol(X)),
+  iter = 2000
 )
 ```
 
 
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
+
+
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```    
+
+- Many other models are possible including
+- negative binomial (overdispersed count data)
+- gamma regression
+- beta regression (model a latent proportion)
+- multinomial regression (many different categories)
+- zero-inflated models (binary and glm model together)
+- many, many others
+
+
+### Generalized linear models (GLMs) for spatial data
+
+- Define $\boldsymbol{\eta} \sim GP$ with mean 0 and covariance $\tau^2 C(h)$
+
+- Given $\eta(\mathbf{s})$, the $y(\mathbf{s})$ are independent with g \left( E \left( y(\mathbf{s}) \right) \right) & = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \eta(\mathbf{s})
+
+- Marginally over the random effect $\boldymbol{\eta}$ (integrating $\boldsymbol{\eta}$ out of the model), the $\mathbf{y}$ are dependent.
+
+- However, the analytic form of the marginal distribution is typically hard to derive.
+
+### Example: spatial binary (logistic) regression
+
+- $y(\mathbf{s}) = \{0, 1\}$
+
+- $E \left( y(\mathbf{s}) \right) = p(\mathbf{s})$
+
+- the link function is $p(\mathbf{s}) = logit \left( E \left( y(\mathbf{s}) \right) \right) = logit \left( \operatorname{Prob} \left( y(\mathbf{s}) = 1 \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + $
+
+- sometimes a probit link function is used $p(\mathbf{s}) probit \left( E \left( y(\mathbf{s}) \right) \right) = probit \left( \operatorname{Prob} \left( y(\mathbf{s}) = 1 \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}$    
+- the probit function is $probit(z) = \Phi(z)$ where $\Phi()$ is the standard normal CDF
+
+```{r}
+N <- 30^2
+locs_full <- expand.grid(
+  seq(0, 1, length.out = sqrt(N)),
+  seq(0, 1, length.out = sqrt(N))
+)
+colnames(locs_full) <- c("lon", "lat")
+
+## fixed effects
+X_full <- cbind(1, rnorm(N, 0, 0.5))
+beta <- c(2, 0.5)
+Xbeta <- X_full %*% beta
+## random effects
+D <- fields::rdist(locs_full)
+tau2 <- 1.25
+phi <- 1
+Sigma <- tau2 * exp( - D / phi)
+eta <- rmvn(1, rep(0, N), Sigma)
+
+## GLM link function
+## logit(p_i) <- X %*% beta + eta
+logit <- function(x) exp(x) / (1 + exp(x))
+p_i <- logit(Xbeta + eta)
+y_full <- rbinom(N, 1, p_i)
+
+dat <- data.frame(
+  x      = locs_full[, 1], 
+  y      = locs_full[, 2], 
+  z      = y_full, 
+  p_i    = p_i, 
+  Xbeta  = Xbeta, 
+  eta    = eta
+)
+## using patchwork plots
+p1 <- ggplot(dat, aes(x = x, y = y, fill = z)) + 
+  geom_raster() +
+  ggtitle("data") +
+  scale_fill_viridis()
+p2 <- ggplot(dat, aes(x = x, y = y, fill = p_i)) + 
+  geom_raster() +
+  ggtitle("latent value p") +
+  scale_fill_viridis()
+p3 <- ggplot(dat, aes(x = x, y = y, fill = Xbeta)) + 
+  geom_raster() +
+  ggtitle("latent fixed effects") +
+  scale_fill_viridis()
+p4 <- ggplot(dat, aes(x = x, y = y, fill = eta)) + 
+  geom_raster() +
+  ggtitle("latent spatial random effect") +
+  scale_fill_viridis()
+
+(p1 + p2) / (p3 + p4)
+```
+
+subset the data to represent an observation process
+
+```{r}
+## using 
+n <- 200
+idx <- sample(N, n)
+y <- y_full[idx]
+X <- X_full[idx, ]
+locs <- locs_full[idx, ]
+dat_obs <- data.frame(
+  x      = locs[, 1], 
+  y      = locs[, 2], 
+  z      = y
+)
+
+ggplot(dat_obs, aes(x = x, y = y, fill = z)) +
+  geom_tile() +
+  ggtitle("Observed presence/absence")
+```
+
+```{r}
+dat_fit <- data.frame(y = y, covariate = X[, 2], lon = locs$lon, lat = locs$lat)
+## fit logistic regression using mgcv
+mod <- gam(y ~ covariate + s(lon, lat), family = binomial(link = "logit"), data = dat_fit)
+summary(mod)
+```
+
+```{r}
+preds <- predict(mod, newdata = data.frame(covariate = X_full[, 2], lon = locs_full$lon, lat = locs_full$lat), se.fit = TRUE, type = "response")
+dat_plot <- data.frame(
+  lon     = locs_full$lon, 
+  lat     = locs_full$lat,
+  p       = c(p_i),
+  y       = y_full,
+  y_pred  = preds$fit,
+  sd_pred = preds$se.fit
+)
+zlims <- range(range(p_i), range(preds$fit))
+p1 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = p)) +
+  geom_raster() +
+  scale_fill_viridis(limits = zlims) +
+  ggtitle("simulated latent intensity")
+p2 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = y)) +
+  geom_raster() +
+  scale_fill_viridis() +
+  ggtitle("observed data")
+p3 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = y_pred)) +
+  geom_raster() +
+  scale_fill_viridis(limits = zlims) +
+  ggtitle("predicted intensity")
+p4 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = sd_pred)) +
+  geom_raster() +
+  scale_fill_viridis() +
+  ggtitle("predicted sd")
+(p1 + p2) / (p3 + p4)
+```
+
+#### Spatial Poisson regression in stan
+
+- print the output of the model `spatial-poisson-regression.stan`
+
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "spatial-logistic-regression.stan")), sep = "\n")
+```
+
+- Fitting the model
+
+```{r, message = FALSE}
+if (file.exists(here::here("results", "spatial-logistic-regression.RData"))) {
+  load(here::here("results", "spatial-logistic-regression.RData"))
+} else {
+  fit <- stan(
+    file = here::here("stan_models", "spatial-logistic-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X), locs = locs),
+    iter = 2000
+  )
+  save(fit, file = here::here("results", "spatial-logistic-regression.RData"))
+}
+```
+
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "tau2", "phi", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "tau2", "phi", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
+
+
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```    
+
+#### What if we fit a non-spatial regression?
+
+Fit a non-spatial regression to the spatially correlated data
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+  file = here::here("stan_models", "logistic-regression.stan"),
+  data = list(y = y, n = n, X = X, p = ncol(X)),
+  iter = 2000
+)
+```
+
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
+
+Poor coverage when not accounting for the spatial process
+
+Evidence of model mis-fit
+
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```    
+
+<!-- #### Spatial logistic regression in INLA -->
+
+<!-- - Integrated Nested Laplace Approximation -->
+
+<!--     - uses a stochastic PDE approximation to the Matern -->
+
+<!--     -  -->
+
+<!-- ```{r} -->
+<!-- ## generate a mesh for fitting the INLA SPDE approximation -->
+<!-- ## note: be careful to make the mesh too small as this can become very time consuming -->
+<!-- fine_mesh   <- inla.mesh.2d(locs_full, max.edge = c(0.05, 0.1), offset = c(0.1, 0.2)) -->
+<!-- coarse_mesh <- inla.mesh.2d(locs_full, max.edge = c(10, 100), offset = c(0.05, 0.1)) -->
+<!-- layout(matrix(1:2, 1, 2)) -->
+<!-- plot(fine_mesh) -->
+<!-- points(locs, col = "red", pch = 16) -->
+<!-- plot(coarse_mesh) -->
+<!-- points(locs, col = "red", pch = 16) -->
+<!-- ``` -->
+
+<!-- ## start with a coarse mesh -->
+
+<!-- ```{r, cache = TRUE} -->
+<!-- ## generate the SPDE model for the coarse mesh -->
+<!-- coarse_spde   <- inla.spde2.matern(mesh = coarse_mesh, alpha = 2) -->
+<!-- A_coarse      <- inla.spde.make.A(mesh = coarse_mesh, loc = as.matrix(locs)) -->
+<!-- s_coarse      <- inla.spde.make.index(name = "spatial.field", -->
+<!--   n.spde = coarse_spde$n.spde) -->
+
+<!-- ## create the data stack for the coarse mesh -->
+<!-- coarse_stack <- inla.stack( -->
+<!--   data    = list(y = y),  -->
+<!--   A       = list(A_coarse, 1), -->
+<!--   effects = list(c(s_coarse, list(Intercept = 1)), list(covariate = X[, 2])), -->
+<!--   tag     = "coarse_mesh" -->
+<!-- ) -->
+
+<!-- ## create the prediction stack for the coarse mesh predictions -->
+<!-- A_pred <- inla.spde.make.A(mesh = coarse_mesh, loc = as.matrix(locs_full)) -->
+
+<!-- coarse_stack_pred <- inla.stack( -->
+<!--   data    = list(y = NA), -->
+<!--   A       = list(A_pred, 1), -->
+<!--   effects = list(c(s_coarse, list (Intercept = 1)), list(covariate = X_full[, 2])), -->
+<!--   tag     = "coarse_pred") -->
+
+
+<!-- ## fit the INLA model on the coarse mesh -->
+<!-- join_stack_coarse <- inla.stack(coarse_stack, coarse_stack_pred) -->
+<!-- form              <- y ~ -1 + Intercept + covariate + f(spatial.field, model = spde) -->
+
+<!-- fit_coarse <- inla( -->
+<!--   formula           = form, -->
+<!--   family            = "binomial",  -->
+<!--   Ntrials           = rep(1, n+N),  -->
+<!--   data              = inla.stack.data(join_stack_coarse, spde = coarse_spde), -->
+<!--   control.family    = list(link = "logit"), -->
+<!--   control.predictor = list(link = 1, A = inla.stack.A(join_stack_coarse), compute = TRUE), -->
+<!--   control.compute = list(cpo = TRUE, dic = TRUE) -->
+<!-- ) -->
+<!-- summary(fit_coarse) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- ## extract predicted values -->
+<!-- #Get predicted data on grid -->
+<!-- idx_pred <- inla.stack.index(join_stack_coarse, "coarse_pred")$data -->
+
+<!-- y_pred_mean_coarse <- fit_coarse$summary.fitted.values[idx_pred, "mean"] -->
+<!-- y_pred_sd_coarse   <- fit_coarse$summary.fitted.values[idx_pred, "sd"] -->
+<!-- dat_plot <- data.frame( -->
+<!--   x             = locs_full[, 1], -->
+<!--   y             = locs_full[, 2], -->
+<!--   p             = logit(p_i),  -->
+<!--   p_pred_coarse = y_pred_mean_coarse, -->
+<!--   p_sd_coarse   = y_pred_sd_coarse -->
+<!-- ) -->
+<!-- p1 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("simulated latent probability") -->
+<!-- p2 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_pred_coarse)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("estimated latent probability") -->
+<!-- p3 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_sd_coarse)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("posterior predictive sd") -->
+<!-- p1 + p2 + p3 -->
+<!-- ``` -->
+
+<!-- ## fit the INLA model to the fine mesh -->
+
+<!-- ```{r, cache = TRUE} -->
+<!-- ## generate the SPDE model for the fine mesh -->
+<!-- fine_spde   <- inla.spde2.matern(mesh = fine_mesh, alpha = 2) -->
+<!-- A_fine      <- inla.spde.make.A(mesh = fine_mesh, loc = as.matrix(locs)) -->
+<!-- s_fine      <- inla.spde.make.index(name = "spatial.field", -->
+<!--   n.spde = fine_spde$n.spde) -->
+
+<!-- ## create the data stack for the fine mesh -->
+<!-- fine_stack <- inla.stack( -->
+<!--   data    = list(y = y),  -->
+<!--   A       = list(A_fine, 1), -->
+<!--   effects = list(c(s_fine, list(Intercept = 1)), list(covariate = X[, 2])), -->
+<!--   tag     = "fine_mesh" -->
+<!-- ) -->
+
+<!-- ## create the prediction stack for the fine mesh predictions -->
+<!-- A_pred <- inla.spde.make.A(mesh = fine_mesh, loc = as.matrix(locs_full)) -->
+
+<!-- fine_stack_pred <- inla.stack( -->
+<!--   data    = list(y = NA), -->
+<!--   A       = list(A_pred, 1), -->
+<!--   effects = list(c(s_fine, list (Intercept = 1)), list(covariate = X_full[, 2])), -->
+<!--   tag     = "fine_pred") -->
+
+
+<!-- ## fit the INLA model on the fine mesh -->
+<!-- join_stack_fine <- inla.stack(fine_stack, fine_stack_pred) -->
+<!-- form            <- y ~ -1 + Intercept + covariate + f(spatial.field, model = spde) -->
+
+<!-- fit_fine <- inla( -->
+<!--   formula           = form, -->
+<!--   family            = "binomial",  -->
+<!--   Ntrials           = rep(1, n+N),  -->
+<!--   data              = inla.stack.data(join_stack_fine, spde = fine_spde), -->
+<!--   control.family    = list(link = "logit"), -->
+<!--   control.predictor = list(link = 1, A = inla.stack.A(join_stack_fine), compute = TRUE), -->
+<!--   control.compute = list(cpo = TRUE, dic = TRUE) -->
+<!-- ) -->
+<!-- summary(fit_fine) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- ## extract predicted values -->
+<!-- #Get predicted data on grid -->
+<!-- idx_pred <- inla.stack.index(join_stack_fine, "fine_pred")$data -->
+
+<!-- y_pred_mean_fine <- fit_fine$summary.fitted.values[idx_pred, "mean"] -->
+<!-- y_pred_sd_fine   <- fit_fine$summary.fitted.values[idx_pred, "sd"] -->
+<!-- dat_plot <- data.frame( -->
+<!--   x = locs_full[, 1], -->
+<!--   y = locs_full[, 2], -->
+<!--   p = logit(p_i),  -->
+<!--   p_pred_fine = y_pred_mean_fine, -->
+<!--   p_sd_fine   = y_pred_sd_fine -->
+<!-- ) -->
+<!-- p1 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("simulated latent probability") -->
+<!-- p2 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_pred_fine)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("estimated latent probability") -->
+<!-- p3 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_sd_fine)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("posterior predictive sd") -->
+<!-- p1 + p2 + p3 -->
+<!-- ``` -->
+
+
+
+<!-- #### Spatial logistic regression by hand MCMC -->
+
+<!-- ```{r, comment = ""} -->
+<!-- read_lines(here::here("R", "mcmc-bernoulli.R")) -->
+<!-- source(here::here("R", "mcmc-bernoulli.R")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- out <- mcmc_bernoulli(y, X, locs, n_adapt = 2000, n_mcmc = 5000, n_message = 10) -->
+<!-- ``` -->
+
+
+### Example: spatial Poisson (count) regression
+
+- $y_i = \{0, 1, 2, \ldots \}$
+
+- $E \left( y_i \right) = \lambda_i$
+
+- the link function is $\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$
+
+
+```{r}
+N <- 30^2
+locs_full <- expand.grid(
+  seq(0, 1, length.out = sqrt(N)),
+  seq(0, 1, length.out = sqrt(N))
+)
+colnames(locs_full) <- c("lon", "lat")
+
+## fixed effects
+X_full <- cbind(1, rnorm(N, 0, 0.5))
+beta <- c(2, 0.5)
+Xbeta <- X_full %*% beta
+## random effects
+D <- fields::rdist(locs_full)
+tau2 <- 3.25
+phi <- 1
+Sigma <- tau2 * exp( - D / phi)
+eta <- rmvn(1, rep(0, N), Sigma)
+
+## GLM link function
+## log(lambda) <- X %*% beta
+lambda <- exp(Xbeta + eta)
+y_full <- rpois(N, lambda)
+dat <- data.frame(
+  x      = locs_full[, 1], 
+  y      = locs_full[, 2], 
+  z      = y_full, 
+  lambda = lambda, 
+  Xbeta  = Xbeta, 
+  eta    = eta
+)
+## using patchwork plots
+p1 <- ggplot(dat, aes(x = x, y = y, fill = z)) + 
+  geom_raster() +
+  ggtitle("data") +
+  scale_fill_viridis()
+p2 <- ggplot(dat, aes(x = x, y = y, fill = lambda)) + 
+  geom_raster() +
+  ggtitle("latent value lambda") +
+  scale_fill_viridis()
+p3 <- ggplot(dat, aes(x = x, y = y, fill = Xbeta)) + 
+  geom_raster() +
+  ggtitle("latent fixed effects") +
+  scale_fill_viridis()
+p4 <- ggplot(dat, aes(x = x, y = y, fill = eta)) + 
+  geom_raster() +
+  ggtitle("latent spatial random effect") +
+  scale_fill_viridis()
+
+(p1 + p2) / (p3 + p4)
+```
+
+subset the data to represent an observation process
+
+```{r}
+## using 
+n <- 200
+idx <- sample(N, n)
+y <- y_full[idx]
+X <- X_full[idx, ]
+locs <- locs_full[idx, ]
+dat_obs <- data.frame(
+  x      = locs[, 1], 
+  y      = locs[, 2], 
+  z      = y
+)
+
+ggplot(dat_obs, aes(x = x, y = y, fill = z)) +
+  geom_tile() +
+  ggtitle("Observed counts")
+```
+
+```{r}
+dat_fit <- data.frame(y = y, covariate = X[, 2], lon = locs$lon, lat = locs$lat)
+## fit spatial poisson regression using mgcv
+mod <- gam(y ~ covariate + s(lon, lat), family = poisson(link = "log"), data = dat_fit)
+summary(mod)
+```
+
+```{r}
+preds <- predict(mod, newdata = data.frame(covariate = X_full[, 2], lon = locs_full$lon, lat = locs_full$lat), se.fit = TRUE, type = "response")
+dat_plot <- data.frame(
+  lon     = locs_full$lon, 
+  lat     = locs_full$lat,
+  lambda  = c(lambda),
+  y       = y_full,
+  y_pred  = preds$fit,
+  sd_pred = preds$se.fit
+)
+zlims <- range(range(lambda), range(preds$fit))
+p1 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = lambda)) +
+  geom_raster() +
+  scale_fill_viridis(limits = zlims) +
+  ggtitle("simulated latent intensity")
+p2 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = y)) +
+  geom_raster() +
+  scale_fill_viridis() +
+  ggtitle("observed data")
+p3 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = y_pred)) +
+  geom_raster() +
+  scale_fill_viridis(limits = zlims) +
+  ggtitle("predicted intensity")
+p4 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = sd_pred)) +
+  geom_raster() +
+  scale_fill_viridis() +
+  ggtitle("predicted sd")
+(p1 + p2) / (p3 + p4)
+```
+
+We can fit spatial the Poisson regression in stan
+
+- print the output of the model `spatial-poisson-regression.stan`
+
+```{r, comment = ""}
+cat(read_lines(here::here("stan_models", "spatial-poisson-regression.stan")), sep = "\n")
+```
+
+- Fitting the model
+
+```{r, message = FALSE}
+if (file.exists(here::here("results", "spatial-poisson-regression.RData"))) {
+  load(here::here("results", "spatial-poisson-regression.RData"))
+} else {
+  fit <- stan(
+    file = here::here("stan_models", "spatial-poisson-regression.stan"),
+    data = list(y = y, n = n, X = X, p = ncol(X), locs = locs),
+    iter = 2000
+  )
+  save(fit, file = here::here("results", "spatial-poisson-regression.RData"))
+}
+```
+
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "tau2", "phi", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "tau2", "phi", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
+
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```    
+
+#### What if we fit a non-spatial regression?
+
+Fit a non-spatial regression to the spatially correlated data
+
+```{r, cache = TRUE, message = FALSE}
+fit <- stan(
+  file = here::here("stan_models", "poisson-regression.stan"),
+  data = list(y = y, n = n, X = X, p = ncol(X)),
+  iter = 2000
+)
+```
+
+
+```{r}
+## only plot the regression parameters
+print(fit, probs = c(0.1, 0.9), pars = c("beta", "lp__"))
+
+## trace plots
+mcmc_trace(fit, regex_pars = c("beta", "lp__"))
+```
+
+Posterior predictive checks
+
+```{r}
+## extract the posterior predictive samples
+y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
+```
+
+- Poor coverage when not accounting for the spatial process
+
+- Evidence of model mis-fit
+
+```{r, cache = TRUE}
+p1 <- ppc_intervals(y, y_rep, x = X[, 2])
+p2 <- ppc_dens_overlay(y, y_rep)
+p3 <- ppc_ecdf_overlay(y, y_rep)
+p1 + p2 + p3
+```    
 
 
 
 
-- Instead, we add latent Gaussian random effects to the generalized linear model
+
+
+
+
+
+
 
 

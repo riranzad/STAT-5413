@@ -360,10 +360,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
 <li class="chapter" data-level="31.2" data-path="day-31.html"><a href="day-31.html#change-of-spatial-support"><i class="fa fa-check"></i><b>31.2</b> Change of Spatial Support</a></li>
+<li class="chapter" data-level="31.3" data-path="day-31.html"><a href="day-31.html#modeling-change-of-support-continuous-discrete-modeling"><i class="fa fa-check"></i><b>31.3</b> Modeling change of support – continuous-discrete modeling</a></li>
+<li class="chapter" data-level="31.4" data-path="day-31.html"><a href="day-31.html#modeling-change-of-support-discrete-discrete-modeling"><i class="fa fa-check"></i><b>31.4</b> Modeling change of support – discrete-discrete modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
-<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a></li>
+<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a><ul>
+<li class="chapter" data-level="32.2.1" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-non-spatial-data"><i class="fa fa-check"></i><b>32.2.1</b> Generalized linear models (GLMs) for non-spatial data</a></li>
+<li class="chapter" data-level="32.2.2" data-path="day-32.html"><a href="day-32.html#example-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.2</b> Example: binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.3" data-path="day-32.html"><a href="day-32.html#example-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.3</b> Example: Poisson (count) regression</a></li>
+<li class="chapter" data-level="32.2.4" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-spatial-data"><i class="fa fa-check"></i><b>32.2.4</b> Generalized linear models (GLMs) for spatial data</a></li>
+<li class="chapter" data-level="32.2.5" data-path="day-32.html"><a href="day-32.html#example-spatial-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.5</b> Example: spatial binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.6" data-path="day-32.html"><a href="day-32.html#example-spatial-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.6</b> Example: spatial Poisson (count) regression</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
@@ -422,6 +431,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-31" class="section level1">
 <h1><span class="header-section-number">31</span> Day 31</h1>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb474-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb474-2" data-line-number="2"><span class="kw">library</span>(sp)</a>
+<a class="sourceLine" id="cb474-3" data-line-number="3"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb474-4" data-line-number="4"><span class="kw">library</span>(Matrix)</a>
+<a class="sourceLine" id="cb474-5" data-line-number="5"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb474-6" data-line-number="6"><span class="kw">library</span>(patchwork)</a></code></pre></div>
 <div id="announcements-26" class="section level2">
 <h2><span class="header-section-number">31.1</span> Announcements</h2>
 </div>
@@ -451,6 +466,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 </ul>
+</div>
+<div id="modeling-change-of-support-continuous-discrete-modeling" class="section level2">
+<h2><span class="header-section-number">31.3</span> Modeling change of support – continuous-discrete modeling</h2>
+<ul>
+<li><span class="math inline">\(y(\mathbf{s})\)</span> is data measured at location <span class="math inline">\(\mathbf{s} \in \mathcal{D}\)</span></li>
+<li><span class="math inline">\(z_i\)</span> is the data measured for region <span class="math inline">\(A_i \in \mathcal{A}\)</span></li>
+<li>The domains <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\mathcal{A}\)</span> are the same – the difference is whether the underlying spatial process is continuous or discrete</li>
+</ul>
+<p><strong>draw picture</strong></p>
+<ul>
+<li>Example:
+<ul>
+<li><span class="math inline">\(y(\mathbf{s})\)</span> is tree density measured at location <span class="math inline">\(\mathbf{s}\)</span></li>
+<li><span class="math inline">\(z_i\)</span> is satellite data at the grid cell <span class="math inline">\(A_i\)</span></li>
+</ul></li>
+</ul>
+<p>Model: Assume a continuous latent process <span class="math inline">\(\eta(\mathbf{s}) \sim GP\)</span> is a Gaussian process and iid error processes <span class="math inline">\(\varepsilon(\mathbf{s}) \sim N(0, \sigma^2_y)\)</span> and <span class="math inline">\(\delta_i \sim N(0, \sigma^2_z)\)</span> , then the joint model for <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> are</p>
+<p><span class="math display">\[\begin{align*}
+y(\mathbf{s}) &amp; = \eta(\mathbf{s}) + \varepsilon(\mathbf{s}) \\
+z_i &amp; = a + b \int_{A_i} \eta(\mathbf{s}) \,d\mathbf{s} + \delta_i,
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are bias terms that account for the averaging over the region <span class="math inline">\(A_i\)</span>. In practice, the integral <span class="math inline">\(\int_{A_i} \eta(\mathbf{s}) \,d\mathbf{s}\)</span> is difficult to evaluate and requires approximation.</p>
+</div>
+<div id="modeling-change-of-support-discrete-discrete-modeling" class="section level2">
+<h2><span class="header-section-number">31.4</span> Modeling change of support – discrete-discrete modeling</h2>
+<ul>
+<li><span class="math inline">\(y_i\)</span> is data measured for region <span class="math inline">\(A_i \in \mathcal{A} = \{ A_1, \ldots, A_n \}\)</span></li>
+<li><span class="math inline">\(z_j\)</span> is the data measured for region <span class="math inline">\(B_j \in \mathcal{B} = \{ B_1, \ldots, B_m \}\)</span></li>
+<li>The domains <span class="math inline">\(\mathcal{A}\)</span> and <span class="math inline">\(\mathcal{B}\)</span> are the same – the difference is partitioning of the overall domain</li>
+</ul>
+<p><strong>draw picture</strong></p>
+<ul>
+<li>Example:
+<ul>
+<li><span class="math inline">\(y_i\)</span> is tree density measured at location <span class="math inline">\(\mathbf{s}\)</span></li>
+<li><span class="math inline">\(z_i\)</span> is satellite data at the grid cell <span class="math inline">\(A_i\)</span></li>
+</ul></li>
+</ul>
+<p>Model: Define a fine partition <span class="math inline">\(\mathcal{D} = \{ D_1, \ldots, D_p \}\)</span> and let <span class="math inline">\(\boldsymbol{\eta} \sim \operatorname{N} \left(\mathbf{0}, \mathbf{Q}^{-1} \right)\)</span> be a p-dimensional CAR process over the domain <span class="math inline">\(\mathcal{D}\)</span> and iid error processes <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2_y)\)</span> and <span class="math inline">\(\delta_i \sim N(0, \sigma^2_z)\)</span> , then the joint model for <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> are</p>
+<p><span class="math display">\[\begin{align*}
+y_i &amp; = \sum_{k = 1}^p \eta_k |D_k \cap A_i| + \varepsilon_i \\
+z_j &amp; = \sum_{k = 1}^p \eta_k |D_k \cap B_j|  + \delta_i,
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(|D_k \cap A_i|\)</span> is the area of the intersection of partition <span class="math inline">\(D_k\)</span> and <span class="math inline">\(A_i\)</span> and <span class="math inline">\(|D_k \cap B_j|\)</span> is the area of the intersection of partition <span class="math inline">\(D_k\)</span> and <span class="math inline">\(B_j\)</span>. As long as the size of the fine partition isn’t too large, this is pretty straightforward. In matrix notation, this simplifies to</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} = (y_1, \ldots, y_n)&#39; &amp; \sim \operatorname{N}\left( \mathbf{W}_y \boldsymbol{\eta}, \sigma^2_y \mathbf{I} \right) \\
+\mathbf{z} = (z_1, \ldots, z_m)&#39; &amp; \sim \operatorname{N}\left( \mathbf{W}_z \boldsymbol{\eta}, \sigma^2_z \mathbf{I} \right) \\
+\boldsymbol{\eta} \sim \operatorname{N}\left( \mathbf{0}, \tau^2 \mathbf{Q}^{-1} \right),
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{W}_y\)</span> is an <span class="math inline">\(n \times p\)</span> matrix where the <span class="math inline">\(i\)</span>th row is proportional to the area of the domain <span class="math inline">\(A_i\)</span> in each of the fine partitions <span class="math inline">\(\mathbf{D}\)</span>, <span class="math inline">\(\mathbf{W}_z\)</span> is an <span class="math inline">\(m \times p\)</span> matrix where the <span class="math inline">\(j\)</span>th row is proportional to the area of the domain <span class="math inline">\(B_j\)</span> in each of the fine partitions <span class="math inline">\(\mathbf{D}\)</span>, and <span class="math inline">\(\mathbf{Q}\)</span> is a precision matrix for a CAR process on the domain <span class="math inline">\(\mathcal{D}\)</span></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-268-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-268-2.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

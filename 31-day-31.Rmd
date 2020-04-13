@@ -1,5 +1,13 @@
 # Day 31
 
+```{r}
+library(tidyverse)
+library(sp)
+library(igraph)
+library(Matrix)
+library(viridis)
+library(patchwork)
+```
 ## Announcements
 
 
@@ -80,5 +88,95 @@ where $|D_k \cap A_i|$ is the area of the intersection of partition $D_k$ and $A
 
 where $\mathbf{W}_y$ is an $n \times p$ matrix where the $i$th row is proportional to the area of the domain $A_i$ in each of the fine partitions $\mathbf{D}$, $\mathbf{W}_z$ is an $m \times p$ matrix where the $j$th row is proportional to the area of the domain $B_j$ in each of the fine partitions $\mathbf{D}$, and $\mathbf{Q}$ is a precision matrix for a CAR process on the domain $\mathcal{D}$
 
+```{r, echo = FALSE}
+set.seed(112)
+## fine domain D
+n_d <- 100^2
+locs_d <- expand.grid(
+    seq(0, 1, length.out = sqrt(n_d)),
+    seq(0, 1, length.out = sqrt(n_d))
+)
+grid_d <- SpatialGrid(
+    GridTopology(c(0, 0), cellsize = c(abs(locs_d[1, 1] - locs_d[2, 1]), abs(locs_d[1, 1] - locs_d[2, 1])), cells.dim = c(sqrt(n_d), sqrt(n_d)))
+)
 
+## observation domain A
+n_a <- 33^2
+locs_a <- expand.grid(
+    seq(0, 1, length.out = sqrt(n_a)),
+    seq(0, 1, length.out = sqrt(n_a))
+)
+
+grid_a <- SpatialGrid(
+    GridTopology(c(0, 0), cellsize = c(abs(locs_a[1, 1] - locs_a[2, 1]), abs(locs_a[1, 1] - locs_a[2, 1])), cells.dim = c(sqrt(n_a), sqrt(n_a)))
+)
+
+## observation domain B
+n_b <- 17^2
+locs_b <- expand.grid(
+    seq(0, 1, length.out = sqrt(n_b)),
+    seq(0, 1, length.out = sqrt(n_b))
+)
+
+grid_b <- SpatialGrid(
+    GridTopology(c(0, 0), cellsize = c(abs(locs_b[1, 1] - locs_b[2, 1]), abs(locs_b[1, 1] - locs_b[2, 1])), cells.dim = c(sqrt(n_b), sqrt(n_b)))
+)
+
+plot(grid_d)
+plot(grid_a, add = TRUE, col = "red")
+plot(grid_b, add = TRUE, col = "blue")
+
+## simulate the spatial process over D
+phi <- 0.99
+A  <- make_lattice(length = sqrt(n_d), dim = 2) %>%
+    as_adjacency_matrix(sparse = TRUE)
+D <- Diagonal(x = colSums(A))
+Q <- D - phi * A
+## cholesky (this is a sparse matrix that is upper diagonal)
+R <- chol(Q)
+y_d <- backsolve(R, rnorm(n_d))
+
+## assign the values to the grid
+grid_d <- SpatialPointsDataFrame(grid_d, data.frame(y = y_d))
+
+dat_d <- data.frame(
+    lon = locs_d[, 1],
+    lat = locs_d[, 2],
+    y   = y_d
+)
+p1 <- ggplot(data = dat_d, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("latent spatial process")
+
+## aggregate the spatial process for A
+y_a <- aggregate(grid_d[1], grid_a, mean)
+dat_a <- data.frame(
+    lon = locs_a[, 1],
+    lat = locs_a[, 2],
+    y   = y_a@data$y
+)
+## aggregate the spatial process for B
+y_b <- aggregate(grid_d[1], grid_b, mean)
+dat_b <- data.frame(
+    lon = locs_b[, 1],
+    lat = locs_b[, 2],
+    y   = y_b@data$y
+)
+
+p1 <- ggplot(data = dat_d, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("latent spatial process")
+p2 <- ggplot(data = dat_a, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("spatial process over A")
+p3 <- ggplot(data = dat_b, aes(x = lon, y = lat, fill = y)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("spatial process over B")
+
+p1 / p2 / p3
+```
 

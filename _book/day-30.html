@@ -360,10 +360,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
 <li class="chapter" data-level="31.1" data-path="day-31.html"><a href="day-31.html#announcements-26"><i class="fa fa-check"></i><b>31.1</b> Announcements</a></li>
 <li class="chapter" data-level="31.2" data-path="day-31.html"><a href="day-31.html#change-of-spatial-support"><i class="fa fa-check"></i><b>31.2</b> Change of Spatial Support</a></li>
+<li class="chapter" data-level="31.3" data-path="day-31.html"><a href="day-31.html#modeling-change-of-support-continuous-discrete-modeling"><i class="fa fa-check"></i><b>31.3</b> Modeling change of support – continuous-discrete modeling</a></li>
+<li class="chapter" data-level="31.4" data-path="day-31.html"><a href="day-31.html#modeling-change-of-support-discrete-discrete-modeling"><i class="fa fa-check"></i><b>31.4</b> Modeling change of support – discrete-discrete modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
-<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a></li>
+<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a><ul>
+<li class="chapter" data-level="32.2.1" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-non-spatial-data"><i class="fa fa-check"></i><b>32.2.1</b> Generalized linear models (GLMs) for non-spatial data</a></li>
+<li class="chapter" data-level="32.2.2" data-path="day-32.html"><a href="day-32.html#example-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.2</b> Example: binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.3" data-path="day-32.html"><a href="day-32.html#example-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.3</b> Example: Poisson (count) regression</a></li>
+<li class="chapter" data-level="32.2.4" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-spatial-data"><i class="fa fa-check"></i><b>32.2.4</b> Generalized linear models (GLMs) for spatial data</a></li>
+<li class="chapter" data-level="32.2.5" data-path="day-32.html"><a href="day-32.html#example-spatial-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.5</b> Example: spatial binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.6" data-path="day-32.html"><a href="day-32.html#example-spatial-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.6</b> Example: spatial Poisson (count) regression</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
@@ -629,7 +638,7 @@ the CAR and SAR models</a></li>
 <div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">2</span></a>
 <a class="sourceLine" id="cb435-2" data-line-number="2">phi &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
 <a class="sourceLine" id="cb435-3" data-line-number="3"><span class="co">## construct a sparse matrix adjacency matrix for a 2-d lattice</span></a>
-<a class="sourceLine" id="cb435-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(<span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb435-4" data-line-number="4">A  &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">as_adjacency_matrix</span>(igraph<span class="op">::</span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n), <span class="dt">dim =</span> <span class="dv">2</span>), <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb435-5" data-line-number="5">A[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>
 <a class="sourceLine" id="cb435-6" data-line-number="6">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
 <a class="sourceLine" id="cb435-7" data-line-number="7">D[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</a>

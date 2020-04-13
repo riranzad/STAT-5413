@@ -49,8 +49,82 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.13/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<script src="libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -281,7 +355,6 @@
 <li class="chapter" data-level="30.3" data-path="day-30.html"><a href="day-30.html#conditional-autoregressive-models-car-models"><i class="fa fa-check"></i><b>30.3</b> Conditional Autoregressive models (CAR models)</a><ul>
 <li class="chapter" data-level="30.3.1" data-path="day-30.html"><a href="day-30.html#models-built-based-on-conditional-distributions-y_i-mathbfy_-i"><i class="fa fa-check"></i><b>30.3.1</b> Models built based on conditional distributions: <span class="math inline">\(y_i | \mathbf{y}_{-i}\)</span></a></li>
 <li class="chapter" data-level="30.3.2" data-path="day-30.html"><a href="day-30.html#simultaneous-autoregressive-sar-model"><i class="fa fa-check"></i><b>30.3.2</b> Simultaneous autoregressive (SAR) model</a></li>
-<li class="chapter" data-level="30.3.3" data-path="day-30.html"><a href="day-30.html#theoretical-results-for-more-general-model-classes"><i class="fa fa-check"></i><b>30.3.3</b> Theoretical Results for more general model classes</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="31" data-path="day-31.html"><a href="day-31.html"><i class="fa fa-check"></i><b>31</b> Day 31</a><ul>
@@ -292,7 +365,14 @@
 </ul></li>
 <li class="chapter" data-level="32" data-path="day-32.html"><a href="day-32.html"><i class="fa fa-check"></i><b>32</b> Day 32</a><ul>
 <li class="chapter" data-level="32.1" data-path="day-32.html"><a href="day-32.html#announcements-27"><i class="fa fa-check"></i><b>32.1</b> Announcements</a></li>
-<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a></li>
+<li class="chapter" data-level="32.2" data-path="day-32.html"><a href="day-32.html#generalized-non-gaussian-spatial-models"><i class="fa fa-check"></i><b>32.2</b> Generalized (non-Gaussian) spatial models</a><ul>
+<li class="chapter" data-level="32.2.1" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-non-spatial-data"><i class="fa fa-check"></i><b>32.2.1</b> Generalized linear models (GLMs) for non-spatial data</a></li>
+<li class="chapter" data-level="32.2.2" data-path="day-32.html"><a href="day-32.html#example-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.2</b> Example: binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.3" data-path="day-32.html"><a href="day-32.html#example-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.3</b> Example: Poisson (count) regression</a></li>
+<li class="chapter" data-level="32.2.4" data-path="day-32.html"><a href="day-32.html#generalized-linear-models-glms-for-spatial-data"><i class="fa fa-check"></i><b>32.2.4</b> Generalized linear models (GLMs) for spatial data</a></li>
+<li class="chapter" data-level="32.2.5" data-path="day-32.html"><a href="day-32.html#example-spatial-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.5</b> Example: spatial binary (logistic) regression</a></li>
+<li class="chapter" data-level="32.2.6" data-path="day-32.html"><a href="day-32.html#example-spatial-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.6</b> Example: spatial Poisson (count) regression</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
@@ -351,6 +431,21 @@
             <section class="normal" id="section-">
 <div id="day-32" class="section level1">
 <h1><span class="header-section-number">32</span> Day 32</h1>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb475-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb475-3" data-line-number="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb475-4" data-line-number="4"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb475-5" data-line-number="5"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb475-6" data-line-number="6"><span class="kw">library</span>(Matrix)</a>
+<a class="sourceLine" id="cb475-7" data-line-number="7"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb475-8" data-line-number="8"><span class="kw">library</span>(mgcv)</a>
+<a class="sourceLine" id="cb475-9" data-line-number="9"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb475-10" data-line-number="10"><span class="co">## use recommended rstan settings</span></a>
+<a class="sourceLine" id="cb475-11" data-line-number="11"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
+<a class="sourceLine" id="cb475-12" data-line-number="12"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb475-13" data-line-number="13"><span class="kw">library</span>(bayesplot)</a>
+<a class="sourceLine" id="cb475-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb475-15" data-line-number="15"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
 <div id="announcements-27" class="section level2">
 <h2><span class="header-section-number">32.1</span> Announcements</h2>
 </div>
@@ -358,31 +453,974 @@
 <h2><span class="header-section-number">32.2</span> Generalized (non-Gaussian) spatial models</h2>
 <ul>
 <li><p>Many interesting datasets are non-Gaussian</p></li>
-<li><p>Examples:</p>
-<ul>
-<li><p>environmental monitoring through presence/absence data (binary data)</p>
-<ul>
-<li>a researcher visits a site <span class="math inline">\(\mathbf{s}\)</span> and records if the species of interest is present <span class="math inline">\(y(\mathbf{s}) = 1\)</span> or absent <span class="math inline">\(y(\mathbf{s}) = 0\)</span></li>
-</ul></li>
-<li><p>crowd size estimation (count data)</p>
-<ul>
-<li>a researcher wants to determine the total crowd size so she divides the spatial domain into regions <span class="math inline">\(\mathcal{A} = \{ A_1, \ldots, A_n\}\)</span>, samples a few of the regions, and counts the number of people <span class="math inline">\(\mathbf{y}_i = \{0, 1, 2, \ldots \}\)</span> in each area. Then, she predicts the counts at unobserved locations to estimate total crowd size.</li>
-</ul></li>
-</ul></li>
+<li><p>Examples:</p></li>
+<li><p>environmental monitoring through presence/absence data (binary data)</p></li>
+<li><p>a researcher visits a site <span class="math inline">\(\mathbf{s}\)</span> and records if the species of interest is present <span class="math inline">\(y(\mathbf{s}) = 1\)</span> or absent <span class="math inline">\(y(\mathbf{s}) = 0\)</span></p></li>
+<li><p>crowd size estimation (count data)</p></li>
+<li><p>a researcher wants to determine the total crowd size so she divides the spatial domain into regions <span class="math inline">\(\mathcal{A} = \{ A_1, \ldots, A_n\}\)</span>, samples a few of the regions, and counts the number of people <span class="math inline">\(\mathbf{y}_i = \{0, 1, 2, \ldots \}\)</span> in each area. Then, she predicts the counts at unobserved locations to estimate total crowd size.</p></li>
 <li><p>For multivariate normal data, the spatial correlation is easy to incorporate</p></li>
 <li><p>More challenging for non-Gaussian data</p></li>
 <li><p>Recall the Gaussian model:</p></li>
 </ul>
 <p><span class="math display">\[\begin{align*}
 y(\mathbf{s}) | \eta(\mathbf{s}) &amp; \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s} \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
-\mathbf{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))&#39; &amp; \sim N(\mathbf{0}, \boldsymbol{\Sigma}),
+\boldsymbol{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))&#39; &amp; \sim N(\mathbf{0}, \boldsymbol{\Sigma}),
 \end{align*}\]</span></p>
 <p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the covariance matrix for the covariance function <span class="math inline">\(\tau^2 \mathbf{C}(\| \mathbf{s} - \mathbf{s}&#39; \|)\)</span>.</p>
-<p>If we integrate out the random effect <span class="math inline">\(\boldsymbol{\eta}\)</span> we have the data <span class="math inline">\(y(\mathbf{s})\)</span></p>
 <ul>
-<li>Instead, we add latent Gaussian random effects to the generalized linear model</li>
+<li><p>If we integrate out the random effect <span class="math inline">\(\boldsymbol{\eta}\)</span> we have:</p></li>
+<li><span class="math inline">\(y(\mathbf{s})\)</span> is a GP</li>
+<li>$E( y (  ) ) = () </li>
+<li><p><span class="math inline">\(Cov(y(\mathbf{s}), y(\mathbf{s}&#39;)) = \begin{cases} \sigma^2 + \tau^2 &amp; h = 0 \\ \tau^2 C (h) &amp; h &gt; 0 \end{cases}\)</span></p></li>
+<li><p>Therefore, given the random effects, the observations are independent, but marginally, the observations are dependent.</p></li>
+<li><p>Instead, for spatial GLMs we add latent Gaussian random effects to the generalized linear model</p></li>
 </ul>
+<div id="generalized-linear-models-glms-for-non-spatial-data" class="section level3">
+<h3><span class="header-section-number">32.2.1</span> Generalized linear models (GLMs) for non-spatial data</h3>
+<ul>
+<li>Primary idea: model</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+g \left( E \left( y_i \right) \right) &amp; = \mathbf{X}_i \boldsymbol{\beta}
+\end{align*}\]</span></p>
+<p>for some link function <span class="math inline">\(g(\cdot)\)</span></p>
+<ul>
+<li><p>What about a nugget?</p></li>
+<li><p>It is possible to include a nugget. If you include a nugget, you end up with an over-dispersed (higher variance) marginal model because there is already variance due to the distribution tied to the link function.</p></li>
+</ul>
+</div>
+<div id="example-binary-logistic-regression" class="section level3">
+<h3><span class="header-section-number">32.2.2</span> Example: binary (logistic) regression</h3>
+<ul>
+<li><p><span class="math inline">\(y_i = \{0, 1\}\)</span></p></li>
+<li><p><span class="math inline">\(E \left( y_i \right) = p_i\)</span></p></li>
+<li><p>the link function is <span class="math inline">\(p_i = logit \left( E \left( y_i \right) \right) = logit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
+<li><p>the logit function is <span class="math inline">\(logit(z) = \frac{e^z}{1 + e^z}\)</span></p></li>
+<li>sometimes a probit link function is used <span class="math inline">\(p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span><br />
+</li>
+<li><p>the probit function is <span class="math inline">\(probit(z) = \Phi(z)\)</span> where <span class="math inline">\(\Phi()\)</span> is the standard normal CDF</p></li>
+</ul>
+<!-- - Marginal distriubtion of $y(\mathbf{s})$ for binary data -->
+<!--     -For Poisson: $[y(\mathbf{s})] = \int \operatorname{Bernoulli}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}$ = ??? -->
+<!--     - $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)$ -->
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb476-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb476-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb476-4" data-line-number="4">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb476-5" data-line-number="5">p &lt;-<span class="st"> </span><span class="kw">logit</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
+<a class="sourceLine" id="cb476-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, p)</a>
+<a class="sourceLine" id="cb476-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">p =</span> p) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb476-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb476-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb476-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> p), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-271-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb477-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
+<a class="sourceLine" id="cb477-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<pre><code>## 
+## Family: binomial 
+## Link function: logit 
+## 
+## Formula:
+## y ~ X - 1
+## 
+## Parametric coefficients:
+##    Estimate Std. Error z value Pr(&gt;|z|)    
+## X1    2.454      0.276    8.88   &lt;2e-16 ***
+## X2    4.798      0.486    9.87   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## 
+## R-sq.(adj) =   0.67   Deviance explained = 62.8%
+## UBRE = -0.51829  Scale est. = 1         n = 500</code></pre>
+<div id="binary-logistic-regression-in-stan" class="section level4">
+<h4><span class="header-section-number">32.2.2.1</span> Binary logistic regression in stan</h4>
+<ul>
+<li><p>we need to define a stan model</p></li>
+<li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
+<li><p>print the output of the model <code>logistic-regression.stan</code></p></li>
+</ul>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; n;
+  int&lt;lower=0&gt; p;
+  int&lt;lower=0,upper=1&gt; y[n];
+  matrix[n, p] X;
+}
 
+parameters {
+  vector[p] beta;
+}
+
+model {
+  y ~ bernoulli_logit(X * beta);
+  beta ~ normal(0, 1);
+}
+
+generated quantities {
+  int y_rep[n];
+  y_rep = bernoulli_logit_rng(X * beta);
+}
+// Note: the stan file must end in a blank (new) line</code></pre>
+<ul>
+<li>Fitting the model</li>
+</ul>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb481-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb481-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb481-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb481-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb481-5" data-line-number="5">)</a></code></pre></div>
+<pre><code>## Warning: The largest R-hat is NA, indicating chains have not mixed.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
+<pre><code>## Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb485-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb485-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb485-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb485-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb485-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: logistic-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##            mean se_mean   sd     10%     90% n_eff Rhat
+## beta[1]    2.03    0.01 0.20    1.77    2.29  1494    1
+## beta[2]    3.96    0.01 0.34    3.52    4.41  1402    1
+## lp__    -131.07    0.02 0.99 -132.31 -130.20  1679    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:30:22 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-275-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb487-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb487-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb488-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb488-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb488-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb488-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-277-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="example-poisson-count-regression" class="section level3">
+<h3><span class="header-section-number">32.2.3</span> Example: Poisson (count) regression</h3>
+<ul>
+<li><p><span class="math inline">\(y_i = \{0, 1, 2, \ldots \}\)</span></p></li>
+<li><p><span class="math inline">\(E \left( y_i \right) = \lambda_i\)</span></p></li>
+<li><p>the link function is <span class="math inline">\(\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
+<li><p>Marginal distriubtion of <span class="math inline">\(y(\mathbf{s})\)</span> for Poisson data</p></li>
+<li><p><span class="math inline">\([y(\mathbf{s})] = \int \operatorname{Poisson}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}\)</span> = ???</p></li>
+<li><p><span class="math inline">\(E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)\)</span></p></li>
+<li><p><span class="math inline">\(Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \right) \middle| \boldsymbol{\eta} \right) = Var \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} \right) &gt; e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} }\)</span></p></li>
+<li><p>overdispersed relative to the non-spatial Poisson</p></li>
+<li><p><span class="math inline">\(Cov(y(\mathbf{s}), y(\mathbf{s}&#39;))\)</span> is more complicated</p></li>
+</ul>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb489-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb489-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb489-4" data-line-number="4"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
+<a class="sourceLine" id="cb489-5" data-line-number="5">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
+<a class="sourceLine" id="cb489-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, lambda)</a>
+<a class="sourceLine" id="cb489-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb489-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb489-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb489-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> lambda), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-278-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb490-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb490-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>))</a>
+<a class="sourceLine" id="cb490-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<pre><code>## 
+## Family: poisson 
+## Link function: log 
+## 
+## Formula:
+## y ~ X - 1
+## 
+## Parametric coefficients:
+##    Estimate Std. Error z value Pr(&gt;|z|)    
+## X1  -2.0280     0.1273   -15.9   &lt;2e-16 ***
+## X2   1.5300     0.0701    21.8   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## 
+## R-sq.(adj) =  0.802   Deviance explained = 63.5%
+## UBRE = -0.41977  Scale est. = 1         n = 500</code></pre>
+<div id="poisson-regression-in-stan" class="section level4">
+<h4><span class="header-section-number">32.2.3.1</span> Poisson regression in stan</h4>
+<ul>
+<li><p>we need to define a stan model</p></li>
+<li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
+<li><p>print the output of the model <code>poisson-regression.stan</code></p></li>
+</ul>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb492-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; n;
+  int&lt;lower=0&gt; p;
+  int&lt;lower=0&gt; y[n];
+  matrix[n, p] X;
+}
+
+// The parameters accepted by the model. 
+parameters {
+  vector[p] beta;
+}
+
+model {
+  y ~ poisson_log(X * beta);
+  beta ~ normal(0, 5);
+}
+
+generated quantities {
+  int y_rep[n];
+  y_rep = poisson_log_rng(X * beta);  
+}
+// Note: the stan file must end in a blank (new) line</code></pre>
+<ul>
+<li>Fitting the model</li>
+</ul>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb494-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb494-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb494-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb494-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb494-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb495-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb495-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb495-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb495-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: poisson-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##            mean se_mean   sd     10%     90% n_eff Rhat
+## beta[1]   -2.03    0.00 0.12   -2.20   -1.88  1121    1
+## beta[2]    1.53    0.00 0.07    1.44    1.62  1153    1
+## lp__    -147.36    0.03 0.99 -148.61 -146.48  1381    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:31:30 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-282-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb497-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb498-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb498-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb498-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb498-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-284-1.png" width="480" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Many other models are possible including</li>
+<li>negative binomial (overdispersed count data)</li>
+<li>gamma regression</li>
+<li>beta regression (model a latent proportion)</li>
+<li>multinomial regression (many different categories)</li>
+<li>zero-inflated models (binary and glm model together)</li>
+<li>many, many others</li>
+</ul>
+</div>
+</div>
+<div id="generalized-linear-models-glms-for-spatial-data" class="section level3">
+<h3><span class="header-section-number">32.2.4</span> Generalized linear models (GLMs) for spatial data</h3>
+<ul>
+<li><p>Define <span class="math inline">\(\boldsymbol{\eta} \sim GP\)</span> with mean 0 and covariance <span class="math inline">\(\tau^2 C(h)\)</span></p></li>
+<li><p>Given <span class="math inline">\(\eta(\mathbf{s})\)</span>, the <span class="math inline">\(y(\mathbf{s})\)</span> are independent with g ( E ( y() ) ) &amp; = ()  + ()</p></li>
+<li><p>Marginally over the random effect <span class="math inline">\(\boldymbol{\eta}\)</span> (integrating <span class="math inline">\(\boldsymbol{\eta}\)</span> out of the model), the <span class="math inline">\(\mathbf{y}\)</span> are dependent.</p></li>
+<li><p>However, the analytic form of the marginal distribution is typically hard to derive.</p></li>
+</ul>
+</div>
+<div id="example-spatial-binary-logistic-regression" class="section level3">
+<h3><span class="header-section-number">32.2.5</span> Example: spatial binary (logistic) regression</h3>
+<ul>
+<li><p><span class="math inline">\(y(\mathbf{s}) = \{0, 1\}\)</span></p></li>
+<li><p><span class="math inline">\(E \left( y(\mathbf{s}) \right) = p(\mathbf{s})\)</span></p></li>
+<li><p>the link function is $p() = logit ( E ( y() ) ) = logit (  ( y() = 1 ) ) = ()  + $</p></li>
+<li>sometimes a probit link function is used <span class="math inline">\(p(\mathbf{s}) probit \left( E \left( y(\mathbf{s}) \right) \right) = probit \left( \operatorname{Prob} \left( y(\mathbf{s}) = 1 \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}\)</span><br />
+</li>
+<li><p>the probit function is <span class="math inline">\(probit(z) = \Phi(z)\)</span> where <span class="math inline">\(\Phi()\)</span> is the standard normal CDF</p></li>
+</ul>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb499-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb499-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
+<a class="sourceLine" id="cb499-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
+<a class="sourceLine" id="cb499-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb499-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb499-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb499-8" data-line-number="8"><span class="co">## fixed effects</span></a>
+<a class="sourceLine" id="cb499-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb499-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb499-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
+<a class="sourceLine" id="cb499-12" data-line-number="12"><span class="co">## random effects</span></a>
+<a class="sourceLine" id="cb499-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
+<a class="sourceLine" id="cb499-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">1.25</span></a>
+<a class="sourceLine" id="cb499-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb499-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
+<a class="sourceLine" id="cb499-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
+<a class="sourceLine" id="cb499-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb499-19" data-line-number="19"><span class="co">## GLM link function</span></a>
+<a class="sourceLine" id="cb499-20" data-line-number="20"><span class="co">## logit(p_i) &lt;- X %*% beta + eta</span></a>
+<a class="sourceLine" id="cb499-21" data-line-number="21">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb499-22" data-line-number="22">p_i &lt;-<span class="st"> </span><span class="kw">logit</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
+<a class="sourceLine" id="cb499-23" data-line-number="23">y_full &lt;-<span class="st"> </span><span class="kw">rbinom</span>(N, <span class="dv">1</span>, p_i)</a>
+<a class="sourceLine" id="cb499-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb499-25" data-line-number="25">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb499-26" data-line-number="26">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb499-27" data-line-number="27">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb499-28" data-line-number="28">  <span class="dt">z      =</span> y_full, </a>
+<a class="sourceLine" id="cb499-29" data-line-number="29">  <span class="dt">p_i    =</span> p_i, </a>
+<a class="sourceLine" id="cb499-30" data-line-number="30">  <span class="dt">Xbeta  =</span> Xbeta, </a>
+<a class="sourceLine" id="cb499-31" data-line-number="31">  <span class="dt">eta    =</span> eta</a>
+<a class="sourceLine" id="cb499-32" data-line-number="32">)</a>
+<a class="sourceLine" id="cb499-33" data-line-number="33"><span class="co">## using patchwork plots</span></a>
+<a class="sourceLine" id="cb499-34" data-line-number="34">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb499-35" data-line-number="35"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-36" data-line-number="36"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-37" data-line-number="37"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb499-38" data-line-number="38">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> p_i)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb499-39" data-line-number="39"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-40" data-line-number="40"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value p&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-41" data-line-number="41"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb499-42" data-line-number="42">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb499-43" data-line-number="43"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-44" data-line-number="44"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-45" data-line-number="45"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb499-46" data-line-number="46">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb499-47" data-line-number="47"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-48" data-line-number="48"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb499-49" data-line-number="49"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb499-50" data-line-number="50"></a>
+<a class="sourceLine" id="cb499-51" data-line-number="51">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-285-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>subset the data to represent an observation process</p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb500-1" data-line-number="1"><span class="co">## using </span></a>
+<a class="sourceLine" id="cb500-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
+<a class="sourceLine" id="cb500-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
+<a class="sourceLine" id="cb500-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
+<a class="sourceLine" id="cb500-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
+<a class="sourceLine" id="cb500-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
+<a class="sourceLine" id="cb500-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb500-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb500-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb500-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
+<a class="sourceLine" id="cb500-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb500-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb500-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb500-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb500-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed presence/absence&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-286-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb501-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
+<a class="sourceLine" id="cb501-2" data-line-number="2"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb501-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
+<a class="sourceLine" id="cb501-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<pre><code>## 
+## Family: binomial 
+## Link function: logit 
+## 
+## Formula:
+## y ~ covariate + s(lon, lat)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)    1.302      0.222    5.85  4.9e-09 ***
+## covariate      0.700      0.397    1.76    0.078 .  
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##             edf Ref.df Chi.sq p-value
+## s(lon,lat) 20.7     25   33.5    0.12
+## 
+## R-sq.(adj) =  0.174   Deviance explained = 24.5%
+## UBRE = 0.12199  Scale est. = 1         n = 200</code></pre>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb503-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb503-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb503-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
+<a class="sourceLine" id="cb503-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
+<a class="sourceLine" id="cb503-5" data-line-number="5">  <span class="dt">p       =</span> <span class="kw">c</span>(p_i),</a>
+<a class="sourceLine" id="cb503-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
+<a class="sourceLine" id="cb503-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
+<a class="sourceLine" id="cb503-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
+<a class="sourceLine" id="cb503-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb503-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(p_i), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
+<a class="sourceLine" id="cb503-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> p)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb503-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb503-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb503-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb503-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
+<a class="sourceLine" id="cb503-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-288-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="spatial-poisson-regression-in-stan" class="section level4">
+<h4><span class="header-section-number">32.2.5.1</span> Spatial Poisson regression in stan</h4>
+<ul>
+<li>print the output of the model <code>spatial-poisson-regression.stan</code></li>
+</ul>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb504-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; n;
+  int&lt;lower=0&gt; p;
+  int&lt;lower=0,upper=1&gt; y[n];
+  matrix[n, p] X;
+  matrix[n, 2] locs;
+}
+
+transformed data {
+  matrix[n, n] D;
+  for (i in 1:n) {
+    for (j in 1:(i-1)) {
+      D[i, j] = sqrt(sum(square(locs[i, ] - locs[j, ])));
+      D[j, i] = D[i, j];
+    }
+    D[i, i] = 0.0;
+  }
+}
+
+parameters {
+  vector[p] beta;
+  real&lt;lower=0&gt; tau2;
+  real&lt;lower=0&gt; phi;
+  vector[n] eta_center;
+}
+
+transformed parameters {
+  cov_matrix[n] Sigma;
+  matrix[n, n] L_Sigma;
+  Sigma = tau2 * exp( - D / phi);
+  L_Sigma = cholesky_decompose(Sigma);
+}
+
+model {
+  tau2 ~ student_t(3, 0, 1);  // student t prior with df 3, mean 0, sd 1
+  phi ~ student_t(3, 0, 1);   // student t prior with df 3, mean 0, sd 1
+  to_vector(eta_center) ~ std_normal();
+  y ~ bernoulli_logit(X * beta + L_Sigma * eta_center);  
+  beta ~ normal(0, 1);
+}
+
+generated quantities {
+  int y_rep[n];
+  y_rep = bernoulli_logit_rng(X * beta + L_Sigma * eta_center);  
+}
+// Note: the stan file must end in a blank (new) line</code></pre>
+<ul>
+<li>Fitting the model</li>
+</ul>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb506-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))) {</a>
+<a class="sourceLine" id="cb506-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb506-3" data-line-number="3">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb506-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb506-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb506-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
+<a class="sourceLine" id="cb506-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb506-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb506-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb506-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb507-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb507-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb507-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb507-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb507-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: spatial-logistic-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##            mean se_mean    sd     10%     90% n_eff Rhat
+## beta[1]    0.92    0.01  0.58    0.17    1.58  2339 1.00
+## beta[2]    0.52    0.00  0.36    0.05    0.98  5524 1.00
+## tau2       1.73    0.04  1.32    0.48    3.29  1311 1.00
+## phi        0.58    0.02  0.79    0.10    1.31  1447 1.00
+## lp__    -207.46    0.45 12.94 -223.78 -190.85   816 1.01
+## 
+## Samples were drawn using NUTS(diag_e) at Fri Apr 10 20:39:34 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-291-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb509-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb509-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb510-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb510-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb510-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb510-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-293-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="what-if-we-fit-a-non-spatial-regression" class="section level4">
+<h4><span class="header-section-number">32.2.5.2</span> What if we fit a non-spatial regression?</h4>
+<p>Fit a non-spatial regression to the spatially correlated data</p>
+<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb511-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb511-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb511-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb511-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb511-5" data-line-number="5">)</a></code></pre></div>
+<pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+## Running the chains for more iterations may help. See
+## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb513-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb513-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb513-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb513-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb513-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: logistic-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##            mean se_mean   sd     10%     90% n_eff Rhat
+## beta[1]    0.96    0.00 0.16    0.76    1.16  3307    1
+## beta[2]    0.42    0.01 0.33    0.00    0.85  3163    1
+## lp__    -119.20    0.02 1.01 -120.54 -118.30  1998    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:36:46 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-295-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb515-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb515-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<p>Poor coverage when not accounting for the spatial process</p>
+<p>Evidence of model mis-fit</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb516-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb516-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb516-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb516-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-297-1.png" width="480" style="display: block; margin: auto;" /></p>
+<!-- #### Spatial logistic regression in INLA -->
+<!-- - Integrated Nested Laplace Approximation -->
+<!--     - uses a stochastic PDE approximation to the Matern -->
+<!--     -  -->
+<!-- ```{r} -->
+<!-- ## generate a mesh for fitting the INLA SPDE approximation -->
+<!-- ## note: be careful to make the mesh too small as this can become very time consuming -->
+<!-- fine_mesh   <- inla.mesh.2d(locs_full, max.edge = c(0.05, 0.1), offset = c(0.1, 0.2)) -->
+<!-- coarse_mesh <- inla.mesh.2d(locs_full, max.edge = c(10, 100), offset = c(0.05, 0.1)) -->
+<!-- layout(matrix(1:2, 1, 2)) -->
+<!-- plot(fine_mesh) -->
+<!-- points(locs, col = "red", pch = 16) -->
+<!-- plot(coarse_mesh) -->
+<!-- points(locs, col = "red", pch = 16) -->
+<!-- ``` -->
+<!-- ## start with a coarse mesh -->
+<!-- ```{r, cache = TRUE} -->
+<!-- ## generate the SPDE model for the coarse mesh -->
+<!-- coarse_spde   <- inla.spde2.matern(mesh = coarse_mesh, alpha = 2) -->
+<!-- A_coarse      <- inla.spde.make.A(mesh = coarse_mesh, loc = as.matrix(locs)) -->
+<!-- s_coarse      <- inla.spde.make.index(name = "spatial.field", -->
+<!--   n.spde = coarse_spde$n.spde) -->
+<!-- ## create the data stack for the coarse mesh -->
+<!-- coarse_stack <- inla.stack( -->
+<!--   data    = list(y = y),  -->
+<!--   A       = list(A_coarse, 1), -->
+<!--   effects = list(c(s_coarse, list(Intercept = 1)), list(covariate = X[, 2])), -->
+<!--   tag     = "coarse_mesh" -->
+<!-- ) -->
+<!-- ## create the prediction stack for the coarse mesh predictions -->
+<!-- A_pred <- inla.spde.make.A(mesh = coarse_mesh, loc = as.matrix(locs_full)) -->
+<!-- coarse_stack_pred <- inla.stack( -->
+<!--   data    = list(y = NA), -->
+<!--   A       = list(A_pred, 1), -->
+<!--   effects = list(c(s_coarse, list (Intercept = 1)), list(covariate = X_full[, 2])), -->
+<!--   tag     = "coarse_pred") -->
+<!-- ## fit the INLA model on the coarse mesh -->
+<!-- join_stack_coarse <- inla.stack(coarse_stack, coarse_stack_pred) -->
+<!-- form              <- y ~ -1 + Intercept + covariate + f(spatial.field, model = spde) -->
+<!-- fit_coarse <- inla( -->
+<!--   formula           = form, -->
+<!--   family            = "binomial",  -->
+<!--   Ntrials           = rep(1, n+N),  -->
+<!--   data              = inla.stack.data(join_stack_coarse, spde = coarse_spde), -->
+<!--   control.family    = list(link = "logit"), -->
+<!--   control.predictor = list(link = 1, A = inla.stack.A(join_stack_coarse), compute = TRUE), -->
+<!--   control.compute = list(cpo = TRUE, dic = TRUE) -->
+<!-- ) -->
+<!-- summary(fit_coarse) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- ## extract predicted values -->
+<!-- #Get predicted data on grid -->
+<!-- idx_pred <- inla.stack.index(join_stack_coarse, "coarse_pred")$data -->
+<!-- y_pred_mean_coarse <- fit_coarse$summary.fitted.values[idx_pred, "mean"] -->
+<!-- y_pred_sd_coarse   <- fit_coarse$summary.fitted.values[idx_pred, "sd"] -->
+<!-- dat_plot <- data.frame( -->
+<!--   x             = locs_full[, 1], -->
+<!--   y             = locs_full[, 2], -->
+<!--   p             = logit(p_i),  -->
+<!--   p_pred_coarse = y_pred_mean_coarse, -->
+<!--   p_sd_coarse   = y_pred_sd_coarse -->
+<!-- ) -->
+<!-- p1 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("simulated latent probability") -->
+<!-- p2 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_pred_coarse)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("estimated latent probability") -->
+<!-- p3 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_sd_coarse)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("posterior predictive sd") -->
+<!-- p1 + p2 + p3 -->
+<!-- ``` -->
+<!-- ## fit the INLA model to the fine mesh -->
+<!-- ```{r, cache = TRUE} -->
+<!-- ## generate the SPDE model for the fine mesh -->
+<!-- fine_spde   <- inla.spde2.matern(mesh = fine_mesh, alpha = 2) -->
+<!-- A_fine      <- inla.spde.make.A(mesh = fine_mesh, loc = as.matrix(locs)) -->
+<!-- s_fine      <- inla.spde.make.index(name = "spatial.field", -->
+<!--   n.spde = fine_spde$n.spde) -->
+<!-- ## create the data stack for the fine mesh -->
+<!-- fine_stack <- inla.stack( -->
+<!--   data    = list(y = y),  -->
+<!--   A       = list(A_fine, 1), -->
+<!--   effects = list(c(s_fine, list(Intercept = 1)), list(covariate = X[, 2])), -->
+<!--   tag     = "fine_mesh" -->
+<!-- ) -->
+<!-- ## create the prediction stack for the fine mesh predictions -->
+<!-- A_pred <- inla.spde.make.A(mesh = fine_mesh, loc = as.matrix(locs_full)) -->
+<!-- fine_stack_pred <- inla.stack( -->
+<!--   data    = list(y = NA), -->
+<!--   A       = list(A_pred, 1), -->
+<!--   effects = list(c(s_fine, list (Intercept = 1)), list(covariate = X_full[, 2])), -->
+<!--   tag     = "fine_pred") -->
+<!-- ## fit the INLA model on the fine mesh -->
+<!-- join_stack_fine <- inla.stack(fine_stack, fine_stack_pred) -->
+<!-- form            <- y ~ -1 + Intercept + covariate + f(spatial.field, model = spde) -->
+<!-- fit_fine <- inla( -->
+<!--   formula           = form, -->
+<!--   family            = "binomial",  -->
+<!--   Ntrials           = rep(1, n+N),  -->
+<!--   data              = inla.stack.data(join_stack_fine, spde = fine_spde), -->
+<!--   control.family    = list(link = "logit"), -->
+<!--   control.predictor = list(link = 1, A = inla.stack.A(join_stack_fine), compute = TRUE), -->
+<!--   control.compute = list(cpo = TRUE, dic = TRUE) -->
+<!-- ) -->
+<!-- summary(fit_fine) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- ## extract predicted values -->
+<!-- #Get predicted data on grid -->
+<!-- idx_pred <- inla.stack.index(join_stack_fine, "fine_pred")$data -->
+<!-- y_pred_mean_fine <- fit_fine$summary.fitted.values[idx_pred, "mean"] -->
+<!-- y_pred_sd_fine   <- fit_fine$summary.fitted.values[idx_pred, "sd"] -->
+<!-- dat_plot <- data.frame( -->
+<!--   x = locs_full[, 1], -->
+<!--   y = locs_full[, 2], -->
+<!--   p = logit(p_i),  -->
+<!--   p_pred_fine = y_pred_mean_fine, -->
+<!--   p_sd_fine   = y_pred_sd_fine -->
+<!-- ) -->
+<!-- p1 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("simulated latent probability") -->
+<!-- p2 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_pred_fine)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("estimated latent probability") -->
+<!-- p3 <- ggplot(data = dat_plot, aes(x = x, y = y, fill = p_sd_fine)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis() + -->
+<!--   ggtitle("posterior predictive sd") -->
+<!-- p1 + p2 + p3 -->
+<!-- ``` -->
+<!-- #### Spatial logistic regression by hand MCMC -->
+<!-- ```{r, comment = ""} -->
+<!-- read_lines(here::here("R", "mcmc-bernoulli.R")) -->
+<!-- source(here::here("R", "mcmc-bernoulli.R")) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- out <- mcmc_bernoulli(y, X, locs, n_adapt = 2000, n_mcmc = 5000, n_message = 10) -->
+<!-- ``` -->
+</div>
+</div>
+<div id="example-spatial-poisson-count-regression" class="section level3">
+<h3><span class="header-section-number">32.2.6</span> Example: spatial Poisson (count) regression</h3>
+<ul>
+<li><p><span class="math inline">\(y_i = \{0, 1, 2, \ldots \}\)</span></p></li>
+<li><p><span class="math inline">\(E \left( y_i \right) = \lambda_i\)</span></p></li>
+<li><p>the link function is <span class="math inline">\(\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
+</ul>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb517-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb517-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb517-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
+<a class="sourceLine" id="cb517-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
+<a class="sourceLine" id="cb517-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb517-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb517-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb517-8" data-line-number="8"><span class="co">## fixed effects</span></a>
+<a class="sourceLine" id="cb517-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb517-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb517-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
+<a class="sourceLine" id="cb517-12" data-line-number="12"><span class="co">## random effects</span></a>
+<a class="sourceLine" id="cb517-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
+<a class="sourceLine" id="cb517-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">3.25</span></a>
+<a class="sourceLine" id="cb517-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb517-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
+<a class="sourceLine" id="cb517-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
+<a class="sourceLine" id="cb517-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb517-19" data-line-number="19"><span class="co">## GLM link function</span></a>
+<a class="sourceLine" id="cb517-20" data-line-number="20"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
+<a class="sourceLine" id="cb517-21" data-line-number="21">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
+<a class="sourceLine" id="cb517-22" data-line-number="22">y_full &lt;-<span class="st"> </span><span class="kw">rpois</span>(N, lambda)</a>
+<a class="sourceLine" id="cb517-23" data-line-number="23">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb517-24" data-line-number="24">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb517-25" data-line-number="25">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb517-26" data-line-number="26">  <span class="dt">z      =</span> y_full, </a>
+<a class="sourceLine" id="cb517-27" data-line-number="27">  <span class="dt">lambda =</span> lambda, </a>
+<a class="sourceLine" id="cb517-28" data-line-number="28">  <span class="dt">Xbeta  =</span> Xbeta, </a>
+<a class="sourceLine" id="cb517-29" data-line-number="29">  <span class="dt">eta    =</span> eta</a>
+<a class="sourceLine" id="cb517-30" data-line-number="30">)</a>
+<a class="sourceLine" id="cb517-31" data-line-number="31"><span class="co">## using patchwork plots</span></a>
+<a class="sourceLine" id="cb517-32" data-line-number="32">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb517-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-34" data-line-number="34"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-35" data-line-number="35"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb517-36" data-line-number="36">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb517-37" data-line-number="37"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-38" data-line-number="38"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value lambda&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-39" data-line-number="39"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb517-40" data-line-number="40">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb517-41" data-line-number="41"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-42" data-line-number="42"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-43" data-line-number="43"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb517-44" data-line-number="44">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb517-45" data-line-number="45"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-46" data-line-number="46"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb517-47" data-line-number="47"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb517-48" data-line-number="48"></a>
+<a class="sourceLine" id="cb517-49" data-line-number="49">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-298-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>subset the data to represent an observation process</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" data-line-number="1"><span class="co">## using </span></a>
+<a class="sourceLine" id="cb518-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
+<a class="sourceLine" id="cb518-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
+<a class="sourceLine" id="cb518-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
+<a class="sourceLine" id="cb518-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
+<a class="sourceLine" id="cb518-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
+<a class="sourceLine" id="cb518-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb518-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb518-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb518-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
+<a class="sourceLine" id="cb518-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb518-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb518-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb518-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb518-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed counts&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-299-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb519-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
+<a class="sourceLine" id="cb519-2" data-line-number="2"><span class="co">## fit spatial poisson regression using mgcv</span></a>
+<a class="sourceLine" id="cb519-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
+<a class="sourceLine" id="cb519-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<pre><code>## 
+## Family: poisson 
+## Link function: log 
+## 
+## Formula:
+## y ~ covariate + s(lon, lat)
+## 
+## Parametric coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   2.3787     0.0343    69.4   &lt;2e-16 ***
+## covariate     0.5000     0.0257    19.4   &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Approximate significance of smooth terms:
+##             edf Ref.df Chi.sq p-value    
+## s(lon,lat) 28.3   28.9   8795  &lt;2e-16 ***
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## R-sq.(adj) =    0.9   Deviance explained = 93.4%
+## UBRE = 3.8443  Scale est. = 1         n = 200</code></pre>
+<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb521-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb521-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb521-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
+<a class="sourceLine" id="cb521-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
+<a class="sourceLine" id="cb521-5" data-line-number="5">  <span class="dt">lambda  =</span> <span class="kw">c</span>(lambda),</a>
+<a class="sourceLine" id="cb521-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
+<a class="sourceLine" id="cb521-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
+<a class="sourceLine" id="cb521-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
+<a class="sourceLine" id="cb521-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb521-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(lambda), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
+<a class="sourceLine" id="cb521-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> lambda)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb521-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb521-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb521-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb521-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
+<a class="sourceLine" id="cb521-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-301-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We can fit spatial the Poisson regression in stan</p>
+<ul>
+<li>print the output of the model <code>spatial-poisson-regression.stan</code></li>
+</ul>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<pre><code>data {
+  int&lt;lower=0&gt; n;
+  int&lt;lower=0&gt; p;
+  int&lt;lower=0&gt; y[n];
+  matrix[n, p] X;
+  matrix[n, 2] locs;
+}
+
+transformed data {
+  matrix[n, n] D;
+  for (i in 1:n) {
+    for (j in 1:(i-1)) {
+      D[i, j] = sqrt(sum(square(locs[i, ] - locs[j, ])));
+      D[j, i] = D[i, j];
+    }
+    D[i, i] = 0.0;
+  }
+}
+
+parameters {
+  vector[p] beta;
+  real&lt;lower=0&gt; tau2;
+  real&lt;lower=0&gt; phi;
+  vector[n] eta_center;
+}
+
+transformed parameters {
+  cov_matrix[n] Sigma;
+  matrix[n, n] L_Sigma;
+  Sigma = tau2 * exp( - D / phi);
+  L_Sigma = cholesky_decompose(Sigma);
+}
+
+model {
+  tau2 ~ student_t(3, 0, 1);  // student t prior with df 3, mean 0, sd 1
+  phi ~ student_t(3, 0, 1);   // student t prior with df 3, mean 0, sd 1
+  to_vector(eta_center) ~ std_normal();
+  y ~ poisson_log(X * beta + L_Sigma * eta_center);  
+  beta ~ normal(0, 5);
+}
+
+generated quantities {
+  int y_rep[n];
+  y_rep = poisson_log_rng(X * beta + L_Sigma * eta_center);  
+}
+// Note: the stan file must end in a blank (new) line</code></pre>
+<ul>
+<li>Fitting the model</li>
+</ul>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))) {</a>
+<a class="sourceLine" id="cb524-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb524-3" data-line-number="3">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb524-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb524-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb524-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
+<a class="sourceLine" id="cb524-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb524-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb524-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb524-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb525-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb525-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb525-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb525-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb525-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: spatial-poisson-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##             mean se_mean    sd      10%      90% n_eff Rhat
+## beta[1]     1.66    0.04  1.27     0.11     3.16  1007    1
+## beta[2]     0.41    0.00  0.07     0.32     0.51   748    1
+## tau2        3.42    0.05  1.63     1.87     5.50   895    1
+## phi         1.04    0.02  0.51     0.55     1.70   922    1
+## lp__    23759.76    0.45 13.52 23742.53 23776.69   896    1
+## 
+## Samples were drawn using NUTS(diag_e) at Fri Apr 10 23:25:38 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-304-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb527-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb527-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb528-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb528-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb528-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-306-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="what-if-we-fit-a-non-spatial-regression-1" class="section level4">
+<h4><span class="header-section-number">32.2.6.1</span> What if we fit a non-spatial regression?</h4>
+<p>Fit a non-spatial regression to the spatially correlated data</p>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb529-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb529-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb529-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb529-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb530-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb530-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb530-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb530-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<pre><code>## Inference for Stan model: poisson-regression.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##             mean se_mean   sd      10%      90% n_eff Rhat
+## beta[1]     3.40    0.00 0.01     3.38     3.42  2133    1
+## beta[2]     0.77    0.00 0.02     0.74     0.80  2032    1
+## lp__    17588.81    0.02 0.98 17587.53 17589.72  1937    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:42:42 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-308-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Posterior predictive checks</p>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb532-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<ul>
+<li><p>Poor coverage when not accounting for the spatial process</p></li>
+<li><p>Evidence of model mis-fit</p></li>
+</ul>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb533-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb533-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb533-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb533-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-310-1.png" width="480" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
 </div>
 </div>
             </section>
