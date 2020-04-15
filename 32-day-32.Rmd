@@ -15,6 +15,7 @@ library(Matrix)
 library(patchwork)
 library(mgcv)
 library(rstan)
+library(nimble)
 ## use recommended rstan settings
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
@@ -52,7 +53,7 @@ set.seed(101)
 - Recall the Gaussian model:
 
 \begin{align*}
-y(\mathbf{s}) | \eta(\mathbf{s}) & \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s} \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
+y(\mathbf{s}) | \eta(\mathbf{s}) & \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
 \boldsymbol{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))' & \sim N(\mathbf{0}, \boldsymbol{\Sigma}),
 \end{align*}
 
@@ -61,7 +62,7 @@ where $\boldsymbol{\Sigma}$ is the covariance matrix for the covariance function
 - If we integrate out the random effect $\boldsymbol{\eta}$ we have:
 
 - $y(\mathbf{s})$ is a GP
-- $E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}
+- $E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}$
 - $Cov(y(\mathbf{s}), y(\mathbf{s}')) = \begin{cases} \sigma^2 + \tau^2 & h = 0 \\ \tau^2 C (h) & h > 0 \end{cases}$
 
 - Therefore, given the random effects, the observations are independent, but marginally, the observations are dependent.    
@@ -100,7 +101,7 @@ for some link function $g(\cdot)$
 
 - the logit function is $logit(z) = \frac{e^z}{1 + e^z}$
 
-- sometimes a probit link function is used $p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$    
+- sometimes a probit link function is used $p_i = probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}$    
 - the probit function is $probit(z) = \Phi(z)$ where $\Phi()$ is the standard normal CDF
 
 <!-- - Marginal distriubtion of $y(\mathbf{s})$ for binary data -->
@@ -173,6 +174,155 @@ p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
 p1 + p2 + p3
 ```   
+
+
+
+
+
+
+####  Binary logistic regression in NIMBLE
+
+- we need to define a nimble model
+
+```{r, error = TRUE}
+logistic_code <- nimbleCode({
+  ## prior for regression parameters beta
+  for (j in 1:q) {
+    beta[j] ~ dnorm(0, sd = 10)
+  }
+  
+  for (i in 1:n) {
+    ## note that you have to be explicit about the variable
+    ## dimensions for each statement
+    logit(p[i]) <- X[i, 1:q] %*% beta[1:q]
+    y[i] ~ dbin(p[i], m[i])
+  }
+})
+
+## define the constants, data, and MCMC initial conditions
+constants <- list(n = n)
+data <- list(
+  y = y, 
+  m = rep(1, n), 
+  X = X,
+  q = ncol(X)
+)
+inits <- list(beta = rnorm(ncol(X)), p = rbeta(n, 1, 1))
+
+## create the NIMBLE model
+logistic_model <- nimbleModel(
+  code      = logistic_code, 
+  constants = constants,
+  data      = data,
+  inits     = inits
+)
+```
+
+Note the above error -- it's saying that `q` needs to be specified as a `constant` rather than `data`.
+
+```{r}
+## define the constants, data, and MCMC initial conditions
+constants <- list(n = n, q = ncol(X))
+data <- list(
+  y = y, 
+  m = rep(1, n), 
+  X = X
+)
+inits <- list(beta = rnorm(ncol(X)), p = rbeta(n, 1, 1))
+
+## create the NIMBLE model
+logistic_model <- nimbleModel(
+  code      = logistic_code, 
+  constants = constants,
+  data      = data,
+  inits     = inits
+)
+```
+
+- Next, we build a default MCMC algorithm 
+
+```{r}
+logistic_mcmc    <- buildMCMC(logistic_model)
+```
+
+We can run the algorithm in R code using
+
+```{r}
+runMCMC(logistic_mcmc, niter=10)
+```
+
+but this is slow. Instead, we compile the model to c++ for faster runtimes
+
+```{r, error = TRUE}
+## compile the model to c++
+logistic_model_c <- compileNimble(logistic_model)
+
+logistic_mcmc_c  <- compileNimble(logistic_mcmc, project = logistic_model) 
+```
+
+but we get some errors. A quick Google search [nimble Warning, in eigenizing model_p[getNodeFunctionIndexedInfo(ARG1_INDEXEDNODEINFO__,1)] the [ is still there but nDim is not 0 (not a scalar).](https://github.com/nimble-dev/nimble/issues/755) led me to this site that suggests the problem is that the output of `X[i, 1:q] %*% beta[1:q]` is a matrix but the logit link function needs a scalar. This is some of the "immaturity" I talk about with NIMBLE that makes it sometimes challenging to get started with. Instead, we replace the `X[i, 1:q] %*% beta[1:q]` with the inner product `inprod(X[i, 1:q], beta[1:q])` in the model statement
+
+```{r}
+logistic_code <- nimbleCode({
+  ## prior for regression parameters beta
+  for (j in 1:q) {
+    beta[j] ~ dnorm(0, sd = 10)
+  }
+  
+  for (i in 1:n) {
+    ## note that you have to be explicit about the variable
+    ## dimensions for each statement
+    logit(p[i]) <- inprod(X[i, 1:q], beta[1:q])
+    y[i] ~ dbin(p[i], m[i])
+  }
+})
+## define the constants, data, and MCMC initial conditions
+constants <- list(n = n, q = ncol(X))
+data <- list(
+  y = y, 
+  m = rep(1, n), 
+  X = X
+)
+inits <- list(beta = rnorm(ncol(X)), p = rbeta(n, 1, 1))
+
+## create the NIMBLE model
+logistic_model <- nimbleModel(
+  code      = logistic_code, 
+  constants = constants,
+  data      = data,
+  inits     = inits
+)
+
+## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded
+Sys.unsetenv("PKG_CXXFLAGS")
+logistic_mcmc    <- buildMCMC(logistic_model)
+## compile the model to c++
+logistic_model_c <- compileNimble(logistic_model)
+
+logistic_mcmc_c  <- compileNimble(logistic_mcmc, project = logistic_model) 
+```
+
+- once the model is compiled, we fit this using `runMCMC`
+
+```{r, cache = TRUE}
+samples <- runMCMC(logistic_mcmc_c, niter = 1000, nchains = 4)
+```
+
+and examine the traceplots with 
+
+```{r}
+layout(matrix(1:2, 2, 1))
+plot(samples[[1]][, "beta[1]"], col = 1, type = 'l', main = "beta_0")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[1]"], col = i, type = 'l')
+}
+plot(samples[[1]][, "beta[2]"], col = 1, type = 'l', main = "beta_1")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[2]"], col = i, type = 'l')
+}
+```
+
+
 
 
 
@@ -259,6 +409,69 @@ p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
 p1 + p2 + p3
 ```    
+
+####  Poisson regression in NIMBLE
+
+- we need to define a nimble model
+
+```{r}
+poisson_code <- nimbleCode({
+  ## prior for regression parameters beta
+  for (j in 1:q) {
+    beta[j] ~ dnorm(0, sd = 10)
+  }
+  
+  for (i in 1:n) {
+    ## note that you have to be explicit about the variable
+    ## dimensions for each statement
+    log(lambda[i]) <- inprod(X[i, 1:q], beta[1:q])
+    y[i] ~ dpois(lambda[i])
+  }
+})
+## define the constants, data, and MCMC initial conditions
+constants <- list(n = n, q = ncol(X))
+data <- list(
+  y = y, 
+  X = X
+)
+inits <- list(beta = rnorm(ncol(X)), lambda = rexp(n, 1))
+
+## create the NIMBLE model
+poisson_model <- nimbleModel(
+  code      = poisson_code, 
+  constants = constants,
+  data      = data,
+  inits     = inits
+)
+
+## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded
+Sys.unsetenv("PKG_CXXFLAGS")
+poisson_mcmc    <- buildMCMC(poisson_model)
+## compile the model to c++
+poisson_model_c <- compileNimble(poisson_model)
+
+poisson_mcmc_c  <- compileNimble(poisson_mcmc, project = poisson_model) 
+```
+
+- once the model is compiled, we fit this using `runMCMC`
+
+```{r, cache = TRUE}
+samples <- runMCMC(poisson_mcmc_c, niter = 1000, nchains = 4)
+```
+
+and examine the traceplots with 
+
+```{r}
+layout(matrix(1:2, 2, 1))
+plot(samples[[1]][, "beta[1]"], col = 1, type = 'l', main = "beta_0")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[1]"], col = i, type = 'l')
+}
+plot(samples[[1]][, "beta[2]"], col = 1, type = 'l', main = "beta_1")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[2]"], col = i, type = 'l')
+}
+```
 
 - Many other models are possible including
 - negative binomial (overdispersed count data)
@@ -401,9 +614,9 @@ p4 <- ggplot(data = dat_plot, aes(x = lon, y = lat, fill = sd_pred)) +
 (p1 + p2) / (p3 + p4)
 ```
 
-#### Spatial Poisson regression in stan
+#### Spatial Ligistic regression in stan
 
-- print the output of the model `spatial-poisson-regression.stan`
+- print the output of the model `spatial-logistic-regression.stan`
 
 ```{r, comment = ""}
 cat(read_lines(here::here("stan_models", "spatial-logistic-regression.stan")), sep = "\n")
@@ -871,6 +1084,91 @@ p1 + p2 + p3
 ```    
 
 
+#### Spatial Poisson regression in NIMBLE
+
+- we need to define a nimble model
+
+```{r}
+poisson_code <- nimbleCode({
+  ## prior for regression parameters beta
+  for (j in 1:q) {
+    beta[j] ~ dnorm(0, sd = 10)
+  }
+  tau ~ dgamma(1, 1)
+  phi ~ dgamma(1, 1)
+  Sigma[1:n, 1:n] <- tau^2 * exp(-D[1:n, 1:n] / phi)
+  # Sigma_chol[1:n, 1:n] <- chol(Sigma[1:n, 1:n])
+  
+  eta[1:n] ~ dmnorm(zeros[1:n], Sigma[1:n, 1:n])
+  
+  
+  for (i in 1:n) {
+    ## note that you have to be explicit about the variable
+    ## dimensions for each statement
+    log(lambda[i]) <- inprod(X[i, 1:q], beta[1:q] + eta[i])
+    y[i] ~ dpois(lambda[i])
+  }
+})
+## define the constants, data, and MCMC initial conditions
+constants <- list(n = n, q = ncol(X))
+data <- list(
+  y = y, 
+  X = X,
+  D = fields::rdist(locs),
+  zeros = rep(0, n)
+)
+inits <- list(
+  beta = rnorm(ncol(X)),
+  lambda = rexp(n, 1), 
+  tau = rgamma(1, 1, 1), 
+  phi = rgamma(1, 1, 1),
+  eta = rnorm(n)
+)
+
+## create the NIMBLE model
+poisson_model <- nimbleModel(
+  code      = poisson_code, 
+  constants = constants,
+  data      = data,
+  inits     = inits
+)
+
+## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded
+Sys.unsetenv("PKG_CXXFLAGS")
+poisson_mcmc    <- buildMCMC(poisson_model)
+## compile the model to c++
+poisson_model_c <- compileNimble(poisson_model)
+
+poisson_mcmc_c  <- compileNimble(poisson_mcmc, project = poisson_model) 
+```
+
+- once the model is compiled, we fit this using `runMCMC`
+
+```{r, cache = TRUE}
+samples <- runMCMC(poisson_mcmc_c, niter = 1000, nchains = 4)
+```
+
+and examine the traceplots with 
+
+```{r}
+layout(matrix(1:4, 2, 2))
+plot(samples[[1]][, "beta[1]"], col = 1, type = 'l', main = "beta_0")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[1]"], col = i, type = 'l')
+}
+plot(samples[[1]][, "beta[2]"], col = 1, type = 'l', main = "beta_1")
+for (i in 2:4) {
+  lines(samples[[i]][, "beta[2]"], col = i, type = 'l')
+}
+plot(samples[[1]][, "tau"], col = 1, type = 'l', main = "tau")
+for (i in 2:4) {
+  lines(samples[[i]][, "tau"], col = i, type = 'l')
+}
+plot(samples[[1]][, "phi"], col = 1, type = 'l', main = "phi")
+for (i in 2:4) {
+  lines(samples[[i]][, "phi"], col = i, type = 'l')
+}
+```
 
 
 

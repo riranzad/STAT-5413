@@ -376,7 +376,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
-<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a><ul>
+<li class="chapter" data-level="33.2.1" data-path="day-33.html"><a href="day-33.html#review-discrete-time"><i class="fa fa-check"></i><b>33.2.1</b> Review: discrete time</a></li>
+<li class="chapter" data-level="33.2.2" data-path="day-33.html"><a href="day-33.html#continuous-space-discrete-time-the-spatial-ar1-model"><i class="fa fa-check"></i><b>33.2.2</b> Continuous space, discrete time – the spatial AR(1) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -431,21 +434,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-32" class="section level1">
 <h1><span class="header-section-number">32</span> Day 32</h1>
-<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb475-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
-<a class="sourceLine" id="cb475-3" data-line-number="3"><span class="kw">library</span>(viridis)</a>
-<a class="sourceLine" id="cb475-4" data-line-number="4"><span class="kw">library</span>(mvnfast)</a>
-<a class="sourceLine" id="cb475-5" data-line-number="5"><span class="kw">library</span>(igraph)</a>
-<a class="sourceLine" id="cb475-6" data-line-number="6"><span class="kw">library</span>(Matrix)</a>
-<a class="sourceLine" id="cb475-7" data-line-number="7"><span class="kw">library</span>(patchwork)</a>
-<a class="sourceLine" id="cb475-8" data-line-number="8"><span class="kw">library</span>(mgcv)</a>
-<a class="sourceLine" id="cb475-9" data-line-number="9"><span class="kw">library</span>(rstan)</a>
-<a class="sourceLine" id="cb475-10" data-line-number="10"><span class="co">## use recommended rstan settings</span></a>
-<a class="sourceLine" id="cb475-11" data-line-number="11"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
-<a class="sourceLine" id="cb475-12" data-line-number="12"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb475-13" data-line-number="13"><span class="kw">library</span>(bayesplot)</a>
-<a class="sourceLine" id="cb475-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb475-15" data-line-number="15"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb476-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb476-3" data-line-number="3"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb476-4" data-line-number="4"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb476-5" data-line-number="5"><span class="kw">library</span>(igraph)</a>
+<a class="sourceLine" id="cb476-6" data-line-number="6"><span class="kw">library</span>(Matrix)</a>
+<a class="sourceLine" id="cb476-7" data-line-number="7"><span class="kw">library</span>(patchwork)</a>
+<a class="sourceLine" id="cb476-8" data-line-number="8"><span class="kw">library</span>(mgcv)</a>
+<a class="sourceLine" id="cb476-9" data-line-number="9"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb476-10" data-line-number="10"><span class="kw">library</span>(nimble)</a>
+<a class="sourceLine" id="cb476-11" data-line-number="11"><span class="co">## use recommended rstan settings</span></a>
+<a class="sourceLine" id="cb476-12" data-line-number="12"><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</a>
+<a class="sourceLine" id="cb476-13" data-line-number="13"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb476-14" data-line-number="14"><span class="kw">library</span>(bayesplot)</a>
+<a class="sourceLine" id="cb476-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb476-16" data-line-number="16"><span class="kw">set.seed</span>(<span class="dv">101</span>)</a></code></pre></div>
 <div id="announcements-27" class="section level2">
 <h2><span class="header-section-number">32.1</span> Announcements</h2>
 </div>
@@ -503,20 +507,20 @@ g \left( E \left( y_i \right) \right) &amp; = \mathbf{X}_i \boldsymbol{\beta}
 <!-- - Marginal distriubtion of $y(\mathbf{s})$ for binary data -->
 <!--     -For Poisson: $[y(\mathbf{s})] = \int \operatorname{Bernoulli}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}$ = ??? -->
 <!--     - $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)$ -->
-<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb476-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb476-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb476-4" data-line-number="4">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
-<a class="sourceLine" id="cb476-5" data-line-number="5">p &lt;-<span class="st"> </span><span class="kw">logit</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
-<a class="sourceLine" id="cb476-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, p)</a>
-<a class="sourceLine" id="cb476-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">p =</span> p) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb476-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb476-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb476-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> p), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb477-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb477-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb477-4" data-line-number="4">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb477-5" data-line-number="5">p &lt;-<span class="st"> </span><span class="kw">logit</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
+<a class="sourceLine" id="cb477-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, p)</a>
+<a class="sourceLine" id="cb477-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">p =</span> p) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb477-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb477-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb477-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> p), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-271-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb477-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
-<a class="sourceLine" id="cb477-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
-<a class="sourceLine" id="cb477-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb478-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb478-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
+<a class="sourceLine" id="cb478-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
 <pre><code>## 
 ## Family: binomial 
 ## Link function: logit 
@@ -542,7 +546,7 @@ g \left( E \left( y_i \right) \right) &amp; = \mathbf{X}_i \boldsymbol{\beta}
 <li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
 <li><p>print the output of the model <code>logistic-regression.stan</code></p></li>
 </ul>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb480-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>data {
   int&lt;lower=0&gt; n;
   int&lt;lower=0&gt; p;
@@ -567,11 +571,11 @@ generated quantities {
 <ul>
 <li>Fitting the model</li>
 </ul>
-<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb481-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb481-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb481-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
-<a class="sourceLine" id="cb481-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb481-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb482-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb482-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb482-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb482-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb482-5" data-line-number="5">)</a></code></pre></div>
 <pre><code>## Warning: The largest R-hat is NA, indicating chains have not mixed.
 ## Running the chains for more iterations may help. See
 ## http://mc-stan.org/misc/warnings.html#r-hat</code></pre>
@@ -581,11 +585,11 @@ generated quantities {
 <pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 ## Running the chains for more iterations may help. See
 ## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
-<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb485-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb485-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb485-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb485-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb485-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb486-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb486-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb486-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb486-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb486-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: logistic-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
@@ -601,13 +605,176 @@ generated quantities {
 ## convergence, Rhat=1).</code></pre>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-275-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb487-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb487-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
-<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb488-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb488-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb488-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb488-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb488-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb488-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb489-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb489-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb489-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-277-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="binary-logistic-regression-in-nimble" class="section level4">
+<h4><span class="header-section-number">32.2.2.2</span> Binary logistic regression in NIMBLE</h4>
+<ul>
+<li>we need to define a nimble model</li>
+</ul>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb490-1" data-line-number="1">logistic_code &lt;-<span class="st"> </span><span class="kw">nimbleCode</span>({</a>
+<a class="sourceLine" id="cb490-2" data-line-number="2">  <span class="co">## prior for regression parameters beta</span></a>
+<a class="sourceLine" id="cb490-3" data-line-number="3">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>q) {</a>
+<a class="sourceLine" id="cb490-4" data-line-number="4">    beta[j] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb490-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb490-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb490-7" data-line-number="7">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb490-8" data-line-number="8">    <span class="co">## note that you have to be explicit about the variable</span></a>
+<a class="sourceLine" id="cb490-9" data-line-number="9">    <span class="co">## dimensions for each statement</span></a>
+<a class="sourceLine" id="cb490-10" data-line-number="10">    <span class="kw">logit</span>(p[i]) &lt;-<span class="st"> </span>X[i, <span class="dv">1</span><span class="op">:</span>q] <span class="op">%*%</span><span class="st"> </span>beta[<span class="dv">1</span><span class="op">:</span>q]</a>
+<a class="sourceLine" id="cb490-11" data-line-number="11">    y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbin</span>(p[i], m[i])</a>
+<a class="sourceLine" id="cb490-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb490-13" data-line-number="13">})</a>
+<a class="sourceLine" id="cb490-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb490-15" data-line-number="15"><span class="co">## define the constants, data, and MCMC initial conditions</span></a>
+<a class="sourceLine" id="cb490-16" data-line-number="16">constants &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> n)</a>
+<a class="sourceLine" id="cb490-17" data-line-number="17">data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb490-18" data-line-number="18">  <span class="dt">y =</span> y, </a>
+<a class="sourceLine" id="cb490-19" data-line-number="19">  <span class="dt">m =</span> <span class="kw">rep</span>(<span class="dv">1</span>, n), </a>
+<a class="sourceLine" id="cb490-20" data-line-number="20">  <span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb490-21" data-line-number="21">  <span class="dt">q =</span> <span class="kw">ncol</span>(X)</a>
+<a class="sourceLine" id="cb490-22" data-line-number="22">)</a>
+<a class="sourceLine" id="cb490-23" data-line-number="23">inits &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">beta =</span> <span class="kw">rnorm</span>(<span class="kw">ncol</span>(X)), <span class="dt">p =</span> <span class="kw">rbeta</span>(n, <span class="dv">1</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb490-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb490-25" data-line-number="25"><span class="co">## create the NIMBLE model</span></a>
+<a class="sourceLine" id="cb490-26" data-line-number="26">logistic_model &lt;-<span class="st"> </span><span class="kw">nimbleModel</span>(</a>
+<a class="sourceLine" id="cb490-27" data-line-number="27">  <span class="dt">code      =</span> logistic_code, </a>
+<a class="sourceLine" id="cb490-28" data-line-number="28">  <span class="dt">constants =</span> constants,</a>
+<a class="sourceLine" id="cb490-29" data-line-number="29">  <span class="dt">data      =</span> data,</a>
+<a class="sourceLine" id="cb490-30" data-line-number="30">  <span class="dt">inits     =</span> inits</a>
+<a class="sourceLine" id="cb490-31" data-line-number="31">)</a></code></pre></div>
+<pre><code>## defining model...</code></pre>
+<pre><code>## Error in getSymbolicParentNodesRecurse(x, constNames, indexNames, nimbleFunctionNames, : R function &#39;:&#39; has arguments that cannot be evaluated; either the function must be a nimbleFunction or values for the following inputs must be specified as constants in the model: q.</code></pre>
+<p>Note the above error – it’s saying that <code>q</code> needs to be specified as a <code>constant</code> rather than <code>data</code>.</p>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb493-1" data-line-number="1"><span class="co">## define the constants, data, and MCMC initial conditions</span></a>
+<a class="sourceLine" id="cb493-2" data-line-number="2">constants &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> n, <span class="dt">q =</span> <span class="kw">ncol</span>(X))</a>
+<a class="sourceLine" id="cb493-3" data-line-number="3">data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb493-4" data-line-number="4">  <span class="dt">y =</span> y, </a>
+<a class="sourceLine" id="cb493-5" data-line-number="5">  <span class="dt">m =</span> <span class="kw">rep</span>(<span class="dv">1</span>, n), </a>
+<a class="sourceLine" id="cb493-6" data-line-number="6">  <span class="dt">X =</span> X</a>
+<a class="sourceLine" id="cb493-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb493-8" data-line-number="8">inits &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">beta =</span> <span class="kw">rnorm</span>(<span class="kw">ncol</span>(X)), <span class="dt">p =</span> <span class="kw">rbeta</span>(n, <span class="dv">1</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb493-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb493-10" data-line-number="10"><span class="co">## create the NIMBLE model</span></a>
+<a class="sourceLine" id="cb493-11" data-line-number="11">logistic_model &lt;-<span class="st"> </span><span class="kw">nimbleModel</span>(</a>
+<a class="sourceLine" id="cb493-12" data-line-number="12">  <span class="dt">code      =</span> logistic_code, </a>
+<a class="sourceLine" id="cb493-13" data-line-number="13">  <span class="dt">constants =</span> constants,</a>
+<a class="sourceLine" id="cb493-14" data-line-number="14">  <span class="dt">data      =</span> data,</a>
+<a class="sourceLine" id="cb493-15" data-line-number="15">  <span class="dt">inits     =</span> inits</a>
+<a class="sourceLine" id="cb493-16" data-line-number="16">)</a></code></pre></div>
+<pre><code>## defining model...</code></pre>
+<pre><code>## building model...</code></pre>
+<pre><code>## setting data and initial values...</code></pre>
+<pre><code>## running calculate on model (any error reports that follow may simply reflect missing values in model variables) ... 
+## checking model sizes and dimensions...
+## model building finished.</code></pre>
+<ul>
+<li>Next, we build a default MCMC algorithm</li>
+</ul>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb498-1" data-line-number="1">logistic_mcmc    &lt;-<span class="st"> </span><span class="kw">buildMCMC</span>(logistic_model)</a></code></pre></div>
+<p>We can run the algorithm in R code using</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" data-line-number="1"><span class="kw">runMCMC</span>(logistic_mcmc, <span class="dt">niter=</span><span class="dv">10</span>)</a></code></pre></div>
+<pre><code>## Warning: running an uncompiled MCMC algorithm, use compileNimble() for faster execution.</code></pre>
+<pre><code>## running chain 1...</code></pre>
+<pre><code>##       beta[1] beta[2]
+##  [1,]   0.483  0.5287
+##  [2,]   0.483  0.5287
+##  [3,]   0.483  0.9324
+##  [4,]   0.483  0.9324
+##  [5,]   0.483  0.9324
+##  [6,]   0.483  0.9324
+##  [7,]   0.483  0.9324
+##  [8,]   0.483  0.9324
+##  [9,]   0.483  0.9286
+## [10,]   0.483  0.9286</code></pre>
+<p>but this is slow. Instead, we compile the model to c++ for faster runtimes</p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb503-1" data-line-number="1"><span class="co">## compile the model to c++</span></a>
+<a class="sourceLine" id="cb503-2" data-line-number="2">logistic_model_c &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(logistic_model)</a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.</code></pre>
+<pre><code>## Error: Failed to create the shared library.</code></pre>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb506-1" data-line-number="1">logistic_mcmc_c  &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(logistic_mcmc, <span class="dt">project =</span> logistic_model) </a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.</code></pre>
+<pre><code>## Error: Failed to create the shared library.</code></pre>
+<pre><code>## Warning, in eigenizing model_p[getNodeFunctionIndexedInfo(ARG1_INDEXEDNODEINFO__,1)] the [ is still there but nDim is not 0 (not a scalar).</code></pre>
+<p>but we get some errors. A quick Google search [nimble Warning, in eigenizing model_p[getNodeFunctionIndexedInfo(ARG1_INDEXEDNODEINFO__,1)] the <a href="https://github.com/nimble-dev/nimble/issues/755">is still there but nDim is not 0 (not a scalar).</a> led me to this site that suggests the problem is that the output of <code>X[i, 1:q] %*% beta[1:q]</code> is a matrix but the logit link function needs a scalar. This is some of the “immaturity” I talk about with NIMBLE that makes it sometimes challenging to get started with. Instead, we replace the <code>X[i, 1:q] %*% beta[1:q]</code> with the inner product <code>inprod(X[i, 1:q], beta[1:q])</code> in the model statement</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb510-1" data-line-number="1">logistic_code &lt;-<span class="st"> </span><span class="kw">nimbleCode</span>({</a>
+<a class="sourceLine" id="cb510-2" data-line-number="2">  <span class="co">## prior for regression parameters beta</span></a>
+<a class="sourceLine" id="cb510-3" data-line-number="3">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>q) {</a>
+<a class="sourceLine" id="cb510-4" data-line-number="4">    beta[j] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb510-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb510-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb510-7" data-line-number="7">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb510-8" data-line-number="8">    <span class="co">## note that you have to be explicit about the variable</span></a>
+<a class="sourceLine" id="cb510-9" data-line-number="9">    <span class="co">## dimensions for each statement</span></a>
+<a class="sourceLine" id="cb510-10" data-line-number="10">    <span class="kw">logit</span>(p[i]) &lt;-<span class="st"> </span><span class="kw">inprod</span>(X[i, <span class="dv">1</span><span class="op">:</span>q], beta[<span class="dv">1</span><span class="op">:</span>q])</a>
+<a class="sourceLine" id="cb510-11" data-line-number="11">    y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dbin</span>(p[i], m[i])</a>
+<a class="sourceLine" id="cb510-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb510-13" data-line-number="13">})</a>
+<a class="sourceLine" id="cb510-14" data-line-number="14"><span class="co">## define the constants, data, and MCMC initial conditions</span></a>
+<a class="sourceLine" id="cb510-15" data-line-number="15">constants &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> n, <span class="dt">q =</span> <span class="kw">ncol</span>(X))</a>
+<a class="sourceLine" id="cb510-16" data-line-number="16">data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb510-17" data-line-number="17">  <span class="dt">y =</span> y, </a>
+<a class="sourceLine" id="cb510-18" data-line-number="18">  <span class="dt">m =</span> <span class="kw">rep</span>(<span class="dv">1</span>, n), </a>
+<a class="sourceLine" id="cb510-19" data-line-number="19">  <span class="dt">X =</span> X</a>
+<a class="sourceLine" id="cb510-20" data-line-number="20">)</a>
+<a class="sourceLine" id="cb510-21" data-line-number="21">inits &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">beta =</span> <span class="kw">rnorm</span>(<span class="kw">ncol</span>(X)), <span class="dt">p =</span> <span class="kw">rbeta</span>(n, <span class="dv">1</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb510-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb510-23" data-line-number="23"><span class="co">## create the NIMBLE model</span></a>
+<a class="sourceLine" id="cb510-24" data-line-number="24">logistic_model &lt;-<span class="st"> </span><span class="kw">nimbleModel</span>(</a>
+<a class="sourceLine" id="cb510-25" data-line-number="25">  <span class="dt">code      =</span> logistic_code, </a>
+<a class="sourceLine" id="cb510-26" data-line-number="26">  <span class="dt">constants =</span> constants,</a>
+<a class="sourceLine" id="cb510-27" data-line-number="27">  <span class="dt">data      =</span> data,</a>
+<a class="sourceLine" id="cb510-28" data-line-number="28">  <span class="dt">inits     =</span> inits</a>
+<a class="sourceLine" id="cb510-29" data-line-number="29">)</a></code></pre></div>
+<pre><code>## defining model...</code></pre>
+<pre><code>## building model...</code></pre>
+<pre><code>## setting data and initial values...</code></pre>
+<pre><code>## running calculate on model (any error reports that follow may simply reflect missing values in model variables) ... 
+## checking model sizes and dimensions...
+## model building finished.</code></pre>
+<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb515-1" data-line-number="1"><span class="co">## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded</span></a>
+<a class="sourceLine" id="cb515-2" data-line-number="2"><span class="kw">Sys.unsetenv</span>(<span class="st">&quot;PKG_CXXFLAGS&quot;</span>)</a>
+<a class="sourceLine" id="cb515-3" data-line-number="3">logistic_mcmc    &lt;-<span class="st"> </span><span class="kw">buildMCMC</span>(logistic_model)</a>
+<a class="sourceLine" id="cb515-4" data-line-number="4"><span class="co">## compile the model to c++</span></a>
+<a class="sourceLine" id="cb515-5" data-line-number="5">logistic_model_c &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(logistic_model)</a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb517-1" data-line-number="1">logistic_mcmc_c  &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(logistic_mcmc, <span class="dt">project =</span> logistic_model) </a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<ul>
+<li>once the model is compiled, we fit this using <code>runMCMC</code></li>
+</ul>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb519-1" data-line-number="1">samples &lt;-<span class="st"> </span><span class="kw">runMCMC</span>(logistic_mcmc_c, <span class="dt">niter =</span> <span class="dv">1000</span>, <span class="dt">nchains =</span> <span class="dv">4</span>)</a></code></pre></div>
+<pre><code>## running chain 1...</code></pre>
+<pre><code>## running chain 2...</code></pre>
+<pre><code>## running chain 3...</code></pre>
+<pre><code>## running chain 4...</code></pre>
+<pre><code>## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|</code></pre>
+<p>and examine the traceplots with</p>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb525-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb525-2" data-line-number="2"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_0&quot;</span>)</a>
+<a class="sourceLine" id="cb525-3" data-line-number="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb525-4" data-line-number="4">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb525-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb525-6" data-line-number="6"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_1&quot;</span>)</a>
+<a class="sourceLine" id="cb525-7" data-line-number="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb525-8" data-line-number="8">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb525-9" data-line-number="9">}</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-285-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="example-poisson-count-regression" class="section level3">
@@ -623,20 +790,20 @@ generated quantities {
 <li><p>overdispersed relative to the non-spatial Poisson</p></li>
 <li><p><span class="math inline">\(Cov(y(\mathbf{s}), y(\mathbf{s}&#39;))\)</span> is more complicated</p></li>
 </ul>
-<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
-<a class="sourceLine" id="cb489-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
-<a class="sourceLine" id="cb489-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="fl">1.5</span>)</a>
-<a class="sourceLine" id="cb489-4" data-line-number="4"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
-<a class="sourceLine" id="cb489-5" data-line-number="5">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
-<a class="sourceLine" id="cb489-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, lambda)</a>
-<a class="sourceLine" id="cb489-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb489-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb489-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb489-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> lambda), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-278-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb490-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
-<a class="sourceLine" id="cb490-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>))</a>
-<a class="sourceLine" id="cb490-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="dv">500</span></a>
+<a class="sourceLine" id="cb526-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(n))</a>
+<a class="sourceLine" id="cb526-3" data-line-number="3">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb526-4" data-line-number="4"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
+<a class="sourceLine" id="cb526-5" data-line-number="5">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(X <span class="op">%*%</span><span class="st"> </span>beta)</a>
+<a class="sourceLine" id="cb526-6" data-line-number="6">y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n, lambda)</a>
+<a class="sourceLine" id="cb526-7" data-line-number="7"><span class="kw">data.frame</span>(<span class="dt">x =</span> X[, <span class="dv">2</span>], <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb526-8" data-line-number="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">lambda =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb526-9" data-line-number="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb526-10" data-line-number="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> lambda), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-286-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb527-1" data-line-number="1"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb527-2" data-line-number="2">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>X <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>))</a>
+<a class="sourceLine" id="cb527-3" data-line-number="3"><span class="kw">summary</span>(mod)</a></code></pre></div>
 <pre><code>## 
 ## Family: poisson 
 ## Link function: log 
@@ -646,15 +813,15 @@ generated quantities {
 ## 
 ## Parametric coefficients:
 ##    Estimate Std. Error z value Pr(&gt;|z|)    
-## X1  -2.0280     0.1273   -15.9   &lt;2e-16 ***
-## X2   1.5300     0.0701    21.8   &lt;2e-16 ***
+## X1  -1.8251     0.1180   -15.5   &lt;2e-16 ***
+## X2   1.4789     0.0713    20.7   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  
 ## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## 
-## R-sq.(adj) =  0.802   Deviance explained = 63.5%
-## UBRE = -0.41977  Scale est. = 1         n = 500</code></pre>
+## R-sq.(adj) =  0.777   Deviance explained = 58.8%
+## UBRE = -0.36189  Scale est. = 1         n = 500</code></pre>
 <div id="poisson-regression-in-stan" class="section level4">
 <h4><span class="header-section-number">32.2.3.1</span> Poisson regression in stan</h4>
 <ul>
@@ -662,7 +829,7 @@ generated quantities {
 <li><p>create a stan model in a folder named <code>stan_models</code> in the Rstudio project folder</p></li>
 <li><p>print the output of the model <code>poisson-regression.stan</code></p></li>
 </ul>
-<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb492-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>data {
   int&lt;lower=0&gt; n;
   int&lt;lower=0&gt; p;
@@ -688,38 +855,115 @@ generated quantities {
 <ul>
 <li>Fitting the model</li>
 </ul>
-<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb494-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb494-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb494-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
-<a class="sourceLine" id="cb494-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb494-5" data-line-number="5">)</a></code></pre></div>
-<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb495-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb495-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb495-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb495-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb531-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb531-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb531-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb531-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb531-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb532-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb532-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb532-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb532-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: poisson-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
 ##            mean se_mean   sd     10%     90% n_eff Rhat
-## beta[1]   -2.03    0.00 0.12   -2.20   -1.88  1121    1
-## beta[2]    1.53    0.00 0.07    1.44    1.62  1153    1
-## lp__    -147.36    0.03 0.99 -148.61 -146.48  1381    1
+## beta[1]   -1.83    0.00 0.12   -1.98   -1.69  1150    1
+## beta[2]    1.48    0.00 0.07    1.39    1.57  1121    1
+## lp__    -183.31    0.03 1.00 -184.60 -182.42  1357    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:31:30 2020.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 15 09:46:27 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-282-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-290-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb497-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
-<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb498-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb498-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb498-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb498-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-284-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb534-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb535-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb535-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb535-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb535-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-292-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="poisson-regression-in-nimble" class="section level4">
+<h4><span class="header-section-number">32.2.3.2</span> Poisson regression in NIMBLE</h4>
+<ul>
+<li>we need to define a nimble model</li>
+</ul>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" data-line-number="1">poisson_code &lt;-<span class="st"> </span><span class="kw">nimbleCode</span>({</a>
+<a class="sourceLine" id="cb536-2" data-line-number="2">  <span class="co">## prior for regression parameters beta</span></a>
+<a class="sourceLine" id="cb536-3" data-line-number="3">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>q) {</a>
+<a class="sourceLine" id="cb536-4" data-line-number="4">    beta[j] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb536-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb536-6" data-line-number="6">  </a>
+<a class="sourceLine" id="cb536-7" data-line-number="7">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb536-8" data-line-number="8">    <span class="co">## note that you have to be explicit about the variable</span></a>
+<a class="sourceLine" id="cb536-9" data-line-number="9">    <span class="co">## dimensions for each statement</span></a>
+<a class="sourceLine" id="cb536-10" data-line-number="10">    <span class="kw">log</span>(lambda[i]) &lt;-<span class="st"> </span><span class="kw">inprod</span>(X[i, <span class="dv">1</span><span class="op">:</span>q], beta[<span class="dv">1</span><span class="op">:</span>q])</a>
+<a class="sourceLine" id="cb536-11" data-line-number="11">    y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dpois</span>(lambda[i])</a>
+<a class="sourceLine" id="cb536-12" data-line-number="12">  }</a>
+<a class="sourceLine" id="cb536-13" data-line-number="13">})</a>
+<a class="sourceLine" id="cb536-14" data-line-number="14"><span class="co">## define the constants, data, and MCMC initial conditions</span></a>
+<a class="sourceLine" id="cb536-15" data-line-number="15">constants &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> n, <span class="dt">q =</span> <span class="kw">ncol</span>(X))</a>
+<a class="sourceLine" id="cb536-16" data-line-number="16">data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb536-17" data-line-number="17">  <span class="dt">y =</span> y, </a>
+<a class="sourceLine" id="cb536-18" data-line-number="18">  <span class="dt">X =</span> X</a>
+<a class="sourceLine" id="cb536-19" data-line-number="19">)</a>
+<a class="sourceLine" id="cb536-20" data-line-number="20">inits &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">beta =</span> <span class="kw">rnorm</span>(<span class="kw">ncol</span>(X)), <span class="dt">lambda =</span> <span class="kw">rexp</span>(n, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb536-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb536-22" data-line-number="22"><span class="co">## create the NIMBLE model</span></a>
+<a class="sourceLine" id="cb536-23" data-line-number="23">poisson_model &lt;-<span class="st"> </span><span class="kw">nimbleModel</span>(</a>
+<a class="sourceLine" id="cb536-24" data-line-number="24">  <span class="dt">code      =</span> poisson_code, </a>
+<a class="sourceLine" id="cb536-25" data-line-number="25">  <span class="dt">constants =</span> constants,</a>
+<a class="sourceLine" id="cb536-26" data-line-number="26">  <span class="dt">data      =</span> data,</a>
+<a class="sourceLine" id="cb536-27" data-line-number="27">  <span class="dt">inits     =</span> inits</a>
+<a class="sourceLine" id="cb536-28" data-line-number="28">)</a></code></pre></div>
+<pre><code>## defining model...</code></pre>
+<pre><code>## building model...</code></pre>
+<pre><code>## setting data and initial values...</code></pre>
+<pre><code>## running calculate on model (any error reports that follow may simply reflect missing values in model variables) ... 
+## checking model sizes and dimensions...
+## model building finished.</code></pre>
+<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb541-1" data-line-number="1"><span class="co">## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded</span></a>
+<a class="sourceLine" id="cb541-2" data-line-number="2"><span class="kw">Sys.unsetenv</span>(<span class="st">&quot;PKG_CXXFLAGS&quot;</span>)</a>
+<a class="sourceLine" id="cb541-3" data-line-number="3">poisson_mcmc    &lt;-<span class="st"> </span><span class="kw">buildMCMC</span>(poisson_model)</a>
+<a class="sourceLine" id="cb541-4" data-line-number="4"><span class="co">## compile the model to c++</span></a>
+<a class="sourceLine" id="cb541-5" data-line-number="5">poisson_model_c &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(poisson_model)</a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb543-1" data-line-number="1">poisson_mcmc_c  &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(poisson_mcmc, <span class="dt">project =</span> poisson_model) </a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<ul>
+<li>once the model is compiled, we fit this using <code>runMCMC</code></li>
+</ul>
+<div class="sourceCode" id="cb545"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb545-1" data-line-number="1">samples &lt;-<span class="st"> </span><span class="kw">runMCMC</span>(poisson_mcmc_c, <span class="dt">niter =</span> <span class="dv">1000</span>, <span class="dt">nchains =</span> <span class="dv">4</span>)</a></code></pre></div>
+<pre><code>## running chain 1...</code></pre>
+<pre><code>## running chain 2...</code></pre>
+<pre><code>## running chain 3...</code></pre>
+<pre><code>## running chain 4...</code></pre>
+<pre><code>## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|</code></pre>
+<p>and examine the traceplots with</p>
+<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb551-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb551-2" data-line-number="2"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_0&quot;</span>)</a>
+<a class="sourceLine" id="cb551-3" data-line-number="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb551-4" data-line-number="4">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb551-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb551-6" data-line-number="6"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_1&quot;</span>)</a>
+<a class="sourceLine" id="cb551-7" data-line-number="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb551-8" data-line-number="8">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb551-9" data-line-number="9">}</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-295-1.png" width="480" style="display: block; margin: auto;" /></p>
 <ul>
 <li>Many other models are possible including</li>
 <li>negative binomial (overdispersed count data)</li>
@@ -750,79 +994,79 @@ generated quantities {
 </li>
 <li><p>the probit function is <span class="math inline">\(probit(z) = \Phi(z)\)</span> where <span class="math inline">\(\Phi()\)</span> is the standard normal CDF</p></li>
 </ul>
-<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb499-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb499-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
-<a class="sourceLine" id="cb499-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
-<a class="sourceLine" id="cb499-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb499-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
-<a class="sourceLine" id="cb499-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb499-8" data-line-number="8"><span class="co">## fixed effects</span></a>
-<a class="sourceLine" id="cb499-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb499-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb499-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
-<a class="sourceLine" id="cb499-12" data-line-number="12"><span class="co">## random effects</span></a>
-<a class="sourceLine" id="cb499-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
-<a class="sourceLine" id="cb499-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">1.25</span></a>
-<a class="sourceLine" id="cb499-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb499-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
-<a class="sourceLine" id="cb499-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
-<a class="sourceLine" id="cb499-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb499-19" data-line-number="19"><span class="co">## GLM link function</span></a>
-<a class="sourceLine" id="cb499-20" data-line-number="20"><span class="co">## logit(p_i) &lt;- X %*% beta + eta</span></a>
-<a class="sourceLine" id="cb499-21" data-line-number="21">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
-<a class="sourceLine" id="cb499-22" data-line-number="22">p_i &lt;-<span class="st"> </span><span class="kw">logit</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
-<a class="sourceLine" id="cb499-23" data-line-number="23">y_full &lt;-<span class="st"> </span><span class="kw">rbinom</span>(N, <span class="dv">1</span>, p_i)</a>
-<a class="sourceLine" id="cb499-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb499-25" data-line-number="25">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb499-26" data-line-number="26">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb499-27" data-line-number="27">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
-<a class="sourceLine" id="cb499-28" data-line-number="28">  <span class="dt">z      =</span> y_full, </a>
-<a class="sourceLine" id="cb499-29" data-line-number="29">  <span class="dt">p_i    =</span> p_i, </a>
-<a class="sourceLine" id="cb499-30" data-line-number="30">  <span class="dt">Xbeta  =</span> Xbeta, </a>
-<a class="sourceLine" id="cb499-31" data-line-number="31">  <span class="dt">eta    =</span> eta</a>
-<a class="sourceLine" id="cb499-32" data-line-number="32">)</a>
-<a class="sourceLine" id="cb499-33" data-line-number="33"><span class="co">## using patchwork plots</span></a>
-<a class="sourceLine" id="cb499-34" data-line-number="34">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb499-35" data-line-number="35"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-36" data-line-number="36"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-37" data-line-number="37"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb499-38" data-line-number="38">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> p_i)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb499-39" data-line-number="39"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-40" data-line-number="40"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value p&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-41" data-line-number="41"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb499-42" data-line-number="42">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb499-43" data-line-number="43"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-44" data-line-number="44"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-45" data-line-number="45"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb499-46" data-line-number="46">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb499-47" data-line-number="47"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-48" data-line-number="48"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb499-49" data-line-number="49"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb499-50" data-line-number="50"></a>
-<a class="sourceLine" id="cb499-51" data-line-number="51">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-285-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb552-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb552-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb552-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
+<a class="sourceLine" id="cb552-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
+<a class="sourceLine" id="cb552-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb552-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb552-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb552-8" data-line-number="8"><span class="co">## fixed effects</span></a>
+<a class="sourceLine" id="cb552-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb552-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb552-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
+<a class="sourceLine" id="cb552-12" data-line-number="12"><span class="co">## random effects</span></a>
+<a class="sourceLine" id="cb552-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
+<a class="sourceLine" id="cb552-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">1.25</span></a>
+<a class="sourceLine" id="cb552-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb552-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
+<a class="sourceLine" id="cb552-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
+<a class="sourceLine" id="cb552-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb552-19" data-line-number="19"><span class="co">## GLM link function</span></a>
+<a class="sourceLine" id="cb552-20" data-line-number="20"><span class="co">## logit(p_i) &lt;- X %*% beta + eta</span></a>
+<a class="sourceLine" id="cb552-21" data-line-number="21">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb552-22" data-line-number="22">p_i &lt;-<span class="st"> </span><span class="kw">logit</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
+<a class="sourceLine" id="cb552-23" data-line-number="23">y_full &lt;-<span class="st"> </span><span class="kw">rbinom</span>(N, <span class="dv">1</span>, p_i)</a>
+<a class="sourceLine" id="cb552-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb552-25" data-line-number="25">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb552-26" data-line-number="26">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb552-27" data-line-number="27">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb552-28" data-line-number="28">  <span class="dt">z      =</span> y_full, </a>
+<a class="sourceLine" id="cb552-29" data-line-number="29">  <span class="dt">p_i    =</span> p_i, </a>
+<a class="sourceLine" id="cb552-30" data-line-number="30">  <span class="dt">Xbeta  =</span> Xbeta, </a>
+<a class="sourceLine" id="cb552-31" data-line-number="31">  <span class="dt">eta    =</span> eta</a>
+<a class="sourceLine" id="cb552-32" data-line-number="32">)</a>
+<a class="sourceLine" id="cb552-33" data-line-number="33"><span class="co">## using patchwork plots</span></a>
+<a class="sourceLine" id="cb552-34" data-line-number="34">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb552-35" data-line-number="35"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-36" data-line-number="36"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-37" data-line-number="37"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb552-38" data-line-number="38">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> p_i)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb552-39" data-line-number="39"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-40" data-line-number="40"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value p&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-41" data-line-number="41"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb552-42" data-line-number="42">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb552-43" data-line-number="43"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-44" data-line-number="44"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-45" data-line-number="45"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb552-46" data-line-number="46">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb552-47" data-line-number="47"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-48" data-line-number="48"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb552-49" data-line-number="49"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb552-50" data-line-number="50"></a>
+<a class="sourceLine" id="cb552-51" data-line-number="51">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-296-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>subset the data to represent an observation process</p>
-<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb500-1" data-line-number="1"><span class="co">## using </span></a>
-<a class="sourceLine" id="cb500-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
-<a class="sourceLine" id="cb500-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
-<a class="sourceLine" id="cb500-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
-<a class="sourceLine" id="cb500-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
-<a class="sourceLine" id="cb500-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
-<a class="sourceLine" id="cb500-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb500-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb500-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
-<a class="sourceLine" id="cb500-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
-<a class="sourceLine" id="cb500-11" data-line-number="11">)</a>
-<a class="sourceLine" id="cb500-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb500-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb500-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb500-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed presence/absence&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-286-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb501-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
-<a class="sourceLine" id="cb501-2" data-line-number="2"><span class="co">## fit logistic regression using mgcv</span></a>
-<a class="sourceLine" id="cb501-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
-<a class="sourceLine" id="cb501-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb553-1" data-line-number="1"><span class="co">## using </span></a>
+<a class="sourceLine" id="cb553-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
+<a class="sourceLine" id="cb553-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
+<a class="sourceLine" id="cb553-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
+<a class="sourceLine" id="cb553-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
+<a class="sourceLine" id="cb553-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
+<a class="sourceLine" id="cb553-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb553-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb553-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb553-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
+<a class="sourceLine" id="cb553-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb553-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb553-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb553-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb553-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed presence/absence&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-297-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb554-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
+<a class="sourceLine" id="cb554-2" data-line-number="2"><span class="co">## fit logistic regression using mgcv</span></a>
+<a class="sourceLine" id="cb554-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
+<a class="sourceLine" id="cb554-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
 <pre><code>## 
 ## Family: binomial 
 ## Link function: logit 
@@ -832,52 +1076,55 @@ generated quantities {
 ## 
 ## Parametric coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)    1.302      0.222    5.85  4.9e-09 ***
-## covariate      0.700      0.397    1.76    0.078 .  
+## (Intercept)   3.1870     0.4240    7.52  5.7e-14 ***
+## covariate     0.0283     0.6182    0.05     0.96    
 ## ---
 ## Signif. codes:  
 ## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Approximate significance of smooth terms:
-##             edf Ref.df Chi.sq p-value
-## s(lon,lat) 20.7     25   33.5    0.12
+##             edf Ref.df Chi.sq p-value  
+## s(lon,lat) 6.12   8.56   15.7   0.064 .
+## ---
+## Signif. codes:  
+## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## R-sq.(adj) =  0.174   Deviance explained = 24.5%
-## UBRE = 0.12199  Scale est. = 1         n = 200</code></pre>
-<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb503-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb503-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb503-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
-<a class="sourceLine" id="cb503-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
-<a class="sourceLine" id="cb503-5" data-line-number="5">  <span class="dt">p       =</span> <span class="kw">c</span>(p_i),</a>
-<a class="sourceLine" id="cb503-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
-<a class="sourceLine" id="cb503-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
-<a class="sourceLine" id="cb503-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
-<a class="sourceLine" id="cb503-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb503-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(p_i), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
-<a class="sourceLine" id="cb503-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> p)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
-<a class="sourceLine" id="cb503-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
-<a class="sourceLine" id="cb503-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
-<a class="sourceLine" id="cb503-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb503-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
-<a class="sourceLine" id="cb503-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-288-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div id="spatial-poisson-regression-in-stan" class="section level4">
-<h4><span class="header-section-number">32.2.5.1</span> Spatial Poisson regression in stan</h4>
+## R-sq.(adj) =  0.112   Deviance explained = 22.5%
+## UBRE = -0.54608  Scale est. = 1         n = 200</code></pre>
+<div class="sourceCode" id="cb556"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb556-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb556-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb556-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
+<a class="sourceLine" id="cb556-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
+<a class="sourceLine" id="cb556-5" data-line-number="5">  <span class="dt">p       =</span> <span class="kw">c</span>(p_i),</a>
+<a class="sourceLine" id="cb556-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
+<a class="sourceLine" id="cb556-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
+<a class="sourceLine" id="cb556-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
+<a class="sourceLine" id="cb556-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb556-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(p_i), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
+<a class="sourceLine" id="cb556-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> p)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb556-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb556-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb556-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb556-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
+<a class="sourceLine" id="cb556-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-299-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="spatial-ligistic-regression-in-stan" class="section level4">
+<h4><span class="header-section-number">32.2.5.1</span> Spatial Ligistic regression in stan</h4>
 <ul>
-<li>print the output of the model <code>spatial-poisson-regression.stan</code></li>
+<li>print the output of the model <code>spatial-logistic-regression.stan</code></li>
 </ul>
-<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb504-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb557-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>data {
   int&lt;lower=0&gt; n;
   int&lt;lower=0&gt; p;
@@ -927,21 +1174,21 @@ generated quantities {
 <ul>
 <li>Fitting the model</li>
 </ul>
-<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb506-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))) {</a>
-<a class="sourceLine" id="cb506-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb506-3" data-line-number="3">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb506-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb506-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb506-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
-<a class="sourceLine" id="cb506-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb506-8" data-line-number="8">  )</a>
-<a class="sourceLine" id="cb506-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb506-10" data-line-number="10">}</a></code></pre></div>
-<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb507-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb507-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb507-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb507-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb507-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb559-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))) {</a>
+<a class="sourceLine" id="cb559-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb559-3" data-line-number="3">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb559-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb559-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb559-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
+<a class="sourceLine" id="cb559-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb559-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb559-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-logistic-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb559-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb560-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb560-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb560-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb560-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb560-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: spatial-logistic-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
@@ -957,56 +1204,56 @@ generated quantities {
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-291-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-302-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb509-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb509-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
-<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb510-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb510-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb510-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb510-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-293-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb562-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb562-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb563-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb563-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb563-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-304-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="what-if-we-fit-a-non-spatial-regression" class="section level4">
 <h4><span class="header-section-number">32.2.5.2</span> What if we fit a non-spatial regression?</h4>
 <p>Fit a non-spatial regression to the spatially correlated data</p>
-<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb511-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb511-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb511-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
-<a class="sourceLine" id="cb511-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb511-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb564-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb564-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;logistic-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb564-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb564-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb564-5" data-line-number="5">)</a></code></pre></div>
 <pre><code>## Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 ## Running the chains for more iterations may help. See
 ## http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
-<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb513-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb513-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb513-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb513-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb513-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb566-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb566-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb566-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb566-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb566-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: logistic-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-##            mean se_mean   sd     10%     90% n_eff Rhat
-## beta[1]    0.96    0.00 0.16    0.76    1.16  3307    1
-## beta[2]    0.42    0.01 0.33    0.00    0.85  3163    1
-## lp__    -119.20    0.02 1.01 -120.54 -118.30  1998    1
+##           mean se_mean   sd    10%    90% n_eff Rhat
+## beta[1]   2.52    0.01 0.26   2.19   2.86  2613    1
+## beta[2]   0.03    0.01 0.46  -0.56   0.61  2855    1
+## lp__    -52.41    0.03 1.00 -53.66 -51.51  1335    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:36:46 2020.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 15 09:53:51 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-295-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-306-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb515-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb515-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb568-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
 <p>Poor coverage when not accounting for the spatial process</p>
 <p>Evidence of model mis-fit</p>
-<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb516-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb516-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb516-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb516-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-297-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb569-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb569-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb569-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-308-1.png" width="480" style="display: block; margin: auto;" /></p>
 <!-- #### Spatial logistic regression in INLA -->
 <!-- - Integrated Nested Laplace Approximation -->
 <!--     - uses a stochastic PDE approximation to the Matern -->
@@ -1163,77 +1410,77 @@ generated quantities {
 <li><p><span class="math inline">\(E \left( y_i \right) = \lambda_i\)</span></p></li>
 <li><p>the link function is <span class="math inline">\(\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
 </ul>
-<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb517-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb517-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
-<a class="sourceLine" id="cb517-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
-<a class="sourceLine" id="cb517-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
-<a class="sourceLine" id="cb517-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb517-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
-<a class="sourceLine" id="cb517-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb517-8" data-line-number="8"><span class="co">## fixed effects</span></a>
-<a class="sourceLine" id="cb517-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb517-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb517-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
-<a class="sourceLine" id="cb517-12" data-line-number="12"><span class="co">## random effects</span></a>
-<a class="sourceLine" id="cb517-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
-<a class="sourceLine" id="cb517-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">3.25</span></a>
-<a class="sourceLine" id="cb517-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb517-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
-<a class="sourceLine" id="cb517-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
-<a class="sourceLine" id="cb517-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb517-19" data-line-number="19"><span class="co">## GLM link function</span></a>
-<a class="sourceLine" id="cb517-20" data-line-number="20"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
-<a class="sourceLine" id="cb517-21" data-line-number="21">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
-<a class="sourceLine" id="cb517-22" data-line-number="22">y_full &lt;-<span class="st"> </span><span class="kw">rpois</span>(N, lambda)</a>
-<a class="sourceLine" id="cb517-23" data-line-number="23">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb517-24" data-line-number="24">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb517-25" data-line-number="25">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
-<a class="sourceLine" id="cb517-26" data-line-number="26">  <span class="dt">z      =</span> y_full, </a>
-<a class="sourceLine" id="cb517-27" data-line-number="27">  <span class="dt">lambda =</span> lambda, </a>
-<a class="sourceLine" id="cb517-28" data-line-number="28">  <span class="dt">Xbeta  =</span> Xbeta, </a>
-<a class="sourceLine" id="cb517-29" data-line-number="29">  <span class="dt">eta    =</span> eta</a>
-<a class="sourceLine" id="cb517-30" data-line-number="30">)</a>
-<a class="sourceLine" id="cb517-31" data-line-number="31"><span class="co">## using patchwork plots</span></a>
-<a class="sourceLine" id="cb517-32" data-line-number="32">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb517-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-34" data-line-number="34"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-35" data-line-number="35"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb517-36" data-line-number="36">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb517-37" data-line-number="37"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-38" data-line-number="38"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value lambda&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-39" data-line-number="39"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb517-40" data-line-number="40">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb517-41" data-line-number="41"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-42" data-line-number="42"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-43" data-line-number="43"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb517-44" data-line-number="44">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb517-45" data-line-number="45"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-46" data-line-number="46"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb517-47" data-line-number="47"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
-<a class="sourceLine" id="cb517-48" data-line-number="48"></a>
-<a class="sourceLine" id="cb517-49" data-line-number="49">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-298-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" data-line-number="1">N &lt;-<span class="st"> </span><span class="dv">30</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb570-2" data-line-number="2">locs_full &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb570-3" data-line-number="3">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N)),</a>
+<a class="sourceLine" id="cb570-4" data-line-number="4">  <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(N))</a>
+<a class="sourceLine" id="cb570-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb570-6" data-line-number="6"><span class="kw">colnames</span>(locs_full) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb570-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb570-8" data-line-number="8"><span class="co">## fixed effects</span></a>
+<a class="sourceLine" id="cb570-9" data-line-number="9">X_full &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">rnorm</span>(N, <span class="dv">0</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb570-10" data-line-number="10">beta &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb570-11" data-line-number="11">Xbeta &lt;-<span class="st"> </span>X_full <span class="op">%*%</span><span class="st"> </span>beta</a>
+<a class="sourceLine" id="cb570-12" data-line-number="12"><span class="co">## random effects</span></a>
+<a class="sourceLine" id="cb570-13" data-line-number="13">D &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs_full)</a>
+<a class="sourceLine" id="cb570-14" data-line-number="14">tau2 &lt;-<span class="st"> </span><span class="fl">3.25</span></a>
+<a class="sourceLine" id="cb570-15" data-line-number="15">phi &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb570-16" data-line-number="16">Sigma &lt;-<span class="st"> </span>tau2 <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D <span class="op">/</span><span class="st"> </span>phi)</a>
+<a class="sourceLine" id="cb570-17" data-line-number="17">eta &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, N), Sigma)</a>
+<a class="sourceLine" id="cb570-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb570-19" data-line-number="19"><span class="co">## GLM link function</span></a>
+<a class="sourceLine" id="cb570-20" data-line-number="20"><span class="co">## log(lambda) &lt;- X %*% beta</span></a>
+<a class="sourceLine" id="cb570-21" data-line-number="21">lambda &lt;-<span class="st"> </span><span class="kw">exp</span>(Xbeta <span class="op">+</span><span class="st"> </span>eta)</a>
+<a class="sourceLine" id="cb570-22" data-line-number="22">y_full &lt;-<span class="st"> </span><span class="kw">rpois</span>(N, lambda)</a>
+<a class="sourceLine" id="cb570-23" data-line-number="23">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb570-24" data-line-number="24">  <span class="dt">x      =</span> locs_full[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb570-25" data-line-number="25">  <span class="dt">y      =</span> locs_full[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb570-26" data-line-number="26">  <span class="dt">z      =</span> y_full, </a>
+<a class="sourceLine" id="cb570-27" data-line-number="27">  <span class="dt">lambda =</span> lambda, </a>
+<a class="sourceLine" id="cb570-28" data-line-number="28">  <span class="dt">Xbeta  =</span> Xbeta, </a>
+<a class="sourceLine" id="cb570-29" data-line-number="29">  <span class="dt">eta    =</span> eta</a>
+<a class="sourceLine" id="cb570-30" data-line-number="30">)</a>
+<a class="sourceLine" id="cb570-31" data-line-number="31"><span class="co">## using patchwork plots</span></a>
+<a class="sourceLine" id="cb570-32" data-line-number="32">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb570-33" data-line-number="33"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-34" data-line-number="34"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;data&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-35" data-line-number="35"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb570-36" data-line-number="36">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> lambda)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb570-37" data-line-number="37"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-38" data-line-number="38"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent value lambda&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-39" data-line-number="39"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb570-40" data-line-number="40">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> Xbeta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb570-41" data-line-number="41"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-42" data-line-number="42"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent fixed effects&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-43" data-line-number="43"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb570-44" data-line-number="44">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> eta)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb570-45" data-line-number="45"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-46" data-line-number="46"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial random effect&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb570-47" data-line-number="47"><span class="st">  </span><span class="kw">scale_fill_viridis</span>()</a>
+<a class="sourceLine" id="cb570-48" data-line-number="48"></a>
+<a class="sourceLine" id="cb570-49" data-line-number="49">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-309-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>subset the data to represent an observation process</p>
-<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb518-1" data-line-number="1"><span class="co">## using </span></a>
-<a class="sourceLine" id="cb518-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
-<a class="sourceLine" id="cb518-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
-<a class="sourceLine" id="cb518-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
-<a class="sourceLine" id="cb518-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
-<a class="sourceLine" id="cb518-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
-<a class="sourceLine" id="cb518-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb518-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
-<a class="sourceLine" id="cb518-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
-<a class="sourceLine" id="cb518-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
-<a class="sourceLine" id="cb518-11" data-line-number="11">)</a>
-<a class="sourceLine" id="cb518-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb518-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb518-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb518-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed counts&quot;</span>)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-299-1.png" width="480" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb519-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
-<a class="sourceLine" id="cb519-2" data-line-number="2"><span class="co">## fit spatial poisson regression using mgcv</span></a>
-<a class="sourceLine" id="cb519-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
-<a class="sourceLine" id="cb519-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
+<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb571-1" data-line-number="1"><span class="co">## using </span></a>
+<a class="sourceLine" id="cb571-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">200</span></a>
+<a class="sourceLine" id="cb571-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">sample</span>(N, n)</a>
+<a class="sourceLine" id="cb571-4" data-line-number="4">y &lt;-<span class="st"> </span>y_full[idx]</a>
+<a class="sourceLine" id="cb571-5" data-line-number="5">X &lt;-<span class="st"> </span>X_full[idx, ]</a>
+<a class="sourceLine" id="cb571-6" data-line-number="6">locs &lt;-<span class="st"> </span>locs_full[idx, ]</a>
+<a class="sourceLine" id="cb571-7" data-line-number="7">dat_obs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb571-8" data-line-number="8">  <span class="dt">x      =</span> locs[, <span class="dv">1</span>], </a>
+<a class="sourceLine" id="cb571-9" data-line-number="9">  <span class="dt">y      =</span> locs[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb571-10" data-line-number="10">  <span class="dt">z      =</span> y</a>
+<a class="sourceLine" id="cb571-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb571-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb571-13" data-line-number="13"><span class="kw">ggplot</span>(dat_obs, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb571-14" data-line-number="14"><span class="st">  </span><span class="kw">geom_tile</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb571-15" data-line-number="15"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observed counts&quot;</span>)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-310-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb572-1" data-line-number="1">dat_fit &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">covariate =</span> X[, <span class="dv">2</span>], <span class="dt">lon =</span> locs<span class="op">$</span>lon, <span class="dt">lat =</span> locs<span class="op">$</span>lat)</a>
+<a class="sourceLine" id="cb572-2" data-line-number="2"><span class="co">## fit spatial poisson regression using mgcv</span></a>
+<a class="sourceLine" id="cb572-3" data-line-number="3">mod &lt;-<span class="st"> </span><span class="kw">gam</span>(y <span class="op">~</span><span class="st"> </span>covariate <span class="op">+</span><span class="st"> </span><span class="kw">s</span>(lon, lat), <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>), <span class="dt">data =</span> dat_fit)</a>
+<a class="sourceLine" id="cb572-4" data-line-number="4"><span class="kw">summary</span>(mod)</a></code></pre></div>
 <pre><code>## 
 ## Family: poisson 
 ## Link function: log 
@@ -1243,54 +1490,54 @@ generated quantities {
 ## 
 ## Parametric coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)   2.3787     0.0343    69.4   &lt;2e-16 ***
-## covariate     0.5000     0.0257    19.4   &lt;2e-16 ***
+## (Intercept)   0.3344     0.0779    4.29  1.8e-05 ***
+## covariate     0.4918     0.0979    5.02  5.1e-07 ***
 ## ---
 ## Signif. codes:  
 ## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Approximate significance of smooth terms:
 ##             edf Ref.df Chi.sq p-value    
-## s(lon,lat) 28.3   28.9   8795  &lt;2e-16 ***
+## s(lon,lat) 19.5   23.8    274  &lt;2e-16 ***
 ## ---
 ## Signif. codes:  
 ## 0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## R-sq.(adj) =    0.9   Deviance explained = 93.4%
-## UBRE = 3.8443  Scale est. = 1         n = 200</code></pre>
-<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb521-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb521-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb521-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
-<a class="sourceLine" id="cb521-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
-<a class="sourceLine" id="cb521-5" data-line-number="5">  <span class="dt">lambda  =</span> <span class="kw">c</span>(lambda),</a>
-<a class="sourceLine" id="cb521-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
-<a class="sourceLine" id="cb521-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
-<a class="sourceLine" id="cb521-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
-<a class="sourceLine" id="cb521-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb521-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(lambda), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
-<a class="sourceLine" id="cb521-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> lambda)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
-<a class="sourceLine" id="cb521-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
-<a class="sourceLine" id="cb521-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
-<a class="sourceLine" id="cb521-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb521-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
-<a class="sourceLine" id="cb521-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-301-1.png" width="480" style="display: block; margin: auto;" /></p>
+## R-sq.(adj) =  0.594   Deviance explained = 60.8%
+## UBRE = 0.46017  Scale est. = 1         n = 200</code></pre>
+<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb574-1" data-line-number="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">covariate =</span> X_full[, <span class="dv">2</span>], <span class="dt">lon =</span> locs_full<span class="op">$</span>lon, <span class="dt">lat =</span> locs_full<span class="op">$</span>lat), <span class="dt">se.fit =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
+<a class="sourceLine" id="cb574-2" data-line-number="2">dat_plot &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb574-3" data-line-number="3">  <span class="dt">lon     =</span> locs_full<span class="op">$</span>lon, </a>
+<a class="sourceLine" id="cb574-4" data-line-number="4">  <span class="dt">lat     =</span> locs_full<span class="op">$</span>lat,</a>
+<a class="sourceLine" id="cb574-5" data-line-number="5">  <span class="dt">lambda  =</span> <span class="kw">c</span>(lambda),</a>
+<a class="sourceLine" id="cb574-6" data-line-number="6">  <span class="dt">y       =</span> y_full,</a>
+<a class="sourceLine" id="cb574-7" data-line-number="7">  <span class="dt">y_pred  =</span> preds<span class="op">$</span>fit,</a>
+<a class="sourceLine" id="cb574-8" data-line-number="8">  <span class="dt">sd_pred =</span> preds<span class="op">$</span>se.fit</a>
+<a class="sourceLine" id="cb574-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb574-10" data-line-number="10">zlims &lt;-<span class="st"> </span><span class="kw">range</span>(<span class="kw">range</span>(lambda), <span class="kw">range</span>(preds<span class="op">$</span>fit))</a>
+<a class="sourceLine" id="cb574-11" data-line-number="11">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> lambda)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-12" data-line-number="12"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-13" data-line-number="13"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-14" data-line-number="14"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;simulated latent intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb574-15" data-line-number="15">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-16" data-line-number="16"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-17" data-line-number="17"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-18" data-line-number="18"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;observed data&quot;</span>)</a>
+<a class="sourceLine" id="cb574-19" data-line-number="19">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-21" data-line-number="21"><span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-22" data-line-number="22"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted intensity&quot;</span>)</a>
+<a class="sourceLine" id="cb574-23" data-line-number="23">p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_plot, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> sd_pred)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-24" data-line-number="24"><span class="st">  </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-25" data-line-number="25"><span class="st">  </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb574-26" data-line-number="26"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;predicted sd&quot;</span>)</a>
+<a class="sourceLine" id="cb574-27" data-line-number="27">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-312-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>We can fit spatial the Poisson regression in stan</p>
 <ul>
 <li>print the output of the model <code>spatial-poisson-regression.stan</code></li>
 </ul>
-<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb575-1" data-line-number="1"><span class="kw">cat</span>(<span class="kw">read_lines</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>)), <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a></code></pre></div>
 <pre><code>data {
   int&lt;lower=0&gt; n;
   int&lt;lower=0&gt; p;
@@ -1340,21 +1587,21 @@ generated quantities {
 <ul>
 <li>Fitting the model</li>
 </ul>
-<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))) {</a>
-<a class="sourceLine" id="cb524-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb524-3" data-line-number="3">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb524-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb524-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb524-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
-<a class="sourceLine" id="cb524-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb524-8" data-line-number="8">  )</a>
-<a class="sourceLine" id="cb524-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
-<a class="sourceLine" id="cb524-10" data-line-number="10">}</a></code></pre></div>
-<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb525-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb525-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb525-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb525-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb525-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb577-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))) {</a>
+<a class="sourceLine" id="cb577-2" data-line-number="2">  <span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb577-3" data-line-number="3">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb577-4" data-line-number="4">  fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb577-5" data-line-number="5">    <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;spatial-poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb577-6" data-line-number="6">    <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X), <span class="dt">locs =</span> locs),</a>
+<a class="sourceLine" id="cb577-7" data-line-number="7">    <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb577-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb577-9" data-line-number="9">  <span class="kw">save</span>(fit, <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;results&quot;</span>, <span class="st">&quot;spatial-poisson-regression.RData&quot;</span>))</a>
+<a class="sourceLine" id="cb577-10" data-line-number="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb578-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb578-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb578-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb578-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb578-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;tau2&quot;</span>, <span class="st">&quot;phi&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: spatial-poisson-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
@@ -1370,54 +1617,154 @@ generated quantities {
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-304-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-315-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb527-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb527-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
-<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb528-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb528-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb528-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-306-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb580-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb580-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb581-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb581-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb581-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb581-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-317-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div id="what-if-we-fit-a-non-spatial-regression-1" class="section level4">
 <h4><span class="header-section-number">32.2.6.1</span> What if we fit a non-spatial regression?</h4>
 <p>Fit a non-spatial regression to the spatially correlated data</p>
-<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
-<a class="sourceLine" id="cb529-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
-<a class="sourceLine" id="cb529-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
-<a class="sourceLine" id="cb529-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
-<a class="sourceLine" id="cb529-5" data-line-number="5">)</a></code></pre></div>
-<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
-<a class="sourceLine" id="cb530-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
-<a class="sourceLine" id="cb530-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb530-4" data-line-number="4"><span class="co">## trace plots</span></a>
-<a class="sourceLine" id="cb530-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" data-line-number="1">fit &lt;-<span class="st"> </span><span class="kw">stan</span>(</a>
+<a class="sourceLine" id="cb582-2" data-line-number="2">  <span class="dt">file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;stan_models&quot;</span>, <span class="st">&quot;poisson-regression.stan&quot;</span>),</a>
+<a class="sourceLine" id="cb582-3" data-line-number="3">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> y, <span class="dt">n =</span> n, <span class="dt">X =</span> X, <span class="dt">p =</span> <span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb582-4" data-line-number="4">  <span class="dt">iter =</span> <span class="dv">2000</span></a>
+<a class="sourceLine" id="cb582-5" data-line-number="5">)</a></code></pre></div>
+<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb583-1" data-line-number="1"><span class="co">## only plot the regression parameters</span></a>
+<a class="sourceLine" id="cb583-2" data-line-number="2"><span class="kw">print</span>(fit, <span class="dt">probs =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a>
+<a class="sourceLine" id="cb583-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb583-4" data-line-number="4"><span class="co">## trace plots</span></a>
+<a class="sourceLine" id="cb583-5" data-line-number="5"><span class="kw">mcmc_trace</span>(fit, <span class="dt">regex_pars =</span> <span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;lp__&quot;</span>))</a></code></pre></div>
 <pre><code>## Inference for Stan model: poisson-regression.
 ## 4 chains, each with iter=2000; warmup=1000; thin=1; 
 ## post-warmup draws per chain=1000, total post-warmup draws=4000.
 ## 
-##             mean se_mean   sd      10%      90% n_eff Rhat
-## beta[1]     3.40    0.00 0.01     3.38     3.42  2133    1
-## beta[2]     0.77    0.00 0.02     0.74     0.80  2032    1
-## lp__    17588.81    0.02 0.98 17587.53 17589.72  1937    1
+##           mean se_mean   sd    10%    90% n_eff Rhat
+## beta[1]   0.78    0.00 0.05   0.72   0.84  2418    1
+## beta[2]   0.49    0.00 0.09   0.37   0.61  2909    1
+## lp__    -70.44    0.02 0.96 -71.74 -69.57  2017    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sun Apr 12 20:42:42 2020.
+## Samples were drawn using NUTS(diag_e) at Wed Apr 15 10:01:00 2020.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-308-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-319-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Posterior predictive checks</p>
-<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
-<a class="sourceLine" id="cb532-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
+<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb585-1" data-line-number="1"><span class="co">## extract the posterior predictive samples</span></a>
+<a class="sourceLine" id="cb585-2" data-line-number="2">y_rep &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(fit, <span class="dt">pars =</span> <span class="st">&quot;y_rep&quot;</span>)<span class="op">$</span>y_rep</a></code></pre></div>
 <ul>
 <li><p>Poor coverage when not accounting for the spatial process</p></li>
 <li><p>Evidence of model mis-fit</p></li>
 </ul>
-<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb533-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb533-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb533-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb533-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
-<p><img src="STAT-5413_files/figure-html/unnamed-chunk-310-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb586-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb586-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
+<a class="sourceLine" id="cb586-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-321-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="spatial-poisson-regression-in-nimble" class="section level4">
+<h4><span class="header-section-number">32.2.6.2</span> Spatial Poisson regression in NIMBLE</h4>
+<ul>
+<li>we need to define a nimble model</li>
+</ul>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" data-line-number="1">poisson_code &lt;-<span class="st"> </span><span class="kw">nimbleCode</span>({</a>
+<a class="sourceLine" id="cb587-2" data-line-number="2">  <span class="co">## prior for regression parameters beta</span></a>
+<a class="sourceLine" id="cb587-3" data-line-number="3">  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>q) {</a>
+<a class="sourceLine" id="cb587-4" data-line-number="4">    beta[j] <span class="op">~</span><span class="st"> </span><span class="kw">dnorm</span>(<span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb587-5" data-line-number="5">  }</a>
+<a class="sourceLine" id="cb587-6" data-line-number="6">  tau <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb587-7" data-line-number="7">  phi <span class="op">~</span><span class="st"> </span><span class="kw">dgamma</span>(<span class="dv">1</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb587-8" data-line-number="8">  Sigma[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n] &lt;-<span class="st"> </span>tau<span class="op">^</span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>D[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n] <span class="op">/</span><span class="st"> </span>phi)</a>
+<a class="sourceLine" id="cb587-9" data-line-number="9">  <span class="co"># Sigma_chol[1:n, 1:n] &lt;- chol(Sigma[1:n, 1:n])</span></a>
+<a class="sourceLine" id="cb587-10" data-line-number="10">  </a>
+<a class="sourceLine" id="cb587-11" data-line-number="11">  eta[<span class="dv">1</span><span class="op">:</span>n] <span class="op">~</span><span class="st"> </span><span class="kw">dmnorm</span>(zeros[<span class="dv">1</span><span class="op">:</span>n], Sigma[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n])</a>
+<a class="sourceLine" id="cb587-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb587-13" data-line-number="13">  </a>
+<a class="sourceLine" id="cb587-14" data-line-number="14">  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n) {</a>
+<a class="sourceLine" id="cb587-15" data-line-number="15">    <span class="co">## note that you have to be explicit about the variable</span></a>
+<a class="sourceLine" id="cb587-16" data-line-number="16">    <span class="co">## dimensions for each statement</span></a>
+<a class="sourceLine" id="cb587-17" data-line-number="17">    <span class="kw">log</span>(lambda[i]) &lt;-<span class="st"> </span><span class="kw">inprod</span>(X[i, <span class="dv">1</span><span class="op">:</span>q], beta[<span class="dv">1</span><span class="op">:</span>q] <span class="op">+</span><span class="st"> </span>eta[i])</a>
+<a class="sourceLine" id="cb587-18" data-line-number="18">    y[i] <span class="op">~</span><span class="st"> </span><span class="kw">dpois</span>(lambda[i])</a>
+<a class="sourceLine" id="cb587-19" data-line-number="19">  }</a>
+<a class="sourceLine" id="cb587-20" data-line-number="20">})</a>
+<a class="sourceLine" id="cb587-21" data-line-number="21"><span class="co">## define the constants, data, and MCMC initial conditions</span></a>
+<a class="sourceLine" id="cb587-22" data-line-number="22">constants &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> n, <span class="dt">q =</span> <span class="kw">ncol</span>(X))</a>
+<a class="sourceLine" id="cb587-23" data-line-number="23">data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb587-24" data-line-number="24">  <span class="dt">y =</span> y, </a>
+<a class="sourceLine" id="cb587-25" data-line-number="25">  <span class="dt">X =</span> X,</a>
+<a class="sourceLine" id="cb587-26" data-line-number="26">  <span class="dt">D =</span> fields<span class="op">::</span><span class="kw">rdist</span>(locs),</a>
+<a class="sourceLine" id="cb587-27" data-line-number="27">  <span class="dt">zeros =</span> <span class="kw">rep</span>(<span class="dv">0</span>, n)</a>
+<a class="sourceLine" id="cb587-28" data-line-number="28">)</a>
+<a class="sourceLine" id="cb587-29" data-line-number="29">inits &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb587-30" data-line-number="30">  <span class="dt">beta =</span> <span class="kw">rnorm</span>(<span class="kw">ncol</span>(X)),</a>
+<a class="sourceLine" id="cb587-31" data-line-number="31">  <span class="dt">lambda =</span> <span class="kw">rexp</span>(n, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb587-32" data-line-number="32">  <span class="dt">tau =</span> <span class="kw">rgamma</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb587-33" data-line-number="33">  <span class="dt">phi =</span> <span class="kw">rgamma</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb587-34" data-line-number="34">  <span class="dt">eta =</span> <span class="kw">rnorm</span>(n)</a>
+<a class="sourceLine" id="cb587-35" data-line-number="35">)</a>
+<a class="sourceLine" id="cb587-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb587-37" data-line-number="37"><span class="co">## create the NIMBLE model</span></a>
+<a class="sourceLine" id="cb587-38" data-line-number="38">poisson_model &lt;-<span class="st"> </span><span class="kw">nimbleModel</span>(</a>
+<a class="sourceLine" id="cb587-39" data-line-number="39">  <span class="dt">code      =</span> poisson_code, </a>
+<a class="sourceLine" id="cb587-40" data-line-number="40">  <span class="dt">constants =</span> constants,</a>
+<a class="sourceLine" id="cb587-41" data-line-number="41">  <span class="dt">data      =</span> data,</a>
+<a class="sourceLine" id="cb587-42" data-line-number="42">  <span class="dt">inits     =</span> inits</a>
+<a class="sourceLine" id="cb587-43" data-line-number="43">)</a></code></pre></div>
+<pre><code>## defining model...</code></pre>
+<pre><code>## building model...</code></pre>
+<pre><code>## setting data and initial values...</code></pre>
+<pre><code>## running calculate on model (any error reports that follow may simply reflect missing values in model variables) ... 
+## checking model sizes and dimensions...
+## model building finished.</code></pre>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb592-1" data-line-number="1"><span class="co">## I need the additional option to change my c++ compiler flags when both stan and nimble are loaded</span></a>
+<a class="sourceLine" id="cb592-2" data-line-number="2"><span class="kw">Sys.unsetenv</span>(<span class="st">&quot;PKG_CXXFLAGS&quot;</span>)</a>
+<a class="sourceLine" id="cb592-3" data-line-number="3">poisson_mcmc    &lt;-<span class="st"> </span><span class="kw">buildMCMC</span>(poisson_model)</a>
+<a class="sourceLine" id="cb592-4" data-line-number="4"><span class="co">## compile the model to c++</span></a>
+<a class="sourceLine" id="cb592-5" data-line-number="5">poisson_model_c &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(poisson_model)</a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" data-line-number="1">poisson_mcmc_c  &lt;-<span class="st"> </span><span class="kw">compileNimble</span>(poisson_mcmc, <span class="dt">project =</span> poisson_model) </a></code></pre></div>
+<pre><code>## compiling... this may take a minute. Use &#39;showCompilerOutput = TRUE&#39; to see C++ compilation details.
+## compilation finished.</code></pre>
+<ul>
+<li>once the model is compiled, we fit this using <code>runMCMC</code></li>
+</ul>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" data-line-number="1">samples &lt;-<span class="st"> </span><span class="kw">runMCMC</span>(poisson_mcmc_c, <span class="dt">niter =</span> <span class="dv">1000</span>, <span class="dt">nchains =</span> <span class="dv">4</span>)</a></code></pre></div>
+<pre><code>## running chain 1...</code></pre>
+<pre><code>## running chain 2...</code></pre>
+<pre><code>## running chain 3...</code></pre>
+<pre><code>## running chain 4...</code></pre>
+<pre><code>## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|
+## |-------------|-------------|-------------|-------------|
+## |-------------------------------------------------------|</code></pre>
+<p>and examine the traceplots with</p>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb602-1" data-line-number="1"><span class="kw">layout</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb602-2" data-line-number="2"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_0&quot;</span>)</a>
+<a class="sourceLine" id="cb602-3" data-line-number="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb602-4" data-line-number="4">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[1]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb602-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb602-6" data-line-number="6"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;beta_1&quot;</span>)</a>
+<a class="sourceLine" id="cb602-7" data-line-number="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb602-8" data-line-number="8">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;beta[2]&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb602-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb602-10" data-line-number="10"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;tau&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;tau&quot;</span>)</a>
+<a class="sourceLine" id="cb602-11" data-line-number="11"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb602-12" data-line-number="12">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;tau&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb602-13" data-line-number="13">}</a>
+<a class="sourceLine" id="cb602-14" data-line-number="14"><span class="kw">plot</span>(samples[[<span class="dv">1</span>]][, <span class="st">&quot;phi&quot;</span>], <span class="dt">col =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&quot;phi&quot;</span>)</a>
+<a class="sourceLine" id="cb602-15" data-line-number="15"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb602-16" data-line-number="16">  <span class="kw">lines</span>(samples[[i]][, <span class="st">&quot;phi&quot;</span>], <span class="dt">col =</span> i, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</a>
+<a class="sourceLine" id="cb602-17" data-line-number="17">}</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-324-1.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

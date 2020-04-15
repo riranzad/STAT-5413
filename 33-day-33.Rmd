@@ -1,12 +1,103 @@
 # Day 33
 
+
+```{r}
+library(mvnfast)
+```
+
 ## Announcements
 
 
 ## Spatio-temporal data
 
-Let $y(\mathbf{s}, t)$ be an observation at location $\mathbf{s} \in \mathcal{D}$ for time $t \in \mathcal{T}$ the $\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))' \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})$
+Let $y(\mathbf{s}, t)$ be an observation at location $\mathbf{s} \in \mathcal{D}$ for time $t \in \mathcal{T}$ then $\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))' \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})$
 
 - In general, $\mathcal{D}$ and $\mathcal{T}$ could be either discrete or continuous.
 
+- Types of spatio-temporal data
+
+    - continuous space, continuous time
+    
+        - $y(\mathbf{s}, t)$ for $\mathbf{s} \in \mathcal{R}^2$ and $t \in \mathcal{R}$
+        
+        - Example: temperature surfaces at locations $\mathbf{s}$ at time $t$
+    
+    - continuous space, discrete time
+
+        - $y_t(\mathbf{s})$ for $\mathbf{s} \in \mathcal{R}^2$ and $t \in \{1, 2, \ldots, T\}$
+        
+        - Monthly precipitation at location $\mathbf{s}$ for year $t$
+        
+    - discrete space, continuous time
+    
+        - $y_i(t)$ for $i \in \{1, 2, \ldots, n \}$ and $t \in \mathcal{R}$
+        
+        - inventory at Walmart location $i$ for time $t$
+        
+    - discrete space, discrete time
+
+        - $y_{it}$ for $i \in \{1, 2, \ldots, n \}$ and $t \in \{1, 2, \ldots, T\}$
+        
+        - Annual sales at Walmart location $i$ for year $t$
+        
+
 - The same old story -- It's really hard to specify a positive-definite covariance function in space-time without making some assumptions
+
+### Review: discrete time 
+
+- Recall the stationary first-order autoregressive (AR(1)) time series model
+
+\begin{align*}
+y_1 & N \left( \mathbf{X}_1 \boldsymbol{\beta}, \sigma^2 \right) \\
+y_t | y_{t-1} & \sim N \left( \mathbf{X}_t \boldsymbol{\beta} + \rho \left( y_{t-1} - \mathbf{X}_{t-1} \boldsymbol{\beta}  \right), \left( 1 - \rho^2 \right) \sigma^2 \right)
+\end{align*}
+
+where $|\rho| < 1$.
+
+- The AR(1) is stationary (Except for the mean so assume WLOG $\mathbf{X}_t \boldsymbol{\beta} = 0$ because we can model this as a fixed effect). 
+
+    - Mean:
+        - $E(y_1) = 0$
+        - $E(y_2) = E(E(y_2 | y_1)) = \rho E(y_1) = 0$
+        - $E(y_t) = E( E(y_t | y_{t-1})) = \cdots = \rho^{t-1} E( sy_1) = 0$
+        
+    - Variance
+        - $Var(y_1) = \sigma^2)$
+        - $Var(y_2) = Var(E(y_2 | y_1)) + E(Var(y_2 | y_1)) = Var(\rho y_1) + E((1 - \rho^2) \sigma^2) = \rho^2 \sigma^2 + (1 - \rho^2) \sigma^2  = \sigma^2$
+        - $Var(y_t) = \sigma^2$
+        
+    - Covariance
+    
+        - $Cov(y_1, y_2) = Cov(y_1, \rho y_1 + \varepsilon_2) = \rho \sigma^2$
+        - $Cov(y_t, y_{t+h}) = \rho^{|h|}\sigma^2 = \sigma^2 e^{-\frac{|h|}{\phi}}$ where $\phi = - \frac{1}{log(\rho)}$ 
+
+\begin{align*}
+\mathbf{y} = (y_1, \ldots, y_n)' \sim N( \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{R}(\phi))
+\end{align*}
+        
+- Many other time series models (including autoregressive moving average ARMA(p, q))
+
+\begin{align*}
+y_t | y_{t-1}, \ldots, y_{t-p} & = \sum_{j = 1}^p \phi_j y_{t-j} + \sum_{k = 1}^q \gamma_k \varepsilon_{t-k} + \varepsilon_t
+\end{align*}
+
+### Continuous space, discrete time -- the spatial AR(1) model
+
+- Spatial AR(1) model:
+
+\begin{align*}
+y_1(\mathbf{s}) & = \mathbf{X}_1(\mathbf{s}) \boldsymbol{\beta} + \varepsilon_1(\mathbf{s}) \\
+y_t(\mathbf{s}) | y_{t-1}\mathbf{s} & = \mathbf{X}_t(\mathbf{s}) \boldsymbol{\beta} + \rho \left( y_{t-1}(\mathbf{s}) - \mathbf{X}_{t-1}(\mathbf{s}) \boldsymbol{\beta} \right) + \sqrt{1 - \rho^2} \varepsilon_t(\mathbf{s}),
+\end{align*}
+
+where $|\rho| < 1$ and $\boldsymbol{\varepsilon}_t = (\varepsilon_t(\mathbf{s}_1), \ldots, \varepsilon_t(\mathbf{s}_n))'$ are iid (with respect to time) Gaussian processes with mean $\mathbf{0}$, variance $\tau^2$, and Matern correlation function $C(h | \nu, \phi)$
+
+- Mean: $E(y_t(\mathbf{s})) = \mathbf{X}_t(\mathbf{s})$
+- Covariance: $Cov(y_t(\mathbf{s}), y_{t-d}(\mathbf{s}')) = \rho^d C(|\mathbf{s} - \mathbf{s}'| | \nu, \phi)$
+
+- The covariance is stationary and seperable
+
+    - $Cov(y_t(\mathbf{s}), y_{t'}(\mathbf{s}')) = C_T(t, t') C_S(\mathbf{s}, \mathbf{s}')$ 
+        - temporal correlation $C_T(t, t')$
+        - spatial correlation $C_S(\mathbf{s}, \mathbf{s}')$
+

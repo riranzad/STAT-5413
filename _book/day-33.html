@@ -376,7 +376,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
-<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a><ul>
+<li class="chapter" data-level="33.2.1" data-path="day-33.html"><a href="day-33.html#review-discrete-time"><i class="fa fa-check"></i><b>33.2.1</b> Review: discrete time</a></li>
+<li class="chapter" data-level="33.2.2" data-path="day-33.html"><a href="day-33.html#continuous-space-discrete-time-the-spatial-ar1-model"><i class="fa fa-check"></i><b>33.2.2</b> Continuous space, discrete time – the spatial AR(1) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -431,17 +434,106 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-33" class="section level1">
 <h1><span class="header-section-number">33</span> Day 33</h1>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" data-line-number="1"><span class="kw">library</span>(mvnfast)</a></code></pre></div>
 <div id="announcements-28" class="section level2">
 <h2><span class="header-section-number">33.1</span> Announcements</h2>
 </div>
 <div id="spatio-temporal-data" class="section level2">
 <h2><span class="header-section-number">33.2</span> Spatio-temporal data</h2>
-<p>Let <span class="math inline">\(y(\mathbf{s}, t)\)</span> be an observation at location <span class="math inline">\(\mathbf{s} \in \mathcal{D}\)</span> for time <span class="math inline">\(t \in \mathcal{T}\)</span> the <span class="math inline">\(\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))&#39; \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})\)</span></p>
+<p>Let <span class="math inline">\(y(\mathbf{s}, t)\)</span> be an observation at location <span class="math inline">\(\mathbf{s} \in \mathcal{D}\)</span> for time <span class="math inline">\(t \in \mathcal{T}\)</span> then <span class="math inline">\(\mathbf{y} = (y(\mathbf{s}_1, t_1), \ldots, y(\mathbf{s}_1, t_m), \ldots, y(\mathbf{s}_n, t_1), \ldots, y(\mathbf{s}_n, t_m))&#39; \sim N(\mathbf{X}\boldsymbol{\beta}, \boldsymbol{\Sigma})\)</span></p>
 <ul>
 <li><p>In general, <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\mathcal{T}\)</span> could be either discrete or continuous.</p></li>
+<li><p>Types of spatio-temporal data</p>
+<ul>
+<li><p>continuous space, continuous time</p>
+<ul>
+<li><p><span class="math inline">\(y(\mathbf{s}, t)\)</span> for <span class="math inline">\(\mathbf{s} \in \mathcal{R}^2\)</span> and <span class="math inline">\(t \in \mathcal{R}\)</span></p></li>
+<li><p>Example: temperature surfaces at locations <span class="math inline">\(\mathbf{s}\)</span> at time <span class="math inline">\(t\)</span></p></li>
+</ul></li>
+<li><p>continuous space, discrete time</p>
+<ul>
+<li><p><span class="math inline">\(y_t(\mathbf{s})\)</span> for <span class="math inline">\(\mathbf{s} \in \mathcal{R}^2\)</span> and <span class="math inline">\(t \in \{1, 2, \ldots, T\}\)</span></p></li>
+<li><p>Monthly precipitation at location <span class="math inline">\(\mathbf{s}\)</span> for year <span class="math inline">\(t\)</span></p></li>
+</ul></li>
+<li><p>discrete space, continuous time</p>
+<ul>
+<li><p><span class="math inline">\(y_i(t)\)</span> for <span class="math inline">\(i \in \{1, 2, \ldots, n \}\)</span> and <span class="math inline">\(t \in \mathcal{R}\)</span></p></li>
+<li><p>inventory at Walmart location <span class="math inline">\(i\)</span> for time <span class="math inline">\(t\)</span></p></li>
+</ul></li>
+<li><p>discrete space, discrete time</p>
+<ul>
+<li><p><span class="math inline">\(y_{it}\)</span> for <span class="math inline">\(i \in \{1, 2, \ldots, n \}\)</span> and <span class="math inline">\(t \in \{1, 2, \ldots, T\}\)</span></p></li>
+<li><p>Annual sales at Walmart location <span class="math inline">\(i\)</span> for year <span class="math inline">\(t\)</span></p></li>
+</ul></li>
+</ul></li>
 <li><p>The same old story – It’s really hard to specify a positive-definite covariance function in space-time without making some assumptions</p></li>
 </ul>
+<div id="review-discrete-time" class="section level3">
+<h3><span class="header-section-number">33.2.1</span> Review: discrete time</h3>
+<ul>
+<li>Recall the stationary first-order autoregressive (AR(1)) time series model</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_1 &amp; N \left( \mathbf{X}_1 \boldsymbol{\beta}, \sigma^2 \right) \\
+y_t | y_{t-1} &amp; \sim N \left( \mathbf{X}_t \boldsymbol{\beta} + \rho \left( y_{t-1} - \mathbf{X}_{t-1} \boldsymbol{\beta}  \right), \left( 1 - \rho^2 \right) \sigma^2 \right)
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(|\rho| &lt; 1\)</span>.</p>
+<ul>
+<li><p>The AR(1) is stationary (Except for the mean so assume WLOG <span class="math inline">\(\mathbf{X}_t \boldsymbol{\beta} = 0\)</span> because we can model this as a fixed effect).</p>
+<ul>
+<li>Mean:
+<ul>
+<li><span class="math inline">\(E(y_1) = 0\)</span></li>
+<li><span class="math inline">\(E(y_2) = E(E(y_2 | y_1)) = \rho E(y_1) = 0\)</span></li>
+<li><span class="math inline">\(E(y_t) = E( E(y_t | y_{t-1})) = \cdots = \rho^{t-1} E( sy_1) = 0\)</span></li>
+</ul></li>
+<li>Variance
+<ul>
+<li><span class="math inline">\(Var(y_1) = \sigma^2)\)</span></li>
+<li><span class="math inline">\(Var(y_2) = Var(E(y_2 | y_1)) + E(Var(y_2 | y_1)) = Var(\rho y_1) + E((1 - \rho^2) \sigma^2) = \rho^2 \sigma^2 + (1 - \rho^2) \sigma^2 = \sigma^2\)</span></li>
+<li><span class="math inline">\(Var(y_t) = \sigma^2\)</span></li>
+</ul></li>
+<li><p>Covariance</p>
+<ul>
+<li><span class="math inline">\(Cov(y_1, y_2) = Cov(y_1, \rho y_1 + \varepsilon_2) = \rho \sigma^2\)</span></li>
+<li><span class="math inline">\(Cov(y_t, y_{t+h}) = \rho^{|h|}\sigma^2 = \sigma^2 e^{-\frac{|h|}{\phi}}\)</span> where <span class="math inline">\(\phi = - \frac{1}{log(\rho)}\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y} = (y_1, \ldots, y_n)&#39; \sim N( \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{R}(\phi))
+\end{align*}\]</span></p>
+<ul>
+<li>Many other time series models (including autoregressive moving average ARMA(p, q))</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_t | y_{t-1}, \ldots, y_{t-p} &amp; = \sum_{j = 1}^p \phi_j y_{t-j} + \sum_{k = 1}^q \gamma_k \varepsilon_{t-k} + \varepsilon_t
+\end{align*}\]</span></p>
+</div>
+<div id="continuous-space-discrete-time-the-spatial-ar1-model" class="section level3">
+<h3><span class="header-section-number">33.2.2</span> Continuous space, discrete time – the spatial AR(1) model</h3>
+<ul>
+<li>Spatial AR(1) model:</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+y_1(\mathbf{s}) &amp; = \mathbf{X}_1(\mathbf{s}) \boldsymbol{\beta} + \varepsilon_1(\mathbf{s}) \\
+y_t(\mathbf{s}) | y_{t-1}\mathbf{s} &amp; = \mathbf{X}_t(\mathbf{s}) \boldsymbol{\beta} + \rho \left( y_{t-1}(\mathbf{s}) - \mathbf{X}_{t-1}(\mathbf{s}) \boldsymbol{\beta} \right) + \sqrt{1 - \rho^2} \varepsilon_t(\mathbf{s}),
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(|\rho| &lt; 1\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}_t = (\varepsilon_t(\mathbf{s}_1), \ldots, \varepsilon_t(\mathbf{s}_n))&#39;\)</span> are iid (with respect to time) Gaussian processes with mean <span class="math inline">\(\mathbf{0}\)</span>, variance <span class="math inline">\(\tau^2\)</span>, and Matern correlation function <span class="math inline">\(C(h | \nu, \phi)\)</span></p>
+<ul>
+<li>Mean: <span class="math inline">\(E(y_t(\mathbf{s})) = \mathbf{X}_t(\mathbf{s})\)</span></li>
+<li><p>Covariance: <span class="math inline">\(Cov(y_t(\mathbf{s}), y_{t-d}(\mathbf{s}&#39;)) = \rho^d C(|\mathbf{s} - \mathbf{s}&#39;| | \nu, \phi)\)</span></p></li>
+<li><p>The covariance is stationary and seperable</p>
+<ul>
+<li><span class="math inline">\(Cov(y_t(\mathbf{s}), y_{t&#39;}(\mathbf{s}&#39;)) = C_T(t, t&#39;) C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span>
+<ul>
+<li>temporal correlation <span class="math inline">\(C_T(t, t&#39;)\)</span></li>
+<li>spatial correlation <span class="math inline">\(C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span></li>
+</ul></li>
+</ul></li>
+</ul>
 
+</div>
 </div>
 </div>
             </section>

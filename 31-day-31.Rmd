@@ -88,7 +88,7 @@ where $|D_k \cap A_i|$ is the area of the intersection of partition $D_k$ and $A
 
 where $\mathbf{W}_y$ is an $n \times p$ matrix where the $i$th row is proportional to the area of the domain $A_i$ in each of the fine partitions $\mathbf{D}$, $\mathbf{W}_z$ is an $m \times p$ matrix where the $j$th row is proportional to the area of the domain $B_j$ in each of the fine partitions $\mathbf{D}$, and $\mathbf{Q}$ is a precision matrix for a CAR process on the domain $\mathcal{D}$
 
-```{r, echo = FALSE}
+```{r}
 set.seed(112)
 ## fine domain D
 n_d <- 100^2

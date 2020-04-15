@@ -376,7 +376,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
-<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a></li>
+<li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a><ul>
+<li class="chapter" data-level="33.2.1" data-path="day-33.html"><a href="day-33.html#review-discrete-time"><i class="fa fa-check"></i><b>33.2.1</b> Review: discrete time</a></li>
+<li class="chapter" data-level="33.2.2" data-path="day-33.html"><a href="day-33.html#continuous-space-discrete-time-the-spatial-ar1-model"><i class="fa fa-check"></i><b>33.2.2</b> Continuous space, discrete time – the spatial AR(1) model</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
 <li class="chapter" data-level="34.1" data-path="day-34.html"><a href="day-34.html#announcements-29"><i class="fa fa-check"></i><b>34.1</b> Announcements</a></li>
@@ -516,6 +519,95 @@ z_j &amp; = \sum_{k = 1}^p \eta_k |D_k \cap B_j|  + \delta_i,
 \boldsymbol{\eta} \sim \operatorname{N}\left( \mathbf{0}, \tau^2 \mathbf{Q}^{-1} \right),
 \end{align*}\]</span></p>
 <p>where <span class="math inline">\(\mathbf{W}_y\)</span> is an <span class="math inline">\(n \times p\)</span> matrix where the <span class="math inline">\(i\)</span>th row is proportional to the area of the domain <span class="math inline">\(A_i\)</span> in each of the fine partitions <span class="math inline">\(\mathbf{D}\)</span>, <span class="math inline">\(\mathbf{W}_z\)</span> is an <span class="math inline">\(m \times p\)</span> matrix where the <span class="math inline">\(j\)</span>th row is proportional to the area of the domain <span class="math inline">\(B_j\)</span> in each of the fine partitions <span class="math inline">\(\mathbf{D}\)</span>, and <span class="math inline">\(\mathbf{Q}\)</span> is a precision matrix for a CAR process on the domain <span class="math inline">\(\mathcal{D}\)</span></p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">112</span>)</a>
+<a class="sourceLine" id="cb475-2" data-line-number="2"><span class="co">## fine domain D</span></a>
+<a class="sourceLine" id="cb475-3" data-line-number="3">n_d &lt;-<span class="st"> </span><span class="dv">100</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb475-4" data-line-number="4">locs_d &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb475-5" data-line-number="5">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_d)),</a>
+<a class="sourceLine" id="cb475-6" data-line-number="6">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_d))</a>
+<a class="sourceLine" id="cb475-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb475-8" data-line-number="8">grid_d &lt;-<span class="st"> </span><span class="kw">SpatialGrid</span>(</a>
+<a class="sourceLine" id="cb475-9" data-line-number="9">    <span class="kw">GridTopology</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">cellsize =</span> <span class="kw">c</span>(<span class="kw">abs</span>(locs_d[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_d[<span class="dv">2</span>, <span class="dv">1</span>]), <span class="kw">abs</span>(locs_d[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_d[<span class="dv">2</span>, <span class="dv">1</span>])), <span class="dt">cells.dim =</span> <span class="kw">c</span>(<span class="kw">sqrt</span>(n_d), <span class="kw">sqrt</span>(n_d)))</a>
+<a class="sourceLine" id="cb475-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb475-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb475-12" data-line-number="12"><span class="co">## observation domain A</span></a>
+<a class="sourceLine" id="cb475-13" data-line-number="13">n_a &lt;-<span class="st"> </span><span class="dv">33</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb475-14" data-line-number="14">locs_a &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb475-15" data-line-number="15">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_a)),</a>
+<a class="sourceLine" id="cb475-16" data-line-number="16">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_a))</a>
+<a class="sourceLine" id="cb475-17" data-line-number="17">)</a>
+<a class="sourceLine" id="cb475-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb475-19" data-line-number="19">grid_a &lt;-<span class="st"> </span><span class="kw">SpatialGrid</span>(</a>
+<a class="sourceLine" id="cb475-20" data-line-number="20">    <span class="kw">GridTopology</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">cellsize =</span> <span class="kw">c</span>(<span class="kw">abs</span>(locs_a[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_a[<span class="dv">2</span>, <span class="dv">1</span>]), <span class="kw">abs</span>(locs_a[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_a[<span class="dv">2</span>, <span class="dv">1</span>])), <span class="dt">cells.dim =</span> <span class="kw">c</span>(<span class="kw">sqrt</span>(n_a), <span class="kw">sqrt</span>(n_a)))</a>
+<a class="sourceLine" id="cb475-21" data-line-number="21">)</a>
+<a class="sourceLine" id="cb475-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb475-23" data-line-number="23"><span class="co">## observation domain B</span></a>
+<a class="sourceLine" id="cb475-24" data-line-number="24">n_b &lt;-<span class="st"> </span><span class="dv">17</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb475-25" data-line-number="25">locs_b &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb475-26" data-line-number="26">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_b)),</a>
+<a class="sourceLine" id="cb475-27" data-line-number="27">    <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n_b))</a>
+<a class="sourceLine" id="cb475-28" data-line-number="28">)</a>
+<a class="sourceLine" id="cb475-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb475-30" data-line-number="30">grid_b &lt;-<span class="st"> </span><span class="kw">SpatialGrid</span>(</a>
+<a class="sourceLine" id="cb475-31" data-line-number="31">    <span class="kw">GridTopology</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">cellsize =</span> <span class="kw">c</span>(<span class="kw">abs</span>(locs_b[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_b[<span class="dv">2</span>, <span class="dv">1</span>]), <span class="kw">abs</span>(locs_b[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>locs_b[<span class="dv">2</span>, <span class="dv">1</span>])), <span class="dt">cells.dim =</span> <span class="kw">c</span>(<span class="kw">sqrt</span>(n_b), <span class="kw">sqrt</span>(n_b)))</a>
+<a class="sourceLine" id="cb475-32" data-line-number="32">)</a>
+<a class="sourceLine" id="cb475-33" data-line-number="33"></a>
+<a class="sourceLine" id="cb475-34" data-line-number="34"><span class="kw">plot</span>(grid_d)</a>
+<a class="sourceLine" id="cb475-35" data-line-number="35"><span class="kw">plot</span>(grid_a, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb475-36" data-line-number="36"><span class="kw">plot</span>(grid_b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb475-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb475-38" data-line-number="38"><span class="co">## simulate the spatial process over D</span></a>
+<a class="sourceLine" id="cb475-39" data-line-number="39">phi &lt;-<span class="st"> </span><span class="fl">0.99</span></a>
+<a class="sourceLine" id="cb475-40" data-line-number="40">A  &lt;-<span class="st"> </span><span class="kw">make_lattice</span>(<span class="dt">length =</span> <span class="kw">sqrt</span>(n_d), <span class="dt">dim =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb475-41" data-line-number="41"><span class="st">    </span><span class="kw">as_adjacency_matrix</span>(<span class="dt">sparse =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb475-42" data-line-number="42">D &lt;-<span class="st"> </span><span class="kw">Diagonal</span>(<span class="dt">x =</span> <span class="kw">colSums</span>(A))</a>
+<a class="sourceLine" id="cb475-43" data-line-number="43">Q &lt;-<span class="st"> </span>D <span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>A</a>
+<a class="sourceLine" id="cb475-44" data-line-number="44"><span class="co">## cholesky (this is a sparse matrix that is upper diagonal)</span></a>
+<a class="sourceLine" id="cb475-45" data-line-number="45">R &lt;-<span class="st"> </span><span class="kw">chol</span>(Q)</a>
+<a class="sourceLine" id="cb475-46" data-line-number="46">y_d &lt;-<span class="st"> </span><span class="kw">backsolve</span>(R, <span class="kw">rnorm</span>(n_d))</a>
+<a class="sourceLine" id="cb475-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb475-48" data-line-number="48"><span class="co">## assign the values to the grid</span></a>
+<a class="sourceLine" id="cb475-49" data-line-number="49">grid_d &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(grid_d, <span class="kw">data.frame</span>(<span class="dt">y =</span> y_d))</a>
+<a class="sourceLine" id="cb475-50" data-line-number="50"></a>
+<a class="sourceLine" id="cb475-51" data-line-number="51">dat_d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb475-52" data-line-number="52">    <span class="dt">lon =</span> locs_d[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb475-53" data-line-number="53">    <span class="dt">lat =</span> locs_d[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb475-54" data-line-number="54">    <span class="dt">y   =</span> y_d</a>
+<a class="sourceLine" id="cb475-55" data-line-number="55">)</a>
+<a class="sourceLine" id="cb475-56" data-line-number="56">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_d, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-57" data-line-number="57"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-58" data-line-number="58"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-59" data-line-number="59"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial process&quot;</span>)</a>
+<a class="sourceLine" id="cb475-60" data-line-number="60"></a>
+<a class="sourceLine" id="cb475-61" data-line-number="61"><span class="co">## aggregate the spatial process for A</span></a>
+<a class="sourceLine" id="cb475-62" data-line-number="62">y_a &lt;-<span class="st"> </span><span class="kw">aggregate</span>(grid_d[<span class="dv">1</span>], grid_a, mean)</a>
+<a class="sourceLine" id="cb475-63" data-line-number="63">dat_a &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb475-64" data-line-number="64">    <span class="dt">lon =</span> locs_a[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb475-65" data-line-number="65">    <span class="dt">lat =</span> locs_a[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb475-66" data-line-number="66">    <span class="dt">y   =</span> y_a<span class="op">@</span>data<span class="op">$</span>y</a>
+<a class="sourceLine" id="cb475-67" data-line-number="67">)</a>
+<a class="sourceLine" id="cb475-68" data-line-number="68"><span class="co">## aggregate the spatial process for B</span></a>
+<a class="sourceLine" id="cb475-69" data-line-number="69">y_b &lt;-<span class="st"> </span><span class="kw">aggregate</span>(grid_d[<span class="dv">1</span>], grid_b, mean)</a>
+<a class="sourceLine" id="cb475-70" data-line-number="70">dat_b &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb475-71" data-line-number="71">    <span class="dt">lon =</span> locs_b[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb475-72" data-line-number="72">    <span class="dt">lat =</span> locs_b[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb475-73" data-line-number="73">    <span class="dt">y   =</span> y_b<span class="op">@</span>data<span class="op">$</span>y</a>
+<a class="sourceLine" id="cb475-74" data-line-number="74">)</a>
+<a class="sourceLine" id="cb475-75" data-line-number="75"></a>
+<a class="sourceLine" id="cb475-76" data-line-number="76">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_d, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-77" data-line-number="77"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-78" data-line-number="78"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-79" data-line-number="79"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;latent spatial process&quot;</span>)</a>
+<a class="sourceLine" id="cb475-80" data-line-number="80">p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_a, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-81" data-line-number="81"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-82" data-line-number="82"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-83" data-line-number="83"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;spatial process over A&quot;</span>)</a>
+<a class="sourceLine" id="cb475-84" data-line-number="84">p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> dat_b, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat, <span class="dt">fill =</span> y)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-85" data-line-number="85"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-86" data-line-number="86"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb475-87" data-line-number="87"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;spatial process over B&quot;</span>)</a>
+<a class="sourceLine" id="cb475-88" data-line-number="88"></a>
+<a class="sourceLine" id="cb475-89" data-line-number="89">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-268-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-268-2.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
