@@ -172,7 +172,7 @@ y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```   
 
 
@@ -338,9 +338,9 @@ for (i in 2:4) {
 
 - $[y(\mathbf{s})] = \int \operatorname{Poisson}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}$ = ???
 
-- $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)$
+- $E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s})} \right) = e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2}$
 
-- $Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \right) \middle| \boldsymbol{\eta} \right) = Var \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + E \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left(  e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} \right) > e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} }$
+- $Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = Var \left(  e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) + E \left(  e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left(  e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) + e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} > e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} }$
 
 - overdispersed relative to the non-spatial Poisson
 
@@ -407,7 +407,7 @@ y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```    
 
 ####  Poisson regression in NIMBLE
@@ -658,7 +658,7 @@ y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```    
 
 #### What if we fit a non-spatial regression?
@@ -697,7 +697,7 @@ Evidence of model mis-fit
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```    
 
 <!-- #### Spatial logistic regression in INLA -->
@@ -1041,7 +1041,7 @@ y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```    
 
 #### What if we fit a non-spatial regression?
@@ -1080,7 +1080,7 @@ y_rep <- rstan::extract(fit, pars = "y_rep")$y_rep
 p1 <- ppc_intervals(y, y_rep, x = X[, 2])
 p2 <- ppc_dens_overlay(y, y_rep)
 p3 <- ppc_ecdf_overlay(y, y_rep)
-p1 + p2 + p3
+p1 / p2 / p3
 ```    
 
 

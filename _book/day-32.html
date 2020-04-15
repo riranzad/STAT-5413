@@ -467,14 +467,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Recall the Gaussian model:</p></li>
 </ul>
 <p><span class="math display">\[\begin{align*}
-y(\mathbf{s}) | \eta(\mathbf{s}) &amp; \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s} \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
+y(\mathbf{s}) | \eta(\mathbf{s}) &amp; \stackrel{iid}{\sim} N(\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \eta(\mathbf{s}), \sigma^2) \\
 \boldsymbol{\eta} = (\eta(\mathbf{s}_1), \ldots, \eta(\mathbf{s}_n))&#39; &amp; \sim N(\mathbf{0}, \boldsymbol{\Sigma}),
 \end{align*}\]</span></p>
 <p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the covariance matrix for the covariance function <span class="math inline">\(\tau^2 \mathbf{C}(\| \mathbf{s} - \mathbf{s}&#39; \|)\)</span>.</p>
 <ul>
 <li><p>If we integrate out the random effect <span class="math inline">\(\boldsymbol{\eta}\)</span> we have:</p></li>
 <li><span class="math inline">\(y(\mathbf{s})\)</span> is a GP</li>
-<li>$E( y (  ) ) = () </li>
+<li><span class="math inline">\(E\left( y \left( \mathbf{s} \right) \right) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}\)</span></li>
 <li><p><span class="math inline">\(Cov(y(\mathbf{s}), y(\mathbf{s}&#39;)) = \begin{cases} \sigma^2 + \tau^2 &amp; h = 0 \\ \tau^2 C (h) &amp; h &gt; 0 \end{cases}\)</span></p></li>
 <li><p>Therefore, given the random effects, the observations are independent, but marginally, the observations are dependent.</p></li>
 <li><p>Instead, for spatial GLMs we add latent Gaussian random effects to the generalized linear model</p></li>
@@ -500,7 +500,7 @@ g \left( E \left( y_i \right) \right) &amp; = \mathbf{X}_i \boldsymbol{\beta}
 <li><p><span class="math inline">\(E \left( y_i \right) = p_i\)</span></p></li>
 <li><p>the link function is <span class="math inline">\(p_i = logit \left( E \left( y_i \right) \right) = logit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
 <li><p>the logit function is <span class="math inline">\(logit(z) = \frac{e^z}{1 + e^z}\)</span></p></li>
-<li>sometimes a probit link function is used <span class="math inline">\(p_i probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span><br />
+<li>sometimes a probit link function is used <span class="math inline">\(p_i = probit \left( E \left( y_i \right) \right) = probit \left( \operatorname{Prob} \left( y_i = 1 \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span><br />
 </li>
 <li><p>the probit function is <span class="math inline">\(probit(z) = \Phi(z)\)</span> where <span class="math inline">\(\Phi()\)</span> is the standard normal CDF</p></li>
 </ul>
@@ -610,7 +610,7 @@ generated quantities {
 <div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb489-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb489-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb489-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb489-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-277-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="binary-logistic-regression-in-nimble" class="section level4">
@@ -785,8 +785,8 @@ generated quantities {
 <li><p>the link function is <span class="math inline">\(\log( \lambda_i) = log \left( E \left( y_i \right) \right) = \mathbf{X}_i \boldsymbol{\beta}\)</span></p></li>
 <li><p>Marginal distriubtion of <span class="math inline">\(y(\mathbf{s})\)</span> for Poisson data</p></li>
 <li><p><span class="math inline">\([y(\mathbf{s})] = \int \operatorname{Poisson}\left( y(\mathbf{s}) | \boldsymbol{\beta}, \boldsymbol{\eta} \right) \operatorname{N} \left( \mathbf{0}, \boldsymbol{\Sigma} \right) d\, \boldsymbol{\eta}\)</span> = ???</p></li>
-<li><p><span class="math inline">\(E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s}) \right) = e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2 / } \right)\)</span></p></li>
-<li><p><span class="math inline">\(Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \right) \middle| \boldsymbol{\eta} \right) = Var \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + E \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left( e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) \right) + e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} \right) &gt; e^{\mathbf{X}\(\mathbf{s}) \boldsymbol{\beta} }\)</span></p></li>
+<li><p><span class="math inline">\(E\left( y(\mathbf{s}) \right) = E \left( E\left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = E \left( e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta}} E \left( e^{\boldsymbol{\eta}(\mathbf{s})} \right) = e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta}} e^{\tau^2}\)</span></p></li>
+<li><p><span class="math inline">\(Var \left( y(\mathbf{s}) \right) = Var \left( E \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) + E \left( Var \left( y(\mathbf{s}) \right) \middle| \boldsymbol{\eta} \right) = Var \left( e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) + E \left( e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) = Var \left( e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \boldsymbol{\eta}(\mathbf{s}) } \right) + e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} + \tau^2 / 2} &gt; e^{\mathbf{X}(\mathbf{s}) \boldsymbol{\beta} }\)</span></p></li>
 <li><p>overdispersed relative to the non-spatial Poisson</p></li>
 <li><p><span class="math inline">\(Cov(y(\mathbf{s}), y(\mathbf{s}&#39;))\)</span> is more complicated</p></li>
 </ul>
@@ -885,7 +885,7 @@ generated quantities {
 <div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb535-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb535-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb535-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb535-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb535-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-292-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="poisson-regression-in-nimble" class="section level4">
@@ -1211,7 +1211,7 @@ generated quantities {
 <div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb563-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb563-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb563-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb563-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-304-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="what-if-we-fit-a-non-spatial-regression" class="section level4">
@@ -1252,7 +1252,7 @@ generated quantities {
 <div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb569-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb569-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb569-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb569-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-308-1.png" width="480" style="display: block; margin: auto;" /></p>
 <!-- #### Spatial logistic regression in INLA -->
 <!-- - Integrated Nested Laplace Approximation -->
@@ -1624,7 +1624,7 @@ generated quantities {
 <div class="sourceCode" id="cb581"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb581-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb581-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb581-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb581-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb581-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-317-1.png" width="480" style="display: block; margin: auto;" /></p>
 <div id="what-if-we-fit-a-non-spatial-regression-1" class="section level4">
 <h4><span class="header-section-number">32.2.6.1</span> What if we fit a non-spatial regression?</h4>
@@ -1663,7 +1663,7 @@ generated quantities {
 <div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" data-line-number="1">p1 &lt;-<span class="st"> </span><span class="kw">ppc_intervals</span>(y, y_rep, <span class="dt">x =</span> X[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb586-2" data-line-number="2">p2 &lt;-<span class="st"> </span><span class="kw">ppc_dens_overlay</span>(y, y_rep)</a>
 <a class="sourceLine" id="cb586-3" data-line-number="3">p3 &lt;-<span class="st"> </span><span class="kw">ppc_ecdf_overlay</span>(y, y_rep)</a>
-<a class="sourceLine" id="cb586-4" data-line-number="4">p1 <span class="op">+</span><span class="st"> </span>p2 <span class="op">+</span><span class="st"> </span>p3</a></code></pre></div>
+<a class="sourceLine" id="cb586-4" data-line-number="4">p1 <span class="op">/</span><span class="st"> </span>p2 <span class="op">/</span><span class="st"> </span>p3</a></code></pre></div>
 <p><img src="STAT-5413_files/figure-html/unnamed-chunk-321-1.png" width="480" style="display: block; margin: auto;" /></p>
 </div>
 <div id="spatial-poisson-regression-in-nimble" class="section level4">
