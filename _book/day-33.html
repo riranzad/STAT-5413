@@ -373,12 +373,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="32.2.5" data-path="day-32.html"><a href="day-32.html#example-spatial-binary-logistic-regression"><i class="fa fa-check"></i><b>32.2.5</b> Example: spatial binary (logistic) regression</a></li>
 <li class="chapter" data-level="32.2.6" data-path="day-32.html"><a href="day-32.html#example-spatial-poisson-count-regression"><i class="fa fa-check"></i><b>32.2.6</b> Example: spatial Poisson (count) regression</a></li>
 </ul></li>
+<li class="chapter" data-level="32.3" data-path="day-32.html"><a href="day-32.html#plot-the-estimated-vs.fitted-values-of-eta"><i class="fa fa-check"></i><b>32.3</b> plot the estimated vs. fitted values of eta</a></li>
+<li class="chapter" data-level="32.4" data-path="day-32.html"><a href="day-32.html#plot-the-estimated-vs.fitted-values-of-lambda"><i class="fa fa-check"></i><b>32.4</b> plot the estimated vs. fitted values of lambda</a></li>
+<li class="chapter" data-level="32.5" data-path="day-32.html"><a href="day-32.html#how-to-improve-computation-in-spatial-glms"><i class="fa fa-check"></i><b>32.5</b> How to improve computation in spatial GLMs</a></li>
 </ul></li>
 <li class="chapter" data-level="33" data-path="day-33.html"><a href="day-33.html"><i class="fa fa-check"></i><b>33</b> Day 33</a><ul>
 <li class="chapter" data-level="33.1" data-path="day-33.html"><a href="day-33.html#announcements-28"><i class="fa fa-check"></i><b>33.1</b> Announcements</a></li>
 <li class="chapter" data-level="33.2" data-path="day-33.html"><a href="day-33.html#spatio-temporal-data"><i class="fa fa-check"></i><b>33.2</b> Spatio-temporal data</a><ul>
 <li class="chapter" data-level="33.2.1" data-path="day-33.html"><a href="day-33.html#review-discrete-time"><i class="fa fa-check"></i><b>33.2.1</b> Review: discrete time</a></li>
 <li class="chapter" data-level="33.2.2" data-path="day-33.html"><a href="day-33.html#continuous-space-discrete-time-the-spatial-ar1-model"><i class="fa fa-check"></i><b>33.2.2</b> Continuous space, discrete time – the spatial AR(1) model</a></li>
+</ul></li>
+<li class="chapter" data-level="33.3" data-path="day-33.html"><a href="day-33.html#seperable-models-are-computationally-more-efficient"><i class="fa fa-check"></i><b>33.3</b> seperable models are computationally more efficient:</a><ul>
+<li class="chapter" data-level="33.3.1" data-path="day-33.html"><a href="day-33.html#more-flexible-models"><i class="fa fa-check"></i><b>33.3.1</b> More flexible models</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="34" data-path="day-34.html"><a href="day-34.html"><i class="fa fa-check"></i><b>34</b> Day 34</a><ul>
@@ -434,7 +440,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="day-33" class="section level1">
 <h1><span class="header-section-number">33</span> Day 33</h1>
-<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" data-line-number="1"><span class="kw">library</span>(mvnfast)</a></code></pre></div>
+<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb604-1" data-line-number="1"><span class="kw">library</span>(mvnfast)</a>
+<a class="sourceLine" id="cb604-2" data-line-number="2"><span class="kw">library</span>(fields)</a>
+<a class="sourceLine" id="cb604-3" data-line-number="3"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb604-4" data-line-number="4"><span class="kw">library</span>(viridis)</a>
+<a class="sourceLine" id="cb604-5" data-line-number="5"><span class="kw">library</span>(patchwork)</a></code></pre></div>
 <div id="announcements-28" class="section level2">
 <h2><span class="header-section-number">33.1</span> Announcements</h2>
 </div>
@@ -528,10 +538,526 @@ y_t(\mathbf{s}) | y_{t-1}\mathbf{s} &amp; = \mathbf{X}_t(\mathbf{s}) \boldsymbol
 <li><span class="math inline">\(Cov(y_t(\mathbf{s}), y_{t&#39;}(\mathbf{s}&#39;)) = C_T(t, t&#39;) C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span>
 <ul>
 <li>temporal correlation <span class="math inline">\(C_T(t, t&#39;)\)</span></li>
-<li>spatial correlation <span class="math inline">\(C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span></li>
+<li><p>spatial correlation <span class="math inline">\(C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span></p></li>
+<li><p>assumes that there is the same temporal relationship at every point in space and that there is the same spatial relationship at each time</p></li>
+</ul></li>
+<li><p>How do I know if this assumption is valid?</p>
+<ul>
+<li>There are <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378375804003210">formal tests</a> for separability</li>
 </ul></li>
 </ul></li>
 </ul>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb605-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb605-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb605-3" data-line-number="3">T &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb605-4" data-line-number="4">t &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>T</a>
+<a class="sourceLine" id="cb605-5" data-line-number="5">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb605-6" data-line-number="6">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb605-7" data-line-number="7">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb605-8" data-line-number="8">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb605-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb605-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb605-11" data-line-number="11">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb605-12" data-line-number="12">tau2  &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb605-13" data-line-number="13">phi_s &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb605-14" data-line-number="14">rho &lt;-<span class="st"> </span><span class="fl">0.9</span></a>
+<a class="sourceLine" id="cb605-15" data-line-number="15">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb605-16" data-line-number="16">y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, T)</a>
+<a class="sourceLine" id="cb605-17" data-line-number="17">y[, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb605-18" data-line-number="18"><span class="co">## initialize the distribution</span></a>
+<a class="sourceLine" id="cb605-19" data-line-number="19"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">20</span>){</a>
+<a class="sourceLine" id="cb605-20" data-line-number="20">    y[, <span class="dv">1</span>] &lt;-<span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>y[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb605-21" data-line-number="21">}</a>
+<a class="sourceLine" id="cb605-22" data-line-number="22"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb605-23" data-line-number="23">    y[, k] &lt;-<span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>y[, k<span class="op">-</span><span class="st"> </span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb605-24" data-line-number="24">}</a>
+<a class="sourceLine" id="cb605-25" data-line-number="25">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb605-26" data-line-number="26">    <span class="dt">x   =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb605-27" data-line-number="27">    <span class="dt">y   =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb605-28" data-line-number="28">    <span class="dt">obs =</span> <span class="kw">c</span>(y),</a>
+<a class="sourceLine" id="cb605-29" data-line-number="29">    <span class="dt">time =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> n)</a>
+<a class="sourceLine" id="cb605-30" data-line-number="30">)</a>
+<a class="sourceLine" id="cb605-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb605-32" data-line-number="32">make_plot &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb605-33" data-line-number="33">    zlims &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>obs)</a>
+<a class="sourceLine" id="cb605-34" data-line-number="34">    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb605-35" data-line-number="35">        <span class="kw">print</span>(</a>
+<a class="sourceLine" id="cb605-36" data-line-number="36">            dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb605-37" data-line-number="37"><span class="st">                </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb605-38" data-line-number="38"><span class="st">                </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb605-39" data-line-number="39"><span class="st">                </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb605-40" data-line-number="40"><span class="st">                </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb605-41" data-line-number="41"><span class="st">                </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;spatio-temporal process; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb605-42" data-line-number="42">        )</a>
+<a class="sourceLine" id="cb605-43" data-line-number="43">    }</a>
+<a class="sourceLine" id="cb605-44" data-line-number="44">}  </a>
+<a class="sourceLine" id="cb605-45" data-line-number="45"></a>
+<a class="sourceLine" id="cb605-46" data-line-number="46"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatio-temporal-ar.gif&quot;</span>))) {</a>
+<a class="sourceLine" id="cb605-47" data-line-number="47">    gifski<span class="op">::</span><span class="kw">save_gif</span>(</a>
+<a class="sourceLine" id="cb605-48" data-line-number="48">        <span class="kw">make_plot</span>(), </a>
+<a class="sourceLine" id="cb605-49" data-line-number="49">        <span class="dt">gif_file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatio-temporal-ar.gif&quot;</span>),</a>
+<a class="sourceLine" id="cb605-50" data-line-number="50">        <span class="dt">progress =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb605-51" data-line-number="51">        <span class="dt">delay =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb605-52" data-line-number="52">        <span class="dt">height =</span> <span class="dv">640</span>, <span class="dt">width =</span> <span class="dv">640</span>, <span class="dt">units =</span> <span class="st">&quot;px&quot;</span></a>
+<a class="sourceLine" id="cb605-53" data-line-number="53">    )</a>
+<a class="sourceLine" id="cb605-54" data-line-number="54">}</a>
+<a class="sourceLine" id="cb605-55" data-line-number="55">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatio-temporal-ar.gif&quot;</span>))</a></code></pre></div>
+<p><img src="images/spatio-temporal-ar.gif" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="seperable-models-are-computationally-more-efficient" class="section level2">
+<h2><span class="header-section-number">33.3</span> seperable models are computationally more efficient:</h2>
+<ul>
+<li>Assume complete data: all locations <span class="math inline">\(\{\mathbf{s}_1, \ldots, \mathbf{s}_n\}\)</span> are measured at each timestep <span class="math inline">\(\{ t_1, \ldots, t_T\}\)</span>
+<ul>
+<li>In a Bayesian setting, if there are missing values, just estimate these are parameters in the model</li>
+</ul></li>
+<li><p>Define <span class="math inline">\(\mathbf{y}_t = \left( y_t(\mathbf{s}_1), \ldots, y_t(\mathbf{s}_n) \right)&#39;\)</span> as the data observation at time <span class="math inline">\(t\)</span> and <span class="math inline">\(\mathbf{y}(\mathbf{s}) = \left( y_1(\mathbf{s}), \ldots, y_T(\mathbf{s}) \right)&#39;\)</span> as the data observation for location <span class="math inline">\(\mathbf{s}\)</span></p></li>
+<li><p><span class="math inline">\(\mathbf{y} = \left( \mathbf{y}_1&#39;, \ldots, \mathbf{y}_T&#39; \right)&#39;\)</span></p></li>
+<li><p>Let <span class="math inline">\(\mathbf{y}\)</span> be a separable spatio-temporal GP with mean <span class="math inline">\(E(y_t(\mathbf{s})) = \mathbf{X}_t(\mathbf{s}) \boldsymbol{\beta}\)</span> and separable covariance <span class="math inline">\(\tau^2 C_T(t, t&#39;) C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span> given temporal correlation function <span class="math inline">\(C_T(t, t&#39;)\)</span> and spatial correlation function <span class="math inline">\(C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span></p></li>
+<li><p>The mean and covariance for an observation at time <span class="math inline">\(t\)</span></p>
+<ul>
+<li><p><span class="math inline">\(E(\mathbf{y}_t) = \mathbf{X}_t \boldsymbol{\beta}\)</span></p></li>
+<li><p><span class="math inline">\(Cov(y_t(\mathbf{s}_i), y_t(\mathbf{s}_j)) = \tau^2 C_T(t, t) C_S(\mathbf{s}_i, \mathbf{s}_j) = \tau^2 C_S(\mathbf{s}_i, \mathbf{s}_j)\)</span></p></li>
+<li><span class="math inline">\(\mathbf{y}_t \sim N(\boldsymbol{X}_t\boldsymbol{\beta}, \boldsymbol{\Sigma}_S)\)</span>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}_S\)</span> are the realizations of the covariance function <span class="math inline">\(\tau^2 C_S(\mathbf{s}_i, \mathbf{s}_j)\)</span> at the set of locations for time <span class="math inline">\(t\)</span></li>
+</ul></li>
+</ul></li>
+<li><p>The mean and covariance for an observation at location <span class="math inline">\(\mathbf{s}\)</span></p>
+<ul>
+<li><p><span class="math inline">\(E(\mathbf{y}(\mathbf{s})) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}\)</span></p></li>
+<li><p><span class="math inline">\(Cov(y_{t_i}(\mathbf{s}), y_{t_j}(\mathbf{s})) = \tau^2 C_T(t_i, t_j) C_S(\mathbf{s}, \mathbf{s}) = \tau^2 C_T(t_i, t_j)\)</span></p></li>
+<li><span class="math inline">\(\mathbf{y}(\mathbf{s}) \sim N(\boldsymbol{X}(\mathbf{s} \boldsymbol{\beta}, \boldsymbol{\Sigma}_T)\)</span>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}_T\)</span> are the realizations of the covariance function <span class="math inline">\(\tau^2 C_T(t_i, t_j)\)</span> at the time points <span class="math inline">\(t_i\)</span> and <span class="math inline">\(t_j\)</span> for location <span class="math inline">\(\mathbf{s}\)</span></li>
+</ul></li>
+</ul></li>
+<li><p>The joint distribution is <span class="math inline">\(\mathbf{y} \sim N(\mathbf{X} \boldsymbol{\beta}, \boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S)\)</span></p></li>
+<li><p>Kronecker product properties</p>
+<ul>
+<li>If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m \times n\)</span> matrix and <span class="math inline">\(\mathbf{B}\)</span> is a <span class="math inline">\(p \times q\)</span>, then the Kronecker product <span class="math inline">\(\mathbf{A} \otimes \mathbf{B}\)</span> is the <span class="math inline">\(pm \times qn\)</span> block matrix: <span class="math inline">\(\mathbf {A} \otimes \mathbf {B} ={\begin{pmatrix}a_{11}\mathbf {B} &amp;\cdots &amp;a_{1n}\mathbf {B} \\\vdots &amp;\ddots &amp;\vdots \\a_{m1}\mathbf {B} &amp;\cdots &amp;a_{mn}\mathbf {B} \end{pmatrix}}\)</span> which is</li>
+</ul>
+<p><span class="math inline">\({\mathbf{A}\otimes\mathbf{B}} = \begin{pmatrix}  a_{11} b_{11} &amp; a_{11} b_{12} &amp; \cdots &amp; a_{11} b_{1q} &amp;  \cdots &amp; \cdots &amp; a_{1n} b_{11} &amp; a_{1n} b_{12} &amp; \cdots &amp; a_{1n} b_{1q} \\  a_{11} b_{21} &amp; a_{11} b_{22} &amp; \cdots &amp; a_{11} b_{2q} &amp;  \cdots &amp; \cdots &amp; a_{1n} b_{21} &amp; a_{1n} b_{22} &amp; \cdots &amp; a_{1n} b_{2q} \\  \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; &amp; &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\  a_{11} b_{p1} &amp; a_{11} b_{p2} &amp; \cdots &amp; a_{11} b_{pq} &amp;  \cdots &amp; \cdots &amp; a_{1n} b_{p1} &amp; a_{1n} b_{p2} &amp; \cdots &amp; a_{1n} b_{pq} \\  \vdots &amp; \vdots &amp; &amp; \vdots &amp; \ddots &amp; &amp; \vdots &amp; \vdots &amp; &amp; \vdots \\  \vdots &amp; \vdots &amp; &amp; \vdots &amp; &amp; \ddots &amp; \vdots &amp; \vdots &amp; &amp; \vdots \\  a_{m1} b_{11} &amp; a_{m1} b_{12} &amp; \cdots &amp; a_{m1} b_{1q} &amp;  \cdots &amp; \cdots &amp; a_{mn} b_{11} &amp; a_{mn} b_{12} &amp; \cdots &amp; a_{mn} b_{1q} \\  a_{m1} b_{21} &amp; a_{m1} b_{22} &amp; \cdots &amp; a_{m1} b_{2q} &amp;  \cdots &amp; \cdots &amp; a_{mn} b_{21} &amp; a_{mn} b_{22} &amp; \cdots &amp; a_{mn} b_{2q} \\  \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; &amp; &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\  a_{m1} b_{p1} &amp; a_{m1} b_{p2} &amp; \cdots &amp; a_{m1} b_{pq} &amp;  \cdots &amp; \cdots &amp; a_{mn} b_{p1} &amp; a_{mn} b_{p2} &amp; \cdots &amp; a_{mn} b_{pq} \end{pmatrix}\)</span>.</p></li>
+<li><p>If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(n \times n\)</span> matrix and <span class="math inline">\(\mathbf{B}\)</span> is an <span class="math inline">\(m \times m\)</span> matrix and both are invertible matrices, then <span class="math inline">\((\mathbf{A} \otimes \mathbf{B})^{-1} = \mathbf{A}^{-1} \otimes \mathbf{B}^{-1}\)</span>.</p>
+<ul>
+<li><p>computational complexity of <span class="math inline">\((\mathbf{A} \otimes \mathbf{B})^{-1} = O((nm)^3)\)</span></p></li>
+<li><p>computational complexity of <span class="math inline">\(\mathbf{A}^{-1} \otimes \mathbf{B}^{-1} = O(n^3 + m^3)\)</span></p></li>
+<li><p>Generating the Kronecker produce is embarassingly parallel</p></li>
+</ul></li>
+<li><p>If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(n \times n\)</span> matrix and <span class="math inline">\(\mathbf{B}\)</span> is an <span class="math inline">\(m \times m\)</span> matrix and both are invertible matrices, then <span class="math inline">\(|\mathbf{A} \otimes \mathbf{B}| = |\mathbf{A}|^m |\mathbf{B}|^n\)</span>.<br />
+- computational complexity of <span class="math inline">\(|\mathbf{A} \otimes \mathbf{B}| = O((nm)^3)\)</span></p>
+<ul>
+<li>computational complexity of <span class="math inline">\(|\mathbf{A}|^m |\mathbf{B}|^n = O(n^3 + m^3)\)</span></li>
+</ul></li>
+<li>For sparse CAR models:
+<ul>
+<li>If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(n \times n\)</span> matrix with eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_n\)</span> and <span class="math inline">\(\mathbf{B}\)</span> is an <span class="math inline">\(m \times m\)</span> matrix with eigenvalues <span class="math inline">\(\omega_, \ldots, \omega_m\)</span> then the eigenvalues of <span class="math inline">\(\mathbf{A} \otimes \mathbf{B}\)</span> are <span class="math inline">\(\{\lambda_i \omega_j \}\)</span> for <span class="math inline">\(i = 1, \ldots, n\)</span> and <span class="math inline">\(j = 1, \ldots, m\)</span></li>
+</ul></li>
+<li><p>The separable likelihood is</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+|\boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S|^{-\frac{1}{2}} exp\{- \frac{1}{2} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right)&#39; \left( \boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S \right)^{-1} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right) \} \\
+= |\boldsymbol{\Sigma}_T|^{-\frac{n}{2}} |\boldsymbol{\Sigma}_S|^{-\frac{m}{2}} exp\{- \frac{1}{2} \sum_{t=1}^m \sum_{t&#39;=1}^m \left( \mathbf{y}_t - \mathbf{X}_t \boldsymbol{\beta} \right)&#39; {\boldsymbol{\Sigma}_S}^{-1} \left( \mathbf{y}_{t&#39;} - \mathbf{X}_{t&#39;} \boldsymbol{\beta} \right) {{\boldsymbol{\Sigma}_T}^{-1}}_{tt&#39;} \}
+\end{align*}\]</span></p>
+<ul>
+<li><p>As these are Gaussian distributions, MLE and Bayesian estimation is straightforward</p>
+<ul>
+<li>can use dimension reduction methods to reduce computational cost</li>
+<li>spatio-temporal Kriging uses conditional multivariate normal distributions</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb606-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb606-3" data-line-number="3">T &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb606-4" data-line-number="4">t &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>T</a>
+<a class="sourceLine" id="cb606-5" data-line-number="5">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb606-6" data-line-number="6">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb606-7" data-line-number="7">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb606-8" data-line-number="8">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb606-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb606-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb606-11" data-line-number="11">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb606-12" data-line-number="12">D_t &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(t)</a>
+<a class="sourceLine" id="cb606-13" data-line-number="13">tau2  &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb606-14" data-line-number="14">phi_s &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb606-15" data-line-number="15">phi_t &lt;-<span class="st"> </span><span class="dv">7</span></a>
+<a class="sourceLine" id="cb606-16" data-line-number="16">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb606-17" data-line-number="17">R_t &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_t <span class="op">/</span><span class="st"> </span>phi_t)</a>
+<a class="sourceLine" id="cb606-18" data-line-number="18">z &lt;-<span class="st"> </span><span class="kw">sqrt</span>(tau2) <span class="op">*</span><span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>T), n, T)</a>
+<a class="sourceLine" id="cb606-19" data-line-number="19">y &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">chol</span>(R_s)) <span class="op">%*%</span><span class="st"> </span>z <span class="op">%*%</span><span class="st"> </span><span class="kw">chol</span>(R_t)</a>
+<a class="sourceLine" id="cb606-20" data-line-number="20">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb606-21" data-line-number="21">    <span class="dt">x   =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb606-22" data-line-number="22">    <span class="dt">y   =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb606-23" data-line-number="23">    <span class="dt">obs =</span> <span class="kw">c</span>(y),</a>
+<a class="sourceLine" id="cb606-24" data-line-number="24">    <span class="dt">time =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> n)</a>
+<a class="sourceLine" id="cb606-25" data-line-number="25">)</a>
+<a class="sourceLine" id="cb606-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb606-27" data-line-number="27">make_plot &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb606-28" data-line-number="28">    zlims &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>obs)</a>
+<a class="sourceLine" id="cb606-29" data-line-number="29">    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb606-30" data-line-number="30">        <span class="kw">print</span>(</a>
+<a class="sourceLine" id="cb606-31" data-line-number="31">            dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb606-32" data-line-number="32"><span class="st">                </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb606-33" data-line-number="33"><span class="st">                </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb606-34" data-line-number="34"><span class="st">                </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb606-35" data-line-number="35"><span class="st">                </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb606-36" data-line-number="36"><span class="st">                </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;spatio-temporal process; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb606-37" data-line-number="37">        )</a>
+<a class="sourceLine" id="cb606-38" data-line-number="38">    }</a>
+<a class="sourceLine" id="cb606-39" data-line-number="39">}  </a>
+<a class="sourceLine" id="cb606-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb606-41" data-line-number="41"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;seperable.gif&quot;</span>))) {</a>
+<a class="sourceLine" id="cb606-42" data-line-number="42">    gifski<span class="op">::</span><span class="kw">save_gif</span>(</a>
+<a class="sourceLine" id="cb606-43" data-line-number="43">        <span class="kw">make_plot</span>(), </a>
+<a class="sourceLine" id="cb606-44" data-line-number="44">        <span class="dt">gif_file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;seperable.gif&quot;</span>),</a>
+<a class="sourceLine" id="cb606-45" data-line-number="45">        <span class="dt">progress =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb606-46" data-line-number="46">        <span class="dt">delay =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb606-47" data-line-number="47">        <span class="dt">height =</span> <span class="dv">640</span>, <span class="dt">width =</span> <span class="dv">640</span>, <span class="dt">units =</span> <span class="st">&quot;px&quot;</span></a>
+<a class="sourceLine" id="cb606-48" data-line-number="48">    )</a>
+<a class="sourceLine" id="cb606-49" data-line-number="49">}</a>
+<a class="sourceLine" id="cb606-50" data-line-number="50">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;seperable.gif&quot;</span>))</a></code></pre></div>
+<p><img src="images/seperable.gif" style="display: block; margin: auto;" /></p>
+<div id="more-flexible-models" class="section level3">
+<h3><span class="header-section-number">33.3.1</span> More flexible models</h3>
+<ul>
+<li>can fit models with anisotropy, nonseperability, or nonstationarity
+<ul>
+<li>greatly increases computational cost and amount of data needed for estimation</li>
+</ul></li>
+<li>nonseperable models can often be easy to specify but hard to fit
+<ul>
+<li>in some sense, modern machine learning methods (tree-based methods and neural networks) can be used to induce complex covariance structures</li>
+<li>currently, this is an underexplored area of research in spatial statistics</li>
+</ul></li>
+<li><p>Nonstationary in space, stationary in time model</p>
+<ul>
+<li><p>Use a nonstationary function <span class="math inline">\(C_S(\mathbf{s}, \mathbf{s}&#39;)\)</span></p></li>
+<li><p>Spatially varying autoregressive model
+<span class="math inline">\(\mathbf{y}_t(\mathbf{s}) = \rho(\mathbf{s}) \mathbf{y}_{t-1}(\mathbf{s}) + \varepsilon_t(\mathbf{s})\)</span></p>
+<ul>
+<li>Let the autocorrelation parameter <span class="math inline">\(\rho{s}\)</span> change over space</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb607-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb607-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb607-3" data-line-number="3">T &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb607-4" data-line-number="4">t &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>T</a>
+<a class="sourceLine" id="cb607-5" data-line-number="5">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb607-6" data-line-number="6">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb607-7" data-line-number="7">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb607-8" data-line-number="8">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb607-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb607-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb607-11" data-line-number="11">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb607-12" data-line-number="12">D_t &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(t)</a>
+<a class="sourceLine" id="cb607-13" data-line-number="13">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb607-14" data-line-number="14">rho &lt;-<span class="st"> </span><span class="kw">logit</span>(<span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span><span class="dv">3</span>))))</a>
+<a class="sourceLine" id="cb607-15" data-line-number="15">tau2 &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb607-16" data-line-number="16">phi_s &lt;-<span class="st"> </span><span class="fl">0.2</span></a>
+<a class="sourceLine" id="cb607-17" data-line-number="17">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb607-18" data-line-number="18">y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, T)</a>
+<a class="sourceLine" id="cb607-19" data-line-number="19">y[, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb607-20" data-line-number="20"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb607-21" data-line-number="21">    y[, k] &lt;-<span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>y[, k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb607-22" data-line-number="22">}</a>
+<a class="sourceLine" id="cb607-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb607-24" data-line-number="24">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb607-25" data-line-number="25">    <span class="dt">x   =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb607-26" data-line-number="26">    <span class="dt">y   =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb607-27" data-line-number="27">    <span class="dt">rho =</span> rho,</a>
+<a class="sourceLine" id="cb607-28" data-line-number="28">    <span class="dt">obs =</span> <span class="kw">c</span>(y),</a>
+<a class="sourceLine" id="cb607-29" data-line-number="29">    <span class="dt">time =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> n)</a>
+<a class="sourceLine" id="cb607-30" data-line-number="30">)</a>
+<a class="sourceLine" id="cb607-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb607-32" data-line-number="32">dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb607-33" data-line-number="33"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-34" data-line-number="34"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-35" data-line-number="35"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-36" data-line-number="36"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;spatially-varying autocorrelation&quot;</span>)</a>
+<a class="sourceLine" id="cb607-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb607-38" data-line-number="38">make_plot &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb607-39" data-line-number="39">    zlims &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>obs)</a>
+<a class="sourceLine" id="cb607-40" data-line-number="40">    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb607-41" data-line-number="41">        <span class="kw">print</span>(</a>
+<a class="sourceLine" id="cb607-42" data-line-number="42">            dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb607-43" data-line-number="43"><span class="st">                </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb607-44" data-line-number="44"><span class="st">                </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-45" data-line-number="45"><span class="st">                </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-46" data-line-number="46"><span class="st">                </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb607-47" data-line-number="47"><span class="st">                </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;spatio-temporal process; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb607-48" data-line-number="48">        )</a>
+<a class="sourceLine" id="cb607-49" data-line-number="49">    }</a>
+<a class="sourceLine" id="cb607-50" data-line-number="50">}  </a>
+<a class="sourceLine" id="cb607-51" data-line-number="51"></a>
+<a class="sourceLine" id="cb607-52" data-line-number="52"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatially-varying-rho.gif&quot;</span>))) {</a>
+<a class="sourceLine" id="cb607-53" data-line-number="53">    gifski<span class="op">::</span><span class="kw">save_gif</span>(</a>
+<a class="sourceLine" id="cb607-54" data-line-number="54">        <span class="kw">make_plot</span>(), </a>
+<a class="sourceLine" id="cb607-55" data-line-number="55">        <span class="dt">gif_file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatially-varying-rho.gif&quot;</span>),</a>
+<a class="sourceLine" id="cb607-56" data-line-number="56">        <span class="dt">progress =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb607-57" data-line-number="57">        <span class="dt">delay =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb607-58" data-line-number="58">        <span class="dt">height =</span> <span class="dv">640</span>, <span class="dt">width =</span> <span class="dv">640</span>, <span class="dt">units =</span> <span class="st">&quot;px&quot;</span></a>
+<a class="sourceLine" id="cb607-59" data-line-number="59">    )</a>
+<a class="sourceLine" id="cb607-60" data-line-number="60">}</a>
+<a class="sourceLine" id="cb607-61" data-line-number="61">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;spatially-varying-rho.gif&quot;</span>))</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-338-1.png" width="480" style="display: block; margin: auto;" /><img src="images/spatially-varying-rho.gif" style="display: block; margin: auto;" /></p>
+<ul>
+<li><p>Nonstationary in time, stationary in space</p>
+<ul>
+<li><p>Use a nonstationary function <span class="math inline">\(C_T(t, t&#39;)\)</span></p></li>
+<li><p>time varying autoregressive model
+<span class="math inline">\(\mathbf{y}_t(\mathbf{s}) = \rho_t \mathbf{y}_{t-1}(\mathbf{s}) + \delta_t \varepsilon_t(\mathbf{s})\)</span></p>
+<ul>
+<li><p>Let the autocorrelation parameters <span class="math inline">\(\rho_t\)</span> and <span class="math inline">\(\delta_t\)</span> change over time</p></li>
+<li><p><span class="math inline">\(logit(\boldsymbol{\rho}) \sim GP\)</span></p></li>
+<li><p><span class="math inline">\(logit(\boldsymbol{\delta}) \sim GP\)</span></p></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb608-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb608-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb608-3" data-line-number="3">T &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb608-4" data-line-number="4">t &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>T</a>
+<a class="sourceLine" id="cb608-5" data-line-number="5">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb608-6" data-line-number="6">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb608-7" data-line-number="7">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb608-8" data-line-number="8">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb608-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb608-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb608-11" data-line-number="11">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb608-12" data-line-number="12">D_t &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(t)</a>
+<a class="sourceLine" id="cb608-13" data-line-number="13">tau2 &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb608-14" data-line-number="14">phi_s &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb608-15" data-line-number="15">phi_t &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb608-16" data-line-number="16">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb608-17" data-line-number="17">logit &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</a>
+<a class="sourceLine" id="cb608-18" data-line-number="18">rho  &lt;-<span class="st"> </span><span class="kw">logit</span>(<span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, T), <span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>D_t <span class="op">/</span><span class="st"> </span>phi_t[<span class="dv">1</span>]))))</a>
+<a class="sourceLine" id="cb608-19" data-line-number="19">delta &lt;-<span class="st"> </span><span class="kw">logit</span>(<span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, T), <span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>D_t <span class="op">/</span><span class="st"> </span>phi_t[<span class="dv">2</span>]))))</a>
+<a class="sourceLine" id="cb608-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb608-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb608-22" data-line-number="22">y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, T)</a>
+<a class="sourceLine" id="cb608-23" data-line-number="23"><span class="co">## initialize this to a steady state</span></a>
+<a class="sourceLine" id="cb608-24" data-line-number="24">y[, <span class="dv">1</span>] &lt;-<span class="st"> </span>delta[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb608-25" data-line-number="25"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">20</span>){</a>
+<a class="sourceLine" id="cb608-26" data-line-number="26">    y[, <span class="dv">1</span>] &lt;-<span class="st"> </span>rho[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span>y[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>delta[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb608-27" data-line-number="27">}</a>
+<a class="sourceLine" id="cb608-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb608-29" data-line-number="29"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb608-30" data-line-number="30">    y[, k] &lt;-<span class="st"> </span>rho[t] <span class="op">*</span><span class="st"> </span>y[, k<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>delta[t] <span class="op">*</span><span class="st"> </span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s)</a>
+<a class="sourceLine" id="cb608-31" data-line-number="31">}</a>
+<a class="sourceLine" id="cb608-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb608-33" data-line-number="33">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb608-34" data-line-number="34">    <span class="dt">x     =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb608-35" data-line-number="35">    <span class="dt">y     =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb608-36" data-line-number="36">    <span class="dt">rho   =</span> <span class="kw">rep</span>(rho, <span class="dt">each =</span> n),</a>
+<a class="sourceLine" id="cb608-37" data-line-number="37">    <span class="dt">delta =</span> <span class="kw">rep</span>(delta, <span class="dt">each =</span> n),</a>
+<a class="sourceLine" id="cb608-38" data-line-number="38">    <span class="dt">obs   =</span> <span class="kw">c</span>(y),</a>
+<a class="sourceLine" id="cb608-39" data-line-number="39">    <span class="dt">time  =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> n)</a>
+<a class="sourceLine" id="cb608-40" data-line-number="40">)</a>
+<a class="sourceLine" id="cb608-41" data-line-number="41"></a>
+<a class="sourceLine" id="cb608-42" data-line-number="42">dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb608-43" data-line-number="43"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> rho)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-44" data-line-number="44"><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-45" data-line-number="45"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> delta), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-46" data-line-number="46"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;time-varying autocorrelation&quot;</span>)</a>
+<a class="sourceLine" id="cb608-47" data-line-number="47"></a>
+<a class="sourceLine" id="cb608-48" data-line-number="48">make_plot &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb608-49" data-line-number="49">    zlims &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>obs)</a>
+<a class="sourceLine" id="cb608-50" data-line-number="50">    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb608-51" data-line-number="51">        <span class="kw">print</span>(</a>
+<a class="sourceLine" id="cb608-52" data-line-number="52">            dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb608-53" data-line-number="53"><span class="st">                </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb608-54" data-line-number="54"><span class="st">                </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-55" data-line-number="55"><span class="st">                </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-56" data-line-number="56"><span class="st">                </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims) <span class="op">+</span></a>
+<a class="sourceLine" id="cb608-57" data-line-number="57"><span class="st">                </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;spatio-temporal process; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb608-58" data-line-number="58">        )</a>
+<a class="sourceLine" id="cb608-59" data-line-number="59">    }</a>
+<a class="sourceLine" id="cb608-60" data-line-number="60">}  </a>
+<a class="sourceLine" id="cb608-61" data-line-number="61"></a>
+<a class="sourceLine" id="cb608-62" data-line-number="62"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;time-varying-rho-delta.gif&quot;</span>))) {</a>
+<a class="sourceLine" id="cb608-63" data-line-number="63">    gifski<span class="op">::</span><span class="kw">save_gif</span>(</a>
+<a class="sourceLine" id="cb608-64" data-line-number="64">        <span class="kw">make_plot</span>(), </a>
+<a class="sourceLine" id="cb608-65" data-line-number="65">        <span class="dt">gif_file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;time-varying-rho-delta.gif&quot;</span>),</a>
+<a class="sourceLine" id="cb608-66" data-line-number="66">        <span class="dt">progress =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb608-67" data-line-number="67">        <span class="dt">delay =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb608-68" data-line-number="68">        <span class="dt">height =</span> <span class="dv">640</span>, <span class="dt">width =</span> <span class="dv">640</span>, <span class="dt">units =</span> <span class="st">&quot;px&quot;</span></a>
+<a class="sourceLine" id="cb608-69" data-line-number="69">    )</a>
+<a class="sourceLine" id="cb608-70" data-line-number="70">}</a>
+<a class="sourceLine" id="cb608-71" data-line-number="71">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;time-varying-rho-delta.gif&quot;</span>))</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-339-1.png" width="480" style="display: block; margin: auto;" /><img src="images/time-varying-rho-delta.gif" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Dynamic linear models (DLMs)</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mathbf{y}_t(\mathbf{s}) &amp; = \mathbf{X}_t \boldsymbol{\beta}_t + \rho (\mathbf{y}_{t-1}(\mathbf{s}) - \mathbf{X}_{t-1} \boldsymbol{\beta}_{t-1}) + \varepsilon_t(\mathbf{s}) \\
+\boldsymbol{\beta}_{t} | \boldsymbol{\beta}_{t-1} &amp; \sim N(\mathbf{A} \boldsymbol{\beta}_{t-1}, \boldsymbol{\Sigma}_{\boldsymbol{\beta}})$
+\end{align*}\]</span></p>
+<ul>
+<li>eigenvalues of <span class="math inline">\(\mathbf{A}\)</span> must be bounded by 1 in absolute value – otherwise the process will grow without bounds</li>
+</ul>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb609-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb609-3" data-line-number="3">T &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb609-4" data-line-number="4">t &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>T</a>
+<a class="sourceLine" id="cb609-5" data-line-number="5">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb609-6" data-line-number="6">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb609-7" data-line-number="7">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb609-8" data-line-number="8">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb609-9" data-line-number="9">    )</a>
+<a class="sourceLine" id="cb609-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb609-11" data-line-number="11">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb609-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb609-13" data-line-number="13"><span class="co">## use fixed coefficients in time</span></a>
+<a class="sourceLine" id="cb609-14" data-line-number="14">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">t</span>(mvnfast<span class="op">::</span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span><span class="dv">3</span>))))</a>
+<a class="sourceLine" id="cb609-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb609-16" data-line-number="16"><span class="co">## parameters for the dynamic process</span></a>
+<a class="sourceLine" id="cb609-17" data-line-number="17">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>), <span class="dv">2</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb609-18" data-line-number="18"><span class="kw">eigen</span>(A)<span class="op">$</span>values</a>
+<a class="sourceLine" id="cb609-19" data-line-number="19">Sigma_beta &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">c</span>(<span class="fl">0.3</span>, <span class="fl">0.5</span>))</a>
+<a class="sourceLine" id="cb609-20" data-line-number="20">beta &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">2</span>, T)</a>
+<a class="sourceLine" id="cb609-21" data-line-number="21"><span class="co">## initialize beta</span></a>
+<a class="sourceLine" id="cb609-22" data-line-number="22"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {</a>
+<a class="sourceLine" id="cb609-23" data-line-number="23">    beta[, <span class="dv">1</span>] &lt;-<span class="st"> </span>mvnfast<span class="op">::</span><span class="kw">rmvn</span>(<span class="dv">1</span>, A <span class="op">%*%</span><span class="st"> </span>beta[, <span class="dv">1</span>], Sigma_beta)</a>
+<a class="sourceLine" id="cb609-24" data-line-number="24">}</a>
+<a class="sourceLine" id="cb609-25" data-line-number="25"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb609-26" data-line-number="26">    beta[, k] &lt;-<span class="st"> </span>mvnfast<span class="op">::</span><span class="kw">rmvn</span>(<span class="dv">1</span>, A <span class="op">%*%</span><span class="st"> </span>beta[, k<span class="dv">-1</span>], Sigma_beta)</a>
+<a class="sourceLine" id="cb609-27" data-line-number="27">}</a>
+<a class="sourceLine" id="cb609-28" data-line-number="28">tau2 &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb609-29" data-line-number="29">phi_s &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb609-30" data-line-number="30">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb609-31" data-line-number="31">rho &lt;-<span class="st"> </span><span class="fl">0.8</span></a>
+<a class="sourceLine" id="cb609-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb609-33" data-line-number="33">y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, n, T)</a>
+<a class="sourceLine" id="cb609-34" data-line-number="34"><span class="co">## initialize this to a steady state</span></a>
+<a class="sourceLine" id="cb609-35" data-line-number="35">y[, <span class="dv">1</span>] &lt;-<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s))</a>
+<a class="sourceLine" id="cb609-36" data-line-number="36"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">20</span>){</a>
+<a class="sourceLine" id="cb609-37" data-line-number="37">    y[, <span class="dv">1</span>] &lt;-<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>(y[, <span class="dv">1</span>] <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta[, <span class="dv">1</span>]) <span class="op">+</span><span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s))</a>
+<a class="sourceLine" id="cb609-38" data-line-number="38">}</a>
+<a class="sourceLine" id="cb609-39" data-line-number="39"></a>
+<a class="sourceLine" id="cb609-40" data-line-number="40"><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb609-41" data-line-number="41">    y[, k] &lt;-<span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta[, k] <span class="op">+</span><span class="st"> </span>rho <span class="op">*</span><span class="st"> </span>(y[, k<span class="dv">-1</span>] <span class="op">-</span><span class="st"> </span>X <span class="op">%*%</span><span class="st"> </span>beta[, k<span class="dv">-1</span>]) <span class="op">+</span><span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s))}</a>
+<a class="sourceLine" id="cb609-42" data-line-number="42"></a>
+<a class="sourceLine" id="cb609-43" data-line-number="43">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb609-44" data-line-number="44">    <span class="dt">x         =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb609-45" data-line-number="45">    <span class="dt">y         =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb609-46" data-line-number="46">    <span class="dt">covariate =</span> X[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb609-47" data-line-number="47">    <span class="dt">fixed     =</span> <span class="kw">c</span>(X <span class="op">%*%</span><span class="st"> </span>beta),</a>
+<a class="sourceLine" id="cb609-48" data-line-number="48">    <span class="dt">obs       =</span> <span class="kw">c</span>(y),</a>
+<a class="sourceLine" id="cb609-49" data-line-number="49">    <span class="dt">time      =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> n)</a>
+<a class="sourceLine" id="cb609-50" data-line-number="50">)</a>
+<a class="sourceLine" id="cb609-51" data-line-number="51"></a>
+<a class="sourceLine" id="cb609-52" data-line-number="52">dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-53" data-line-number="53"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> covariate)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-54" data-line-number="54"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-55" data-line-number="55"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-56" data-line-number="56"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;coefficients&quot;</span>)</a>
+<a class="sourceLine" id="cb609-57" data-line-number="57"></a>
+<a class="sourceLine" id="cb609-58" data-line-number="58">dat_beta &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb609-59" data-line-number="59">    <span class="dt">time =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>T, <span class="dt">each =</span> <span class="dv">2</span>), </a>
+<a class="sourceLine" id="cb609-60" data-line-number="60">    <span class="dt">beta =</span> <span class="kw">c</span>(beta),</a>
+<a class="sourceLine" id="cb609-61" data-line-number="61">    <span class="dt">var  =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;beta_0&quot;</span>, <span class="st">&quot;beta_1&quot;</span>), T)</a>
+<a class="sourceLine" id="cb609-62" data-line-number="62">)</a>
+<a class="sourceLine" id="cb609-63" data-line-number="63"></a>
+<a class="sourceLine" id="cb609-64" data-line-number="64">dat_beta <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-65" data-line-number="65"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, <span class="dt">y =</span> beta, <span class="dt">group =</span> var, <span class="dt">color =</span> var)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-66" data-line-number="66"><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-67" data-line-number="67"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;time varying coefficients&quot;</span>)</a>
+<a class="sourceLine" id="cb609-68" data-line-number="68"></a>
+<a class="sourceLine" id="cb609-69" data-line-number="69">make_plot &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb609-70" data-line-number="70">    zlims_fixed &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>fixed)</a>
+<a class="sourceLine" id="cb609-71" data-line-number="71">    zlims_obs &lt;-<span class="st"> </span><span class="kw">range</span>(dat<span class="op">$</span>obs)</a>
+<a class="sourceLine" id="cb609-72" data-line-number="72">    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>T) {</a>
+<a class="sourceLine" id="cb609-73" data-line-number="73">        p1 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-74" data-line-number="74"><span class="st">            </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-75" data-line-number="75"><span class="st">            </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> fixed)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-76" data-line-number="76"><span class="st">            </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-77" data-line-number="77"><span class="st">            </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims_fixed) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-78" data-line-number="78"><span class="st">            </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;fixed effects; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb609-79" data-line-number="79">        p2 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-80" data-line-number="80"><span class="st">            </span><span class="kw">subset</span>(time <span class="op">==</span><span class="st"> </span>i) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb609-81" data-line-number="81"><span class="st">            </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-82" data-line-number="82"><span class="st">            </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-83" data-line-number="83"><span class="st">            </span><span class="kw">scale_fill_viridis</span>(<span class="dt">limits =</span> zlims_obs) <span class="op">+</span></a>
+<a class="sourceLine" id="cb609-84" data-line-number="84"><span class="st">            </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;spatio-temporal process; time&quot;</span>, i))</a>
+<a class="sourceLine" id="cb609-85" data-line-number="85">        <span class="kw">print</span>(p1 <span class="op">+</span><span class="st"> </span>p2)</a>
+<a class="sourceLine" id="cb609-86" data-line-number="86">    }</a>
+<a class="sourceLine" id="cb609-87" data-line-number="87">}  </a>
+<a class="sourceLine" id="cb609-88" data-line-number="88"></a>
+<a class="sourceLine" id="cb609-89" data-line-number="89"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;dlm.gif&quot;</span>))) {</a>
+<a class="sourceLine" id="cb609-90" data-line-number="90">    gifski<span class="op">::</span><span class="kw">save_gif</span>(</a>
+<a class="sourceLine" id="cb609-91" data-line-number="91">        <span class="kw">make_plot</span>(), </a>
+<a class="sourceLine" id="cb609-92" data-line-number="92">        <span class="dt">gif_file =</span> here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;dlm.gif&quot;</span>),</a>
+<a class="sourceLine" id="cb609-93" data-line-number="93">        <span class="dt">progress =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb609-94" data-line-number="94">        <span class="dt">delay =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb609-95" data-line-number="95">        <span class="dt">height =</span> <span class="dv">640</span>, <span class="dt">width =</span> <span class="dv">640</span>, <span class="dt">units =</span> <span class="st">&quot;px&quot;</span></a>
+<a class="sourceLine" id="cb609-96" data-line-number="96">    )</a>
+<a class="sourceLine" id="cb609-97" data-line-number="97">}</a>
+<a class="sourceLine" id="cb609-98" data-line-number="98">knitr<span class="op">::</span><span class="kw">include_graphics</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;images&quot;</span>, <span class="st">&quot;dlm.gif&quot;</span>))</a></code></pre></div>
+<pre><code>## [1] 0.84051 0.05949</code></pre>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-340-1.png" width="480" style="display: block; margin: auto;" /><img src="STAT-5413_files/figure-html/unnamed-chunk-340-2.png" width="480" style="display: block; margin: auto;" /><img src="images/dlm.gif" style="display: block; margin: auto;" /></p>
+<ul>
+<li>Spatially varying coefficient models (spatial only)</li>
+</ul>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">99</span>)</a>
+<a class="sourceLine" id="cb611-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">40</span><span class="op">^</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb611-3" data-line-number="3">locs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(</a>
+<a class="sourceLine" id="cb611-4" data-line-number="4">    <span class="kw">expand.grid</span>(</a>
+<a class="sourceLine" id="cb611-5" data-line-number="5">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n)),</a>
+<a class="sourceLine" id="cb611-6" data-line-number="6">        <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="kw">sqrt</span>(n))</a>
+<a class="sourceLine" id="cb611-7" data-line-number="7">    )</a>
+<a class="sourceLine" id="cb611-8" data-line-number="8">)</a>
+<a class="sourceLine" id="cb611-9" data-line-number="9">D_s &lt;-<span class="st"> </span>fields<span class="op">::</span><span class="kw">rdist</span>(locs)</a>
+<a class="sourceLine" id="cb611-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb611-11" data-line-number="11"><span class="co">## use fixed coefficients in time</span></a>
+<a class="sourceLine" id="cb611-12" data-line-number="12">X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">t</span>(mvnfast<span class="op">::</span><span class="kw">rmvn</span>(<span class="dv">1</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), <span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span><span class="dv">3</span>))))</a>
+<a class="sourceLine" id="cb611-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb611-14" data-line-number="14"><span class="co">## parameters for the dynamic process</span></a>
+<a class="sourceLine" id="cb611-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb611-16" data-line-number="16">tau2 &lt;-<span class="st"> </span><span class="fl">0.75</span></a>
+<a class="sourceLine" id="cb611-17" data-line-number="17">phi_s &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb611-18" data-line-number="18">R_s &lt;-<span class="st"> </span><span class="kw">exp</span>( <span class="op">-</span><span class="st"> </span>D_s <span class="op">/</span><span class="st"> </span>phi_s)</a>
+<a class="sourceLine" id="cb611-19" data-line-number="19">beta &lt;-<span class="st"> </span><span class="kw">t</span>(mvnfast<span class="op">::</span><span class="kw">rmvn</span>(<span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">0</span>, n), tau2 <span class="op">*</span><span class="st"> </span>R_s))</a>
+<a class="sourceLine" id="cb611-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb611-21" data-line-number="21">y &lt;-<span class="st"> </span><span class="kw">rowSums</span>(X <span class="op">*</span><span class="st"> </span>beta)</a>
+<a class="sourceLine" id="cb611-22" data-line-number="22"><span class="co">## initialize this to a steady state</span></a>
+<a class="sourceLine" id="cb611-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb611-24" data-line-number="24">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb611-25" data-line-number="25">    <span class="dt">x         =</span> locs[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb611-26" data-line-number="26">    <span class="dt">y         =</span> locs[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb611-27" data-line-number="27">    <span class="dt">covariate =</span> X[, <span class="dv">2</span>], </a>
+<a class="sourceLine" id="cb611-28" data-line-number="28">    <span class="dt">intercept =</span> beta[, <span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb611-29" data-line-number="29">    <span class="dt">slope     =</span> beta[, <span class="dv">2</span>],</a>
+<a class="sourceLine" id="cb611-30" data-line-number="30">    <span class="dt">obs       =</span> y</a>
+<a class="sourceLine" id="cb611-31" data-line-number="31">)</a>
+<a class="sourceLine" id="cb611-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb611-33" data-line-number="33">p1 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb611-34" data-line-number="34"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> covariate)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-35" data-line-number="35"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-36" data-line-number="36"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-37" data-line-number="37"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;coefficients&quot;</span>)</a>
+<a class="sourceLine" id="cb611-38" data-line-number="38"></a>
+<a class="sourceLine" id="cb611-39" data-line-number="39">p2 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb611-40" data-line-number="40"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> obs)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-41" data-line-number="41"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-42" data-line-number="42"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-43" data-line-number="43"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;observations&quot;</span>)</a>
+<a class="sourceLine" id="cb611-44" data-line-number="44"></a>
+<a class="sourceLine" id="cb611-45" data-line-number="45">p3 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb611-46" data-line-number="46"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> intercept)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-47" data-line-number="47"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-48" data-line-number="48"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-49" data-line-number="49"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;spatially-varying intercept&quot;</span>)</a>
+<a class="sourceLine" id="cb611-50" data-line-number="50"></a>
+<a class="sourceLine" id="cb611-51" data-line-number="51">p4 &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb611-52" data-line-number="52"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> slope)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-53" data-line-number="53"><span class="st">    </span><span class="kw">geom_raster</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-54" data-line-number="54"><span class="st">    </span><span class="kw">scale_fill_viridis</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb611-55" data-line-number="55"><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;spatially-varying slope&quot;</span>)</a>
+<a class="sourceLine" id="cb611-56" data-line-number="56"></a>
+<a class="sourceLine" id="cb611-57" data-line-number="57">(p1 <span class="op">+</span><span class="st"> </span>p2) <span class="op">/</span><span class="st"> </span>(p3 <span class="op">+</span><span class="st"> </span>p4)</a></code></pre></div>
+<p><img src="STAT-5413_files/figure-html/unnamed-chunk-341-1.png" width="480" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

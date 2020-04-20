@@ -1,8 +1,12 @@
 # Day 33
 
 
-```{r}
+```{r, message = FALSE}
 library(mvnfast)
+library(fields)
+library(tidyverse)
+library(viridis)
+library(patchwork)
 ```
 
 ## Announcements
@@ -100,4 +104,554 @@ where $|\rho| < 1$ and $\boldsymbol{\varepsilon}_t = (\varepsilon_t(\mathbf{s}_1
     - $Cov(y_t(\mathbf{s}), y_{t'}(\mathbf{s}')) = C_T(t, t') C_S(\mathbf{s}, \mathbf{s}')$ 
         - temporal correlation $C_T(t, t')$
         - spatial correlation $C_S(\mathbf{s}, \mathbf{s}')$
+        
+        - assumes that there is the same temporal relationship at every point in space and that there is the same spatial relationship at each time
+        
+    - How do I know if this assumption is valid?
+        
+        - There are [formal tests](https://www.sciencedirect.com/science/article/abs/pii/S0378375804003210) for separability
+    
+```{r}
+set.seed(99)
+n <- 40^2
+T <- 20
+t <- 1:T
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+tau2  <- 0.75
+phi_s <- 2
+rho <- 0.9
+R_s <- exp( - D_s / phi_s)
+y <- matrix(0, n, T)
+y[, 1] <- rmvn(1, rep(0, n), tau2 * R_s)
+## initialize the distribution
+for (k in 1:20){
+    y[, 1] <- rho * y[, 1] + rmvn(1, rep(0, n), tau2 * R_s)
+}
+for (k in 2:T) {
+    y[, k] <- rho * y[, k- 1] + rmvn(1, rep(0, n), tau2 * R_s)
+}
+dat <- data.frame(
+    x   = locs[, 1],
+    y   = locs[, 2],
+    obs = c(y),
+    time = rep(1:T, each = n)
+)
+
+make_plot <- function() {
+    zlims <- range(dat$obs)
+    for (i in 1:T) {
+        print(
+            dat %>%
+                subset(time == i) %>%
+                ggplot(aes(x = x, y = y, fill = obs)) +
+                geom_raster() +
+                scale_fill_viridis(limits = zlims) +
+                ggtitle(paste("spatio-temporal process; time", i))
+        )
+    }
+}  
+
+if (!file.exists(here::here("images", "spatio-temporal-ar.gif"))) {
+    gifski::save_gif(
+        make_plot(), 
+        gif_file = here::here("images", "spatio-temporal-ar.gif"),
+        progress = FALSE,
+        delay = 0.5, 
+        height = 640, width = 640, units = "px"
+    )
+}
+knitr::include_graphics(here::here("images", "spatio-temporal-ar.gif"))
+
+```
+
+## seperable models are computationally more efficient:
+
+- Assume complete data: all locations $\{\mathbf{s}_1, \ldots, \mathbf{s}_n\}$ are measured at each timestep $\{ t_1, \ldots, t_T\}$
+    - In a Bayesian setting, if there are missing values, just estimate these are parameters in the model
+
+- Define $\mathbf{y}_t = \left( y_t(\mathbf{s}_1), \ldots, y_t(\mathbf{s}_n) \right)'$ as the data observation at time $t$ and $\mathbf{y}(\mathbf{s}) = \left( y_1(\mathbf{s}), \ldots, y_T(\mathbf{s}) \right)'$ as the data observation for location $\mathbf{s}$
+
+- $\mathbf{y} = \left( \mathbf{y}_1', \ldots, \mathbf{y}_T' \right)'$
+
+- Let $\mathbf{y}$ be a separable spatio-temporal GP with mean $E(y_t(\mathbf{s})) = \mathbf{X}_t(\mathbf{s}) \boldsymbol{\beta}$ and separable covariance $\tau^2 C_T(t, t') C_S(\mathbf{s}, \mathbf{s}')$ given temporal correlation function $C_T(t, t')$ and spatial correlation function $C_S(\mathbf{s}, \mathbf{s}')$
+
+- The mean and covariance for an observation at time $t$ 
+
+    - $E(\mathbf{y}_t) = \mathbf{X}_t \boldsymbol{\beta}$
+        
+    - $Cov(y_t(\mathbf{s}_i), y_t(\mathbf{s}_j)) = \tau^2 C_T(t, t) C_S(\mathbf{s}_i, \mathbf{s}_j) = \tau^2 C_S(\mathbf{s}_i, \mathbf{s}_j)$
+        
+    - $\mathbf{y}_t \sim N(\boldsymbol{X}_t\boldsymbol{\beta}, \boldsymbol{\Sigma}_S)$ 
+        - $\boldsymbol{\Sigma}_S$ are the realizations of the covariance function $\tau^2 C_S(\mathbf{s}_i, \mathbf{s}_j)$ at the set of locations for time $t$
+            
+- The mean and covariance for an observation at location $\mathbf{s}$ 
+
+    - $E(\mathbf{y}(\mathbf{s})) = \mathbf{X}(\mathbf{s}) \boldsymbol{\beta}$
+        
+    - $Cov(y_{t_i}(\mathbf{s}), y_{t_j}(\mathbf{s})) = \tau^2 C_T(t_i, t_j) C_S(\mathbf{s}, \mathbf{s}) = \tau^2 C_T(t_i, t_j)$
+        
+    - $\mathbf{y}(\mathbf{s}) \sim N(\boldsymbol{X}(\mathbf{s} \boldsymbol{\beta}, \boldsymbol{\Sigma}_T)$ 
+        - $\boldsymbol{\Sigma}_T$ are the realizations of the covariance function $\tau^2 C_T(t_i, t_j)$ at the time points $t_i$ and $t_j$ for location $\mathbf{s}$
+            
+- The joint distribution is $\mathbf{y} \sim N(\mathbf{X} \boldsymbol{\beta}, \boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S)$            
+
+- Kronecker product properties
+    
+    - If $\mathbf{A}$ is an $m \times n$ matrix and $\mathbf{B}$ is a $p \times q$, then the Kronecker product $\mathbf{A} \otimes \mathbf{B}$ is the $pm \times qn$ block matrix: $\mathbf {A} \otimes \mathbf {B} ={\begin{pmatrix}a_{11}\mathbf {B} &\cdots &a_{1n}\mathbf {B} \\\vdots &\ddots &\vdots \\a_{m1}\mathbf {B} &\cdots &a_{mn}\mathbf {B} \end{pmatrix}}$ which is
+        
+    ${\mathbf{A}\otimes\mathbf{B}} = \begin{pmatrix}
+   a_{11} b_{11} & a_{11} b_{12} & \cdots & a_{11} b_{1q} &
+                   \cdots & \cdots & a_{1n} b_{11} & a_{1n} b_{12} & \cdots & a_{1n} b_{1q} \\
+   a_{11} b_{21} & a_{11} b_{22} & \cdots & a_{11} b_{2q} &
+                   \cdots & \cdots & a_{1n} b_{21} & a_{1n} b_{22} & \cdots & a_{1n} b_{2q} \\
+   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+   a_{11} b_{p1} & a_{11} b_{p2} & \cdots & a_{11} b_{pq} &
+                   \cdots & \cdots & a_{1n} b_{p1} & a_{1n} b_{p2} & \cdots & a_{1n} b_{pq} \\
+   \vdots & \vdots & & \vdots & \ddots & & \vdots & \vdots & & \vdots \\
+   \vdots & \vdots & & \vdots & & \ddots & \vdots & \vdots & & \vdots \\
+   a_{m1} b_{11} & a_{m1} b_{12} & \cdots & a_{m1} b_{1q} &
+                   \cdots & \cdots & a_{mn} b_{11} & a_{mn} b_{12} & \cdots & a_{mn} b_{1q} \\
+   a_{m1} b_{21} & a_{m1} b_{22} & \cdots & a_{m1} b_{2q} &
+                   \cdots & \cdots & a_{mn} b_{21} & a_{mn} b_{22} & \cdots & a_{mn} b_{2q} \\
+   \vdots & \vdots & \ddots & \vdots & & & \vdots & \vdots & \ddots & \vdots \\
+   a_{m1} b_{p1} & a_{m1} b_{p2} & \cdots & a_{m1} b_{pq} &
+                   \cdots & \cdots & a_{mn} b_{p1} & a_{mn} b_{p2} & \cdots & a_{mn} b_{pq}
+\end{pmatrix}$.
+
+- If $\mathbf{A}$ is an $n \times n$ matrix and $\mathbf{B}$ is an $m \times m$ matrix and both are invertible matrices, then $(\mathbf{A} \otimes \mathbf{B})^{-1} = \mathbf{A}^{-1} \otimes \mathbf{B}^{-1}$.
+
+    - computational complexity of $(\mathbf{A} \otimes \mathbf{B})^{-1} = O((nm)^3)$
+        
+    - computational complexity of $\mathbf{A}^{-1} \otimes \mathbf{B}^{-1} = O(n^3 + m^3)$
+        
+    - Generating the Kronecker produce is embarassingly parallel
+        
+- If $\mathbf{A}$ is an $n \times n$ matrix and $\mathbf{B}$ is an $m \times m$ matrix and both are invertible matrices, then $|\mathbf{A} \otimes \mathbf{B}| = |\mathbf{A}|^m |\mathbf{B}|^n$.        
+        - computational complexity of $|\mathbf{A} \otimes \mathbf{B}| = O((nm)^3)$
+        
+    - computational complexity of $|\mathbf{A}|^m |\mathbf{B}|^n = O(n^3 + m^3)$
+        
+- For sparse CAR models:
+    - If $\mathbf{A}$ is an $n \times n$ matrix with eigenvalues $\lambda_1, \ldots, \lambda_n$ and $\mathbf{B}$ is an $m \times m$ matrix with eigenvalues $\omega_, \ldots, \omega_m$ then the eigenvalues of $\mathbf{A} \otimes \mathbf{B}$ are $\{\lambda_i \omega_j \}$ for $i = 1, \ldots, n$ and $j = 1, \ldots, m$
+
+- The separable likelihood is
+
+\begin{align*}
+|\boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S|^{-\frac{1}{2}} exp\{- \frac{1}{2} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right)' \left( \boldsymbol{\Sigma}_T \otimes \boldsymbol{\Sigma}_S \right)^{-1} \left( \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \right) \} \\
+= |\boldsymbol{\Sigma}_T|^{-\frac{n}{2}} |\boldsymbol{\Sigma}_S|^{-\frac{m}{2}} exp\{- \frac{1}{2} \sum_{t=1}^m \sum_{t'=1}^m \left( \mathbf{y}_t - \mathbf{X}_t \boldsymbol{\beta} \right)' {\boldsymbol{\Sigma}_S}^{-1} \left( \mathbf{y}_{t'} - \mathbf{X}_{t'} \boldsymbol{\beta} \right) {{\boldsymbol{\Sigma}_T}^{-1}}_{tt'} \}
+\end{align*}
+
+- As these are Gaussian distributions, MLE and Bayesian estimation is straightforward
+
+    - can use dimension reduction methods to reduce computational cost
+    - spatio-temporal Kriging uses conditional multivariate normal distributions
+    
+```{r}
+set.seed(99)
+n <- 40^2
+T <- 20
+t <- 1:T
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+D_t <- fields::rdist(t)
+tau2  <- 0.75
+phi_s <- 2
+phi_t <- 7
+R_s <- exp( - D_s / phi_s)
+R_t <- exp( - D_t / phi_t)
+z <- sqrt(tau2) * matrix(rnorm(n * T), n, T)
+y <- t(chol(R_s)) %*% z %*% chol(R_t)
+dat <- data.frame(
+    x   = locs[, 1],
+    y   = locs[, 2],
+    obs = c(y),
+    time = rep(1:T, each = n)
+)
+
+make_plot <- function() {
+    zlims <- range(dat$obs)
+    for (i in 1:T) {
+        print(
+            dat %>%
+                subset(time == i) %>%
+                ggplot(aes(x = x, y = y, fill = obs)) +
+                geom_raster() +
+                scale_fill_viridis(limits = zlims) +
+                ggtitle(paste("spatio-temporal process; time", i))
+        )
+    }
+}  
+
+if (!file.exists(here::here("images", "seperable.gif"))) {
+    gifski::save_gif(
+        make_plot(), 
+        gif_file = here::here("images", "seperable.gif"),
+        progress = FALSE,
+        delay = 0.5, 
+        height = 640, width = 640, units = "px"
+    )
+}
+knitr::include_graphics(here::here("images", "seperable.gif"))
+
+```
+
+### More flexible models
+
+- can fit models with anisotropy, nonseperability, or nonstationarity
+    - greatly increases computational cost and amount of data needed for estimation
+
+- nonseperable models can often be easy to specify but hard to fit
+    - in some sense, modern machine learning methods (tree-based methods and neural networks) can be used to induce complex covariance structures
+    - currently, this is an underexplored area of research in spatial statistics
+
+- Nonstationary in space, stationary in time model
+
+    - Use a nonstationary function $C_S(\mathbf{s}, \mathbf{s}')$ 
+    
+    - Spatially varying autoregressive model
+    $\mathbf{y}_t(\mathbf{s}) = \rho(\mathbf{s}) \mathbf{y}_{t-1}(\mathbf{s}) + \varepsilon_t(\mathbf{s})$
+
+        - Let the autocorrelation parameter $\rho{s}$ change over space
+        
+```{r}
+set.seed(99)
+n <- 40^2
+T <- 20
+t <- 1:T
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+D_t <- fields::rdist(t)
+logit <- function(x) exp(x) / (1 + exp(x))
+rho <- logit(as.vector(rmvn(1, rep(0, n), exp(- D_s / 3))))
+tau2 <- 0.75
+phi_s <- 0.2
+R_s <- exp( - D_s / phi_s)
+y <- matrix(0, n, T)
+y[, 1] <- rmvn(1, rep(0, n), tau2 * R_s)
+for (k in 2:T) {
+    y[, k] <- rho * y[, k-1] + rmvn(1, rep(0, n), tau2 * R_s)
+}
+
+dat <- data.frame(
+    x   = locs[, 1],
+    y   = locs[, 2],
+    rho = rho,
+    obs = c(y),
+    time = rep(1:T, each = n)
+)
+
+dat %>%
+    ggplot(aes(x = x, y = y, fill = rho)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("spatially-varying autocorrelation")
+
+make_plot <- function() {
+    zlims <- range(dat$obs)
+    for (i in 1:T) {
+        print(
+            dat %>%
+                subset(time == i) %>%
+                ggplot(aes(x = x, y = y, fill = obs)) +
+                geom_raster() +
+                scale_fill_viridis(limits = zlims) +
+                ggtitle(paste("spatio-temporal process; time", i))
+        )
+    }
+}  
+
+if (!file.exists(here::here("images", "spatially-varying-rho.gif"))) {
+    gifski::save_gif(
+        make_plot(), 
+        gif_file = here::here("images", "spatially-varying-rho.gif"),
+        progress = FALSE,
+        delay = 0.5, 
+        height = 640, width = 640, units = "px"
+    )
+}
+knitr::include_graphics(here::here("images", "spatially-varying-rho.gif"))
+```
+
+    
+- Nonstationary in time, stationary in space
+
+    - Use a nonstationary function $C_T(t, t')$ 
+    
+    - time varying autoregressive model
+    $\mathbf{y}_t(\mathbf{s}) = \rho_t \mathbf{y}_{t-1}(\mathbf{s}) + \delta_t \varepsilon_t(\mathbf{s})$
+
+        - Let the autocorrelation parameters $\rho_t$ and $\delta_t$ change over time
+        
+        - $logit(\boldsymbol{\rho}) \sim GP$
+        
+        - $logit(\boldsymbol{\delta}) \sim GP$
+        
+```{r}
+set.seed(99)
+n <- 40^2
+T <- 20
+t <- 1:T
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+D_t <- fields::rdist(t)
+tau2 <- 0.75
+phi_s <- 2
+phi_t <- c(3, 5)
+R_s <- exp( - D_s / phi_s)
+logit <- function(x) exp(x) / (1 + exp(x))
+rho  <- logit(as.vector(rmvn(1, rep(0, T), exp(- D_t / phi_t[1]))))
+delta <- logit(as.vector(rmvn(1, rep(0, T), exp(- D_t / phi_t[2]))))
+
+
+y <- matrix(0, n, T)
+## initialize this to a steady state
+y[, 1] <- delta[1] * rmvn(1, rep(0, n), tau2 * R_s)
+for (t in 1:20){
+    y[, 1] <- rho[1] * y[, 1] + delta[1] * rmvn(1, rep(0, n), tau2 * R_s)
+}
+
+for (k in 2:T) {
+    y[, k] <- rho[t] * y[, k-1] + delta[t] * rmvn(1, rep(0, n), tau2 * R_s)
+}
+
+dat <- data.frame(
+    x     = locs[, 1],
+    y     = locs[, 2],
+    rho   = rep(rho, each = n),
+    delta = rep(delta, each = n),
+    obs   = c(y),
+    time  = rep(1:T, each = n)
+)
+
+dat %>%
+    ggplot(aes(x = time, y = rho)) +
+    geom_line() +
+    geom_line(aes(x = time, y = delta), col = "red") +
+    ggtitle("time-varying autocorrelation")
+
+make_plot <- function() {
+    zlims <- range(dat$obs)
+    for (i in 1:T) {
+        print(
+            dat %>%
+                subset(time == i) %>%
+                ggplot(aes(x = x, y = y, fill = obs)) +
+                geom_raster() +
+                scale_fill_viridis(limits = zlims) +
+                ggtitle(paste("spatio-temporal process; time", i))
+        )
+    }
+}  
+
+if (!file.exists(here::here("images", "time-varying-rho-delta.gif"))) {
+    gifski::save_gif(
+        make_plot(), 
+        gif_file = here::here("images", "time-varying-rho-delta.gif"),
+        progress = FALSE,
+        delay = 0.5, 
+        height = 640, width = 640, units = "px"
+    )
+}
+knitr::include_graphics(here::here("images", "time-varying-rho-delta.gif"))
+```
+
+- Dynamic linear models (DLMs)
+
+
+\begin{align*}
+\mathbf{y}_t(\mathbf{s}) & = \mathbf{X}_t \boldsymbol{\beta}_t + \rho (\mathbf{y}_{t-1}(\mathbf{s}) - \mathbf{X}_{t-1} \boldsymbol{\beta}_{t-1}) + \varepsilon_t(\mathbf{s}) \\
+\boldsymbol{\beta}_{t} | \boldsymbol{\beta}_{t-1} & \sim N(\mathbf{A} \boldsymbol{\beta}_{t-1}, \boldsymbol{\Sigma}_{\boldsymbol{\beta}})$
+\end{align*}
+
+- eigenvalues of $\mathbf{A}$ must be bounded by 1 in absolute value -- otherwise the process will grow without bounds
+
+        
+```{r}
+set.seed(99)
+n <- 40^2
+T <- 20
+t <- 1:T
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+
+## use fixed coefficients in time
+X <- cbind(1, t(mvnfast::rmvn(1, rep(0, n), exp( - D_s / 3))))
+
+## parameters for the dynamic process
+A <- matrix(c(0.5, 0.5, 0.3, 0.4), 2, 2)
+eigen(A)$values
+Sigma_beta <- diag(c(0.3, 0.5))
+beta <- matrix(0, 2, T)
+## initialize beta
+for (i in 1:100) {
+    beta[, 1] <- mvnfast::rmvn(1, A %*% beta[, 1], Sigma_beta)
+}
+for (k in 2:T) {
+    beta[, k] <- mvnfast::rmvn(1, A %*% beta[, k-1], Sigma_beta)
+}
+tau2 <- 0.75
+phi_s <- 2
+R_s <- exp( - D_s / phi_s)
+rho <- 0.8
+
+y <- matrix(0, n, T)
+## initialize this to a steady state
+y[, 1] <- X %*% beta[, 1] + as.vector(rmvn(1, rep(0, n), tau2 * R_s))
+for (t in 1:20){
+    y[, 1] <- X %*% beta[, 1] + rho * (y[, 1] - X %*% beta[, 1]) + as.vector(rmvn(1, rep(0, n), tau2 * R_s))
+}
+
+for (k in 2:T) {
+    y[, k] <- X %*% beta[, k] + rho * (y[, k-1] - X %*% beta[, k-1]) + as.vector(rmvn(1, rep(0, n), tau2 * R_s))}
+
+dat <- data.frame(
+    x         = locs[, 1],
+    y         = locs[, 2],
+    covariate = X[, 2], 
+    fixed     = c(X %*% beta),
+    obs       = c(y),
+    time      = rep(1:T, each = n)
+)
+
+dat %>%
+    ggplot(aes(x = x, y = y, fill = covariate)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("coefficients")
+
+dat_beta <- data.frame(
+    time = rep(1:T, each = 2), 
+    beta = c(beta),
+    var  = rep(c("beta_0", "beta_1"), T)
+)
+
+dat_beta %>%
+    ggplot(aes(x = time, y = beta, group = var, color = var)) +
+    geom_line() +
+    ggtitle("time varying coefficients")
+
+make_plot <- function() {
+    zlims_fixed <- range(dat$fixed)
+    zlims_obs <- range(dat$obs)
+    for (i in 1:T) {
+        p1 <- dat %>%
+            subset(time == i) %>%
+            ggplot(aes(x = x, y = y, fill = fixed)) +
+            geom_raster() +
+            scale_fill_viridis(limits = zlims_fixed) +
+            ggtitle(paste("fixed effects; time", i))
+        p2 <- dat %>%
+            subset(time == i) %>%
+            ggplot(aes(x = x, y = y, fill = obs)) +
+            geom_raster() +
+            scale_fill_viridis(limits = zlims_obs) +
+            ggtitle(paste("spatio-temporal process; time", i))
+        print(p1 + p2)
+    }
+}  
+
+if (!file.exists(here::here("images", "dlm.gif"))) {
+    gifski::save_gif(
+        make_plot(), 
+        gif_file = here::here("images", "dlm.gif"),
+        progress = FALSE,
+        delay = 0.5, 
+        height = 640, width = 640, units = "px"
+    )
+}
+knitr::include_graphics(here::here("images", "dlm.gif"))
+```
+
+- Spatially varying coefficient models (spatial only)
+
+```{r, cache = TRUE}
+set.seed(99)
+n <- 40^2
+locs <- as.matrix(
+    expand.grid(
+        seq(0, 1, length.out = sqrt(n)),
+        seq(0, 1, length.out = sqrt(n))
+    )
+)
+D_s <- fields::rdist(locs)
+
+## use fixed coefficients in time
+X <- cbind(1, t(mvnfast::rmvn(1, rep(0, n), exp( - D_s / 3))))
+
+## parameters for the dynamic process
+
+tau2 <- 0.75
+phi_s <- 2
+R_s <- exp( - D_s / phi_s)
+beta <- t(mvnfast::rmvn(2, rep(0, n), tau2 * R_s))
+
+y <- rowSums(X * beta)
+## initialize this to a steady state
+
+dat <- data.frame(
+    x         = locs[, 1],
+    y         = locs[, 2],
+    covariate = X[, 2], 
+    intercept = beta[, 1],
+    slope     = beta[, 2],
+    obs       = y
+)
+
+p1 <- dat %>%
+    ggplot(aes(x = x, y = y, fill = covariate)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("coefficients")
+
+p2 <- dat %>%
+    ggplot(aes(x = x, y = y, fill = obs)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("observations")
+
+p3 <- dat %>%
+    ggplot(aes(x = x, y = y, fill = intercept)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("spatially-varying intercept")
+
+p4 <- dat %>%
+    ggplot(aes(x = x, y = y, fill = slope)) +
+    geom_raster() +
+    scale_fill_viridis() +
+    ggtitle("spatially-varying slope")
+
+(p1 + p2) / (p3 + p4)
+```
+
+
+
+
+
 
